@@ -15,7 +15,7 @@ jobs:
       - name: 🔍 Wait for checks to pass
         uses: hmarr/auto-approve-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.BOT_PAT}}
 
       - name: 🧠 Enable auto-merge
         uses: peter-evans/enable-pull-request-automerge@v3
