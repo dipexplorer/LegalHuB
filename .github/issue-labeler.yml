@@ -1,31 +1,57 @@
 bug fix:
-  - "bug"
-  - "fix"
-  - "error"
+  - "(?i)bug"
+  - "(?i)fix"
+  - "(?i)error"
+  - "(?i)issue"
+  - "(?i)problem"
+  - "(?i)bug fix"
+  
 
 level 1:
-  - "level[\\s_-]?1"
+  - "(?i)level[\\s_-]?1"
+  - "(?i)beginner"
+  - "(?i)easy"
+
 
 level 2:
-  - "level[\\s_-]?2"
+  - "(?i)level[\\s_-]?2"
+  - "(?i)intermediate"
 
 level 3:
-  - "level[\\s_-]?3"
+  - "(?i)level[\\s_-]?3"
+  - "(?i)advanced"
 
 gssoc25:
-  - "gssoc25"
+  - "(?i)gssoc25"
+  - "(?i)gssoc 2025"
+  - "(?i)gssoc 25"
+  
 
 good first issue:
-  - "good first issue"
+  - "(?i)good first issue"
 
 enhancement:
-  - "enhancement"
-  - "improvement"
+  - "(?i)enhancement"
+  - "(?i)improvement"
+  - "(?i)improve"
+  - "(?i)upgrade"
+  - "(?i)update"
 
 feature request:
-  - "feature request"
-  - "suggestion"
-  - "new feature"
+  - "(?i)feature request"
+  - "(?i)suggestion"
+  - "(?i)new feature"
+  - "(?i)new feature request"
+  - "(?i)feature"
+  - "(?i)feature enhancement"
+  - "(?i)feature improvement"
+  - "(?i)feature upgrade"
+  - "(?i)feature update"
 
 documentation:
-  - "documentation"
+  - "(?i)documentation"
+  - "(?i)docs"
+  - "(?i)readme"
+  - "(?i)doc"
+  - "(?i)readme update"
+

@@ -1,31 +1,21 @@
-bug fix:
-  - 'fix/**'
-  - '**/bugfix/**'
+backend:
+  - 'src/controllers/**'
+  - 'src/models/**'
+  - 'src/routes/**'
+  - 'src/db/**'
+  - 'src/utils/**'
+  - 'src/middlewares/**'
+  - 'init/**'
+  - 'test/**'
+  - '__tests__/**'
 
-level 1:
-  - 'level1/**'
-
-level 2:
-  - 'level2/**'
-
-level 3:
-  - 'level3/**'
-
-gssoc25:
-  - 'gssoc25/**'
-
-good first issue:
-  - 'good-first-issue/**'
+frontend:
+  - 'src/views/**'
+  - 'src/public/**'
 
 documentation:
-  - 'docs/**'
   - '**/*.md'
 
-enhancement:
-  - 'enhancement/**'
-
-feature request:
-  - 'feature-request/**'
-  - 'feature/**'
-  - 'request/**'
-  - 'suggestion/**'
+tests:
+  - 'test/**'
+  - '__tests__/**'
