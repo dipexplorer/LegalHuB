@@ -1,4 +1,4 @@
-name: 🔁 Auto Merge on Test Success
+name: 🔁 Auto-Merge (Only After Review)
 
 on:
   pull_request:
@@ -12,12 +12,7 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: 🔍 Wait for checks to pass
-        uses: hmarr/auto-approve-action@v3
-        with:
-          github-token: ${{ secrets.BOT_PAT}}
-
-      - name: 🧠 Enable auto-merge
+      - name: 🧠 Enable auto-merge (manual approval required)
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
