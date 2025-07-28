@@ -1,0 +1,43 @@
+name: 💬 Auto Comment on PR Opened
+
+on:
+  pull_request:
+    types:
+      - opened
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  comment-on-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💬 Post comment on new PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const prTitle = context.payload.pull_request.title;
+            const prAuthor = context.payload.pull_request.user.login;
+            # const initiator = context.actor;
+            # const owner = context.repo.owner;
+
+            # if (initiator === owner) {
+            #   console.log(`PR opened by repo owner (${owner}). Skipping comment.`);
+            #   return;
+            # }
+
+            const comment = `👋 Hi @${prAuthor}!
+
+            Thanks for opening this pull request titled **"${prTitle}"**.
+            Our team will review it as soon as possible. Please make sure your PR follows the contributing guidelines and passes all checks ✅.
+
+            Happy contributing! 🚀`;
+
+            await github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
