@@ -27,6 +27,8 @@ jobs:
             //   console.log(`PR opened by repo owner (${owner}). Skipping comment.`);
             //   return;
             // }
+            // Construct the comment body
+            // const comment = `👋 Hi @${prAuthor}!
 
             const comment = `👋 Hi @${prAuthor}!
 
