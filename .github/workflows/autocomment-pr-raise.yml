@@ -20,13 +20,13 @@ jobs:
             const prNumber = context.payload.pull_request.number;
             const prTitle = context.payload.pull_request.title;
             const prAuthor = context.payload.pull_request.user.login;
-            # const initiator = context.actor;
-            # const owner = context.repo.owner;
+            // const initiator = context.actor;
+            // const owner = context.repo.owner;
 
-            # if (initiator === owner) {
-            #   console.log(`PR opened by repo owner (${owner}). Skipping comment.`);
-            #   return;
-            # }
+            // if (initiator === owner) {
+            //   console.log(`PR opened by repo owner (${owner}). Skipping comment.`);
+            //   return;
+            // }
 
             const comment = `👋 Hi @${prAuthor}!
 
