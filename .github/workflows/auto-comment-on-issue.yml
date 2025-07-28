@@ -1,0 +1,34 @@
+name: 💬 Auto Comment on Contributor Issues
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 💡 Check if author is not the owner
+        id: check
+        run: |
+          if [ "${{ github.event.issue.user.login }}" != "${{ github.repository_owner }}" ]; then
+            echo "is_contributor=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_contributor=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 💬 Post thank-you comment
+        if: steps.check.outputs.is_contributor == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "👋 Hi @${{ github.event.issue.user.login }}! Thank you for opening this issue. A maintainer will review it soon. Stay tuned! 🚀"
+            })
