@@ -1,4 +1,4 @@
-name: 🔁 Auto-Merge (Only After Review)
+name: 🔁 Auto-Merge (Only for Owner PRs Without Review)
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   automerge:
+    if: github.event.pull_request.user.login == github.repository_owner
     runs-on: ubuntu-latest
     permissions:
       contents: write
