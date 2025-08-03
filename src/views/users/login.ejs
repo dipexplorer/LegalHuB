@@ -1,11 +1,11 @@
 <% layout("/layouts/boilerplate") -%>
 <style>
     .success-message {
-    color: #28a745; 
-    margin-bottom: 15px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 500;
+        color: #28a745;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
     }
 
     .btn {
@@ -32,7 +32,7 @@
         margin-bottom: 20px;
         border-radius: 25px;
         overflow: hidden;
-        background: linear-gradient(90deg, #4e00ff, #8e00ff)
+        background: linear-gradient(90deg, #4e00ff, #8e00ff);
     }
     
     .toggle button {
@@ -42,11 +42,11 @@
         background: transparent;
         cursor: pointer;
         font-weight: bold;
+        color: white;
     }
     
     .toggle button.active {
-        background: linear-gradient(90deg, #4e00ff, #8e00ff);
-        color: white;
+        background: rgba(255, 255, 255, 0.2);
     }
     
     .hidden {
@@ -80,16 +80,53 @@
         margin-top: 0.25rem;
         display: none;
     }
+    
+    .password-field-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .password-input-wrapper {
+        flex: 1;
+    }
+    
+    .password-toggle-btn {
+        margin-left: 10px;
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        height: 38px; /* Match input height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .password-toggle-btn:hover {
+        background: rgba(240, 240, 240, 0.7);
+    }
+    
+    .password-toggle-btn:focus {
+        outline: none;
+    }
+    
+    /* Adjust form control to remove extra padding */
+    .form-control {
+        padding-right: 12px !important;
+    }
 </style>
 
 <div class="frm_container row">
     <div class="col-md-4 offset-md-4 frm_box">
-
-                 <% if (success && success.length > 0) { %>
-                    <div class="alert alert-success text-center my-3">
-                    <%= success %>
-                        </div>
-                        <% } %>
+        <% if (success && success.length > 0) { %>
+            <div class="alert alert-success text-center my-3">
+                <%= success %>
+            </div>
+        <% } %>
 
         <!-- Toggle Buttons -->
         <div class="toggle">
@@ -119,8 +156,13 @@
                 <div class="col">
                     <div class="input-group form-group">
                         <label for="login-password" class="form-label">Password</label>
-                        <input type="password" id="login-password" name="password" placeholder="Enter your password"
-                            class="form-control" required>
+                        <div class="password-field-container">
+                            <input type="password" id="login-password" name="password" placeholder="Enter your password"
+                                class="form-control" required>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('login-password', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         <div class="invalid-feedback">Please enter your password.</div>
                     </div>
                 </div>
@@ -132,8 +174,6 @@
         </form>
 
         <!-- REGISTRATION FORM -->
-
-
         <form id="register-form" class="form hidden" method="POST" novalidate>
             <div id="register-error" class="error-message" style="display: none;"></div>
             <div class="row mb-3">
@@ -160,17 +200,26 @@
                 <div class="col-md-6">
                     <div class="input-group form-group">
                         <label for="register-password" class="form-label">Password</label>
-                        <input type="password" id="register-password" name="password"
-                            placeholder="Enter your password" class="form-control" required minlength="6">
+                        <div class="password-field-container">
+                            <input type="password" id="register-password" name="password"
+                                placeholder="Enter your password" class="form-control" required minlength="6">
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('register-password', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         <div class="invalid-feedback">Password must be at least 6 characters.</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group form-group">
                         <label for="register-confirm-password" class="form-label">Confirm Password</label>
-                        <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Confirm your password" class="form-control" required>
-
-                        <!-- <div class="invalid-feedback">Passwords must match.</div> -->
+                        <div class="password-field-container">
+                            <input type="password" id="register-confirm-password" name="confirmPassword" 
+                                placeholder="Confirm your password" class="form-control" required>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('register-confirm-password', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         <div id="password-mismatch-error" class="validation-error">Passwords do not match</div>
                     </div>
                 </div>
@@ -184,12 +233,26 @@
 </div>
 
 <script>
+    // Password visibility toggle function
+    function togglePassword(inputId, toggleBtn) {
+        const input = document.getElementById(inputId);
+        const icon = toggleBtn.querySelector('i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+        // Keep focus on input after toggle
+        input.focus();
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         // Form toggle functionality
-
-
-        
         const loginToggle = document.getElementById('login-toggle');
         const registerToggle = document.getElementById('register-toggle');
         const loginForm = document.getElementById('login-form');
@@ -240,30 +303,28 @@
         confirmPasswordInput.addEventListener('input', validatePasswordMatch);
 
         // Form submission handling
-registerForm.addEventListener('submit', async function(event) {
-  event.preventDefault(); 
+        registerForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); 
 
-  const formData = new FormData(registerForm);
-  const payload = Object.fromEntries(formData.entries());
+            const formData = new FormData(registerForm);
+            const payload = Object.fromEntries(formData.entries());
 
-  const response = await fetch('/api/users/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+            const response = await fetch('/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
 
-  const result = await response.json();
-  if (response.ok) {
-    alert(result.msg); 
-  } else {
-    // show error
-    document.getElementById('register-error').textContent = result.msg;
-    document.getElementById('register-error').style.display = 'block';
-  }
-});
-
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.msg); 
+            } else {
+                document.getElementById('register-error').textContent = result.msg;
+                document.getElementById('register-error').style.display = 'block';
+            }
+        });
 
         // Login form validation
         loginForm.addEventListener('submit', function(event) {
@@ -273,6 +334,5 @@ registerForm.addEventListener('submit', async function(event) {
                 document.getElementById('login-error').style.display = 'block';
             }
         });
-        
     });
 </script>
