@@ -1,99 +1,278 @@
 <% layout("/layouts/boilerplate") -%>
-    <style>
-        .btn {
-            width: 100%;
-            padding: 15px 25px;
-            background: linear-gradient(90deg, #4e00ff, #8e00ff);
-            border: none;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
-        }
+<style>
+    .success-message {
+    color: #28a745; 
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
-        }
-    </style>
-    <div class="frm_container row">
-        <div class="col-md-4 offset-md-4 frm_box">
-            <!-- Toggle Buttons -->
-            <div class="toggle">
-                <button id="login-toggle" class="active">Login</button>
-                <button id="register-toggle">Register</button>
-            </div>
+    .btn {
+        width: 100%;
+        padding: 15px 25px;
+        background: linear-gradient(90deg, #4e00ff, #8e00ff);
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
+    }
 
-            <!-- LOGIN FORM -->
-            <form id="login-form" class="form needs-validation" method="POST" action="/api/users/login" novalidate>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group form-group">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" name="username" placeholder="Enter your username"
-                                class="form-control" required>
-                            <div class="invalid-feedback">Please enter a valid username.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group form-group">
-                            <label for="login-password" class="form-label">Password</label>
-                            <input type="password" id="login-password" name="password" placeholder="Enter your password"
-                                class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="submit" class="btn">Login</button>
-                </div>
-                <p class="small-text">Don't have an account? <span id="switch-to-register">Register</span></p>
-            </form>
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
+    }
+    
+    .toggle {
+        display: flex;
+        margin-bottom: 20px;
+        border-radius: 25px;
+        overflow: hidden;
+        background: linear-gradient(90deg, #4e00ff, #8e00ff)
+    }
+    
+    .toggle button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    .toggle button.active {
+        background: linear-gradient(90deg, #4e00ff, #8e00ff);
+        color: white;
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    .error-message {
+        color: #dc3545;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 14px;
+    }
+    
+    .small-text span {
+        color: #4e00ff;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    .small-text span:hover {
+        text-decoration: underline;
+    }
+    
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    
+    .validation-error {
+        color: #dc3545;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+        display: none;
+    }
+</style>
 
-            <!-- REGISTRATION FORM -->
-            <form id="register-form" class="form hidden" method="POST" action="/api/users/register">
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group form-group">
-                            <label for="register-name" class="form-label">Username</label>
-                            <input type="text" id="register-name" name="username" placeholder="Enter your name"
-                                class="form-control" required>
+<div class="frm_container row">
+    <div class="col-md-4 offset-md-4 frm_box">
+
+                 <% if (success && success.length > 0) { %>
+                    <div class="alert alert-success text-center my-3">
+                    <%= success %>
                         </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group form-group">
-                            <label for="register-email" class="form-label">Email</label>
-                            <input type="email" id="register-email" name="email" placeholder="Enter your email"
-                                class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="input-group form-group">
-                            <label for="register-password" class="form-label">Password</label>
-                            <input type="password" id="register-password" name="password"
-                                placeholder="Enter your password" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="input-group form-group">
-                            <label for="register-confirm-password" class="form-label">Confirm Password</label>
-                            <input type="password" id="register-confirm-password" name="confirmPassword"
-                                placeholder="Confirm your password" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="submit" class="btn">Register</button>
-                </div>
-                <p class="small-text">Already have an account? <span id="switch-to-login">Login</span></p>
-            </form>
+                        <% } %>
+
+        <!-- Toggle Buttons -->
+        <div class="toggle">
+            <button id="login-toggle" class="active">Login</button>
+            <button id="register-toggle">Register</button>
         </div>
+
+        <!-- Error Messages -->
+        <% if (error) { %>
+            <div class="error-message"><%= error %></div>
+        <% } %>
+
+        <!-- LOGIN FORM -->
+        <form id="login-form" class="form" method="POST" action="/api/users/login" novalidate>
+            <div id="login-error" class="error-message" style="display: none;"></div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username"
+                            class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid username.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="login-password" class="form-label">Password</label>
+                        <input type="password" id="login-password" name="password" placeholder="Enter your password"
+                            class="form-control" required>
+                        <div class="invalid-feedback">Please enter your password.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn">Login</button>
+            </div>
+            <p class="small-text">Don't have an account? <span id="switch-to-register">Register</span></p>
+        </form>
+
+        <!-- REGISTRATION FORM -->
+
+
+        <form id="register-form" class="form hidden" method="POST" novalidate>
+            <div id="register-error" class="error-message" style="display: none;"></div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="register-name" class="form-label">Username</label>
+                        <input type="text" id="register-name" name="username" placeholder="Enter your name"
+                            class="form-control" required>
+                        <div class="invalid-feedback">Please enter a username.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="register-email" class="form-label">Email</label>
+                        <input type="email" id="register-email" name="email" placeholder="Enter your email"
+                            class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid email.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="input-group form-group">
+                        <label for="register-password" class="form-label">Password</label>
+                        <input type="password" id="register-password" name="password"
+                            placeholder="Enter your password" class="form-control" required minlength="6">
+                        <div class="invalid-feedback">Password must be at least 6 characters.</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group form-group">
+                        <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Confirm your password" class="form-control" required>
+
+                        <!-- <div class="invalid-feedback">Passwords must match.</div> -->
+                        <div id="password-mismatch-error" class="validation-error">Passwords do not match</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn">Register</button>
+            </div>
+            <p class="small-text">Already have an account? <span id="switch-to-login">Login</span></p>
+        </form>
     </div>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form toggle functionality
+
+
+        
+        const loginToggle = document.getElementById('login-toggle');
+        const registerToggle = document.getElementById('register-toggle');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        
+        // Toggle forms
+        function showLoginForm() {
+            loginToggle.classList.add('active');
+            registerToggle.classList.remove('active');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            document.getElementById('login-error').style.display = 'none';
+        }
+        
+        function showRegisterForm() {
+            registerToggle.classList.add('active');
+            loginToggle.classList.remove('active');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            document.getElementById('register-error').style.display = 'none';
+        }
+
+        loginToggle.addEventListener('click', showLoginForm);
+        registerToggle.addEventListener('click', showRegisterForm);
+
+        // Switch between forms using text links
+        document.getElementById('switch-to-register').addEventListener('click', showRegisterForm);
+        document.getElementById('switch-to-login').addEventListener('click', showLoginForm);
+
+        // Password match validation
+        const passwordInput = document.getElementById('register-password');
+        const confirmPasswordInput = document.getElementById('register-confirm-password');
+        const passwordMismatchError = document.getElementById('password-mismatch-error');
+
+        function validatePasswordMatch() {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordInput.classList.add('is-invalid');
+                passwordMismatchError.style.display = 'block';
+                return false;
+            } else {
+                confirmPasswordInput.classList.remove('is-invalid');
+                passwordMismatchError.style.display = 'none';
+                return true;
+            }
+        }
+
+        passwordInput.addEventListener('input', validatePasswordMatch);
+        confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+
+        // Form submission handling
+registerForm.addEventListener('submit', async function(event) {
+  event.preventDefault(); 
+
+  const formData = new FormData(registerForm);
+  const payload = Object.fromEntries(formData.entries());
+
+  const response = await fetch('/api/users/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const result = await response.json();
+  if (response.ok) {
+    alert(result.msg); 
+  } else {
+    // show error
+    document.getElementById('register-error').textContent = result.msg;
+    document.getElementById('register-error').style.display = 'block';
+  }
+});
+
+
+        // Login form validation
+        loginForm.addEventListener('submit', function(event) {
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                document.getElementById('login-error').textContent = 'Please fill in all required fields';
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+        
+    });
+</script>

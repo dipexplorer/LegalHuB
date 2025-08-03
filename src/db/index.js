@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const DB_NAME = require("../constants.js");
 
-const DB_URL = process.env.DB_URL;
+const DB_URL = process.env.MONGO_URL;
 
 const db_connect = async () => {
     try {

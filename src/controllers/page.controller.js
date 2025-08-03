@@ -59,7 +59,10 @@ const renderTermsAndConditions = asyncHandler(async (req, res) => {
 });
 
 const renderLoginForm = async (req, res) => {
-    res.render("users/login");
+    res.render("users/login", {
+        success: req.flash("success"),
+        error: req.flash("error"),
+    });
 };
 
 const getLawyers = asyncHandler(async (req, res) => {

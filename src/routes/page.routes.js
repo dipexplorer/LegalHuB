@@ -40,5 +40,7 @@ router.get("/account/update", renderUpdateForm);
 router.get("/articles/publish", publishArticle);
 router.get("/articles/:id/edit", renderEditForm);
 router.get("/viewdowncount", renderDownCount);
-
+router.get("/register", (req, res) => {
+res.render("pages/login");
+});
 module.exports = router;

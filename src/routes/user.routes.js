@@ -1,39 +1,46 @@
 const express = require("express");
 const passport = require("passport");
 const {
-    registerUser,
-    loginUser,
-    logoutUser,
-    getUserProfile,
-    renderUpdateForm,
-    updateUser,
-    deleteUser,
+registerUser,
+loginUser,
+logoutUser,
+getUserProfile,
+updateUser,
+deleteUser,
 } = require("../controllers/user.controller.js");
 const {
-    isLoggedIn,
-    saveRedirectUrl,
+isLoggedIn,
+saveRedirectUrl,
 } = require("../middlewares/auth.middleware.js");
 
 const router = express.Router();
 
-// User routes using router.route()
-router.route("/register").post(registerUser);
+router.get("/login", (req, res) => {
+res.render("pages/login", { error: req.flash("error") });
+});
 
-router.route("/login").post(
-    saveRedirectUrl,
-    passport.authenticate("local", {
-        failureRedirect: "/login",
-        failureFlash: true,
-    }),
-    loginUser
-);
+router.post("/register", registerUser);
 
-router.route("/logout").get(logoutUser);
+router.post("/login", saveRedirectUrl, (req, res, next) => {
+passport.authenticate("local", (err, user, info) => {
+if (err) return next(err);
+if (!user) {
+req.flash("error", info?.message || "Invalid username or password");
+return res.redirect("/login");
+}
+req.logIn(user, (err) => {
+if (err) return next(err);
+return res.redirect(req.session.returnTo || "/");
+});
+})(req, res, next);
+});
 
-router.route("/profile").get(isLoggedIn, getUserProfile);
+router.get("/logout", logoutUser);
 
-router.route("/update").put(isLoggedIn, updateUser);
+router.get("/profile", isLoggedIn, getUserProfile);
 
-router.route("/delete").delete(isLoggedIn, deleteUser);
+router.put("/update", isLoggedIn, updateUser);
+
+router.delete("/delete", isLoggedIn, deleteUser);
 
 module.exports = router;

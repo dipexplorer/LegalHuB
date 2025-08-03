@@ -61,8 +61,11 @@ const registerUser = asyncHandler(async (req, res, next) => {
                     );
             }
 
-            req.flash("success", "Welcome! Account created successfully.");
-            return res.redirect("/");
+req.flash("success", "Registered successfully. Please log in.");
+return res.status(200).render("users/login");
+
+
+
         });
     } catch (err) {
         if (req.accepts("json")) {
