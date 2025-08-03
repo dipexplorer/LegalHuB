@@ -1,191 +1,746 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        /* ✅ Container Styling */
-        .document_container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 24px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease;
+<style>
+    /* ✅ Main Container Styling - Inspired by the clean design */
+    .documents-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 24px;
+        background: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    /* ✅ Header Section - Soft gradient enhancement */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 50px 0;
+        background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 50%, #ba68c8 100%);
+        border-radius: 20px;
+        color: white;
+        box-shadow: 0px 12px 40px rgba(123, 31, 162, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+        pointer-events: none;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        margin: 0 0 12px 0;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    /* ✅ Filter Section - Clean and modern like inspiration */
+    .filter-section {
+        background: #ffffff;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 32px;
+        border: 1px solid #e8e8e8;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .filter-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c2c2c;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .clear-filters-btn {
+        background: #f5f5f5;
+        color: #666;
+        border: 1px solid #ddd;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .clear-filters-btn:hover {
+        background: #7b1fa2;
+        color: white;
+        border-color: #7b1fa2;
+    }
+
+    .filter-controls {
+        display: grid;
+        grid-template-columns: 3fr 1.2fr 1.2fr 1.2fr;
+        gap: 24px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 8px;
+    }
+
+    .filter-select {
+        padding: 16px 16px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #fafafa;
+        font-family: inherit;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%237b1fa2' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        padding-right: 40px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #7b1fa2;
+        box-shadow: 0 0 0 4px rgba(123, 31, 162, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
+        background: #fff;
+        transform: translateY(-1px);
+    }
+
+    .filter-select:hover {
+        border-color: #c4c4c4;
+        background: #fff;
+    }
+
+    .search-input-container {
+        position: relative;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7b1fa2;
+        font-size: 1.1rem;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+
+    .filter-input {
+        padding: 16px 20px 16px 52px;
+        width: 100%;
+        min-width: 350px;
+        font-size: 1rem;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: #fafafa;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .filter-input:focus {
+        border-color: #7b1fa2;
+        box-shadow: 0 0 0 4px rgba(123, 31, 162, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
+        background: #fff;
+        transform: translateY(-1px);
+    }
+
+    .filter-input::placeholder {
+        color: #999;
+        font-style: italic;
+    }
+
+    /* ✅ Results Summary */
+    .results-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding: 0 8px;
+    }
+
+    .results-count {
+        font-size: 1rem;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .results-count strong {
+        color: #7b1fa2;
+        font-weight: 700;
+    }
+
+    /* ✅ Document Grid - Inspired by the card layout */
+    .documents-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    /* ✅ Document Cards - Enhanced design */
+    .document-card {
+        background: #ffffff;
+        border: 1px solid #e8e8e8;
+        border-radius: 16px;
+        padding: 28px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .document-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #7b1fa2, #9c27b0);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .document-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0px 12px 32px rgba(0, 0, 0, 0.15);
+        border-color: #7b1fa2;
+    }
+
+    .document-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .card-header {
+        margin-bottom: 16px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2c2c2c;
+        margin: 0 0 12px 0;
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    .card-description {
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 16px;
+        flex-grow: 1;
+        text-align: left;
+    }
+
+    /* ✅ Location and Department Info */
+    .card-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+        font-size: 0.85rem;
+        color: #777;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .meta-item i {
+        color: #7b1fa2;
+        font-size: 0.8rem;
+    }
+
+    /* ✅ Tags/Categories - Like in inspiration */
+    .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .tag {
+        background: #f0f0f0;
+        color: #666;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .tag.primary {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .tag.secondary {
+        background: #f3e5f5;
+        color: #6a1b9a;
+    }
+
+    /* ✅ Action Buttons - Matching inspiration style */
+    .card-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: auto;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .btn-download {
+        background: #2c2c2c;
+        color: white;
+    }
+
+    .btn-download:hover {
+        background: #1a1a1a;
+        transform: translateY(-2px);
+    }
+
+    .btn-apply {
+        background: transparent;
+        color: #2c2c2c;
+        border: 2px solid #2c2c2c;
+    }
+
+    .btn-apply:hover {
+        background: #2c2c2c;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn i {
+        font-size: 0.85rem;
+    }
+
+    /* ✅ Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: #ffffff;
+        border-radius: 16px;
+        border: 2px dashed #e0e0e0;
+        margin: 40px 0;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 24px;
+        color: #ccc;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+        color: #555;
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        font-size: 1rem;
+        color: #777;
+        margin-bottom: 24px;
+    }
+
+    /* ✅ Responsive Design */
+    @media (min-width: 1200px) {
+        .documents-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .documents-page {
+            padding: 0 16px;
         }
 
-        .document_container:hover {
-            transform: translateY(-2px);
+        .filter-controls {
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
-        /* ✅ Title Styling */
-        .title {
-            font-size: 2.2rem;
-            color: #7b1fa2;
-            margin-bottom: 32px;
-            text-align: center;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .filter-input {
+            min-width: auto;
         }
 
-        /* ✅ Document Card */
-        .document-card {
-            background: #fafafa;
+        .filter-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
+        }
+
+        .documents-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card-actions {
+            flex-direction: column;
+        }
+
+        .page-title {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .filter-section {
             padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .document-card:hover {
-            transform: translateY(-4px);
-            border-color: #ddd;
-            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.12);
+        .document-card {
+            padding: 20px;
         }
 
-        .document-card h2 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 600;
+        .page-header {
+            padding: 24px 0;
         }
+    }
+</style>
 
-        .document-card p {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
+<section class="documents" role="main">
+    <div class="documents-page">
+        <!-- Header Section -->
+        <div class="page-header">
+            <h1 class="page-title">📄 Legal Document Library</h1>
+            <p class="page-subtitle">Access and download legal documents and application forms from various Indian government departments</p>
+        </div>
 
-        /* ✅ Button Container - Proper Alignment */
-        .buttons {
-            display: flex;
-            justify-content: flex-start;
-            gap: 12px;
-            margin-top: 12px;
-            flex-wrap: nowrap;
-        }
+        <!-- Filter Section -->
+        <section class="filter-section" role="search" aria-labelledby="filter-title">
+            <div class="filter-header">
+                <h2 class="filter-title" id="filter-title">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    Filter Documents
+                </h2>
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()"
+                        aria-label="Clear all filters">
+                    <i class="fas fa-times" aria-hidden="true"></i> Clear Filters
+                </button>
+            </div>
+            
+            <form method="GET" action="" class="filter-form" role="search">
+                <div class="filter-controls" role="group" aria-labelledby="filter-title">
+                    <!-- Search Input -->
+                    <div class="filter-group">
+                        <label for="search" class="filter-label">Search Documents</label>
+                        <div class="search-input-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input 
+                                type="text" 
+                                id="search" 
+                                name="search" 
+                                class="filter-input" 
+                                placeholder="Search by title or description..."
+                                value="<%= currentFilters.search %>"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
 
-        /* ✅ General Button Styling */
-        .btn {
-            background-color: #7b1fa2;
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            white-space: nowrap;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
-        }
+                    <!-- State Filter -->
+                    <div class="filter-group">
+                        <label for="state" class="filter-label">State</label>
+                        <select id="state" name="state" class="filter-select">
+                            <option value="all" <%= currentFilters.state === 'all' ? 'selected' : '' %>>All States</option>
+                            <% if (filterOptions && filterOptions.states) { %>
+                                <% filterOptions.states.forEach(state => { %>
+                                    <option value="<%= state %>" <%= currentFilters.state === state ? 'selected' : '' %>>
+                                        <%= state %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
 
-        .btn:hover {
-            background-color: #9c27b0;
-            transform: translateY(-2px);
-        }
+                    <!-- Department Filter -->
+                    <div class="filter-group">
+                        <label for="department" class="filter-label">Department</label>
+                        <select id="department" name="department" class="filter-select">
+                            <option value="all" <%= currentFilters.department === 'all' ? 'selected' : '' %>>All Departments</option>
+                            <% if (filterOptions && filterOptions.departments) { %>
+                                <% filterOptions.departments.forEach(dept => { %>
+                                    <option value="<%= dept %>" <%= currentFilters.department === dept ? 'selected' : '' %>>
+                                        <%= dept %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
 
-        /* ✅ Download Button */
-        .download-btn {
-            background-color: #4caf50;
-        }
+                    <!-- Sort Options -->
+                    <div class="filter-group">
+                        <label for="sortBy" class="filter-label">Sort By</label>
+                        <select id="sortBy" name="sortBy" class="filter-select">
+                            <option value="newest" <%= currentFilters.sortBy === 'newest' ? 'selected' : '' %>>Newest First</option>
+                            <option value="oldest" <%= currentFilters.sortBy === 'oldest' ? 'selected' : '' %>>Oldest First</option>
+                            <option value="downloads" <%= currentFilters.sortBy === 'downloads' ? 'selected' : '' %>>Most Downloaded</option>
+                            <option value="alphabetical" <%= currentFilters.sortBy === 'alphabetical' ? 'selected' : '' %>>A-Z</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </section>
 
-        .download-btn:hover {
-            background-color: #45a049;
-        }
-
-        /* ✅ Apply Button */
-        .apply-btn {
-            background-color: #ff5722;
-        }
-
-        .apply-btn:hover {
-            background-color: #f44336;
-        }
-
-        /* ✅ Responsive Styling */
-        @media (max-width: 768px) {
-            .document_container {
-                padding: 20px;
-            }
-
-            .document-card {
-                padding: 16px;
-            }
-
-            .buttons {
-                flex-direction: row;
-                gap: 8px;
-            }
-
-            .btn {
-                padding: 6px 12px;
-                font-size: 0.85rem;
-            }
-        }
-    </style>
-
-    <section class="documents">
-        <div class="document_container">
-            <h1 class="title">📄 Download Legal Documents</h1>
-
-            <div id="documents-list">
-                <% if (documents && documents.length===0) { %>
-                    <p style="text-align: center; color: #888;">❌ No documents available.</p>
-                    <% } else if (documents) { %>
-                        <% documents.forEach(doc=> { %>
-                            <div class="document-card">
-                                <h2>
-                                    <%= doc.title %>
-                                </h2>
-                                <p>
-                                    <%= doc.description %>
-                                </p>
-                                <p><strong>State:</strong>
-                                    <%= doc.state %>
-                                </p>
-                                <p><strong>Department:</strong>
-                                    <%= doc.department %>
-                                </p>
-                                <div class="">
-                                    <a href="/api/documents/<%= doc._id %>/download">
-                                        <button class="btn" onclick="trackDownload('<%= doc._id %>')">⬇️
-                                            Download</button>
-                                    </a>
-                                    <a href="/api/documents/<%= doc._id %>/apply" class="btn apply-btn">
-                                        📥 Apply Online
-                                    </a>
-                                </div>
-                            </div>
-                            <% }) %>
-                                <% } else { %>
-                                    <p style="text-align: center; color: #888;">❌ Failed to load documents.</p>
-                                    <% } %>
+        <!-- Results Summary -->
+        <div class="results-summary" role="status" aria-live="polite">
+            <div class="results-count">
+                Showing <strong><%= resultsCount || 0 %></strong> document<%= (resultsCount !== 1) ? 's' : '' %>
             </div>
         </div>
-    </section>
 
-    <script>
-        function trackDownload(docId) {
-            fetch(`/api/documents/${docId}/track`, {
-                method: "POST"
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Download tracked successfully!");
-                        location.reload(); // Refresh page to update the download count
-                    } else {
-                        alert("Error tracking download.");
-                    }
-                })
-                .catch(error => console.error("Error:", error));
+        <!-- Documents Grid -->
+        <section id="documents-list" aria-labelledby="results-count" role="region">
+            <% if (documents && documents.length === 0) { %>
+                <div class="empty-state" role="status">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <h3>No documents found</h3>
+                    <p>We couldn't find any documents matching your current search criteria.</p>
+                </div>
+            <% } else if (documents) { %>
+                <div class="documents-grid">
+                    <% documents.forEach(doc => { %>
+                        <div class="document-card" role="article">
+                            <div class="card-header">
+                                <h3 class="card-title"><%= doc.title %></h3>
+                            </div>
+                            
+                            <p class="card-description"><%= doc.description %></p>
+                            
+                            <div class="card-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                    <span><%= doc.state %></span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-building" aria-hidden="true"></i>
+                                    <span><%= doc.department %></span>
+                                </div>
+                            </div>
+                            
+                            <div class="card-tags">
+                                <% 
+                                // Generate tags based on department and title keywords
+                                const departmentTag = doc.department.split(' ')[0]; // First word of department
+                                const titleWords = doc.title.toLowerCase();
+                                let tags = [departmentTag];
+                                
+                                // Add contextual tags based on title content
+                                if (titleWords.includes('ration') || titleWords.includes('food')) tags.push('PDS');
+                                if (titleWords.includes('certificate')) tags.push('Certificate');
+                                if (titleWords.includes('license')) tags.push('License');
+                                if (titleWords.includes('tax')) tags.push('Tax');
+                                if (titleWords.includes('pension')) tags.push('Pension');
+                                if (titleWords.includes('birth')) tags.push('Vital Records');
+                                if (titleWords.includes('caste')) tags.push('Reservation');
+                                if (titleWords.includes('driving')) tags.push('Transport');
+                                if (titleWords.includes('trade')) tags.push('Business');
+                                
+                                // Remove duplicates and limit to 3 tags
+                                tags = [...new Set(tags)].slice(0, 3);
+                                %>
+                                
+                                <% tags.forEach((tag, index) => { %>
+                                    <span class="tag <%= index === 0 ? 'primary' : '' %>"><%= tag %></span>
+                                <% }) %>
+                                
+                                <% if (doc.downloadCount && doc.downloadCount > 100) { %>
+                                    <span class="tag secondary">+<%= doc.downloadCount %></span>
+                                <% } %>
+                            </div>
+                            
+                            <div class="card-actions">
+                                <a href="/api/documents/<%= doc._id %>/download" 
+                                   class="btn btn-download" 
+                                   onclick="trackDownload('<%= doc._id %>')">
+                                    <i class="fas fa-download" aria-hidden="true"></i> Download PDF
+                                </a>
+                                <a href="/api/documents/<%= doc._id %>/apply" 
+                                   class="btn btn-apply">
+                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> Apply Online
+                                </a>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="empty-state" role="alert">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <h3>Failed to load documents</h3>
+                    <p>We're having trouble loading the documents right now.</p>
+                </div>
+            <% } %>
+        </section>
+    </div>
+</section>
+
+<script>
+    // Filter functionality
+    let filterTimeout;
+    
+    function trackDownload(docId) {
+        fetch(`/api/documents/${docId}/track`, {
+            method: "POST"
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Download tracked successfully!");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+
+    function clearAllFilters() {
+        document.getElementById('search').value = '';
+        document.getElementById('state').value = 'all';
+        document.getElementById('department').value = 'all';
+        document.getElementById('sortBy').value = 'newest';
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const search = document.getElementById('search').value.trim();
+        const state = document.getElementById('state').value;
+        const department = document.getElementById('department').value;
+        const sortBy = document.getElementById('sortBy').value;
+        
+        const params = new URLSearchParams();
+        if (search) params.set('search', search);
+        if (state !== 'all') params.set('state', state);
+        if (department !== 'all') params.set('department', department);
+        if (sortBy !== 'newest') params.set('sortBy', sortBy);
+        
+        const queryString = params.toString();
+        const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+        window.location.href = newUrl;
+    }
+
+    function handleSearchInput() {
+        clearTimeout(filterTimeout);
+        const searchInput = document.getElementById('search');
+        const searchIcon = document.querySelector('.search-icon');
+        
+        // Visual feedback during search
+        if (searchInput.value.trim()) {
+            searchIcon.className = 'fas fa-spinner fa-spin search-icon';
+        } else {
+            searchIcon.className = 'fas fa-search search-icon';
         }
-    </script>
+        
+        filterTimeout = setTimeout(() => {
+            applyFilters();
+        }, 300);
+    }
+
+    function showSearchLoading() {
+        const searchIcon = document.querySelector('.search-icon');
+        searchIcon.className = 'fas fa-spinner fa-spin search-icon';
+    }
+
+    function hideSearchLoading() {
+        const searchIcon = document.querySelector('.search-icon');
+        searchIcon.className = 'fas fa-search search-icon';
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            searchInput.addEventListener('input', handleSearchInput);
+            
+            // Add focus/blur effects
+            searchInput.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+                hideSearchLoading();
+            });
+        }
+        
+        const stateSelect = document.getElementById('state');
+        const departmentSelect = document.getElementById('department');
+        const sortSelect = document.getElementById('sortBy');
+        
+        if (stateSelect) {
+            stateSelect.addEventListener('change', function() {
+                showSearchLoading();
+                applyFilters();
+            });
+        }
+        
+        if (departmentSelect) {
+            departmentSelect.addEventListener('change', function() {
+                showSearchLoading();
+                applyFilters();
+            });
+        }
+        
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function() {
+                showSearchLoading();
+                applyFilters();
+            });
+        }
+    });
+</script>

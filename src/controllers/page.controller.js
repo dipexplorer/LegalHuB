@@ -15,10 +15,82 @@ const renderDictionary = (req, res) => {
 };
 
 const renderDocument = asyncHandler(async (req, res) => {
-    const documents = await Document.find();
+    // Extract filter parameters from query string
+    const { search, state, department, sortBy } = req.query;
+    
+    // Build filter object
+    let filter = {};
+    
+    // Add text search filter (case-insensitive search across title and description)
+    if (search && search.trim()) {
+        filter.$or = [
+            { title: { $regex: search.trim(), $options: 'i' } },
+            { description: { $regex: search.trim(), $options: 'i' } }
+        ];
+    }
+    
+    // Add state filter
+    if (state && state !== 'all') {
+        filter.state = state;
+    }
+    
+    // Add department filter
+    if (department && department !== 'all') {
+        filter.department = department;
+    }
+    
+    // Build sort object
+    let sort = {};
+    switch (sortBy) {
+        case 'oldest':
+            sort = { createdAt: 1 };
+            break;
+        case 'downloads':
+            sort = { downloadCount: -1 };
+            break;
+        case 'alphabetical':
+            sort = { title: 1 };
+            break;
+        case 'newest':
+        default:
+            sort = { createdAt: -1 };
+            break;
+    }
+    
+    // Fetch filtered and sorted documents
+    const documents = await Document.find(filter).sort(sort);
+    
+    // Get unique states and departments for filter options
+    const allStates = await Document.distinct('state');
+    const allDepartments = await Document.distinct('department');
+    
+    // Prepare filter options
+    const filterOptions = {
+        states: allStates.sort(),
+        departments: allDepartments.sort(),
+        sortOptions: [
+            { value: 'newest', label: 'Newest First' },
+            { value: 'oldest', label: 'Oldest First' },
+            { value: 'downloads', label: 'Most Downloaded' },
+            { value: 'alphabetical', label: 'A-Z' }
+        ]
+    };
+    
+    // Current filter state for maintaining form values
+    const currentFilters = {
+        search: search || '',
+        state: state || 'all',
+        department: department || 'all',
+        sortBy: sortBy || 'newest'
+    };
 
-    // ✅ Render ke andar `documents` pass karna zaroori hai
-    res.render("pages/documents", { documents });
+    // ✅ Render with documents, filter options, and current filters
+    res.render("pages/documents", { 
+        documents, 
+        filterOptions, 
+        currentFilters,
+        resultsCount: documents.length
+    });
 });
 
 const renderArticles = asyncHandler(async (req, res) => {

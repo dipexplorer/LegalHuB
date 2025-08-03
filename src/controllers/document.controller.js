@@ -45,14 +45,89 @@ const createDocument = asyncHandler(async (req, res) => {
     );
 });
 
-// ✅ Get All Documents (Pass data to EJS)
+// ✅ Get All Documents with filtering support
 const getAllDocuments = asyncHandler(async (req, res) => {
-    const documents = await Document.find();
+    // Extract filter parameters from query string
+    const { search, state, department, sortBy, page = 1, limit = 50 } = req.query;
+    
+    // Build filter object
+    let filter = {};
+    
+    // Add text search filter (case-insensitive search across title and description)
+    if (search && search.trim()) {
+        filter.$or = [
+            { title: { $regex: search.trim(), $options: 'i' } },
+            { description: { $regex: search.trim(), $options: 'i' } }
+        ];
+    }
+    
+    // Add state filter
+    if (state && state !== 'all') {
+        filter.state = state;
+    }
+    
+    // Add department filter
+    if (department && department !== 'all') {
+        filter.department = department;
+    }
+    
+    // Build sort object
+    let sort = {};
+    switch (sortBy) {
+        case 'oldest':
+            sort = { createdAt: 1 };
+            break;
+        case 'downloads':
+            sort = { downloadCount: -1 };
+            break;
+        case 'alphabetical':
+            sort = { title: 1 };
+            break;
+        case 'newest':
+        default:
+            sort = { createdAt: -1 };
+            break;
+    }
+    
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Fetch filtered and sorted documents with pagination
+    const documents = await Document.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(parseInt(limit));
+    
+    // Get total count for pagination
+    const totalDocuments = await Document.countDocuments(filter);
+    
+    // Get filter options
+    const allStates = await Document.distinct('state');
+    const allDepartments = await Document.distinct('department');
+    
+    const responseData = {
+        documents,
+        pagination: {
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(totalDocuments / parseInt(limit)),
+            totalDocuments,
+            hasNextPage: parseInt(page) < Math.ceil(totalDocuments / parseInt(limit)),
+            hasPrevPage: parseInt(page) > 1
+        },
+        filterOptions: {
+            states: allStates.sort(),
+            departments: allDepartments.sort()
+        },
+        appliedFilters: {
+            search: search || '',
+            state: state || 'all',
+            department: department || 'all',
+            sortBy: sortBy || 'newest'
+        }
+    };
 
-    // ✅ Render ke andar `documents` pass karna zaroori hai
-    // res.render('pages/documents', { documents });
     res.status(200).json(
-        new ApiResponse(200, documents, "Documents fetched successfully")
+        new ApiResponse(200, responseData, "Documents fetched successfully")
     );
 });
 

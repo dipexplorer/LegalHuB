@@ -14,6 +14,11 @@
     "main": "src/index.js",
     "scripts": {
         "test": "NODE_ENV=test jest --detectOpenHandles",
+        "test:filter": "NODE_ENV=test jest test/document.filter.test.js --detectOpenHandles",
+        "test:performance": "NODE_ENV=test jest test/document.performance.test.js --detectOpenHandles",
+        "test:frontend": "echo 'Frontend tests require browser environment (Puppeteer/Playwright/Cypress)'",
+        "test:watch": "NODE_ENV=test jest --watch --detectOpenHandles",
+        "test:coverage": "NODE_ENV=test jest --coverage --detectOpenHandles",
         "start": "node src/index.js",
         "dev": "nodemon src/index.js",
         "build": "echo 'No build step required for Express.js' && exit 0"
