@@ -12,14 +12,27 @@ const rightsSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        sourceLink: {
+        articleNumber: {
             type: String,
             required: true,
+            trim: true,
         },
         category: {
             type: String,
             required: true,
+            enum: [
+                "Right to Equality",
+                "Right to Freedom",
+                "Right Against Exploitation",
+                "Right to Freedom of Religion",
+                "Cultural and Educational Rights",
+                "Right to Constitutional Remedies",
+            ],
         },
+        sourceLink: {
+            type: String,
+            required: true,
+        }
     },
     { timestamps: true }
 );
