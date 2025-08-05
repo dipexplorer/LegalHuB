@@ -6,26 +6,81 @@ const ApiResponse = require("../utils/apiResponse");
 
 // ✅ Create Article
 const createArticle = asyncHandler(async (req, res) => {
-    const { title, content, tags } = req.body;
+    let {
+        title,
+        introduction,
+        conclusion,
+        sectionSubheadings,
+        sectionContents,
+        sectionListTypes,
+        sectionListItems,
+        tags,
+    } = req.body;
+
     const author = req.user?._id || req.body.author;
 
-    if (!title?.trim() || !content?.trim()) {
-        throw new ApiError(400, "Title and content are required");
+    // Normalize all section-related fields to arrays
+    const toArray = (val) => Array.isArray(val) ? val : (val ? [val] : []);
+    sectionSubheadings = toArray(sectionSubheadings);
+    sectionContents = toArray(sectionContents);
+    sectionListTypes = toArray(sectionListTypes);
+    sectionListItems = toArray(sectionListItems);
+
+    if (!title?.trim()) {
+        throw new ApiError(400, "Title is required");
     }
 
-    const article = await Article.create({ title, content, tags, author });
+    if (
+        sectionContents.length === 0 ||
+        sectionContents.every(content => !content.trim())
+    ) {
+        throw new ApiError(400, "At least one section with content is required");
+    }
 
-    // Check if request expects HTML or JSON
+    const sections = sectionContents.map((content, index) => {
+        const section = {
+            subheading: sectionSubheadings[index] || '',
+            content: content.trim(),
+        };
+
+        const listType = sectionListTypes[index];
+        const rawListItems = sectionListItems[index];
+
+        if (listType && rawListItems) {
+            const items = rawListItems
+                .split('\n')
+                .map(item => item.trim())
+                .filter(item => item);
+
+            if (items.length > 0) {
+                section.list = {
+                    type: listType,
+                    items,
+                };
+            }
+        }
+
+        return section;
+    });
+
+    const article = await Article.create({
+        title: title.trim(),
+        introduction: introduction?.trim(),
+        conclusion: conclusion?.trim(),
+        sections,
+        tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+        author,
+    });
+
     if (req.accepts("html")) {
         return res.redirect("/articles");
     } else {
         return res
             .status(201)
-            .json(
-                new ApiResponse(201, article, "Article created successfully")
-            );
+            .json(new ApiResponse(201, article, "Article created successfully"));
     }
 });
+
 
 // ✅ Get All Articles
 const getAllArticles = asyncHandler(async (req, res) => {
