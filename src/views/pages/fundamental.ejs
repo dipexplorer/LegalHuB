@@ -5,11 +5,121 @@
         .fun_container {
             max-width: 1080px;
             margin: 40px auto;
-            padding: 32px;
+            padding: 0;
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* ✅ Enhanced Educational Header */
+        .educational-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .educational-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .flag-icon {
+            font-size: 2.8rem;
+            margin-right: 12px;
+            display: inline-block;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .educational-context {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .educational-context .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px 24px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 120px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* ✅ Title Styling */
@@ -21,35 +131,138 @@
             margin-bottom: 20px;
         }
 
-        /* ✅ Search & Filter Section */
-        .search-filter-box {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
+        /* ✅ Enhanced Search & Filter Section */
+        .advanced-search-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid #e9ecef;
         }
 
-        .search-filter-box input,
-        .search-filter-box select {
-            flex: 1;
-            padding: 14px;
-            border: 1px solid #dfe6e9;
+        .search-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .search-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .search-icon {
+            color: #6c5ce7;
+            font-size: 1.2rem;
+        }
+
+        .search-subtitle {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto auto auto;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .search-input-container {
+            position: relative;
+        }
+
+        .smart-search-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #dee2e6;
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
-            background-color: #f9fafc;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
             outline: none;
         }
 
-        .search-filter-box input:focus,
-        .search-filter-box select:focus {
+        .smart-search-input:focus {
             border-color: #6c5ce7;
-            box-shadow: 0 0 8px rgba(108, 92, 231, 0.2);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
         }
 
-        /* ✅ Updated Button Styling */
-        .search-filter-box button {
-            padding: 14px 24px;
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f8f9fa;
+            transition: background-color 0.2s ease;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .category-select:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .article-search-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .article-search-input:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .search-btn {
+            padding: 14px 20px;
             background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
             color: #ffffff;
             border: none;
@@ -57,13 +270,110 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            transition: background 0.3s ease, transform 0.2s;
+            transition: all 0.3s ease;
             box-shadow: 0px 4px 12px rgba(108, 92, 231, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
         }
 
-        .search-filter-box button:hover {
+        .search-btn:hover {
             background: linear-gradient(135deg, #5a4ae5 0%, #8c82ff 100%);
             transform: translateY(-2px);
+            box-shadow: 0px 6px 16px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Active Filters */
+        .active-filters {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .filters-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        .clear-all-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .clear-all-btn:hover {
+            background: #c82333;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-tag {
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #b3d9ff;
+        }
+
+        .remove-filter {
+            background: none;
+            border: none;
+            color: #0066cc;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-left: 4px;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+
+        .remove-filter:hover {
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        /* Results Info */
+        .results-info {
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .results-count {
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         /* ✅ Rights Card */
@@ -133,11 +443,71 @@
             transform: translateY(-2px);
         }
 
+        /* ✅ Main Content Padding */
+        .main-content {
+            padding: 32px;
+        }
+
         /* ✅ Responsive Styling */
         @media (max-width: 768px) {
-            .search-filter-box {
+            .educational-header {
+                padding: 32px 20px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .flag-icon {
+                font-size: 2.2rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .educational-context .description {
+                font-size: 1rem;
+            }
+
+            .stats-section {
+                gap: 16px;
+            }
+
+            .stat-card {
+                min-width: 100px;
+                padding: 16px 20px;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .advanced-search-section {
+                padding: 20px;
+            }
+
+            .search-title {
+                font-size: 1.2rem;
+            }
+
+            .filters-header {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .filter-tags {
+                justify-content: center;
             }
 
             .recommendations {
@@ -175,22 +545,155 @@
     </style>
 
     <section class="fun_container">
-        <h1>🇮🇳 Fundamental Rights</h1>
-        <p>Explore different fundamental rights granted to individuals.</p>
+        <!-- Enhanced Educational Header -->
+        <div class="educational-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 class="main-title">
+                        <span class="flag-icon">🇮🇳</span>
+                        Fundamental Rights of India
+                    </h1>
+                    <p class="subtitle">Constitutional Guarantees for Every Citizen</p>
+                </div>
+                
+                <div class="educational-context">
+                    <p class="description">
+                        Fundamental Rights are the basic human rights enshrined in the Constitution of India 
+                        which are guaranteed to all citizens. These rights are essential for the development 
+                        of every individual and the progress of the nation.
+                    </p>
+                </div>
 
-        <!-- ✅ Search and Filter -->
-        <div class="search-filter-box">
-            <input type="text" id="search-input" placeholder="Search Rights..." aria-label="Search Rights">
-            <select id="category-filter" aria-label="Filter by Category">
-                <option value="">All Categories</option>
-                <option value="Equality">Equality</option>
-                <option value="Freedom">Freedom</option>
-                <option value="Education">Education</option>
-                <option value="Justice">Justice</option>
-                <option value="Constitutional Remedies">Constitutional Remedies</option>
-            </select>
-            <button id="search-button">Search</button>
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-number"><%= stats.totalRights %></div>
+                        <div class="stat-label">Total Rights</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><%= stats.totalCategories %></div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><%= stats.filteredResults %></div>
+                        <div class="stat-label">
+                            <% if (hasFilters) { %>
+                                Filtered Results
+                            <% } else { %>
+                                Available Rights
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Main Content Section -->
+        <div class="main-content">
+            <!-- ✅ Enhanced Search and Filter Section -->
+            <div class="advanced-search-section">
+                <div class="search-header">
+                    <h3 class="search-title">
+                        <i class="fas fa-search search-icon"></i>
+                        Find Your Rights
+                    </h3>
+                    <p class="search-subtitle">Search by name, description, or article number</p>
+                </div>
+
+                <form class="search-form" id="search-form" method="GET" action="/rights">
+                    <div class="search-row">
+                        <div class="search-input-container">
+                            <input 
+                                type="text" 
+                                id="search-input" 
+                                name="search"
+                                value="<%= currentFilters.search %>"
+                                placeholder="Search rights, descriptions, or article numbers..." 
+                                aria-label="Search Rights"
+                                class="smart-search-input"
+                            >
+                            <div class="search-suggestions" id="search-suggestions"></div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <select id="category-filter" name="category" aria-label="Filter by Category" class="category-select">
+                                <option value="all">All Categories</option>
+                                <% filterOptions.categories.forEach(category => { %>
+                                    <option 
+                                        value="<%= category.value %>" 
+                                        <%= currentFilters.category === category.value ? 'selected' : '' %>
+                                    >
+                                        <%= category.label %> (<%= category.count %>)
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="article-search-container">
+                            <input 
+                                type="text" 
+                                id="article-input" 
+                                name="articleNumber"
+                                value="<%= currentFilters.articleNumber %>"
+                                placeholder="Article #" 
+                                aria-label="Search by Article Number"
+                                class="article-search-input"
+                            >
+                        </div>
+
+                        <button type="submit" class="search-btn" id="search-button">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Active Filters Display -->
+                <% if (hasFilters) { %>
+                    <div class="active-filters">
+                        <div class="filters-header">
+                            <span class="filters-label">Active Filters:</span>
+                            <button type="button" class="clear-all-btn" onclick="clearAllFilters()">
+                                <i class="fas fa-times"></i>
+                                Clear All
+                            </button>
+                        </div>
+                        <div class="filter-tags">
+                            <% if (currentFilters.search) { %>
+                                <span class="filter-tag">
+                                    <i class="fas fa-search"></i>
+                                    Search: "<%= currentFilters.search %>"
+                                    <button type="button" onclick="clearFilter('search')" class="remove-filter">×</button>
+                                </span>
+                            <% } %>
+                            <% if (currentFilters.category && currentFilters.category !== 'all') { %>
+                                <span class="filter-tag">
+                                    <i class="fas fa-tag"></i>
+                                    Category: <%= currentFilters.category %>
+                                    <button type="button" onclick="clearFilter('category')" class="remove-filter">×</button>
+                                </span>
+                            <% } %>
+                            <% if (currentFilters.articleNumber) { %>
+                                <span class="filter-tag">
+                                    <i class="fas fa-file-alt"></i>
+                                    Article: <%= currentFilters.articleNumber %>
+                                    <button type="button" onclick="clearFilter('articleNumber')" class="remove-filter">×</button>
+                                </span>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+
+                <!-- Results Count -->
+                <div class="results-info">
+                    <span class="results-count">
+                        <% if (hasFilters) { %>
+                            Showing <%= resultsCount %> of <%= totalRights %> rights
+                        <% } else { %>
+                            Showing all <%= totalRights %> rights
+                        <% } %>
+                    </span>
+                </div>
+            </div>
         <!-- ✅ Recommended Rights -->
         <h2>Commonly Searched</h2>
         <div class="recommendations">
@@ -233,40 +736,168 @@
                                     <% } %>
             </div>
             <% } %>
-
-
-
-
-
+        </div>
     </section>
 
 
     <script>
-        // ✅ Search Functionality
-        document.getElementById('search-button').addEventListener('click', () => {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const category = document.getElementById('category-filter').value.toLowerCase();
+        // Enhanced Search and Filter Functionality
+        let searchTimeout;
+        const searchInput = document.getElementById('search-input');
+        const categoryFilter = document.getElementById('category-filter');
+        const articleInput = document.getElementById('article-input');
+        const searchForm = document.getElementById('search-form');
+        const suggestionsContainer = document.getElementById('search-suggestions');
 
-            document.querySelectorAll('.right').forEach(item => {
-                const name = item.querySelector('h2').textContent.toLowerCase();
-                if ((name.includes(query) || query === "") && (category === "" || name.includes(category))) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
+        // Debounced search functionality
+        function debounceSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                // Auto-submit form on input change for real-time filtering
+                if (searchInput.value.length >= 2 || searchInput.value.length === 0) {
+                    searchForm.submit();
                 }
-            });
-        });
-
-        // ✅ Recommended Search
-        function fetchRight(right) {
-            document.getElementById('search-input').value = right;
-            document.getElementById('search-button').click();
+            }, 300);
         }
-        function changePage(page) {
-            if (page) {
-                window.location.href = `/rights?page=${encodeURIComponent(page)}`;
+
+        // Add event listeners for real-time search
+        searchInput.addEventListener('input', debounceSearch);
+        categoryFilter.addEventListener('change', () => searchForm.submit());
+        articleInput.addEventListener('input', debounceSearch);
+
+        // Search suggestions functionality
+        const commonSearches = [
+            'Right to Equality',
+            'Right to Freedom',
+            'Right to Education',
+            'Right Against Exploitation',
+            'Right to Freedom of Religion',
+            'Cultural and Educational Rights',
+            'Right to Constitutional Remedies',
+            'Article 14',
+            'Article 19',
+            'Article 21',
+            'Article 32'
+        ];
+
+        function showSuggestions(query) {
+            if (!query || query.length < 2) {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
+
+            const matches = commonSearches.filter(item => 
+                item.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5);
+
+            if (matches.length > 0) {
+                suggestionsContainer.innerHTML = matches.map(match => 
+                    `<div class="suggestion-item" onclick="selectSuggestion('${match}')">${match}</div>`
+                ).join('');
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
             }
         }
 
+        function selectSuggestion(suggestion) {
+            searchInput.value = suggestion;
+            suggestionsContainer.style.display = 'none';
+            searchForm.submit();
+        }
 
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-input-container')) {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            showSuggestions(e.target.value);
+        });
+
+        // Filter management functions
+        function clearFilter(filterType) {
+            const url = new URL(window.location);
+            url.searchParams.delete(filterType);
+            url.searchParams.delete('page'); // Reset to first page
+            window.location.href = url.toString();
+        }
+
+        function clearAllFilters() {
+            const url = new URL(window.location);
+            url.searchParams.delete('search');
+            url.searchParams.delete('category');
+            url.searchParams.delete('articleNumber');
+            url.searchParams.delete('page');
+            window.location.href = url.toString();
+        }
+
+        // Enhanced recommended search
+        function fetchRight(right) {
+            const url = new URL(window.location);
+            url.searchParams.set('search', right);
+            url.searchParams.delete('page');
+            window.location.href = url.toString();
+        }
+
+        // Enhanced pagination with filter preservation
+        function changePage(page) {
+            if (page) {
+                const url = new URL(window.location);
+                url.searchParams.set('page', page);
+                window.location.href = url.toString();
+            }
+        }
+
+        // Form submission enhancement
+        searchForm.addEventListener('submit', (e) => {
+            // Remove empty parameters to keep URL clean
+            const formData = new FormData(searchForm);
+            const url = new URL(window.location.origin + '/rights');
+            
+            for (let [key, value] of formData.entries()) {
+                if (value && value.trim() && value !== 'all') {
+                    url.searchParams.set(key, value.trim());
+                }
+            }
+            
+            // Reset to first page on new search
+            url.searchParams.delete('page');
+            
+            window.location.href = url.toString();
+            e.preventDefault();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + K to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            
+            // Escape to clear search
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        // Add loading indicator for search
+        function showSearchLoading() {
+            const searchBtn = document.getElementById('search-button');
+            const originalContent = searchBtn.innerHTML;
+            searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Searching...</span>';
+            searchBtn.disabled = true;
+            
+            setTimeout(() => {
+                searchBtn.innerHTML = originalContent;
+                searchBtn.disabled = false;
+            }, 1000);
+        }
+
+        // Show loading on form submit
+        searchForm.addEventListener('submit', showSearchLoading);
     </script>
