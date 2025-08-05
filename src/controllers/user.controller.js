@@ -3,9 +3,11 @@ const asyncHandler = require("../utils/asyncHandler.js");
 const apiResponse = require("../utils/apiResponse.js");
 const apiError = require("../utils/apiError.js");
 const passport = require("passport");
+const validatePassword = require("../validators/passwordValidator.js");
+
 
 // 📌 Register User
-const registerUser = asyncHandler(async (req, res, next) => {
+const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
 
     if (!username || !email || !password || !confirmPassword) {
@@ -17,6 +19,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
             throw new apiError(400, errorMsg);
         }
     }
+
+     // Validate password strength
+    const result = validatePassword(password);
+    if (result.errors.length > 0) {
+    return res.status(400).json({ errors: result.errors, strength: result.strength });
+  }
 
     if (password !== confirmPassword) {
         const errorMsg = "Passwords do not match";

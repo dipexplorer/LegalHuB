@@ -203,7 +203,7 @@
         <!-- ✅ Rights List -->
         <div class="rights-list">
             <% rights.forEach(right=> { %>
-                <div class="right">
+                <div class="right" data-category="<%= right.category || '' %>">
                     <h2>
                         <%= right.name %>
                     </h2>
@@ -249,7 +249,8 @@
 
             document.querySelectorAll('.right').forEach(item => {
                 const name = item.querySelector('h2').textContent.toLowerCase();
-                if ((name.includes(query) || query === "") && (category === "" || name.includes(category))) {
+                const itemCategory = item.getAttribute('data-category')?.toLowerCase() || "";
+                if ((name.includes(query) || query === "") && (category === "" || itemCategory === category)) {
                     item.style.display = 'block';
                 } else {
                     item.style.display = 'none';
