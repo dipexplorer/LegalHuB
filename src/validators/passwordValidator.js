@@ -8,8 +8,8 @@ const validatePassword = function(password) {
   const errors = [];
   let score = 0;
 
-  if (password.length >= 12) score += 2;
-  else if (password.length >= 8) score += 1;
+  if (password.length >= 8) score += 1;
+  
   else errors.push("Minimum 8 characters.");
 
   if (/[A-Z]/.test(password)) score += 1;
