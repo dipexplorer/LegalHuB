@@ -1,191 +1,204 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        .legal {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+<style>
+    :root {
+        --primary: #9c27b0;
+        --light-bg: rgba(255, 255, 255, 0.05);
+        --hover-bg: rgba(255, 255, 255, 0.08);
+        --text: #e0e0e0;
+        --subtext: #bbb;
+    }
+
+    .articles-wrapper {
+        max-width: 1100px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .page-title {
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-align: left;
+        margin-bottom: 30px;
+        border-left: 6px solid var(--primary);
+        padding-left: 16px;
+    }
+
+    /* ✅ Search Bar */
+    .search-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+
+    #search-input {
+        flex-grow: 1;
+        padding: 12px 16px;
+        border: 1px solid #555;
+        border-radius: 8px;
+        background-color: var(--light-bg);
+        color: #fff;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    #search-input:focus {
+        border-color: var(--primary);
+    }
+
+    #search-button {
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    #search-button:hover {
+        background: #b04ec2;
+    }
+
+    /* ✅ Articles Grid */
+    .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    .article-card {
+        background: var(--light-bg);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .article-card:hover {
+        background-color: var(--hover-bg);
+        transform: translateY(-4px);
+    }
+
+    .article-card h2 {
+        font-size: 1.4rem;
+        color: #fff;
+        margin-bottom: 10px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .article-card p {
+        color: var(--text);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 12px;
+        flex-grow: 1;
+    }
+
+    .meta-info {
+        font-size: 0.85rem;
+        color: var(--subtext);
+        margin-bottom: 10px;
+    }
+
+    .read-more {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .read-more:hover {
+        color: #b366cc;
+    }
+
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
         }
 
-        /* ✅ Title Styling */
-        h1 {
-            font-size: 2.5rem;
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 24px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        /* ✅ Search Bar Styling */
-        #search-container {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        #search-input {
-            padding: 12px 16px;
-            border: 1px solid #555;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-size: 16px;
-            width: 70%;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        #search-input::placeholder {
-            color: #aaa;
-        }
-
-        #search-input:focus {
-            border-color: #9c27b0;
+        .search-bar {
+            flex-direction: column;
         }
 
         #search-button {
-            background: #7b1fa2;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 10px;
-            transition: background-color 0.3s ease;
+            width: 100%;
         }
+    }
+</style>
 
-        #search-button:hover {
-            background: #9c27b0;
-        }
+<div class="articles-wrapper">
+    <h1 class="page-title">📚 Explore Legal Articles</h1>
 
-        /* ✅ Article Card Styling */
-        .article {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-        }
+    <!-- ✅ Search -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search legal topics, keywords..." />
+        <button id="search-button">Search</button>
+    </div>
 
-        .article:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            transform: translateY(-4px);
-        }
-
-        .article h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-
-        .article p {
-            font-size: 1rem;
-            color: #ddd;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .article a {
-            color: #9c27b0;
-            text-decoration: none;
-            font-weight: 500;
-            border-bottom: 1px solid #9c27b0;
-            transition: color 0.3s ease;
-        }
-
-        .article a:hover {
-            color: #b366cc;
-            border-bottom-color: #b366cc;
-        }
-
-        /* ✅ Responsive Styling */
-        @media (max-width: 768px) {
-            #search-input {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            #search-button {
-                width: 100%;
-                margin-left: 0;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-
-    <section class="container legal">
-        <h1>📄 Legal Articles</h1>
-
-        <!-- ✅ Search Bar -->
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="Search Legal Articles..." />
-            <button id="search-button">Search</button>
-        </div>
-
-        <!-- ✅ Articles List -->
-        <div class="articles-list">
-            <% articles.forEach(article=> { %>
-                <div class="article">
-                    <h2>
-                        <%= article.title %>
-                    </h2>
-                    <p>
-                        <%= article.content.substring(0, 150) %>...
-                    </p>
-                    <a href="/api/articles/<%= article._id %>">Read More →</a>
+    <!-- ✅ Article List -->
+    <div class="articles-grid">
+        <% articles.forEach(article => { %>
+            <div class="article-card">
+                <h2><%= article.title %></h2>
+                <div class="meta-info">
+                    By <%= article.author?.name || "Unknown Author" %> · <%= article.createdAt.toDateString() %>
                 </div>
-                <% }) %>
-        </div>
-    </section>
+                <p>
+                    <%= article.introduction 
+                        ? article.introduction.replace(/<[^>]+>/g, '').substring(0, 150) 
+                        : "No introduction available." 
+                    %>...
+                </p>
+                <a href="/api/articles/<%= article._id %>" class="read-more">Read More →</a>
+            </div>
+        <% }) %>
+    </div>
+</div>
 
-    <!-- ✅ JavaScript Search Functionality -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('search-input');
-            const searchButton = document.getElementById('search-button');
-            const articles = document.querySelectorAll('.article');
+<!-- ✅ JavaScript Search -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const articleCards = document.querySelectorAll('.article-card');
 
-            // ✅ Function to filter articles
-            function filterArticles() {
-                const query = searchInput.value.toLowerCase();
+        function filterArticles() {
+            const query = searchInput.value.toLowerCase();
 
-                articles.forEach(article => {
-                    const title = article.querySelector('h2').innerText.toLowerCase();
-                    const content = article.querySelector('p').innerText.toLowerCase();
+            articleCards.forEach(card => {
+                const title = card.querySelector('h2').innerText.toLowerCase();
+                const body = card.querySelector('p').innerText.toLowerCase();
 
-                    if (title.includes(query) || content.includes(query)) {
-                        article.style.display = 'block';
-                    } else {
-                        article.style.display = 'none';
-                    }
-                });
-            }
-
-            // ✅ Search on input change (Debounce Effect)
-            let debounceTimer;
-            searchInput.addEventListener('input', () => {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(filterArticles, 300);
-            });
-
-            // ✅ Search on button click
-            searchButton.addEventListener('click', filterArticles);
-
-            // ✅ Allow pressing "Enter" to search
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    filterArticles();
+                if (title.includes(query) || body.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
                 }
             });
+        }
+
+        let debounceTimer;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(filterArticles, 300);
         });
-    </script>
+
+        searchButton.addEventListener('click', filterArticles);
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                filterArticles();
+            }
+        });
+    });
+</script>
