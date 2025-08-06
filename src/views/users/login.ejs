@@ -128,8 +128,6 @@
                                 placeholder="Enter your password" class="form-control" required minlength="8">
                                 <div class="password-feedback" id="password-feedback"></div>
                                 <div class="invalid-feedback">Please enter a valid password.</div>
-                                <div id="strength-message" style="font-size: smaller; color:cadetblue;" ></div>
-                                <div id="strength-line" style="height:4px; width:100%; background:#eee;"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -155,66 +153,34 @@
 <script>
     (() => {
         'use strict';
-        function validatePassword(password) {
-        let score = 0;
 
-        if (password.length >= 8) score += 2;
+        const passwordInput = document.getElementById('register-password');
+        const confirmPasswordInput = document.getElementById('register-confirm-password');
+        const passwordFeedback = document.getElementById('password-feedback');
 
-        if (/[A-Z]/.test(password)) score += 1;
-        if (/[a-z]/.test(password)) score += 1;
-        if (/[0-9]/.test(password)) score += 1;
-        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
+        const getPasswordErrors = (password) => {
+            const errors = [];
+            if (password.length < 8) errors.push("at least 8 characters");
+            if (!/[a-z]/.test(password)) errors.push("a lowercase letter");
+            if (!/[A-Z]/.test(password)) errors.push("an uppercase letter");
+            if (!/[0-9]/.test(password)) errors.push("a number");
+            if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) errors.push("a special character");
+            return errors;
+        };
 
-        let strength = "Very Weak";
-        let color = "red";
-
-        if (score >= 6) {
-            strength = "Strong";
-            color = "green";
-        } else if (score >= 4) {
-            strength = "Medium";
-            color = "orange";
-        } else if (score >= 2) {
-            strength = "Weak";
-            color = "red";
-        }
-
-        return { strength, color };
-    }
-
-    const passwordInput = document.getElementById('register-password');
-    const strengthMsg = document.getElementById('strength-message');
-    const strengthLine = document.getElementById('strength-line');
-    const passwordFeedback = document.getElementById('password-feedback');
-
-    const getPasswordErrors = (password) => {
-        const errors = [];
-        if (password.length < 8) errors.push("at least 8 characters");
-        if (!/[a-z]/.test(password)) errors.push("a lowercase letter");
-        if (!/[A-Z]/.test(password)) errors.push("an uppercase letter");
-        if (!/[0-9]/.test(password)) errors.push("a number");
-        if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) errors.push("a special character");
-        return errors;
-    };
-
-    passwordInput.addEventListener('input', function () {
-        const password = passwordInput.value;
-        const errors = getPasswordErrors(password);
-        if (errors.length === 0) {
-            passwordFeedback.textContent = "Password looks good!";
-            passwordFeedback.className = "password-feedback valid";
-            passwordInput.setCustomValidity('');
-        } else {
-            passwordFeedback.textContent = "Include: " + errors.join(", ");
-            passwordFeedback.className = "password-feedback show";
-            passwordInput.setCustomValidity("Invalid password.");
-        }
-
-        const { strength, color } = validatePassword(password);
-
-        strengthMsg.textContent = `Password Strength: ${strength}`;
-        strengthLine.style.backgroundColor = color;
-    });
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const errors = getPasswordErrors(password);
+            if (errors.length === 0) {
+                passwordFeedback.textContent = "Password looks good!";
+                passwordFeedback.className = "password-feedback valid";
+                passwordInput.setCustomValidity('');
+            } else {
+                passwordFeedback.textContent = "Include: " + errors.join(", ");
+                passwordFeedback.className = "password-feedback show";
+                passwordInput.setCustomValidity("Invalid password.");
+            }
+        });
 
         confirmPasswordInput.addEventListener('input', () => {
             if (confirmPasswordInput.value !== passwordInput.value) {
