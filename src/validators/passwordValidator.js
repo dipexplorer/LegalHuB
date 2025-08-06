@@ -24,13 +24,8 @@ const validatePassword = function(password) {
   if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
   else errors.push("At least one special character.");
 
-  let strength = 'Very Weak';
-  let color = 'red';
-  if (score >= 6) {strength = 'Strong'; color = 'green';}
-  else if (score >= 4){ strength = 'Medium'; color = 'orange';}
-  else if (score >= 2){ strength = 'Weak'; color = 'red';}
 
-  return {errors, strength, color};
+  return {errors};
 }
 
 module.exports = validatePassword;
