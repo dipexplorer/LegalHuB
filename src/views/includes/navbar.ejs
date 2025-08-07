@@ -1,24 +1,35 @@
 <header>
     <nav>
-        <div class="left-section">
-            <div class="navbar-brand logo">
-                <a href="/">🚀 Legal<span style="color:#e040fb;">HuB</span></a>
-            </div>
-            <ul>
+        <div class="navbar-brand logo">
+            <a href="/">🚀 Legal<span style="color:#e040fb;">HuB</span></a>
+        </div>
+        <div class="nav-container" id="nav-container">
+            <ul class="nav-links">
                 <li><a href="/articles">Articles</a></li>
                 <li><a href="/documents">Documents</a></li>
-                <!-- <li><a href="/articles">Articles & Guides</a></li> -->
+                <li><a href="/articles">Articles & Guides</a></li>
                 <li><a href="/rights">Fundamental Rights</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/#FAQs">FAQs</a></li>
             </ul>
+            <div class="auth-links">
+                <% if (currentUser) { %>
+                    <a href="/api/users/logout">Logout</a>
+                    <% } else { %>
+                        <a href="/login">Login</a>
+                        <% } %>
+            </div>
         </div>
-        <div class="auth-links">
-            <% if (currentUser) { %>
-                <a href="/api/users/logout">Logout</a>
-                <% } else { %>
-                    <a href="/login">Login</a>
-                    <% } %>
-        </div>
+        <div class="hamburger" id="hamburger">&#9776;</div>
     </nav>
 </header>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navContainer = document.getElementById('nav-container');
+
+  hamburger.addEventListener('click', () => {
+    navContainer.classList.toggle('active');
+    hamburger.classList.toggle('open');
+  });
+</script>

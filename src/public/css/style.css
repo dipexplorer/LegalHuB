@@ -1,14 +1,13 @@
 /* 🌌 General Styling */
 body {
-    background: linear-gradient(
-        135deg,
-        #1a1a2e,
-        #16213e
-    );
+    background: linear-gradient(135deg,
+            #1a1a2e,
+            #16213e);
     font-family: rakkas;
     text-align: center;
     overflow-x: hidden;
     margin: 0;
+    padding-top: 80px;
 }
 
 /* ✅ Navbar */
@@ -17,25 +16,33 @@ nav {
     align-items: center;
     justify-content: space-between;
     padding: 18px 40px;
-    background: #1a1a2e; /* Dark Blue */
-    border-bottom: 2px solid #6a1b9a; /* Dark Purple */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #1a1a2e;
+    /* Dark Blue */
+    border-bottom: 2px solid #6a1b9a;
+    /* Dark Purple */
+    z-index: 1000;
 }
 
 .navbar-brand a {
-    color: #9c27b0; /* Light Purple */
+    color: #9c27b0;
+    /* Light Purple */
     font-size: 1.8rem;
     font-weight: bold;
     text-decoration: none;
 }
 
 /* ✅ Left Section */
-.left-section {
+/* .left-section {
     display: flex;
     align-items: center;
     gap: 30px;
 }
 
-nav ul {
+.nav-links {
     list-style: none;
     display: flex;
     gap: 20px;
@@ -43,7 +50,7 @@ nav ul {
     margin: 0;
 }
 
-nav ul li a {
+.nav-links li a {
     color: #f4f4f9;
     text-decoration: none;
     font-weight: bold;
@@ -51,11 +58,72 @@ nav ul li a {
     font-size: 1em;
 }
 
-nav ul li a:hover {
-    color: #9c27b0; /* Light Purple */
+.nav-links li a:hover {
+    color: #9c27b0;
 }
 
-/* ✅ Auth Links */
+.hamburger {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    margin-left: auto;
+}
+@media (max-width:768px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links ul,
+  .auth-links {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    transition: all 0.3s ease;
+    padding: 10px 0;
+  }
+
+  .nav-links.active,
+  .auth-links.active {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+    color: #6a1b9a;
+  }
+}
+
+@media (max-width:768px) {
+    nav {
+        flex-direction: column;
+        align-items: center; 
+    }
+
+    nav ul,
+    .auth-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        transition: all 0.3s ease;
+        padding: 10px 0;
+    }
+
+    nav ul.active,
+    .auth-links.active {
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hamburger {
+        display: block;
+        color: #6a1b9a;
+    }
+} 
+
+
 .auth-links {
     margin-left: auto;
 }
@@ -71,6 +139,99 @@ nav ul li a:hover {
 
 .auth-links a:hover {
     color: #9c27b0;
+}
+ */
+
+ nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: #1a1a2e;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: 2px solid #6a1b9a;
+}
+
+.navbar-brand a {
+  color: #9c27b0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a,
+.auth-links a {
+  color: #f4f4f9;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.nav-links li a:hover,
+.auth-links a:hover {
+  color: #9c27b0;
+}
+
+.auth-links {
+  display: flex;
+  gap: 15px;
+}
+
+/* Hamburger Hidden by Default */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* 🌐 Responsive */
+@media (max-width: 768px) {
+  .nav-container {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    background: #1a1a2e;
+    padding: 10px 0;
+  }
+
+  .nav-container.active {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-direction: column;
+  }
+
+  .auth-links {
+    flex-direction: column;
+  }
+
+  .hamburger {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+  }
+ 
 }
 
 /* ✅ Hero Section */
@@ -153,7 +314,8 @@ nav ul li a:hover {
 }
 
 .buttons a {
-    background: #6a1b9a; /* Dark Purple */
+    background: #6a1b9a;
+    /* Dark Purple */
     color: white;
     padding: 14px 28px;
     border-radius: 8px;
@@ -166,7 +328,8 @@ nav ul li a:hover {
 }
 
 .buttons a:hover {
-    background: #9c27b0; /* Light Purple */
+    background: #9c27b0;
+    /* Light Purple */
     transform: translateY(-3px);
 }
 
@@ -252,6 +415,7 @@ nav ul li a:hover {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -293,11 +457,10 @@ nav ul li a:hover {
 
 /* ✅ Footer Container (Fixed) */
 .footer-container {
-    background: linear-gradient(
-        135deg,
-        #1a1a2e,
-        #16213e
-    ); /* Same as body gradient */
+    background: linear-gradient(135deg,
+            #1a1a2e,
+            #16213e);
+    /* Same as body gradient */
     color: #e0e0e0;
     padding: 40px 20px;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
@@ -470,6 +633,7 @@ nav ul li a:hover {
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5) !important;
     /* border: 1px solid #929292; */
 }
+
 .gt-current-lang {
     background-color: #16213e !important;
     padding: 0 !important;
@@ -480,30 +644,38 @@ nav ul li a:hover {
     justify-content: center;
     align-items: center;
 }
+
 .gt-current-lang img {
     height: 1rem !important;
 }
+
 .gt-current-lang .gt-lang-code {
     color: #fff;
     font-size: 1rem !important;
     margin-right: 0.5rem;
 }
+
 .gt-current-lang .gt_float_switcher-arrow {
     color: #fff !important;
 }
+
 .gt_options {
     width: auto !important;
     background-color: #a2a2a2af;
     box-shadow: 0 5px 10px #000000bc;
 }
+
 .gt_options a {
     font-size: 0.8rem !important;
     color: #2e2e2e !important;
 }
+
 .gt_options a img {
     height: 1rem !important;
 }
+
 .dark-mode {
+
     /* .gt-current-lang, .gt_float_switcher-arrow, .gt_options a{
         color: #000000 !important;
     } */
@@ -511,22 +683,28 @@ nav ul li a:hover {
         background-color: rgb(255, 255, 255) !important;
         box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.715) !important;
     }
+
     .gt-lang-code {
         color: #000000 !important;
     }
+
     .gt-current-lang {
         background-color: rgb(255, 255, 255) !important;
         color: #000000 !important;
     }
+
     .gt_options {
         background-color: #d0d0d0 !important;
     }
+
     .gt_options a {
         color: #000000 !important;
     }
+
     .gt_options a:hover {
         color: #d0d0d0 !important;
     }
+
     .gt_float_switcher-arrow {
         color: #fff !important;
     }
