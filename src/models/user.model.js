@@ -36,6 +36,8 @@ const userSchema = new Schema({
         default: 0,
         min: 0,
     },
+    resetToken: String,
+    resetTokenExpires: Date,
 });
 
 userSchema.plugin(passportLocalMongoose);
