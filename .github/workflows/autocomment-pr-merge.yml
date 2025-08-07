@@ -3,6 +3,8 @@ name: 🔒 Auto Comment on PR Closed
 on:
   pull_request:
     types: [closed]
+  pull_request_target:
+    types: [closed]
 
 permissions:
   issues: write

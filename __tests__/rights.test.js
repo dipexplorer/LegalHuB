@@ -4,11 +4,11 @@ const Right = require("../src/models/rights.model");
 
 describe("🛡️ Rights API Testing", () => {
     const mockRight = {
-        name: "Right to Equality",
-        description:
-            "Ensures equality before the law and equal protection of the laws.",
-        sourceLink: "https://example.com/equality",
-        category: "Fundamental",
+        name: "Protection of Interests of Minorities",
+        articleNumber: "Article 29",
+        description: "Ensures that minorities have the right to conserve their distinct language, script, or culture.",
+        sourceLink: "https://indiankanoon.org/doc/1298951/",
+        category: "Cultural and Educational Rights",
     };
     let createdRight;
 
@@ -30,22 +30,24 @@ describe("🛡️ Rights API Testing", () => {
             .post("/api/rights")
             .set("Accept", "application/json")
             .send({
-                name: "Right to Freedom of Speech",
-                description: "Protects the freedom of expression and speech.",
-                sourceLink: "https://example.com/freedom-of-speech",
-                category: "Fundamental",
+                name: "Right to Approach Courts for Enforcement of Rights",
+                articleNumber: "Article 32",
+                description: "Grants citizens the right to move the Supreme Court directly for enforcement of fundamental rights through writs like habeas corpus, mandamus, prohibition, quo warranto, and certiorari.",
+                sourceLink: "https://www.constitutionofindia.net/constitution_of_india/fundamental_rights/articles/Article%2032",
+                category: "Right to Constitutional Remedies",
             });
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(201);
         expect(res.body.success).toBe(true);
-        expect(res.body.data.name).toBe("Right to Freedom of Speech");
+        expect(res.body.data.name).toBe("Right to Approach Courts for Enforcement of Rights");
     });
 
     it("❌ should return 400 if required fields are missing", async () => {
         // console.log("📤 Sending invalid data...");
         const res = await request(app).post("/api/rights").send({
             name: "",
+            articleNumber: "",
             description: "",
             sourceLink: "",
             category: "",

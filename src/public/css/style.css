@@ -4,8 +4,7 @@ body {
         135deg,
         #1a1a2e,
         #16213e
-    ); /* Dark blue gradient for consistency */
-    color: #f4f4f9;
+    );
     font-family: rakkas;
     text-align: center;
     overflow-x: hidden;
@@ -76,7 +75,7 @@ nav ul li a:hover {
 
 /* ✅ Hero Section */
 .hero {
-    padding: 100px 20px;
+    padding: 50px 20px;
     background: url("/pic") center/cover no-repeat;
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     color: #f4f4f9;

@@ -1,272 +1,808 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        /* ✅ Container Styling */
-        .fun_container {
-            max-width: 1080px;
-            margin: 40px auto;
-            padding: 32px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
+<style>
+    /* ✅ Main Container - Inspired by documents.ejs */
+    .rights-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 24px;
+        min-height: 100vh;
+    }
+
+    /* ✅ Header Section - Soft gradient enhancement like documents */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 50px 0;
+        background: linear-gradient(135deg, #480c61 0%, #9c27b0 50%, #a577ac 100%);
+        border-radius: 20px;
+        color: white;
+        box-shadow: 0px 12px 40px rgba(123, 31, 162, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+        pointer-events: none;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        margin: 0 0 12px 0;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin: 0;
+        font-weight: 400;
+        position: relative;
+        z-index: 1;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* ✅ Filter Section - Dark gradient like documents */
+    .filter-section {
+        background: linear-gradient(135deg, #2e003e, #4a0072);
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        margin-bottom: 32px;
+        border: 1px solid #5c2d91;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .filter-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #f3e5f5;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .clear-filters-btn {
+        background: #4a0072;
+        color: #f3e5f5;
+        border: 1px solid #7b1fa2;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .clear-filters-btn:hover {
+        background: #7b1fa2;
+        color: #ffffff;
+        border-color: #9c27b0;
+    }
+
+    .filter-controls {
+        display: grid;
+        grid-template-columns: minmax(200px, 2fr) minmax(140px, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #e1bee7;
+        margin-bottom: 8px;
+    }
+
+    .search-input-container {
+        position: relative;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #f3e5f5;
+        font-size: 1.1rem;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+
+    .filter-input {
+        padding: 16px 20px 16px 52px;
+        width: 100%;
+        min-width: 350px;
+        font-size: 1rem;
+        border: 2px solid #7b1fa2;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: #311b47;
+        color: #f3e5f5;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .filter-input:focus {
+        border-color: #ba68c8;
+        box-shadow: 0 0 0 4px rgba(186, 104, 200, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: #3a2154;
+        transform: translateY(-1px);
+    }
+
+    .filter-input::placeholder {
+        color: #b39ddb;
+        font-style: italic;
+    }
+
+    .filter-select {
+        padding: 16px 16px;
+        border: 2px solid #7b1fa2;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #311b47;
+        color: #f3e5f5;
+        font-family: inherit;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f3e5f5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        padding-right: 40px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .filter-select:focus {
+        border-color: #ba68c8;
+        box-shadow: 0 0 0 4px rgba(186, 104, 200, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: #3a2154;
+        transform: translateY(-1px);
+    }
+
+    .filter-select:hover {
+        border-color: #ab47bc;
+        background: #3a2154;
+    }
+
+    .search-btn {
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #7b1fa2 0%, #ab47bc 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0px 4px 12px rgba(123, 31, 162, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+    }
+
+    .search-btn:hover {
+        background: linear-gradient(135deg, #6a1b9a 0%, #9c27b0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 16px rgba(123, 31, 162, 0.4);
+    }
+
+    /* ✅ Results Info */
+    .results-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding: 0 8px;
+    }
+
+    .results-count {
+        font-size: 1rem;
+        color: #666;
+        font-weight: 500;
+    }
+
+    /* ✅ Results Summary */
+    .results-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding: 0 8px;
+    }
+
+    .results-count {
+        font-size: 1rem;
+        color: #cacaca;
+        font-weight: 500;
+    }
+
+    /* ✅ Rights Grid - Inspired by documents grid */
+    .rights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    /* ✅ Rights Cards - Dark Gradient Design like documents */
+    .rights-card {
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        border: 1px solid #3c3c3c;
+        border-radius: 16px;
+        padding: 28px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.3);
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        color: #f0f0f0;
+    }
+
+    .rights-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ab47bc, #ce93d8);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .rights-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0px 12px 32px rgba(123, 31, 162, 0.5);
+        border-color: #ab47bc;
+    }
+
+    .rights-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .article-number {
+        background: rgba(171, 71, 188, 0.2);
+        color: #ce93d8;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(171, 71, 188, 0.3);
+    }
+
+    .category-icon {
+        font-size: 1.5rem;
+        opacity: 0.8;
+    }
+
+    .rights-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 12px 0;
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    .category-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+    }
+
+    /* Category Colors - Dark theme variants */
+    .category-equality { 
+        background: rgba(33, 150, 243, 0.2); 
+        color: #90caf9; 
+        border: 1px solid rgba(33, 150, 243, 0.3);
+    }
+    .category-freedom { 
+        background: rgba(76, 175, 80, 0.2); 
+        color: #a5d6a7; 
+        border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+    .category-exploitation { 
+        background: rgba(244, 67, 54, 0.2); 
+        color: #ef9a9a; 
+        border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+    .category-religion { 
+        background: rgba(156, 39, 176, 0.2); 
+        color: #ce93d8; 
+        border: 1px solid rgba(156, 39, 176, 0.3);
+    }
+    .category-cultural { 
+        background: rgba(255, 152, 0, 0.2); 
+        color: #ffcc02; 
+        border: 1px solid rgba(255, 152, 0, 0.3);
+    }
+    .category-remedies { 
+        background: rgba(63, 81, 181, 0.2); 
+        color: #9fa8da; 
+        border: 1px solid rgba(63, 81, 181, 0.3);
+    }
+
+    .rights-description {
+        font-size: 0.95rem;
+        color: #dcdcdc;
+        line-height: 1.6;
+        margin-bottom: 16px;
+        flex-grow: 1;
+        text-align: left;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: auto;
+    }
+
+    .view-details-btn {
+        flex: 1;
+        padding: 12px 16px;
+        background: #29293a;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .view-details-btn:hover {
+        background: #5e1b7a;
+        transform: translateY(-2px);
+        color: #ffffff;
+    }
+
+    /* ✅ Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 32px;
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        border-radius: 16px;
+        box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.3);
+        color: #f0f0f0;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: #ffffff;
+        margin: 0 0 12px 0;
+    }
+
+    .empty-state p {
+        color: #dcdcdc;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    /* ✅ Pagination Container */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 2.5rem;
+        padding: 1rem 0;
+    }
+
+    /* ✅ Pagination List Styling */
+    .pagination-list {
+        display: flex;
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        flex-wrap: wrap;
+    }
+
+    /* ✅ Pagination Links */
+    .pagination-list li a {
+        display: inline-block;
+        min-width: 36px;
+        padding: 8px 14px;
+        border: 1px solid #ccc;
+        color: #333;
+        background: #f9f9f9;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        text-align: center;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* ✅ Hover State */
+    .pagination-list li a:hover {
+        background-color: #e0e0e0;
+        border-color: #aaa;
+    }
+
+    /* ✅ Active Page Styling */
+    .pagination-page.active {
+        background: #ae00ff;
+        color: white !important;
+        border-color: #e100ff;
+        font-weight: 600;
+        pointer-events: none;
+        box-shadow: 0 0 0 2px rgba(212, 0, 255, 0.322);
+    }
+
+    /* ✅ Previous/Next Link Styling */
+    .pagination-prev,
+    .pagination-next {
+        font-weight: 500;
+        background-color: #f1f1f1;
+        color: #444;
+        border-color: #ccc;
+    }
+
+    .pagination-prev:hover,
+    .pagination-next:hover {
+        background-color: #ddd;
+    }
+
+    /* ✅ Responsive Design */
+    @media (min-width: 1200px) {
+        .rights-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .rights-page {
+            padding: 0 16px;
         }
 
-        /* ✅ Title Styling */
-        h1,
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 20px;
+        .filter-controls {
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
-        /* ✅ Search & Filter Section */
-        .search-filter-box {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
+        .filter-input {
+            min-width: auto;
         }
 
-        .search-filter-box input,
-        .search-filter-box select {
-            flex: 1;
-            padding: 14px;
-            border: 1px solid #dfe6e9;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            background-color: #f9fafc;
-            outline: none;
+        .filter-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
         }
 
-        .search-filter-box input:focus,
-        .search-filter-box select:focus {
-            border-color: #6c5ce7;
-            box-shadow: 0 0 8px rgba(108, 92, 231, 0.2);
+        .rights-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
-        /* ✅ Updated Button Styling */
-        .search-filter-box button {
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background 0.3s ease, transform 0.2s;
-            box-shadow: 0px 4px 12px rgba(108, 92, 231, 0.2);
+        .card-actions {
+            flex-direction: column;
         }
 
-        .search-filter-box button:hover {
-            background: linear-gradient(135deg, #5a4ae5 0%, #8c82ff 100%);
-            transform: translateY(-2px);
+        .page-title {
+            font-size: 2rem;
         }
 
-        /* ✅ Rights Card */
-        .right {
-            background-color: #ffffff;
-            padding: 24px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            margin-bottom: 18px;
-            transition: box-shadow 0.3s ease, transform 0.2s ease;
-        }
-
-        .right:hover {
-            transform: translateY(-6px);
-            box-shadow: 0px 10px 28px rgba(0, 0, 0, 0.12);
-        }
-
-        .right h2 {
-            font-size: 1.4rem;
-            color: #2d3436;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .right p {
-            font-size: 1rem;
-            color: #636e72;
-            line-height: 1.6;
-        }
-
-        .right a {
-            display: inline-block;
-            color: #6c5ce7;
-            font-weight: 600;
-            text-decoration: none;
-            margin-top: 10px;
-            transition: color 0.3s ease;
-        }
-
-        .right a:hover {
-            color: #4834d4;
-        }
-
-        /* ✅ Recommendations */
-        .recommendations {
-            display: flex;
+        .results-summary {
+            flex-direction: column;
             gap: 12px;
-            justify-content: center;
-            margin-top: 24px;
+            align-items: flex-start;
         }
+    }
 
-        .recommendations button {
-            background: linear-gradient(135deg, #ff6b6b, #ff9a9e);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background 0.3s ease, transform 0.2s;
-            box-shadow: 0px 4px 12px rgba(255, 107, 107, 0.2);
-        }
-
-        .recommendations button:hover {
-            background: linear-gradient(135deg, #ff5252, #ff7e7e);
-            transform: translateY(-2px);
-        }
-
-        /* ✅ Responsive Styling */
-        @media (max-width: 768px) {
-            .search-filter-box {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .recommendations {
-                flex-direction: column;
-                gap: 10px;
-            }
+    @media (max-width: 480px) {
+        .pagination-list li a {
+            padding: 6px 10px;
+            font-size: 0.85rem;
         }
 
         .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 8px;
+            padding: 0.5rem 0;
         }
 
-        .pagination button {
-            background-color: #6c5ce7;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
+        .filter-section {
+            padding: 20px;
         }
 
-        .pagination button:hover {
-            background-color: #5a4ae5;
+        .rights-card {
+            padding: 20px;
         }
 
-        .pagination .active {
-            background-color: #4834d4;
-            font-weight: bold;
+        .page-header {
+            padding: 24px 0;
         }
-    </style>
+    }
+</style>
 
-    <section class="fun_container">
-        <h1>🇮🇳 Fundamental Rights</h1>
-        <p>Explore different fundamental rights granted to individuals.</p>
-
-        <!-- ✅ Search and Filter -->
-        <div class="search-filter-box">
-            <input type="text" id="search-input" placeholder="Search Rights..." aria-label="Search Rights">
-            <select id="category-filter" aria-label="Filter by Category">
-                <option value="">All Categories</option>
-                <option value="Equality">Equality</option>
-                <option value="Freedom">Freedom</option>
-                <option value="Education">Education</option>
-                <option value="Justice">Justice</option>
-                <option value="Constitutional Remedies">Constitutional Remedies</option>
-            </select>
-            <button id="search-button">Search</button>
+    <div class="rights-page">
+        <!-- Clean Header Section -->
+        <div class="page-header">
+            <h1 class="page-title">Fundamental Rights of India</h1>
+            <p class="page-subtitle">
+                Discover the 6 fundamental rights guaranteed by the Indian Constitution - your essential protections for 
+                equality, freedom, and dignity as a citizen.
+            </p>
         </div>
-        <!-- ✅ Recommended Rights -->
-        <h2>Commonly Searched</h2>
-        <div class="recommendations">
-            <button onclick="fetchRight('Right to Equality')">Right to Equality</button>
-            <button onclick="fetchRight('Right to Freedom')">Right to Freedom</button>
-            <button onclick="fetchRight('Right to Education')">Right to Education</button>
-            <button onclick="fetchRight('Right Against Exploitation')">Right Against Exploitation</button>
-        </div>
-        <br><br>
-        <!-- ✅ Rights List -->
-        <div class="rights-list">
-            <% rights.forEach(right=> { %>
-                <div class="right">
-                    <h2>
-                        <%= right.name %>
-                    </h2>
-                    <p>
-                        <%= right.description.substring(0, 150) %>...
-                    </p>
-                    <a href="/api/rights/<%= right._id %>">Learn More →</a>
+
+        <!-- Filter Section -->
+        <section class="filter-section" role="search" aria-labelledby="filter-title">
+            <div class="filter-header">
+                <h2 class="filter-title" id="filter-title">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    Find Your Rights
+                </h2>
+                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()"
+                        aria-label="Clear all filters">
+                    <i class="fas fa-times" aria-hidden="true"></i> Clear Filters
+                </button>
+            </div>
+            
+            <form method="GET" action="/rights" class="filter-form" role="search" onsubmit="event.preventDefault(); applyFilters();">
+                <div class="filter-controls" role="group" aria-labelledby="filter-title">
+                    <!-- Search Input -->
+                    <div class="filter-group">
+                        <label for="search" class="filter-label">Search Rights</label>
+                        <div class="search-input-container">
+                            <input 
+                            type="text" 
+                            id="search" 
+                            name="search" 
+                            class="filter-input" 
+                            placeholder="Search by right name, keywords, or article number..."
+                            value="<%= currentFilters.search %>"
+                            autocomplete="off"
+                            >
+                            <i class="fas fa-search search-icon" aria-hidden="true" onclick="applyFilters()" style="cursor: pointer;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <label for="category" class="filter-label">Category</label>
+                        <select id="category" name="category" class="filter-select">
+                            <option value="all" <%= currentFilters.category === 'all' ? 'selected' : '' %>>All Categories</option>
+                            <% if (filterOptions && filterOptions.categories) { %>
+                                <% filterOptions.categories.forEach(category => { %>
+                                    <option value="<%= category.value %>" <%= currentFilters.category === category.value ? 'selected' : '' %>>
+                                        <%= category.label %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <!-- Search Button -->
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </button>
                 </div>
-                <% }) %>
+            </form>
+        </section>
+
+        <!-- Results Summary -->
+        <div class="results-summary" role="status" aria-live="polite">
+            <div class="results-count">
+                Showing <strong><%= stats.filteredResults || 0 %></strong> right<%= (stats.filteredResults !== 1) ? 's' : '' %>
+            </div>
         </div>
 
-        <!-- ✅ Pagination -->
-        <% if (typeof currentPage !=='undefined' && typeof totalPages !=='undefined' ) { %>
-            <div class="pagination">
-                <% if (currentPage> 1) { %>
-                    <button onclick="changePage(<%= currentPage - 1 %>)">← Prev</button>
+        <!-- Rights Grid -->
+        <% if (rights && rights.length > 0) { %>
+            <div class="rights-grid">
+                <% rights.forEach(right => { 
+                    // Determine category class for styling
+                    let categoryClass = 'category-equality';
+                    if (right.category.includes('Freedom')) categoryClass = 'category-freedom';
+                    else if (right.category.includes('Exploitation')) categoryClass = 'category-exploitation';
+                    else if (right.category.includes('Religion')) categoryClass = 'category-religion';
+                    else if (right.category.includes('Cultural')) categoryClass = 'category-cultural';
+                    else if (right.category.includes('Remedies')) categoryClass = 'category-remedies';
+                    
+                    // Determine icon based on category
+                    let categoryIcon = '⚖️';
+                    if (right.category.includes('Freedom')) categoryIcon = '🗽';
+                    else if (right.category.includes('Exploitation')) categoryIcon = '🛡️';
+                    else if (right.category.includes('Religion')) categoryIcon = '🕊️';
+                    else if (right.category.includes('Cultural')) categoryIcon = '📚';
+                    else if (right.category.includes('Remedies')) categoryIcon = '⚖️';
+                %>
+                    <div class="rights-card">
+                        <div class="card-header">
+                            <div class="article-number">Article <%= right.articleNumber %></div>
+                            <div class="category-icon"><%= categoryIcon %></div>
+                        </div>
+                        
+                        <h3 class="rights-title"><%= right.name %></h3>
+                        
+                        <div class="category-badge <%= categoryClass %>">
+                            <%= right.category %>
+                        </div>
+                        
+                        <p class="rights-description">
+                            <%= right.description.length > 150 ? right.description.substring(0, 150) + '...' : right.description %>
+                        </p>
+                        
+                        <div class="card-actions">
+                            <a href="<%= right.sourceLink %>" target="_blank" class="view-details-btn">
+                                <i class="fas fa-external-link-alt"></i>
+                                View Full Details
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <h3>No rights found</h3>
+                <p>Try adjusting your search criteria or browse all categories.</p>
+            </div>
+        <% } %>
+
+        <!-- Pagination -->
+        <% if (totalPages && totalPages > 1) { %>
+            <nav class="pagination" aria-label="Page navigation">
+                <ul class="pagination-list">
+                    <% const queryParams = new URLSearchParams(request.query); %>
+
+                    <% function pageUrl(pageNum) {
+                        queryParams.set('page', pageNum);
+                        return `${request.path}?${queryParams.toString()}`;
+                    } %>
+
+                    <% if (currentPage > 1) { %>
+                        <li><a href="<%= pageUrl(currentPage - 1) %>" class="pagination-prev">« Prev</a></li>
                     <% } %>
 
-                        <% for (let i=1; i <=totalPages; i++) { %>
-                            <button onclick="changePage(<%= i %>)" class="<%= i === currentPage ? 'active' : '' %>">
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li>
+                            <a href="<%= pageUrl(i) %>" class="pagination-page <%= i === currentPage ? 'active' : '' %>">
                                 <%= i %>
-                            </button>
-                            <% } %>
+                            </a>
+                        </li>
+                    <% } %>
 
-                                <% if (currentPage < totalPages) { %>
-                                    <button onclick="changePage(<%= currentPage + 1 %>)">Next →</button>
-                                    <% } %>
-            </div>
-            <% } %>
-
-
-
-
-
-    </section>
+                    <% if (currentPage < totalPages) { %>
+                        <li><a href="<%= pageUrl(currentPage + 1) %>" class="pagination-next">Next »</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+        <% } %>
+    </div>
 
 
     <script>
-        // ✅ Search Functionality
-        document.getElementById('search-button').addEventListener('click', () => {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const category = document.getElementById('category-filter').value.toLowerCase();
+        // Filter functionality inspired by documents.ejs
+        let filterTimeout;
+        
+        function clearAllFilters() {
+            document.getElementById('search').value = '';
+            document.getElementById('category').value = 'all';
+            applyFilters();
+        }
 
-            document.querySelectorAll('.right').forEach(item => {
-                const name = item.querySelector('h2').textContent.toLowerCase();
-                if ((name.includes(query) || query === "") && (category === "" || name.includes(category))) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        function applyFilters() {
+            const search = document.getElementById('search').value.trim();
+            const category = document.getElementById('category').value;
+            
+            const params = new URLSearchParams();
+            if (search) params.set('search', search);
+            if (category !== 'all') params.set('category', category);
+            
+            // Always reset to page 1 when filters change
+            params.set('page', 1);
+
+            const queryString = params.toString();
+            const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+            window.location.href = newUrl;
+        }
+
+        function handleSearchInput() {
+            clearTimeout(filterTimeout);
+            const searchInput = document.getElementById('search');
+            const searchIcon = document.querySelector('.search-icon');
+            
+            // Visual feedback during search
+            if (searchInput.value.trim()) {
+                searchIcon.className = 'fas fa-spinner fa-spin search-icon';
+            } else {
+                searchIcon.className = 'fas fa-search search-icon';
+            }
+            
+            filterTimeout = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        }
+
+        function showSearchLoading() {
+            const searchIcon = document.querySelector('.search-icon');
+            searchIcon.className = 'fas fa-spinner fa-spin search-icon';
+        }
+
+        function hideSearchLoading() {
+            const searchIcon = document.querySelector('.search-icon');
+            searchIcon.className = 'fas fa-search search-icon';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search');
+            if (searchInput) {
+                // Add focus/blur effects
+                searchInput.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
+                
+                searchInput.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                    hideSearchLoading();
+                });
+            }
+            
+            const categorySelect = document.getElementById('category');
+            
+            if (categorySelect) {
+                categorySelect.addEventListener('change', function() {
+                    showSearchLoading();
+                    applyFilters();
+                });
+            }
         });
 
-        // ✅ Recommended Search
-        function fetchRight(right) {
-            document.getElementById('search-input').value = right;
-            document.getElementById('search-button').click();
-        }
-        function changePage(page) {
-            if (page) {
-                window.location.href = `/rights?page=${encodeURIComponent(page)}`;
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('search').focus();
             }
-        }
-
-
+        });
     </script>

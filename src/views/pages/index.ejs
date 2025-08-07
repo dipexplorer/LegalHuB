@@ -159,6 +159,281 @@
                 font-size: 0.9rem;
             }
         }
+        /* ✅ Container Styling */
+        .dic_container {
+            max-width: 50vw;
+            margin: 40px auto;
+            padding: 20px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            color: #e0e0e0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .dic_container:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ✅ Title */
+        .title {
+            font-size: 2.2rem;
+            color: #9c27b0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* ✅ Form Styling */
+        #search-form {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        #search-form input {
+            flex: 1 1 60%;
+            min-width: 240px;
+            padding: 14px;
+            border: 2px solid #b39ddb;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #1e1d1f;
+            color: #e0e0e0;
+            outline: none;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        #search-form input:focus {
+            border-color: #9c27b0;
+            background-color: #2b2a2d;
+        }
+
+        #search-form button {
+            background-color: #7b1fa2;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #search-form button:hover {
+            background-color: #9c27b0;
+        }
+
+        /* ✅ Result Box */
+        #result {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            color: #cfcfcf;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .term-title {
+            font-size: 1.5rem;
+            color: #ce93d8;
+            margin-bottom: 10px;
+        }
+
+        #term-definition {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* ✅ Responsive */
+        @media (max-width: 768px) {
+            .dic_container {
+                padding: 20px;
+            }
+
+            #search-form {
+                flex-direction: column;
+            }
+
+            #search-form input,
+            #search-form button {
+                width: 100%;
+            }
+        }
+        /* ✅ Lawyer Section Styling */
+        .lawyer-section {
+            padding: 60px 20px;
+            background: transparent;
+            color: #e0e0e0;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .lawyer-section h2 {
+            font-size: 2.4rem;
+            color: #9c27b0;
+            margin-bottom: 10px;
+        }
+
+        .lawyer-section .subheading {
+            font-size: 1.1rem;
+            color: #bdbdbd;
+            margin-bottom: 40px;
+        }
+
+        /* ✅ Grid Container */
+        .lawyer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        /* ✅ Card Styling */
+        .lawyer-card {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .lawyer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .lawyer-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .lawyer-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #9c27b0;
+        }
+
+        .lawyer-info h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #ffffff;
+        }
+
+        .lawyer-info p {
+            margin: 2px 0;
+            font-size: 0.95rem;
+            color: #bdbdbd;
+        }
+
+        .lawyer-card p {
+            margin: 6px 0;
+            font-size: 0.95rem;
+            color: #d0d0d0;
+        }
+
+        .rating {
+            color: #ffd54f;
+            font-weight: 600;
+        }
+
+        /* ✅ Buttons */
+        .lawyer-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn,
+        .appointment-btn {
+            flex: 1 1 auto;
+            text-align: center;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-btn {
+            background-color: #7b1fa2;
+            color: #ffffff;
+        }
+
+        .contact-btn:hover {
+            background-color: #9c27b0;
+        }
+
+        .appointment-btn {
+            background-color: #4a148c;
+            color: #ffffff;
+        }
+
+        .appointment-btn:hover {
+            background-color: #6a1b9a;
+        }
+
+        /* ✅ View All Button */
+        .lawyer-action {
+            margin-top: 40px;
+        }
+
+        .view-all-btn {
+            display: inline-block;
+            background-color: transparent;
+            color: #ce93d8;
+            border: 2px solid #9c27b0;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background-color: #9c27b0;
+            color: #ffffff;
+        }
+
+        /* ✅ Responsive Adjustments */
+        @media (max-width: 768px) {
+            .lawyer-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .lawyer-photo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .lawyer-actions {
+                flex-direction: column;
+            }
+
+            .contact-btn,
+            .appointment-btn {
+                width: 100%;
+            }
+        }   
     </style>
 
     <body>
@@ -167,11 +442,89 @@
             <h1>⚖️ Empower Yourself with Legal Knowledge</h1>
             <p>We simplify complex laws and empower individuals with the right legal tools to protect their rights and
                 make informed decisions.</p>
-            <a href="/dictionary" class="cta-button">Get Started →</a>
+                <!-- <a href="/dictionary" class="cta-button">Get Started →</a> -->
+            <h2 class="title">📖 Legal Dictionary</h2>
+            <div class="dic_container">
+                <form id="search-form">
+                    <input type="text" id="term-input" placeholder="Enter a legal term..." required />
+                    <button type="submit">Search</button>
+                </form>
+                <div id="result" class="hidden">
+                    <h2 class="term-title">Result:</h2>
+                    <p id="term-definition">Searching...</p>
+                </div>
+            </div>
         </section>
 
+        <!-- TOP-RATED LAWYERS SECTION -->
+        <section class="lawyer-section">
+            <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
+            <p class="subheading">Connect with verified experts in your area</p>
 
+            <div class="lawyer-grid">
+                <!-- Lawyer Card 1 -->
+                <article class="lawyer-card">
+                    <div class="lawyer-header">
+                        <img src="/images/lawyers/jane.jpg" alt="Jane Doe" class="lawyer-photo" />
+                        <div class="lawyer-info">
+                            <h3>Jane Doe</h3>
+                            <p class="specialization">Criminal Defense</p>
+                            <p class="license">License #: CA-14539</p>
+                        </div>
+                    </div>
+                    <p class="experience">Experience: 12 years</p>
+                    <p class="location">State: California</p>
+                    <p class="rating">⭐ 4.9 / 5.0</p>
+                    <div class="lawyer-actions">
+                        <a href="mailto:jane@example.com" class="contact-btn">📩 Contact</a>
+                        <a href="/book-appointment/jane" class="appointment-btn">📅 Book Appointment</a>
+                    </div>
+                </article>
 
+                <!-- Repeat for more lawyers -->
+                <article class="lawyer-card">
+                    <div class="lawyer-header">
+                        <img src="/images/lawyers/john.jpg" alt="John Smith" class="lawyer-photo" />
+                        <div class="lawyer-info">
+                            <h3>John Smith</h3>
+                            <p class="specialization">Family Law</p>
+                            <p class="license">License #: NY-22985</p>
+                        </div>
+                    </div>
+                    <p class="experience">Experience: 9 years</p>
+                    <p class="location">State: New York</p>
+                    <p class="rating">⭐ 4.8 / 5.0</p>
+                    <div class="lawyer-actions">
+                        <a href="mailto:john@example.com" class="contact-btn">📩 Contact</a>
+                        <a href="/book-appointment/john" class="appointment-btn">📅 Book Appointment</a>
+                    </div>
+                </article>
+                <!-- Add more as needed -->
+                <article class="lawyer-card">
+                    <div class="lawyer-header">
+                        <img src="/images/lawyers/john.jpg" alt="John Smith" class="lawyer-photo" />
+                        <div class="lawyer-info">
+                            <h3>John Smith</h3>
+                            <p class="specialization">Family Law</p>
+                            <p class="license">License #: NY-22985</p>
+                        </div>
+                    </div>
+                    <p class="experience">Experience: 9 years</p>
+                    <p class="location">State: New York</p>
+                    <p class="rating">⭐ 4.8 / 5.0</p>
+                    <div class="lawyer-actions">
+                        <a href="mailto:john@example.com" class="contact-btn">📩 Contact</a>
+                        <a href="/book-appointment/john" class="appointment-btn">📅 Book Appointment</a>
+                    </div>
+                </article>
+            </div>
+
+            <div class="lawyer-action">
+                <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
+            </div>
+        </section>
+
+        <!-- QUICK LINKS SECTION -->
         <section class="quick-links">
             <h2>Simplifying Legal Jargon, One Step at a Time</h2>
 
@@ -277,4 +630,34 @@
             });
         });
 
+    </script>
+
+      <script>
+        const form = document.getElementById('search-form');
+        const input = document.getElementById('term-input');
+        const resultContainer = document.getElementById('result');
+        const definition = document.getElementById('term-definition');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const term = input.value.trim();
+            if (!term) return;
+
+            definition.innerText = '🔎 Searching...';
+            resultContainer.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`api/dictionary/${term}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    definition.innerText = data.data.response;
+                } else {
+                    definition.innerText = `❌ Error: ${data.msg}`;
+                }
+            } catch (error) {
+                definition.innerText = '❌ Failed to fetch result. Try again!';
+                console.error('Error:', error);
+            }
+        });
     </script>

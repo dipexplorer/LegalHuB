@@ -63,6 +63,22 @@
                 crossorigin="anonymous"></script>
             <script src="/js/login.js"></script>
             <script>
+                                // Toggle Navbar Links and Close on Outside Click
+                document.addEventListener("DOMContentLoaded", function() {
+                var toggle = document.getElementById('navbarToggle');
+                var links = document.getElementById('navbarLinks');
+                if(toggle && links) {
+                toggle.onclick = function() {
+                    links.classList.toggle('active');
+                };
+                document.addEventListener('click', function(event) {
+                    if (!links.contains(event.target) && !toggle.contains(event.target)) {
+                        links.classList.remove('active');
+                    }
+                });
+                }
+            });
+
                 (function(){
                     // Check if chatbase is already initialized
                     if(!window.chatbase || window.chatbase("getState") !== "initialized") {

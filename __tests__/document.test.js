@@ -37,10 +37,10 @@ describe("📄 Documents API", () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.body.success).toBe(true);
-        expect(Array.isArray(res.body.data)).toBe(true);
+        expect(Array.isArray(res.body.data.documents)).toBe(true);
         expect(res.body.msg).toBe("Documents fetched successfully");
 
-        const found = res.body.data.find(
+        const found = res.body.data.documents.find(
             (doc) => doc._id === String(createdDocument._id)
         );
         // console.log("🔍 Found document in list:", found);

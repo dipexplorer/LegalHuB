@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const indianStates = require("../utils/indianStates.js");
 
 const documentSchema = new mongoose.Schema(
     {
@@ -22,6 +23,10 @@ const documentSchema = new mongoose.Schema(
         state: {
             type: String,
             required: true,
+            enum: {
+                values: indianStates,
+                message: "Not a valid Indian state'",
+            }
         },
         department: {
             type: String,

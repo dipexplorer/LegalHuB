@@ -10,15 +10,6 @@ documentation:
 gssoc25:
     - "(gssoc25|gssoc 2025|gssoc 25)"
 
-level 1:
-    - "(level 1|easy|beginner)"
-
-level 2:
-    - "(level 2|intermediate|medium)"
-
-level 3:
-    - "(level 3|advanced|hard|difficult)"
-
 good first issue:
     - "(good first issue|good first bug|good first feature)"
 

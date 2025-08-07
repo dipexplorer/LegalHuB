@@ -18,7 +18,44 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
         }
+
+        .input-group {
+            position: relative;
+        }
+
+        .password-toggle-btn {
+            position: relative;
+            margin-left: 8px;
+            background: none;
+            border: none;
+            bottom: 2px;
+            color: #6c757d;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+        }
+
+        .password-toggle-btn i {
+            pointer-events: none;
+        }
+
+        .password-feedback {
+            font-size: 0.8rem;
+            color: #dc3545;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .password-feedback.valid {
+            color: green;
+            display: block;
+        }
+
+        .password-feedback.show {
+            display: block;
+        }
     </style>
+    
     <div class="frm_container row">
         <div class="col-md-4 offset-md-4 frm_box">
             <!-- Toggle Buttons -->
@@ -43,8 +80,12 @@
                     <div class="col">
                         <div class="input-group form-group">
                             <label for="login-password" class="form-label">Password</label>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('login-password', this)">
+                                [<i class="fas fa-eye"></i>]
+                            </button>
                             <input type="password" id="login-password" name="password" placeholder="Enter your password"
                                 class="form-control" required>
+                            <div class="invalid-feedback">Please enter a valid password.</div>
                         </div>
                     </div>
                 </div>
@@ -59,13 +100,14 @@
             </form>
 
             <!-- REGISTRATION FORM -->
-            <form id="register-form" class="form hidden" method="POST" action="/api/users/register">
+            <form id="register-form" class="form hidden needs-validation" method="POST" action="/api/users/register" novalidate>
                 <div class="row mb-3">
                     <div class="col">
                         <div class="input-group form-group">
                             <label for="register-name" class="form-label">Username</label>
                             <input type="text" id="register-name" name="username" placeholder="Enter your name"
                                 class="form-control" required>
+                            <div class="invalid-feedback">Please enter a valid username.</div>
                         </div>
                     </div>
                 </div>
@@ -75,6 +117,7 @@
                             <label for="register-email" class="form-label">Email</label>
                             <input type="email" id="register-email" name="email" placeholder="Enter your email"
                                 class="form-control" required>
+                            <div class="invalid-feedback">Please enter a valid email.</div>
                         </div>
                     </div>
                 </div>
@@ -82,15 +125,24 @@
                     <div class="col-md-6">
                         <div class="input-group form-group">
                             <label for="register-password" class="form-label">Password</label>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('register-password', this)">
+                                [<i class="fas fa-eye"></i>]
+                            </button>
                             <input type="password" id="register-password" name="password"
-                                placeholder="Enter your password" class="form-control" required>
+                                placeholder="Enter your password" class="form-control" required minlength="8">
+                                <div class="password-feedback" id="password-feedback"></div>
+                                <div class="invalid-feedback">Please enter a valid password.</div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="input-group form-group">
                             <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('register-confirm-password', this)">
+                                [<i class="fas fa-eye"></i>]
+                            </button>
                             <input type="password" id="register-confirm-password" name="confirmPassword"
                                 placeholder="Confirm your password" class="form-control" required>
+                            <div class="invalid-feedback">Passwords do not match.</div>
                         </div>
                     </div>
                 </div>
@@ -101,3 +153,73 @@
             </form>
         </div>
     </div>
+
+<script>
+    (() => {
+        'use strict';
+
+        const passwordInput = document.getElementById('register-password');
+        const confirmPasswordInput = document.getElementById('register-confirm-password');
+        const passwordFeedback = document.getElementById('password-feedback');
+
+        const getPasswordErrors = (password) => {
+            const errors = [];
+            if (password.length < 8) errors.push("at least 8 characters");
+            if (!/[a-z]/.test(password)) errors.push("a lowercase letter");
+            if (!/[A-Z]/.test(password)) errors.push("an uppercase letter");
+            if (!/[0-9]/.test(password)) errors.push("a number");
+            if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) errors.push("a special character");
+            return errors;
+        };
+
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const errors = getPasswordErrors(password);
+            if (errors.length === 0) {
+                passwordFeedback.textContent = "Password looks good!";
+                passwordFeedback.className = "password-feedback valid";
+                passwordInput.setCustomValidity('');
+            } else {
+                passwordFeedback.textContent = "Include: " + errors.join(", ");
+                passwordFeedback.className = "password-feedback show";
+                passwordInput.setCustomValidity("Invalid password.");
+            }
+        });
+
+        confirmPasswordInput.addEventListener('input', () => {
+            if (confirmPasswordInput.value !== passwordInput.value) {
+                confirmPasswordInput.setCustomValidity("Passwords do not match.");
+            } else {
+                confirmPasswordInput.setCustomValidity('');
+            }
+        });
+
+        const forms = document.querySelectorAll('.needs-validation');
+
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+
+    // Fix toggle button functionality
+    function togglePassword(inputId, toggleBtn) {
+        const input = document.getElementById(inputId);
+        const icon = toggleBtn.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>

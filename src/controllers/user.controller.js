@@ -6,6 +6,7 @@ const passport = require("passport");
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const validatePassword = require("../validators/passwordValidator.js");
 
 
 // 📌 Nodemailer setup
@@ -18,35 +19,44 @@ const transporter = nodemailer.createTransport({
   }
 });
 // 📌 Register User
-const registerUser = asyncHandler(async (req, res, next) => {
+const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
 
     if (!username || !email || !password || !confirmPassword) {
         const errorMsg = "All fields are required";
-        if (req.accepts("json")) {
+        if (req.accepts("html")) {
+            req.flash("error", errorMsg);
+            return res.redirect("/login");
+        }else{
             throw new apiError(400, errorMsg);
         }
-        req.flash("error", errorMsg);
-        return res.redirect("/login");
     }
+
+     // Validate password strength
+    const result = validatePassword(password);
+    if (result.errors.length > 0) {
+    return res.status(400).json({ errors: result.errors, strength: result.strength });
+  }
 
     if (password !== confirmPassword) {
         const errorMsg = "Passwords do not match";
-        if (req.accepts("json")) {
+        if (req.accepts("html")) {
+            req.flash("error", errorMsg);
+            return res.redirect("/login");
+        }else{
             throw new apiError(400, errorMsg);
         }
-        req.flash("error", errorMsg);
-        return res.redirect("/login");
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         const errorMsg = "User already exists";
-        if (req.accepts("json")) {
+        if (req.accepts("html")) {
+            req.flash("error", errorMsg);
+            return res.redirect("/login");
+        }else{
             throw new apiError(400, errorMsg);
         }
-        req.flash("error", errorMsg);
-        return res.redirect("/login");
     }
 
     try {
@@ -55,41 +65,35 @@ const registerUser = asyncHandler(async (req, res, next) => {
         req.login(newUser, (err) => {
             if (err) {
                 const errorMsg = "Login failed after registration";
-                if (req.accepts("json")) {
+                if (req.accepts("html")) {
+                    req.flash("error", errorMsg);
+                    return res.redirect("/login");
+                }else{
                     throw new apiError(500, errorMsg);
                 }
-                req.flash("error", errorMsg);
-                return res.redirect("/login"); // Return here to prevent further execution
             }
 
-            if (req.accepts("json")) {
-                return res
-                    .status(201)
-                    .json(
-                        new apiResponse(
-                            201,
-                            registeredUser,
-                            "User registered successfully"
-                        )
-                    );
+            if (req.accepts("html")) {
+                req.flash("success", "Welcome! Account created successfully.");
+                return res.redirect("/");
+            }else{
+                return res.status(201).json(
+                    new apiResponse(201, registeredUser, "User registered successfully")
+                );
             }
-
-            req.flash("success", "Welcome! Account created successfully.");
-            return res.redirect("/");
         });
     } catch (err) {
-        if (req.accepts("json")) {
+        if (req.accepts("html")) {
+            req.flash("error", err.message);
+            return res.redirect("/login");
+        }else{
             throw new apiError(500, err.message);
         }
-        req.flash("error", err.message);
-        return res.redirect("/login");
     }
 });
 
 // 📌 Login User
 const loginUser = asyncHandler(async (req, res, next) => {
-    
-    console.log("login");
     req.flash("success", "Logged in successfully!");
     return res.redirect("/"); // ✅ Redirect after login
 });

@@ -18,9 +18,10 @@ const isLoggedIn = (req, res, next) => {
     next();
 };
 const isAdmin = (req, res, next) => {
-    const adminSecret = req.headers["ADMIN_SECRECT_KEY"]; // 🔹 Get Secret from Headers
+    const adminSecret = req.headers["ADMIN_SECRECT_KEY"]; // Typo matches .env
 
     if (!adminSecret || adminSecret !== process.env.ADMIN_SECRECT_KEY) {
+        return res.status(403).json({ error: "Forbidden: Invalid admin secret" });
     }
 
     next(); // ✅ If secret is correct, proceed to the route
