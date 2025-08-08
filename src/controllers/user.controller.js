@@ -3,9 +3,23 @@ const asyncHandler = require("../utils/asyncHandler.js");
 const apiResponse = require("../utils/apiResponse.js");
 const apiError = require("../utils/apiError.js");
 const passport = require("passport");
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const validatePassword = require("../validators/passwordValidator.js");
 
+
+// 📌 Nodemailer setup
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,      // Add in your .env
+    pass: process.env.EMAIL_PASS
+  }
+});
 // 📌 Register User
-const registerUser = asyncHandler(async (req, res, next) => {
+const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
 
     if (!username || !email || !password || !confirmPassword) {
@@ -17,6 +31,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
             throw new apiError(400, errorMsg);
         }
     }
+
+     // Validate password strength
+    const result = validatePassword(password);
+    if (result.errors.length > 0) {
+    return res.status(400).json({ errors: result.errors, strength: result.strength });
+  }
 
     if (password !== confirmPassword) {
         const errorMsg = "Passwords do not match";
@@ -42,7 +62,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     try {
         const newUser = new User({ username, email });
         const registeredUser = await User.register(newUser, password);
-        req.login(newUser, (err) => {
+        req.login(registeredUser, (err) => {
             if (err) {
                 const errorMsg = "Login failed after registration";
                 if (req.accepts("html")) {
@@ -74,7 +94,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
 // 📌 Login User
 const loginUser = asyncHandler(async (req, res, next) => {
-    // console.log("login");
     req.flash("success", "Logged in successfully!");
     return res.redirect("/"); // ✅ Redirect after login
 });
@@ -108,7 +127,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     }
     const user = await User.findById(req.user._id).select("-password");
     if (!user) {
-        res.redirect("/login");
+        return res.redirect("/login");
     }
 
     if (req.accepts("html")) {
@@ -148,7 +167,7 @@ const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-        return next(new apiError(404, "User not found"));
+        return res.redirect("/login");
     }
 
     user.username = username || user.username;
@@ -185,6 +204,106 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Request password reset
+const requestPasswordReset = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).render("pages/forgot-password", {
+      message: "Email is required."
+    });
+  }
+
+  const user = await User.findOne({ email });
+
+  // Always return generic message to prevent email enumeration
+  const genericMsg = "If the email is valid, a reset link has been sent.";
+
+  if (!user) {
+    return res.render("pages/forgot-password", { message: genericMsg });
+  }
+
+  // Generate reset token and expiry
+  const token = crypto.randomBytes(32).toString("hex");
+  user.resetToken = token;
+  user.resetTokenExpires = Date.now() + 30 * 60 * 1000; // 30 mins
+  await user.save();
+
+  // Use req.headers.host or env for dynamic domain
+  const resetLink = `http://${req.headers.host}/api/users/reset-password/${token}`;
+
+  const mailOptions = {
+    from: `"Support Team" <${process.env.EMAIL_USER}>`,
+    to: user.email,
+    subject: "Password Reset",
+    html: `
+      <p>You requested a password reset.</p>
+      <p>Click <a href="${resetLink}">here</a> to reset your password.</p>
+      <p>This link expires in 30 minutes.</p>
+    `
+  };
+
+  await transporter.sendMail(mailOptions);
+  
+  req.flash("success", "Password reset link sent to your email.");
+  return res.render("pages/forgot-password", { message: genericMsg });
+});
+
+// 🔐 Render Reset Password Page
+const renderResetPasswordPage = async (req, res) => {
+  const { token } = req.params;
+
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return res.send("Reset link is invalid or expired.");
+  }
+
+  res.render('pages/reset-password', { token });
+};
+
+// 🔐 Reset Password Handler
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token, password, confirmPassword } = req.body;
+
+  // Check if passwords match
+  if (password !== confirmPassword) {
+    req.flash("error", "Passwords do not match.");
+    return res.redirect(`/api/users/reset-password/${token}`);
+  }
+
+  // Validate password strength
+  const result = validatePassword(password);
+  if (result.errors.length > 0) {
+    req.flash("error", result.errors.join(" "));
+    return res.redirect(`/api/users/reset-password/${token}`);
+  }
+
+  // Find user with token
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    req.flash("error", "Reset token is invalid or expired.");
+    return res.redirect("/forgot-password");
+  }
+
+  // Update password
+  await user.setPassword(password);
+  user.resetToken = undefined;
+  user.resetTokenExpires = undefined;
+  await user.save();
+
+  req.flash("success", "Password reset successfully. Please log in.");
+  return res.redirect("/login");
+});
+
+
 module.exports = {
     registerUser,
     loginUser,
@@ -193,4 +312,7 @@ module.exports = {
     renderUpdateForm,
     updateUser,
     deleteUser,
+    requestPasswordReset,
+    renderResetPasswordPage,
+    resetPassword
 };

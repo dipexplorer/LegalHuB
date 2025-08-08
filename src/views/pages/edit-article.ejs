@@ -1,97 +1,269 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        .article_container {
-            max-width: 750px;
-            margin: 50px auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 35px;
-            border-radius: 15px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
 
-        h2 {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #fff;
-        }
+<style>
+    body {
+        background: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+    }
 
-        /* Form Input Fields */
-        .form-label {
-            font-weight: 600;
-            font-size: 15px;
-            color: #ddd;
-        }
+    .form_container {
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            font-size: 16px;
-            margin-bottom: 15px;
-            transition: 0.3s ease-in-out;
-            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.1);
-        }
+    h2 {
+        text-align: center;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #222;
+    }
 
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
+    .form-label {
+        display: block;
+        margin: 15px 0 6px;
+        font-weight: 600;
+        font-size: 15px;
+        color: #444;
+    }
 
-        .form-control:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
+    .form-control, select, textarea {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        color: #333;
+        box-sizing: border-box;
+    }
 
-        /* Button Group */
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 15px;
-        }
-    </style>
+    .form-control:focus, textarea:focus, select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    }
 
-    <div class="article_container">
-        <h2>Edit Article</h2>
+    .editor {
+        height: 200px;
+        background: #fff;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
 
-        <form action="/api/articles/<%= article._id %>?_method=PUT" method="POST">
-            <input type="hidden" name="_method" value="PUT">
+    .ql-toolbar {
+        border-radius: 8px 8px 0 0;
+    }
 
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" id="title" name="title" class="form-control" value="<%= article.title %>" required>
-            </div>
+    .ql-container {
+        border-radius: 0 0 8px 8px;
+        font-size: 15px;
+    }
 
-            <div class="mb-3">
-                <label for="content" class="form-label">Content</label>
-                <textarea id="content" name="content" class="form-control" rows="5"
-                    required><%= article.content %></textarea>
-            </div>
+    .section-block {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 10px;
+        background-color: #fdfdfd;
+        position: relative;
+    }
 
-            <div class="mb-3">
-                <label for="tags" class="form-label">Tags (comma separated)</label>
-                <input type="text" id="tags" name="tags" class="form-control" value="<%= article.tags.join(', ') %>">
-            </div>
+    .remove-section {
+        margin-top: 10px;
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+    }
 
-            <button type="submit" class="btn btn-outline-primary">Update Article</button>
-        </form>
+    .remove-section:hover {
+        background-color: #e60000;
+    }
 
-        <form action="/api/articles/<%= article._id %>?_method=DELETE" method="POST">
-            <div class="button-group">
-                <button type="submit" class="btn btn-danger"
-                    onclick="return confirm('Are you sure you want to delete this article?');">
-                    Delete
-                </button>
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
 
-                <a href="/articles" class="btn btn-secondary">Back</a>
-            </div>
-        </form>
+    .btn {
+        padding: 10px 20px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="form_container">
+    <h2>✏️ Edit Article</h2>
+
+    <form action="/api/articles/<%= article._id %>?_method=PUT" method="POST" id="article-form">
+        <input type="hidden" name="_method" value="PUT">
+
+        <label for="title" class="form-label">Title</label>
+        <input type="text" id="title" name="title" class="form-control" value="<%= article.title %>" required />
+
+        <label class="form-label">Introduction</label>
+        <div id="intro-editor" class="editor"></div>
+        <textarea name="introduction" id="introduction" hidden></textarea>
+
+        <div id="sections-container"></div>
+        <button type="button" class="btn btn-secondary" onclick="addSection()">➕ Add Section</button>
+
+        <label class="form-label">Conclusion</label>
+        <div id="conclusion-editor" class="editor"></div>
+        <textarea name="conclusion" id="conclusion" hidden></textarea>
+
+        <label for="tags" class="form-label">Tags (comma separated)</label>
+        <input type="text" id="tags" name="tags" class="form-control" value="<%= article.tags.join(', ') %>" />
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">💾 Update</button>
+            <a href="/articles" class="btn btn-secondary">🔙 Back</a>
+        </div>
+    </form>
+
+    <form action="/api/articles/<%= article._id %>?_method=DELETE" method="POST" style="margin-top: 20px;">
+        <div class="button-group">
+            <button type="submit" class="btn btn-danger"
+                onclick="return confirm('Are you sure you want to delete this article?');">
+                🗑️ Delete
+            </button>
+        </div>
+    </form>
+</div>
+
+<template id="section-template">
+    <div class="section-block">
+        <label class="form-label">Section Subheading</label>
+        <input type="text" name="sectionSubheadings" class="form-control" placeholder="e.g., Key Concepts" />
+
+        <label class="form-label">Section Content</label>
+        <div class="editor"></div>
+        <textarea name="sectionContents" hidden></textarea>
+
+        <label class="form-label">List Type (Optional)</label>
+        <select name="sectionListTypes" class="form-control">
+            <option value="">None</option>
+            <option value="bullet">Bullet</option>
+            <option value="number">Numbered</option>
+        </select>
+
+        <label class="form-label">List Items (one per line)</label>
+        <textarea name="sectionListItems" class="form-control" rows="4" placeholder="Each item on a new line..."></textarea>
+
+        <button type="button" class="remove-section">❌ Remove Section</button>
     </div>
+</template>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+    const form = document.getElementById("article-form");
+    const sectionContainer = document.getElementById("sections-container");
+    const template = document.getElementById("section-template");
+
+    const introEditor = new Quill('#intro-editor', {
+        theme: 'snow',
+        placeholder: 'Write introduction...',
+        modules: {
+            toolbar: [['bold', 'italic', 'underline'], [{ list: 'bullet' }, { list: 'ordered' }], ['blockquote']]
+        }
+    });
+    const conclusionEditor = new Quill('#conclusion-editor', {
+        theme: 'snow',
+        placeholder: 'Write conclusion...',
+        modules: {
+            toolbar: [['bold', 'italic', 'underline'], [{ list: 'bullet' }, { list: 'ordered' }], ['blockquote']]
+        }
+    });
+
+    introEditor.root.innerHTML = `<%- article.introduction %>`;
+    conclusionEditor.root.innerHTML = `<%- article.conclusion %>`;
+
+    const quillSections = [];
+
+    function addSection(sectionData = {}) {
+        const clone = template.content.cloneNode(true);
+        const sectionElement = clone.querySelector('.section-block');
+
+        const subheadingInput = clone.querySelector('input[name="sectionSubheadings"]');
+        const listTypeSelect = clone.querySelector('select[name="sectionListTypes"]');
+        const listItemsTextarea = clone.querySelector('textarea[name="sectionListItems"]');
+
+        subheadingInput.value = sectionData.subheading || '';
+        listTypeSelect.value = sectionData.list?.type || '';
+        listItemsTextarea.value = sectionData.list?.items?.join('\n') || '';
+
+        const editorDiv = clone.querySelector('.editor');
+        const textarea = clone.querySelector('textarea[name="sectionContents"]');
+
+        sectionContainer.appendChild(sectionElement);
+
+        const quill = new Quill(editorDiv, {
+            theme: 'snow',
+            placeholder: 'Write section content...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], [{ list: 'bullet' }, { list: 'ordered' }], ['blockquote']]
+            }
+        });
+
+        quill.root.innerHTML = sectionData.content || '';
+        quillSections.push({ quill, textarea, element: sectionElement });
+
+        sectionElement.querySelector('.remove-section').addEventListener('click', () => {
+            sectionElement.remove();
+            const index = quillSections.findIndex(s => s.element === sectionElement);
+            if (index !== -1) quillSections.splice(index, 1);
+        });
+    }
+
+    // Load existing sections from the server
+    const existingSections = <%- JSON.stringify(article.sections || []) %>;
+    existingSections.forEach(section => addSection(section));
+
+    form.addEventListener("submit", function () {
+        document.getElementById("introduction").value = introEditor.root.innerHTML;
+        document.getElementById("conclusion").value = conclusionEditor.root.innerHTML;
+
+        quillSections.forEach(section => {
+            if (section?.textarea) {
+                section.textarea.value = section.quill.root.innerHTML;
+            }
+        });
+    });
+</script>
