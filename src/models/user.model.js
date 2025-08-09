@@ -16,28 +16,27 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user", "lawyer", "admin"],
         default: "user",
     },
     profilePicture: {
         type: String,
-        //if no profile given default store
-        // default: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+        default: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
     },
-    specialization: {
-        type: String,
-        trim: true,
+    lawyerProfile: {
+        type: Schema.Types.ObjectId,
+        ref: "LawyerProfile",
+        default: null
     },
-    licenseNumber: {
-        type: String,
-    },
-    experience: {
-        type: Number, // ✅ Lawyer ke experience ko handle karega
-        default: 0,
-        min: 0,
+    isActive: {
+        type: Boolean,
+        default: true
     },
     resetToken: String,
     resetTokenExpires: Date,
+}
+, {
+    timestamps: true
 });
 
 userSchema.plugin(passportLocalMongoose);

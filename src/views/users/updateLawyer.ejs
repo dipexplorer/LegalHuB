@@ -1,0 +1,181 @@
+<% layout("/layouts/boilerplate") -%>
+
+<style>
+.profile-update-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Heading */
+.profile-update-container h2 {
+    font-weight: 700;
+    color: #4e00ff;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Label styling */
+.form-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-align: left;
+    color: #333;
+}
+
+/* Input + Select styling */
+.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #8e00ff;
+    box-shadow: 0 0 6px rgba(142, 0, 255, 0.4);
+    outline: none;
+}
+
+/* Button styling */
+.btn {
+    width: 100%;
+    padding: 14px 25px;
+    background: linear-gradient(90deg, #4e00ff, #8e00ff);
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
+}
+</style>
+
+<div class="profile-update-container">
+    <h2>Update Lawyer Profile</h2>
+
+    <form method="POST" action="/api/users/update-lawyer?_method=PUT" method="POST" class="needs-validation" novalidate>
+
+        <!-- Row: Specialization + License Number -->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="specialization" class="form-label">Specialization</label>
+                <select id="specialization" name="specialization" class="form-control" required>
+                    <option value="">Select Specialization</option>
+                    <% const specs = [
+                        "Criminal Law","Civil Law","Corporate Law","Family Law",
+                        "Intellectual Property","Tax Law","Labor Law","Real Estate Law",
+                        "Immigration Law","Other"
+                    ]; %>
+                    <% specs.forEach(spec => { %>
+                        <option value="<%= spec %>" <%= lawyerProfile?.specialization === spec ? 'selected' : '' %>>
+                            <%= spec %>
+                        </option>
+                    <% }) %>
+                </select>
+                <div class="invalid-feedback">Please select a specialization.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="license-number" class="form-label">License Number</label>
+                <input type="text" id="license-number" name="licenseNumber" 
+                       class="form-control" 
+                       value="<%= lawyerProfile?.licenseNumber || '' %>" 
+                       placeholder="Enter license number" required>
+                <div class="invalid-feedback">Please enter your license number.</div>
+            </div>
+        </div>
+
+        <!-- Row: Experience + Fees -->
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label for="experience" class="form-label">Years of Experience</label>
+                <input type="number" id="experience" name="experience" 
+                       class="form-control" min="0" 
+                       value="<%= lawyerProfile?.experience || '' %>" 
+                       placeholder="e.g. 5" required>
+                <div class="invalid-feedback">Enter your years of experience.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="fees" class="form-label">Consultation Fees </label>
+                <input type="number" id="fees" name="fees" class="form-control" min="0"
+                       value="<%= lawyerProfile?.fees || '' %>"
+                       placeholder="Enter fees" required>
+                <div class="invalid-feedback">Please enter your fees.</div>
+            </div>
+        </div>
+
+        <!-- Row: City + State -->
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label for="city" class="form-label">City</label>
+                <input type="text" id="city" name="city" class="form-control"
+                       value="<%= lawyerProfile?.city || '' %>"
+                       placeholder="Enter your city" required>
+                <div class="invalid-feedback">Please enter your city.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="state" class="form-label">State</label>
+                <input type="text" id="state" name="state" class="form-control"
+                       value="<%= lawyerProfile?.state || '' %>"
+                       placeholder="Enter your state" required>
+                <div class="invalid-feedback">Please enter your state.</div>
+            </div>
+        </div>
+
+        <!-- Languages Spoken -->
+        <div class="mt-3">
+            <label for="languages" class="form-label">Languages Spoken</label>
+            <input type="text" id="languages" name="languagesSpoken" class="form-control"
+                   value="<%= lawyerProfile?.languagesSpoken?.join(', ') || '' %>"
+                   placeholder="e.g. English, Spanish, Hindi" required>
+            <div class="form-text">Separate multiple languages with commas.</div>
+            <div class="invalid-feedback">Please enter at least one language.</div>
+        </div>
+
+        <!-- Available Slots -->
+        <div class="mt-3">
+            <label for="slots" class="form-label">Available Slots</label>
+            <input type="text" id="slots" name="availableSlots" class="form-control"
+                   value="<%= lawyerProfile?.availableSlots || '' %>"
+                   placeholder="e.g. Mon-Fri 9am-5pm" required>
+            <div class="invalid-feedback">Please enter your available slots.</div>
+        </div>
+
+        <!-- Bio -->
+        <div class="mt-3">
+            <label for="bio" class="form-label">Professional Bio</label>
+            <textarea id="bio" name="bio" class="form-control" rows="4"
+                      placeholder="Write a short description about your expertise" required><%= lawyerProfile?.bio || '' %></textarea>
+            <div class="invalid-feedback">Please write your bio.</div>
+        </div>
+
+        <button type="submit" class="btn mt-4">Update Profile</button>
+    </form>
+</div>
+
+<script>
+(() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+})();
+</script>

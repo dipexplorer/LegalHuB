@@ -1,158 +1,217 @@
 <% layout("/layouts/boilerplate") -%>
-    <style>
-        .btn {
-            width: 100%;
-            padding: 15px 25px;
-            background: linear-gradient(90deg, #4e00ff, #8e00ff);
-            border: none;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
-        }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
-        }
+<style>
+    .btn {
+        width: 100%;
+        padding: 15px 25px;
+        background: linear-gradient(90deg, #4e00ff, #8e00ff);
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
+    }
 
-        .input-group {
-            position: relative;
-        }
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
+    }
 
-        .password-toggle-btn {
-            position: relative;
-            margin-left: 8px;
-            background: none;
-            border: none;
-            bottom: 2px;
-            color: #6c757d;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 0 0.5rem;
-        }
+    .input-group {
+        position: relative;
+    }
 
-        .password-toggle-btn i {
-            pointer-events: none;
-        }
+    .password-toggle-btn {
+        position: relative;
+        margin-left: 8px;
+        background: none;
+        border: none;
+        bottom: 2px;
+        color: #6c757d;
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 0 0.5rem;
+    }
 
-        .password-feedback {
-            font-size: 0.8rem;
-            color: #dc3545;
-            margin-top: 0.25rem;
-            display: none;
-        }
+    .password-toggle-btn i {
+        pointer-events: none;
+    }
 
-        .password-feedback.valid {
-            color: green;
-            display: block;
-        }
+    .password-feedback {
+        font-size: 0.8rem;
+        color: #dc3545;
+        margin-top: 0.25rem;
+        display: none;
+    }
 
-        .password-feedback.show {
-            display: block;
-        }
-    </style>
-    
-    <div class="frm_container row">
-        <div class="col-md-4 offset-md-4 frm_box">
-            <!-- Toggle Buttons -->
-            <div class="toggle">
-                <button id="login-toggle" class="active">Login</button>
-                <button id="register-toggle">Register</button>
+    .password-feedback.valid {
+        color: green;
+        display: block;
+    }
+
+    .password-feedback.show {
+        display: block;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 6px;
+        text-align: left;
+        display: block;
+        color: #aaa; /* darker for visibility */
+    }
+</style>
+
+<div class="frm_container row">
+    <div class="col-md-4 offset-md-4 frm_box">
+
+        <!-- Toggle Buttons -->
+        <div class="toggle">
+            <button id="login-toggle" class="active">Login</button>
+            <button id="register-toggle">Register</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="login-form" class="form needs-validation" method="POST" action="/api/users/login" novalidate>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid username.</div>
+                    </div>
+                </div>
             </div>
 
-            <!-- LOGIN FORM -->
-            <form id="login-form" class="form needs-validation" method="POST" action="/api/users/login" novalidate>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group form-group">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" name="username" placeholder="Enter your username"
-                                class="form-control" required>
-                            <div class="invalid-feedback">Please enter a valid username.</div>
-                        </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="login-password" class="form-label">Password</label>
+                        <button type="button" class="password-toggle-btn" onclick="togglePassword('login-password', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <input type="password" id="login-password" name="password" placeholder="Enter your password" class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid password.</div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group form-group">
-                            <label for="login-password" class="form-label">Password</label>
-                            <button type="button" class="password-toggle-btn" onclick="togglePassword('login-password', this)">
-                                [<i class="fas fa-eye"></i>]
-                            </button>
-                            <input type="password" id="login-password" name="password" placeholder="Enter your password"
-                                class="form-control" required>
-                            <div class="invalid-feedback">Please enter a valid password.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="submit" class="btn">Login</button>
-                    <p class="small-text">
-   <a href="/api/users/forgot-password" class="forgot-link" style="color: #8e00ff;">Forgot Password?</a>
+            </div>
 
-</p>
-                </div>
-                <p class="small-text">Don't have an account? <span id="switch-to-register">Register</span></p>
-            </form>
+            <div class="row">
+                <button type="submit" class="btn">Login</button>
+                <p class="small-text">
+                    <a href="/api/users/forgot-password" class="forgot-link" style="color: #8e00ff;">Forgot Password?</a>
+                </p>
+            </div>
 
-            <!-- REGISTRATION FORM -->
-            <form id="register-form" class="form hidden needs-validation" method="POST" action="/api/users/register" novalidate>
+            <p class="small-text">Don't have an account? <span id="switch-to-register">Register</span></p>
+        </form>
+
+        <!-- REGISTRATION FORM -->
+        <form id="register-form" class="form hidden needs-validation" method="POST" action="/api/users/register" novalidate>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="register-name" class="form-label">Username</label>
+                        <input type="text" id="register-name" name="username" placeholder="Enter your name" class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid username.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group form-group">
+                        <label for="register-email" class="form-label">Email</label>
+                        <input type="email" id="register-email" name="email" placeholder="Enter your email" class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid email.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role selection -->
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="register-role" class="form-label">Account Type</label>
+                        <select id="register-role" name="role" class="form-control" required>
+                            <option value="user">User</option>
+                            <option value="lawyer">Lawyer</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a role.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lawyer Profile Fields -->
+            <div class="lawyer-profile-fields d-none">
                 <div class="row mb-3">
                     <div class="col">
-                        <div class="input-group form-group">
-                            <label for="register-name" class="form-label">Username</label>
-                            <input type="text" id="register-name" name="username" placeholder="Enter your name"
-                                class="form-control" required>
-                            <div class="invalid-feedback">Please enter a valid username.</div>
+                        <div class="form-group">
+                            <label for="specialization" class="form-label">Specialization</label>
+                            <select id="specialization" name="lawyerProfile[specialization]" class="form-control">
+                                <option value="">Select Specialization</option>
+                                <option value="Criminal Law">Criminal Law</option>
+                                <option value="Civil Law">Civil Law</option>
+                                <option value="Corporate Law">Corporate Law</option>
+                                <option value="Family Law">Family Law</option>
+                                <option value="Intellectual Property">Intellectual Property</option>
+                                <option value="Tax Law">Tax Law</option>
+                                <option value="Labor Law">Labor Law</option>
+                                <option value="Real Estate Law">Real Estate Law</option>
+                                <option value="Immigration Law">Immigration Law</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
                     </div>
                 </div>
+
                 <div class="row mb-3">
                     <div class="col">
-                        <div class="input-group form-group">
-                            <label for="register-email" class="form-label">Email</label>
-                            <input type="email" id="register-email" name="email" placeholder="Enter your email"
-                                class="form-control" required>
-                            <div class="invalid-feedback">Please enter a valid email.</div>
+                        <div class="form-group">
+                            <label for="register-license-number" class="form-label">License Number</label>
+                            <input type="text" id="register-license-number" name="lawyerProfile[licenseNumber]" placeholder="Enter your license number" class="form-control">
+                            <div class="invalid-feedback">Please enter a valid license number.</div>
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="input-group form-group">
-                            <label for="register-password" class="form-label">Password</label>
-                            <button type="button" class="password-toggle-btn" onclick="togglePassword('register-password', this)">
-                                [<i class="fas fa-eye"></i>]
-                            </button>
-                            <input type="password" id="register-password" name="password"
-                                placeholder="Enter your password" class="form-control" required minlength="8">
-                                <div class="password-feedback" id="password-feedback"></div>
-                                <div class="invalid-feedback">Please enter a valid password.</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="input-group form-group">
-                            <label for="register-confirm-password" class="form-label">Confirm Password</label>
-                            <button type="button" class="password-toggle-btn" onclick="togglePassword('register-confirm-password', this)">
-                                [<i class="fas fa-eye"></i>]
-                            </button>
-                            <input type="password" id="register-confirm-password" name="confirmPassword"
-                                placeholder="Confirm your password" class="form-control" required>
-                            <div class="invalid-feedback">Passwords do not match.</div>
-                        </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="input-group form-group">
+                        <label for="register-password" class="form-label">Password</label>
+                        <button type="button" class="password-toggle-btn" onclick="togglePassword('register-password', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <input type="password" id="register-password" name="password" placeholder="Enter your password" class="form-control" required minlength="8">
+                        <div id="password-feedback" class="password-feedback"></div>
+                        <div class="invalid-feedback">Please enter a valid password.</div>
                     </div>
                 </div>
-                <div class="row">
-                    <button type="submit" class="btn">Register</button>
+
+                <div class="col-md-6">
+                    <div class="input-group form-group">
+                        <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                        <button type="button" class="password-toggle-btn" onclick="togglePassword('register-confirm-password', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Confirm your password" class="form-control" required>
+                        <div class="invalid-feedback">Passwords do not match.</div>
+                    </div>
                 </div>
-                <p class="small-text">Already have an account? <span id="switch-to-login">Login</span></p>
-            </form>
-        </div>
+            </div>
+
+            <div class="row">
+                <button type="submit" class="btn">Register</button>
+            </div>
+
+            <p class="small-text">Already have an account? <span id="switch-to-login">Login</span></p>
+        </form>
     </div>
+</div>
 
 <script>
     (() => {
@@ -175,6 +234,7 @@
         passwordInput.addEventListener('input', () => {
             const password = passwordInput.value;
             const errors = getPasswordErrors(password);
+
             if (errors.length === 0) {
                 passwordFeedback.textContent = "Password looks good!";
                 passwordFeedback.className = "password-feedback valid";
@@ -187,39 +247,41 @@
         });
 
         confirmPasswordInput.addEventListener('input', () => {
-            if (confirmPasswordInput.value !== passwordInput.value) {
-                confirmPasswordInput.setCustomValidity("Passwords do not match.");
-            } else {
-                confirmPasswordInput.setCustomValidity('');
-            }
+            confirmPasswordInput.setCustomValidity(
+                confirmPasswordInput.value !== passwordInput.value ? "Passwords do not match." : ''
+            );
         });
 
         const forms = document.querySelectorAll('.needs-validation');
-
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', function (event) {
+        forms.forEach((form) => {
+            form.addEventListener('submit', (event) => {
                 if (!form.checkValidity()) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 form.classList.add('was-validated');
-            }, false);
+            });
         });
     })();
 
-    // Fix toggle button functionality
     function togglePassword(inputId, toggleBtn) {
         const input = document.getElementById(inputId);
         const icon = toggleBtn.querySelector('i');
+        const isPassword = input.type === 'password';
 
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
+        input.type = isPassword ? 'text' : 'password';
+        icon.classList.toggle('fa-eye', !isPassword);
+        icon.classList.toggle('fa-eye-slash', isPassword);
     }
+
+    // Show/Hide lawyer fields based on role selection
+    document.getElementById('register-role').addEventListener('change', function () {
+        const lawyerFields = document.querySelector('.lawyer-profile-fields');
+        if (this.value === 'lawyer') {
+            lawyerFields.classList.remove('d-none');
+        } else {
+            lawyerFields.classList.add('d-none');
+        }
+    });
+
 </script>

@@ -33,8 +33,21 @@ const saveRedirectUrl = (req, res, next) => {
     next();
 };
 
+const requireRole = (role) => {
+    return asyncHandler(async (req, res, next) => {
+        if (!req.user) {
+            return next(new ApiError(401, "Unauthorized"));
+        }
+        if (req.user.role === role || req.user.role === "admin"){
+            return next();
+        }
+        return next(new ApiError(403, "Forbidden"));
+    });
+};
+
 module.exports = {
     isLoggedIn,
     isAdmin,
     saveRedirectUrl,
+    requireRole
 };

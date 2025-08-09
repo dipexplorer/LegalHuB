@@ -112,12 +112,13 @@
                     </p>
 
                     <div class="btn-group">
-                        <a class="btn btn-outline-secondary" href="/account/update">Edit
-                            Profile</a>&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-outline-secondary" href="/account/update">Edit User Profile</a>&nbsp;&nbsp;&nbsp;
+                        <% if (currentUser.role === "lawyer") { %>
+                            <a class="btn btn-outline-secondary" href="/account/update/lawyer">Edit Lawyer Profile</a>&nbsp;&nbsp;&nbsp;
+                        <% } %>
                         <form action="/api/users/delete?_method=DELETE" method="POST" style="margin: 0;">
                             <button type="submit" class="btn btn-outline-danger">Delete Account</button>
                         </form>
-
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const {
-    registerUser,
+    registerAccount,
     loginUser,
     logoutUser,
     getUserProfile,
@@ -9,7 +9,8 @@ const {
     deleteUser,
     requestPasswordReset,
     renderResetPasswordPage,
-    resetPassword
+    resetPassword,
+    updateLawyerProfile
 } = require("../controllers/user.controller.js");
 const {
     isLoggedIn,
@@ -19,7 +20,7 @@ const {
 const router = express.Router();
 
 // Register
-router.route("/register").post(registerUser);
+router.route("/register").post(registerAccount);
 
 // Login
 router.post(
@@ -44,9 +45,8 @@ router.route("/update").put(isLoggedIn, updateUser);
 // Delete
 router.route("/delete").delete(isLoggedIn, deleteUser);
 
-// ---------------------------
-// Forgot/Reset Password Routes
-// ---------------------------
+// Update Lawyer Profile
+router.route("/update-lawyer").put(isLoggedIn, updateLawyerProfile);
 
 // Request password reset (email form submission)
 router.post('/request-reset', requestPasswordReset);
