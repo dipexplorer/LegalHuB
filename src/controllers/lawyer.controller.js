@@ -6,6 +6,7 @@ const LawyerProfile = require("../models/lawyer.model.js");
 
 const getLawyers = asyncHandler(async (req, res) => {
     const lawyers = await User.find({});
+    cosole.log(lawyers);
     res.status(200).json(
         new apiResponse(200, lawyers, "Lawyers fetched successfully")
     );
@@ -15,9 +16,8 @@ const viewLawyer = asyncHandler(async (req, res) => {
     const lawyer = await User.findById(req.params.id).populate({
         path: "lawyerProfile",
         model: LawyerProfile,
-        select: "bio specialization licenseNumber experience city state languagesSpoken availableSlots fees ",
+        select: "bio specialization licenseNumber experience city state languagesSpoken availableSlots fees isVerified",
     });
-    console.log(lawyer);
 
     if (!lawyer) {
         return res.status(404).send("Lawyer not found");

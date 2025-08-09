@@ -45,14 +45,22 @@
         height: 180px;
         border-radius: 50%;
         object-fit: cover;
-        border: 5px solid #b347ff;
-        box-shadow: 0px 4px 15px rgba(179, 71, 255, 0.5);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 5px solid transparent;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .verified-avatar {
+        border-color: #28a745;
+        box-shadow: 0px 0px 15px rgba(40, 167, 69, 0.6);
+    }
+
+    .not-verified-avatar {
+        border-color: #dc3545;
+        box-shadow: 0px 0px 15px rgba(220, 53, 69, 0.6);
     }
 
     .profile-left img:hover {
         transform: scale(1.08);
-        box-shadow: 0px 6px 20px rgba(179, 71, 255, 0.6);
     }
 
     .profile-left h2 {
@@ -60,6 +68,39 @@
         font-size: 2rem;
         color: #e58fff;
         font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .status-badge {
+        font-size: 0.8rem;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: default;
+        transition: transform 0.2s ease;
+    }
+
+    .status-badge:hover {
+        transform: scale(1.05);
+    }
+
+    .status-verified {
+        background: #28a745;
+        color: white;
+        box-shadow: 0 2px 6px rgba(40, 167, 69, 0.4);
+    }
+
+    .status-not-verified {
+        background: #dc3545;
+        color: white;
+        box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
     }
 
     .profile-left p {
@@ -108,33 +149,47 @@
         box-shadow: 0px 6px 18px rgba(179, 71, 255, 0.5);
     }
 
-    /* Right Column */
+    /* Right Column (Improved) */
     .profile-right {
         flex: 2 1 600px;
         padding: 35px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.5s ease-in-out;
     }
 
     .section {
-        margin-bottom: 25px;
-        padding: 20px;
-        background: rgba(35, 35, 58, 0.95);
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 20px 24px;
+        background: rgba(35, 35, 58, 0.85);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
         transition: background 0.3s ease, transform 0.3s ease;
     }
 
     .section:hover {
         background: rgba(44, 44, 71, 0.95);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
     }
 
     .section h3 {
         color: #e58fff;
-        margin-bottom: 12px;
         font-size: 1.3rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding-bottom: 6px;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 6px;
+    }
+
+    .section-icon {
+        font-size: 1.2rem;
+        color: #b347ff;
     }
 
     .section p {
@@ -143,6 +198,54 @@
         font-size: 0.95rem;
     }
 
+    /* Stats Grid */
+    .stats-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .stat-card {
+        flex: 1 1 calc(33.333% - 10px);
+        background: rgba(50, 50, 80, 0.8);
+        border-radius: 14px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .stat-card:hover {
+        background: rgba(60, 60, 100, 0.9);
+        transform: translateY(-4px);
+    }
+
+    .stat-icon {
+        background: linear-gradient(135deg, #8e2de2, #b347ff);
+        color: white;
+        font-size: 1.3rem;
+        padding: 12px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 8px rgba(179, 71, 255, 0.4);
+    }
+
+    .stat-info strong {
+        display: block;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    .stat-info span {
+        font-size: 0.85rem;
+        color: #bbb;
+    }
+
+    /* Tag Chips */
     .tag-list {
         display: flex;
         flex-wrap: wrap;
@@ -150,17 +253,41 @@
     }
 
     .tag {
-        background: #3a3a55;
-        padding: 6px 14px;
-        border-radius: 16px;
+        background: linear-gradient(120deg, #4e4e70, #3a3a55);
+        padding: 7px 16px;
+        border-radius: 20px;
         font-size: 0.85rem;
         color: #f0f0f0;
-        transition: background 0.3s ease, transform 0.3s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0px 2px 8px rgba(179, 71, 255, 0.2);
     }
 
     .tag:hover {
-        background: #4e4e70;
-        transform: scale(1.05);
+        background: linear-gradient(120deg, #6b52b5, #5e479e);
+        transform: scale(1.08);
+        box-shadow: 0 4px 12px rgba(179, 71, 255, 0.4);
+    }
+
+    /* Contact & Availability Styling */
+    .contact-row, .availability-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 0;
+    }
+
+    .contact-label, .availability-label {
+        color: #aaa;
+        font-weight: 500;
+    }
+
+    .contact-value, .availability-value {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .contact-value a {
+        color: #e58fff;
+        text-decoration: none;
     }
 
     /* Floating Chat Button */
@@ -187,7 +314,11 @@
         transform: scale(1.1) rotate(5deg);
     }
 
-    /* Mobile Adjustments */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 768px) {
         .profile-card {
             flex-direction: column;
@@ -198,6 +329,9 @@
         .cta-buttons {
             flex-direction: column;
         }
+        .stats-grid {
+            flex-direction: column;
+        }
     }
 </style>
 
@@ -205,33 +339,58 @@
     <div class="profile-card">
         <!-- Left Column -->
         <div class="profile-left">
-            <img src="<%= lawyer.profilePicture %>" alt="<%= lawyer.username %>">
-            <h2><%= lawyer.username %></h2>
+            <img src="<%= lawyer.profilePicture %>" 
+                 alt="<%= lawyer.username %>" 
+                 class="<%= lawyer.lawyerProfile.isVerified ? 'verified-avatar' : 'not-verified-avatar' %>">
+            
+            <h2>
+                <%= lawyer.username %>
+                <% if (lawyer.lawyerProfile.isVerified) { %>
+                    <span class="status-badge status-verified">✔ Verified</span>
+                <% } else { %>
+                    <span class="status-badge status-not-verified">✖ Not Verified</span>
+                <% } %>
+            </h2>
+
             <p><%= lawyer.email %></p>
             <div class="specialization-badge"><%= lawyer.lawyerProfile.specialization %></div>
 
-            <!-- Service Actions -->
             <div class="cta-buttons">
-                <a href="/appointments/book/<%= lawyer.id %>" class="cta-btn">📅 Book Appointment</a>
-                <a href="/chat/<%= lawyer.id %>" class="cta-btn">💬 Start Chat</a>
+                <a href="/appointments/book/<%= lawyer.id %>" class="cta-btn">📅 Book</a>
+                <a href="/chat/<%= lawyer.id %>" class="cta-btn">💬 Chat</a>
             </div>
         </div>
 
         <!-- Right Column -->
         <div class="profile-right">
-            <div class="section">
-                <h3>About</h3>
+
+            <!-- About -->
+            <div class="section about-section">
+                <h3><span class="section-icon">ℹ️</span> About</h3>
                 <p><%= lawyer.lawyerProfile.bio %></p>
             </div>
 
-            <div class="section">
-                <h3>License & Experience</h3>
-                <p>📜 License Number: <strong><%= lawyer.lawyerProfile.licenseNumber %></strong></p>
-                <p>💼 Experience: <strong><%= lawyer.lawyerProfile.experience %> years</strong></p>
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-info">
+                        <strong><%= lawyer.lawyerProfile.experience %></strong>
+                        <span>Years Experience</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📜</div>
+                    <div class="stat-info">
+                        <strong><%= lawyer.lawyerProfile.licenseNumber %></strong>
+                        <span>License</span>
+                    </div>
+                </div>
             </div>
 
+            <!-- Languages -->
             <div class="section">
-                <h3>Languages Spoken</h3>
+                <h3><span class="section-icon">🌐</span> Languages Spoken</h3>
                 <div class="tag-list">
                     <% lawyer.lawyerProfile.languagesSpoken.forEach(lang => { %>
                         <span class="tag"><%= lang %></span>
@@ -239,19 +398,36 @@
                 </div>
             </div>
 
-            <div class="section">
-                <h3>Contact Info</h3>
-                <p>📧 Email: <a href="mailto:<%= lawyer.email %>" style="color:#e58fff"><%= lawyer.email %></a></p>
+            <!-- Contact Info -->
+            <div class="section contact-section">
+                <h3><span class="section-icon">📞</span> Contact Info</h3>
+                <div class="contact-row">
+                    <span class="contact-label">Email:</span> 
+                    <span class="contact-value"><a href="mailto:<%= lawyer.email %>"><%= lawyer.email %></a></span>
+                </div>
                 <% if (lawyer.phone) { %>
-                    <p>📞 Phone: <%= lawyer.phone %></p>
+                    <div class="contact-row">
+                        <span class="contact-label">Phone:</span> 
+                        <span class="contact-value"><%= lawyer.phone %></span>
+                    </div>
                 <% } %>
-                <p>📍 Location: <%= lawyer.lawyerProfile.city %>, <%= lawyer.lawyerProfile.state %></p>
+                <div class="contact-row">
+                    <span class="contact-label">Location:</span> 
+                    <span class="contact-value"><%= lawyer.lawyerProfile.city %>, <%= lawyer.lawyerProfile.state %></span>
+                </div>
             </div>
 
-            <div class="section">
-                <h3>Availability & Fees</h3>
-                <p>🕒 Available: <%= lawyer.lawyerProfile.availableSlots %></p>
-                <p>💰 Fees: $<%= lawyer.lawyerProfile.fees %></p>
+            <!-- Availability & Fees -->
+            <div class="section availability-section">
+                <h3><span class="section-icon">💰</span> Availability & Fees</h3>
+                <div class="availability-row">
+                    <span class="availability-label">Available:</span>
+                    <span class="availability-value"><%= lawyer.lawyerProfile.availableSlots %></span>
+                </div>
+                <div class="availability-row">
+                    <span class="availability-label">Fees:</span>
+                    <span class="availability-value">$<%= lawyer.lawyerProfile.fees %></span>
+                </div>
             </div>
 
             <a href="/lawyers" class="cta-btn" style="max-width:200px;">⬅ Back to List</a>
@@ -259,5 +435,4 @@
     </div>
 </div>
 
-<!-- Floating Chat -->
 <a href="/chat/<%= lawyer.id %>" class="chat-float">💬</a>
