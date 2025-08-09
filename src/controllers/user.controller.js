@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const validatePassword = require("../validators/passwordValidator.js");
+const lawyerModel = require("../models/lawyer.model.js");
 
 
 // 📌 Nodemailer setup
@@ -22,6 +23,17 @@ const transporter = nodemailer.createTransport({
 // 📌 Register User
 const registerAccount = asyncHandler(async (req, res) => {
     const { username, email, password, confirmPassword, role, lawyerProfile } = req.body;
+
+    // Validate role from backend whitelist
+    const allowedRoles = ["user", "lawyer"];
+    if (!allowedRoles.includes(role)) {
+        const errorMsg = "Invalid role";
+        if (req.accepts("html")) {
+            req.flash("error", errorMsg);
+            return res.redirect("/login");
+        }
+        throw new apiError(400, errorMsg);
+    }
 
     // 1️⃣ Required fields check
     if (!username || !email || !password || !confirmPassword) {
@@ -220,6 +232,20 @@ const updateUser = asyncHandler(async (req, res) => {
             throw new apiError(400, msg);
         }
         user.username = username;
+    }
+
+    // ✅ Unique email check
+    if (email && email !== user.email) {
+        const emailExists = await User.findOne({ email });
+        if (emailExists) {
+            const msg = "Email already taken";
+            if (req.accepts("html")) {
+                req.flash("error", msg);
+                return res.redirect("/account");
+            }
+            throw new apiError(400, msg);
+        }
+        user.email = email;
     }
 
     user.name = name || user.name;
@@ -422,9 +448,7 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
         lawyerProfileDoc.experience = experience ?? lawyerProfileDoc.experience;
         lawyerProfileDoc.city = city || lawyerProfileDoc.city;
         lawyerProfileDoc.state = state || lawyerProfileDoc.state;
-        lawyerProfileDoc.languagesSpoken = languagesSpoken
-            ? languagesSpoken.split(",").map(l => l.trim())
-            : lawyerProfileDoc.languagesSpoken;
+        lawyerProfileDoc.languagesSpoken = languagesSpoken ? languagesSpoken.split(",").map(l => l.trim()) : [];
         lawyerProfileDoc.availableSlots = availableSlots || lawyerProfileDoc.availableSlots;
         lawyerProfileDoc.fees = fees ?? lawyerProfileDoc.fees;
         await lawyerProfileDoc.save();
@@ -440,6 +464,94 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
     }
 });
 
+// apply for lawyer
+const applyForLawyer = asyncHandler(async (req, res) => {
+    // 1️⃣ Ensure user is logged in
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+        const msg = "Please login.";
+        if (req.accepts("html")) {
+            req.flash("error", msg);
+            return res.redirect("/login");
+        }
+        throw new apiError(404, msg);
+    }
+
+    // 2️⃣ Only allow "user" role to apply
+    if (user.role === "lawyer") {
+        const msg = "You are already registered as a lawyer";
+        if (req.accepts("html")) {
+            req.flash("error", msg);
+            return res.redirect("/account");
+        }
+        throw new apiError(403, msg);
+    }
+
+    if (user.role !== "user") {
+        const msg = "Only standard users can apply to become a lawyer";
+        if (req.accepts("html")) {
+            req.flash("error", msg);
+            return res.redirect("/account");
+        }
+        throw new apiError(403, msg);
+    }
+
+    // 3️⃣ Validate required lawyer details
+    const { specialization, licenseNumber } = req.body;
+    if (!specialization || !licenseNumber) {
+        const msg = "Specialization and license number are required";
+        if (req.accepts("html")) {
+            req.flash("error", msg);
+            return res.redirect("/account");
+        }
+        throw new apiError(400, msg);
+    }
+
+    // 4️⃣ Prevent duplicate lawyer applications
+    const existingProfile = await LawyerProfile.findOne({ user: user._id });
+    if (existingProfile) {
+        const msg = "You have already submitted a lawyer application";
+        if (req.accepts("html")) {
+            req.flash("error", msg);
+            return res.redirect("/account");
+        }
+        throw new apiError(400, msg);
+    }
+
+    // 5️⃣ Create lawyer profile & update role
+    try {
+        const lawyerProfile = new LawyerProfile({
+            user: user._id,
+            specialization,
+            licenseNumber
+        });
+
+        await lawyerProfile.save();
+        user.lawyerProfile = lawyerProfile._id;
+        user.role = "lawyer";
+        await user.save();
+
+        if (req.accepts("html")) {
+            req.flash("success", "Application submitted successfully!");
+            return res.redirect("/account");
+        }
+        return res.status(200).json(
+            new apiResponse(200, lawyerProfile, "Application submitted successfully")
+        );
+    } catch (err) {
+        if (req.accepts("html")) {
+            req.flash("error", err.message);
+            return res.redirect("/account");
+        }
+        throw new apiError(500, err.message);
+    }
+});
+
+// render apply form
+const renderLawyerApplyForm = asyncHandler(async (req, res) => {
+    res.render("users/applyforlawyer");
+});
+
 module.exports = {
     registerAccount,
     loginUser,
@@ -452,5 +564,7 @@ module.exports = {
     requestPasswordReset,
     renderResetPasswordPage,
     resetPassword,
-    updateLawyerProfile
+    updateLawyerProfile,
+    applyForLawyer,
+    renderLawyerApplyForm
 };

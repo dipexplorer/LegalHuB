@@ -10,7 +10,8 @@ const {
     requestPasswordReset,
     renderResetPasswordPage,
     resetPassword,
-    updateLawyerProfile
+    updateLawyerProfile,
+    applyForLawyer
 } = require("../controllers/user.controller.js");
 const {
     isLoggedIn,
@@ -44,6 +45,9 @@ router.route("/update").put(isLoggedIn, updateUser);
 
 // Delete
 router.route("/delete").delete(isLoggedIn, deleteUser);
+
+// Apply for Lawyer
+router.route("/apply-lawyer").post(isLoggedIn, applyForLawyer);
 
 // Update Lawyer Profile
 router.route("/update-lawyer").put(isLoggedIn, updateLawyerProfile);
