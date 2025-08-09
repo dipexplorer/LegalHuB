@@ -523,35 +523,36 @@
                 Connect with verified lawyers across India. Get expert legal consultation for your specific needs.
             </p>
         </div>
-
-        <!-- Advanced Filter Section -->
-        <section class="filter-section" role="search" aria-labelledby="filter-title">
-            <div class="filter-header">
-                <h2 class="filter-title" id="filter-title">
+        
+            <!-- Advanced Filter Section -->
+            <section class="filter-section" role="search" aria-labelledby="filter-title">
+                <div class="filter-header">
+                    <h2 class="filter-title" id="filter-title">
                     <i class="fas fa-search" aria-hidden="true"></i>
                     Find Your Lawyer
-                </h2>
-                <button type="button" class="clear-filters-btn" onclick="clearAllFilters()"
-                        aria-label="Clear all filters">
+                    </h2>
+                    <button type="button" class="clear-filters-btn" onclick="clearAllFilters()" aria-label="Clear all filters">
                     <i class="fas fa-times" aria-hidden="true"></i> Clear Filters
-                </button>
-            </div>
-            
-            <form method="GET" action="/lawyers" class="filter-form" role="search">
-                <div class="filter-controls" role="group" aria-labelledby="filter-title">
+                    </button>
+                </div>
+
+                <form method="GET" action="/lawyers" class="filter-form" role="search">
+                    <div class="filter-controls" role="group" aria-labelledby="filter-title">
+
                     <!-- Search Input -->
                     <div class="filter-group">
                         <label for="search" class="filter-label">Search Lawyers</label>
                         <div class="search-input-container">
-                            <input 
-                                type="text" 
-                                id="search" 
-                                name="search" 
-                                class="filter-input" 
-                                placeholder="Search by name, specialization, or location..."
-                                autocomplete="off"
-                            >
-                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            class="filter-input"
+                            placeholder="Search by name, specialization, or location..."
+                            autocomplete="off"
+                            value="<%= search %>"
+                        />
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
                         </div>
                     </div>
 
@@ -559,15 +560,10 @@
                     <div class="filter-group">
                         <label for="specialization" class="filter-label">Specialization</label>
                         <select id="specialization" name="specialization" class="filter-select">
-                            <option value="all">All Specializations</option>
-                            <option value="Criminal Law">Criminal Law</option>
-                            <option value="Corporate Law">Corporate Law</option>
-                            <option value="Family Law">Family Law</option>
-                            <option value="Civil Law">Civil Law</option>
-                            <option value="Property Law">Property Law</option>
-                            <option value="Tax Law">Tax Law</option>
-                            <option value="Labour Law">Labour Law</option>
-                            <option value="Constitutional Law">Constitutional Law</option>
+                        <option value="all" <%= specialization === 'all' ? 'selected' : '' %>>All Specializations</option>
+                        <% specializations.forEach(spec => { %>
+                            <option value="<%= spec %>" <%= specialization === spec ? 'selected' : '' %>><%= spec %></option>
+                        <% }) %>
                         </select>
                     </div>
 
@@ -575,14 +571,10 @@
                     <div class="filter-group">
                         <label for="location" class="filter-label">Location</label>
                         <select id="location" name="location" class="filter-select">
-                            <option value="all">All Locations</option>
-                            <option value="Mumbai">Mumbai</option>
-                            <option value="Delhi">Delhi</option>
-                            <option value="Bangalore">Bangalore</option>
-                            <option value="Chennai">Chennai</option>
-                            <option value="Kolkata">Kolkata</option>
-                            <option value="Hyderabad">Hyderabad</option>
-                            <option value="Pune">Pune</option>
+                        <option value="all" <%= location === 'all' ? 'selected' : '' %>>All Locations</option>
+                        <% locations.forEach(loc => { %>
+                            <option value="<%= loc %>" <%= location === loc ? 'selected' : '' %>><%= loc %></option>
+                        <% }) %>
                         </select>
                     </div>
 
@@ -591,8 +583,8 @@
                         <i class="fas fa-search"></i>
                         <span>Search</span>
                     </button>
-                </div>
-            </form>
+                    </div>
+                </form>
         </section>
 
         <!-- Results Summary -->
@@ -602,237 +594,204 @@
             </div>
         </div>
 
-      <!-- Lawyers Grid -->
-<% if (lawyers && lawyers.length > 0) { %>
-    <div class="lawyers-grid">
-        <% lawyers.forEach(lawyer => { %>
-            <div class="lawyer-card">
-                <!-- Card Header with Profile -->
-                <div class="card-header">
-                    <img src="<%= lawyer.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>" 
-                         alt="<%= lawyer.username || 'Unknown Lawyer' %>" 
-                         class="profile-avatar">
-                    <div class="lawyer-info">
-                        <h3><%= lawyer.username || 'Unknown Lawyer' %></h3>
-                        <% if (lawyer.specialization) { %>
-                            <div class="specialization-badge">
-                                <%= lawyer.specialization %>
-                            </div>
-                        <% } %>
-                    </div>
-                </div>
-                
-                <!-- Card Content -->
-                <div class="card-content">
-                    <!-- Location -->
-                    <% if (lawyer.location && (lawyer.location.city || lawyer.location.state)) { %>
-                        <div class="info-row">
-                            <i class="fas fa-map-marker-alt info-icon"></i>
-                            <span>
-                                <%= lawyer.location.city || '' %>
-                                <%= (lawyer.location.city && lawyer.location.state) ? ', ' : '' %>
-                                <%= lawyer.location.state || '' %>
-                            </span>
-                        </div>
-                    <% } %>
-
-                    <!-- Experience (allow zero years) -->
-                    <% if (lawyer.experience !== undefined) { %>
-                        <div class="info-row">
-                            <i class="fas fa-briefcase info-icon"></i>
-                            <span><%= lawyer.experience %> years experience</span>
-                        </div>
-                    <% } %>
-
-                    <!-- License Number -->
-                    <% if (lawyer.licenseNumber) { %>
-                        <div class="info-row">
-                            <i class="fas fa-id-card info-icon"></i>
-                            <span>License: <%= lawyer.licenseNumber %></span>
-                        </div>
-                    <% } %>
-
-                    <!-- Rating -->
-                    <div class="info-row">
-                        <i class="fas fa-star info-icon"></i>
-                        <span>
-                            <%= lawyer.rating || 0 %>/5
-                            <span class="rating-stars">
-                                <% for(let i = 1; i <= 5; i++) { %>
-                                    <%= i <= (lawyer.rating || 0) ? '★' : '☆' %>
+        <!-- Lawyers Grid -->
+        <% if (lawyers && lawyers.length > 0) { %>
+            <div class="lawyers-grid">
+                <% lawyers.forEach(lawyer => { %>
+                    <div class="lawyer-card">
+                        <!-- Card Header with Profile -->
+                        <div class="card-header">
+                            <img src="<%= lawyer.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>" 
+                                alt="<%= lawyer.username || 'Unknown Lawyer' %>" 
+                                class="profile-avatar">
+                            <div class="lawyer-info">
+                                <h3><%= lawyer.username || 'Unknown Lawyer' %></h3>
+                                <% if (lawyer.specialization) { %>
+                                    <div class="specialization-badge">
+                                        <%= lawyer.specialization %>
+                                    </div>
                                 <% } %>
-                            </span>
-                        </span>
-                    </div>
-
-                    <!-- Consultation Fee -->
-                    <% if (lawyer.consultationFee) { %>
-                        <div class="info-row">
-                            <i class="fas fa-rupee-sign info-icon"></i>
-                            <span>₹<%= lawyer.consultationFee %> consultation</span>
+                            </div>
                         </div>
-                    <% } %>
+                        
+                        <!-- Card Content -->
+                        <div class="card-content">
+                            <!-- Location -->
+                            <% if (lawyer.location && (lawyer.location.city || lawyer.location.state)) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-map-marker-alt info-icon"></i>
+                                    <span>
+                                        <%= lawyer.location.city || '' %>
+                                        <%= (lawyer.location.city && lawyer.location.state) ? ', ' : '' %>
+                                        <%= lawyer.location.state || '' %>
+                                    </span>
+                                </div>
+                            <% } %>
 
-                    <!-- Verification Status -->
-                    <div class="info-row">
-                        <% if (lawyer.verified) { %>
-                            <span class="verified-badge">
-                                <i class="fas fa-check-circle"></i>
-                                Verified
-                            </span>
-                        <% } else { %>
-                            <span class="not-verified-badge">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                Not Verified
-                            </span>
-                        <% } %>
-                    </div>
+                            <!-- Experience (allow zero years) -->
+                            <% if (lawyer.lawyerProfile.experience !== undefined) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-briefcase info-icon"></i>
+                                    <span><%= lawyer.lawyerProfile.experience %> years experience</span>
+                                </div>
+                            <% } %>
 
-                    <!-- Availability -->
-                    <div class="info-row">
-                        <i class="fas fa-clock info-icon"></i>
-                        <span class="availability-status <%= lawyer.availability ? 'available' : 'unavailable' %>">
-                            <%= lawyer.availability ? 'Available' : 'Busy' %>
-                        </span>
+                            <!-- License Number -->
+                            <% if (lawyer.lawyerProfile.specialization) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-id-card info-icon"></i>
+                                    <b>Specialization:</b><span><%= lawyer.lawyerProfile.specialization %></span>
+                                </div>
+                            <% } %>
+
+                            <!-- Rating -->
+                            <div class="info-row">
+                                <i class="fas fa-star info-icon"></i>
+                                <span>
+                                    <%= lawyer.lawyerProfile.rating || 0 %>/5
+                                    <span class="rating-stars">
+                                        <% for(let i = 1; i <= 5; i++) { %>
+                                            <%= i <= (lawyer.rating || 0) ? '★' : '☆' %>
+                                        <% } %>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <!-- Consultation Fee -->
+                            <% if (lawyer.lawyerProfile.fees) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-rupee-sign info-icon"></i>
+                                    <span><%= lawyer.lawyerProfile.fees %> (₹) consultation</span>
+                                </div>
+                            <% }else { %>
+                                <div class="info-row">
+                                    <i class="fas fa-rupee-sign info-icon"></i>
+                                    <span>Free consultation</span>
+                                </div>
+                            <% } %>
+
+                            <!-- Verification Status -->
+                            <div class="info-row">
+                                <% if (lawyer.verified) { %>
+                                    <span class="verified-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        Verified
+                                    </span>
+                                <% } else { %>
+                                    <span class="not-verified-badge">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Not Verified
+                                    </span>
+                                <% } %>
+                            </div>
+
+                            <!-- Availability -->
+                            <div class="info-row">
+                                <i class="fas fa-clock info-icon"></i>
+                                <span class="availability-status <%= lawyer.availability ? 'available' : 'unavailable' %>">
+                                    <%= lawyer.availability ? 'Available' : 'Busy' %>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Actions -->
+                        <div class="card-actions">
+                            <a href="/lawyers/<%= lawyer._id %>" class="btn btn-primary">
+                                <i class="fas fa-user"></i>
+                                View Profile
+                            </a>
+                            <% if (lawyer.availability) { %>
+                                <a href="#" class="btn btn-secondary" onclick="bookAppointment('<%= lawyer._id %>')">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    Book Appointment
+                                </a>
+                            <% } else { %>
+                                <button class="btn btn-secondary" disabled>
+                                    <i class="fas fa-calendar-times"></i>
+                                    Unavailable
+                                </button>
+                            <% } %>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Card Actions -->
-                <div class="card-actions">
-                    <a href="/lawyers/<%= lawyer._id %>" class="btn btn-primary">
-                        <i class="fas fa-user"></i>
-                        View Profile
-                    </a>
-                    <% if (lawyer.availability) { %>
-                        <a href="#" class="btn btn-secondary" onclick="bookAppointment('<%= lawyer._id %>')">
-                            <i class="fas fa-calendar-plus"></i>
-                            Book Appointment
-                        </a>
-                    <% } else { %>
-                        <button class="btn btn-secondary" disabled>
-                            <i class="fas fa-calendar-times"></i>
-                            Unavailable
-                        </button>
-                    <% } %>
-                </div>
+                <% }) %>
             </div>
-        <% }) %>
-    </div>
-<% } else { %>
-    <div class="empty-state">
-        <h3>No lawyers found</h3>
-        <p>Try adjusting your search criteria or browse all available lawyers.</p>
-    </div>
-<% } %>
+        <% } else { %>
+            <div class="empty-state">
+                <h3>No lawyers found</h3>
+                <p>Try adjusting your search criteria or browse all available lawyers.</p>
+            </div>
+        <% } %>
+<script>
+  function clearAllFilters() {
+    document.getElementById('search').value = '';
+    document.getElementById('specialization').value = 'all';
+    document.getElementById('location').value = 'all';
+    applyFilters();
+  }
 
-    <script>
-        // Enhanced search and filter functionality
-        let filterTimeout;
-        
-        function clearAllFilters() {
-            document.getElementById('search').value = '';
-            document.getElementById('specialization').value = 'all';
-            document.getElementById('location').value = 'all';
-            applyFilters();
-        }
+  function applyFilters() {
+    const search = document.getElementById('search').value.trim();
+    const specialization = document.getElementById('specialization').value;
+    const location = document.getElementById('location').value;
 
-        function applyFilters() {
-            const search = document.getElementById('search').value.trim();
-            const specialization = document.getElementById('specialization').value;
-            const location = document.getElementById('location').value;
-            
-            const params = new URLSearchParams();
-            if (search) params.set('search', search);
-            if (specialization !== 'all') params.set('specialization', specialization);
-            if (location !== 'all') params.set('location', location);
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (specialization !== 'all') params.set('specialization', specialization);
+    if (location !== 'all') params.set('location', location);
 
-            const queryString = params.toString();
-            const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
-            window.location.href = newUrl;
-        }
+    const queryString = params.toString();
+    const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+    window.location.href = newUrl;
+  }
 
-        function handleSearchInput() {
-            clearTimeout(filterTimeout);
-            const searchInput = document.getElementById('search');
-            const searchIcon = document.querySelector('.search-icon');
-            
-            // Visual feedback during search
-            if (searchInput.value.trim()) {
-                searchIcon.className = 'fas fa-spinner fa-spin search-icon';
-            } else {
-                searchIcon.className = 'fas fa-search search-icon';
-            }
-            
-            filterTimeout = setTimeout(() => {
-                applyFilters();
-            }, 300);
-        }
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+      searchInput.addEventListener('focus', function () {
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
 
-        function showSearchLoading() {
-            const searchIcon = document.querySelector('.search-icon');
-            searchIcon.className = 'fas fa-spinner fa-spin search-icon';
-        }
+      searchInput.addEventListener('blur', function () {
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+    }
 
-        function hideSearchLoading() {
-            const searchIcon = document.querySelector('.search-icon');
-            searchIcon.className = 'fas fa-search search-icon';
-        }
+    const specializationSelect = document.getElementById('specialization');
+    const locationSelect = document.getElementById('location');
 
-        // Book appointment functionality
-        function bookAppointment(lawyerId) {
-            // This would typically open a modal or redirect to booking page
-            alert(`Booking appointment with lawyer ID: ${lawyerId}\n\nThis feature will be implemented to show a booking form or calendar.`);
-            
-            // Future implementation could include:
-            // - Opening a modal with available time slots
-            // - Redirecting to a dedicated booking page
-            // - Integration with calendar systems
-        }
+    if (specializationSelect) {
+      specializationSelect.addEventListener('change', function () {
+        applyFilters();
+      });
+    }
 
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('search');
-            if (searchInput) {
-                // Add focus/blur effects
-                searchInput.addEventListener('focus', function() {
-                    this.parentElement.style.transform = 'translateY(-2px)';
-                });
-                
-                searchInput.addEventListener('blur', function() {
-                    this.parentElement.style.transform = 'translateY(0)';
-                    hideSearchLoading();
-                });
-            }
-            
-            const specializationSelect = document.getElementById('specialization');
-            const locationSelect = document.getElementById('location');
-            
-            if (specializationSelect) {
-                specializationSelect.addEventListener('change', function() {
-                    showSearchLoading();
-                    applyFilters();
-                });
-            }
-            
-            if (locationSelect) {
-                locationSelect.addEventListener('change', function() {
-                    showSearchLoading();
-                    applyFilters();
-                });
-            }
-        });
+    if (locationSelect) {
+      locationSelect.addEventListener('change', function () {
+        applyFilters();
+      });
+    }
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                document.getElementById('search').focus();
-            }
-        });
+    // Clicking the search icon triggers search
+    const searchIcon = document.querySelector('.search-icon');
+    if (searchIcon) {
+      searchIcon.addEventListener('click', applyFilters);
+    }
 
-        // Form submission enhancement
-        document.querySelector('.filter-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            applyFilters();
-        });
-    </script>
+    // Keyboard shortcut Ctrl+K or Cmd+K to focus search input
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    // Submit button triggers search
+    const filterForm = document.querySelector('.filter-form');
+    if (filterForm) {
+      filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        applyFilters();
+      });
+    }
+  });
+</script>

@@ -5,6 +5,7 @@ const asyncHandler = require("../utils/asyncHandler.js");
 const ApiError = require("../utils/apiError.js");
 const ApiResponse = require("../utils/apiResponse.js");
 const User = require("../models/user.model.js");
+const LawyerProfile = require("../models/lawyer.model.js");
 
 const renderHome = (req, res) => {
     res.render("pages/index");
@@ -232,8 +233,60 @@ const renderLoginForm = async (req, res) => {
 };
 
 const getLawyers = asyncHandler(async (req, res) => {
-    const lawyers = await User.find({});
-    res.render("pages/lawyers", { lawyers });
+  const { search, specialization, location } = req.query;
+
+  const specializations = await LawyerProfile.distinct('specialization');
+  const locations = await LawyerProfile.distinct('city');
+
+  let lawyers = await User.find({ role: "lawyer" })
+    .populate({
+      path: "lawyerProfile",
+      model: LawyerProfile,
+      select: "specialization experience city state availableSlots fees isVerified",
+    })
+    .lean();
+
+    const filteredLawyers = lawyers.filter(lawyer => {
+    if (!lawyer.lawyerProfile) return false;
+
+    const s = search && search.trim().toLowerCase();
+    const specializationFilter = specialization && specialization.toLowerCase();
+    const locationFilter = location && location.toLowerCase();
+
+    // Normalize fields for comparisons (lowercase or empty string)
+    const username = (lawyer.username || '').toLowerCase();
+    const spec = (lawyer.lawyerProfile.specialization || '').toLowerCase();
+    const city = (lawyer.lawyerProfile.city || '').toLowerCase();
+    const state = (lawyer.lawyerProfile.state || '').toLowerCase();
+
+    // Filter specialization if filter active
+    if (specializationFilter && specializationFilter !== 'all' && !spec.includes(specializationFilter)) {
+        return false;
+    }
+
+    // Filter location if filter active
+    if (locationFilter && locationFilter !== 'all' && !city.includes(locationFilter)) {
+        return false;
+    }
+
+    // Search filter on username, specialization, city, state (partial)
+    if (s) {
+        if (!(username.includes(s) || spec.includes(s) || city.includes(s) || state.includes(s))) {
+        return false;
+        }
+    }
+
+    return true;
+    });
+
+  res.render("pages/lawyers", {
+    lawyers: filteredLawyers,
+    search: search || '',
+    specialization: specialization || 'all',
+    location: location || 'all',
+    specializations,
+    locations
+  });
 });
 
 module.exports = {

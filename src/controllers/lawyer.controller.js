@@ -5,11 +5,17 @@ const apiResponse = require("../utils/apiResponse");
 const LawyerProfile = require("../models/lawyer.model.js");
 
 const getLawyers = asyncHandler(async (req, res) => {
-    const lawyers = await User.find({});
-    cosole.log(lawyers);
-    res.status(200).json(
-        new apiResponse(200, lawyers, "Lawyers fetched successfully")
-    );
+    const lawyers = await User.find({ role: "lawyer" }).populate({
+        path: "lawyerProfile",
+        model: LawyerProfile,
+        select: "specialization experience city state availableSlots fees isVerified",
+    });
+    
+    if (req.accepts("html")) {
+        return res.render("pages/lawyers", { lawyers });
+    } else {
+        return res.status(200).json(new apiResponse(200,lawyers,"Lawyers fetched successfully"));
+    }
 });
 
 const viewLawyer = asyncHandler(async (req, res) => {
