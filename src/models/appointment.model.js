@@ -9,7 +9,7 @@ const appointmentSchema = new Schema({
     },
     lawyer: {
         type: Schema.Types.ObjectId,
-        ref: "LawyerProfile",
+        ref: "User",
         required: true
     },
     date: {
@@ -32,5 +32,7 @@ const appointmentSchema = new Schema({
 }, {
     timestamps: true
 });
+
+appointmentSchema.index({ lawyer: 1, date: 1, timeSlot: 1 }, { unique: true }); // Ensure unique lawyer-date-timeSlot combination
 
 module.exports = mongoose.model("Appointment", appointmentSchema);
