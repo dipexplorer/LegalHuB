@@ -21,7 +21,9 @@ const isAdmin = (req, res, next) => {
     const adminSecret = req.headers["ADMIN_SECRECT_KEY"]; // Typo matches .env
 
     if (!adminSecret || adminSecret !== process.env.ADMIN_SECRECT_KEY) {
-        return res.status(403).json({ error: "Forbidden: Invalid admin secret" });
+        return res
+            .status(403)
+            .json({ error: "Forbidden: Invalid admin secret" });
     }
 
     next(); // ✅ If secret is correct, proceed to the route
@@ -38,7 +40,7 @@ const requireRole = (role) => {
         if (!req.user) {
             return next(new ApiError(401, "Unauthorized"));
         }
-        if (req.user.role === role || req.user.role === "admin"){
+        if (req.user.role === role || req.user.role === "admin") {
             return next();
         }
         return next(new ApiError(403, "Forbidden"));
@@ -49,5 +51,5 @@ module.exports = {
     isLoggedIn,
     isAdmin,
     saveRedirectUrl,
-    requireRole
+    requireRole,
 };

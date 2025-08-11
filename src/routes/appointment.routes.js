@@ -5,7 +5,7 @@ const {
     getAppointments,
     updateAppointmentStatus,
     cancelAppointment,
-    getAvailableSlots
+    getAvailableSlots,
 } = require("../controllers/appointment.controller.js");
 
 Router.route("/").post(bookAppointment);

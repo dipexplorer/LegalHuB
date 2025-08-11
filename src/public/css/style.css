@@ -1,10 +1,6 @@
 /* 🌌 General Styling */
 body {
-    background: linear-gradient(
-        135deg,
-        #1a1a2e,
-        #16213e
-    );
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
     font-family: rakkas;
     text-align: center;
     overflow-x: hidden;

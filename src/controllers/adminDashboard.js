@@ -19,4 +19,4 @@ exports.adminApproveLawyer = asyncHandler(async (req, res) => {
     res.status(200).json(
         new apiResponse(200, lawyer, "Lawyer approved successfully")
     );
-})
+});

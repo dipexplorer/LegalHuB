@@ -11,7 +11,7 @@ const {
     renderResetPasswordPage,
     resetPassword,
     updateLawyerProfile,
-    applyForLawyer
+    applyForLawyer,
 } = require("../controllers/user.controller.js");
 const {
     isLoggedIn,
@@ -53,17 +53,16 @@ router.route("/apply-lawyer").post(isLoggedIn, applyForLawyer);
 router.route("/update-lawyer").put(isLoggedIn, updateLawyerProfile);
 
 // Request password reset (email form submission)
-router.post('/request-reset', requestPasswordReset);
+router.post("/request-reset", requestPasswordReset);
 
 // Reset password form (via token in URL)
-router.get('/reset-password/:token', renderResetPasswordPage);
+router.get("/reset-password/:token", renderResetPasswordPage);
 
 // Submit new password (after user enters new password)
-router.post('/reset-password', resetPassword);
+router.post("/reset-password", resetPassword);
 
-router.get('/forgot-password', (req, res) => {
-  res.render('pages/forgot-password');
+router.get("/forgot-password", (req, res) => {
+    res.render("pages/forgot-password");
 });
-
 
 module.exports = router;

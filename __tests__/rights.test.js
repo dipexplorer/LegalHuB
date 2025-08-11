@@ -6,7 +6,8 @@ describe("🛡️ Rights API Testing", () => {
     const mockRight = {
         name: "Protection of Interests of Minorities",
         articleNumber: "Article 29",
-        description: "Ensures that minorities have the right to conserve their distinct language, script, or culture.",
+        description:
+            "Ensures that minorities have the right to conserve their distinct language, script, or culture.",
         sourceLink: "https://indiankanoon.org/doc/1298951/",
         category: "Cultural and Educational Rights",
     };
@@ -32,15 +33,19 @@ describe("🛡️ Rights API Testing", () => {
             .send({
                 name: "Right to Approach Courts for Enforcement of Rights",
                 articleNumber: "Article 32",
-                description: "Grants citizens the right to move the Supreme Court directly for enforcement of fundamental rights through writs like habeas corpus, mandamus, prohibition, quo warranto, and certiorari.",
-                sourceLink: "https://www.constitutionofindia.net/constitution_of_india/fundamental_rights/articles/Article%2032",
+                description:
+                    "Grants citizens the right to move the Supreme Court directly for enforcement of fundamental rights through writs like habeas corpus, mandamus, prohibition, quo warranto, and certiorari.",
+                sourceLink:
+                    "https://www.constitutionofindia.net/constitution_of_india/fundamental_rights/articles/Article%2032",
                 category: "Right to Constitutional Remedies",
             });
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(201);
         expect(res.body.success).toBe(true);
-        expect(res.body.data.name).toBe("Right to Approach Courts for Enforcement of Rights");
+        expect(res.body.data.name).toBe(
+            "Right to Approach Courts for Enforcement of Rights"
+        );
     });
 
     it("❌ should return 400 if required fields are missing", async () => {

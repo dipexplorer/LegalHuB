@@ -18,7 +18,7 @@ const {
     getUserProfile,
     renderUpdateForm,
     renderLawyerUpdateForm,
-    renderLawyerApplyForm
+    renderLawyerApplyForm,
 } = require("../controllers/user.controller.js");
 const {
     publishArticle,

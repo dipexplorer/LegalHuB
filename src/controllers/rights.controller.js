@@ -46,7 +46,6 @@ const createRight = asyncHandler(async (req, res) => {
     );
 });
 
-
 // ✅ Get All Rights
 const getAllRights = asyncHandler(async (req, res) => {
     const rights = await Right.find();
@@ -102,7 +101,7 @@ const updateRight = asyncHandler(async (req, res) => {
     // 🛠️ Apply updates (fallback to existing values if not provided)
     right.name = name || right.name;
     right.description = description || right.description;
-    right.articleNumber = articleNumber ||right.articleNumber;
+    right.articleNumber = articleNumber || right.articleNumber;
     right.sourceLink = sourceLink || right.sourceLink;
     right.category = category || right.category;
 
@@ -113,7 +112,6 @@ const updateRight = asyncHandler(async (req, res) => {
         new ApiResponse(200, right, "Right updated successfully")
     );
 });
-
 
 // ✅ Delete Right
 const deleteRight = asyncHandler(async (req, res) => {

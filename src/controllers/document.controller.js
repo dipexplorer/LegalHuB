@@ -2,7 +2,7 @@ const Document = require("../models/document.model.js");
 const asyncHandler = require("../utils/asyncHandler.js");
 const ApiError = require("../utils/apiError.js");
 const ApiResponse = require("../utils/apiResponse.js");
-const indianStates = require("../utils/indianStates.js")
+const indianStates = require("../utils/indianStates.js");
 
 // ✅ Create Document
 const createDocument = asyncHandler(async (req, res) => {
@@ -33,11 +33,12 @@ const createDocument = asyncHandler(async (req, res) => {
     // Check if state is a valid Indian state
     const normalizedState = state.trim();
     const matchedState = indianStates.find(
-    validState => validState.toLowerCase() === normalizedState.toLowerCase()
+        (validState) =>
+            validState.toLowerCase() === normalizedState.toLowerCase()
     );
 
     if (!matchedState) {
-    throw new ApiError(400, "Not a valid Indian state");
+        throw new ApiError(400, "Not a valid Indian state");
     }
 
     const document = await Document.create({
@@ -45,7 +46,7 @@ const createDocument = asyncHandler(async (req, res) => {
         description,
         downloadLink,
         applyLink,
-        state : normalizedState,
+        state: normalizedState,
         department,
         guidelines,
         requiredDocuments,
@@ -59,91 +60,97 @@ const createDocument = asyncHandler(async (req, res) => {
 // ✅ Get All Documents with filtering support
 const getAllDocuments = asyncHandler(async (req, res) => {
     // Extract filter parameters from query string
-    const { search, state, department, sortBy, page = 1, limit = 10 } = req.query;
-    
+    const {
+        search,
+        state,
+        department,
+        sortBy,
+        page = 1,
+        limit = 10,
+    } = req.query;
+
     // Build filter object
     let filter = {};
-    
+
     // Add text search filter (case-insensitive search across title and description)
     if (search && search.trim()) {
         filter.$or = [
-            { title: { $regex: search.trim(), $options: 'i' } },
-            { description: { $regex: search.trim(), $options: 'i' } }
+            { title: { $regex: search.trim(), $options: "i" } },
+            { description: { $regex: search.trim(), $options: "i" } },
         ];
     }
-    
+
     // Add state filter
-    if (state && state !== 'all') {
+    if (state && state !== "all") {
         const matchedState = indianStates.find(
-            s => s.toLowerCase() === state.trim().toLowerCase()
+            (s) => s.toLowerCase() === state.trim().toLowerCase()
         );
         if (matchedState) {
             filter.state = matchedState;
         }
     }
 
-    
     // Add department filter
-    if (department && department !== 'all') {
+    if (department && department !== "all") {
         filter.department = department;
     }
-    
+
     // Build sort object
     let sort = {};
     switch (sortBy) {
-        case 'oldest':
+        case "oldest":
             sort = { createdAt: 1 };
             break;
-        case 'downloads':
+        case "downloads":
             sort = { downloadCount: -1 };
             break;
-        case 'alphabetical':
+        case "alphabetical":
             sort = { title: 1 };
             break;
-        case 'newest':
+        case "newest":
         default:
             sort = { createdAt: -1 };
             break;
     }
-    
+
     // Calculate pagination
     const safePage = Number.isNaN(parseInt(page)) ? 1 : parseInt(page);
     const safeLimit = Number.isNaN(parseInt(limit)) ? 10 : parseInt(limit);
     const skip = (safePage - 1) * safeLimit;
 
-    
     // Fetch filtered and sorted documents with pagination
     const documents = await Document.find(filter)
         .sort(sort)
         .skip(skip)
         .limit(safeLimit);
-    
+
     // Get total count for pagination
     const totalDocuments = await Document.countDocuments(filter);
-    
+
     // Get filter options
-    const allStates = await Document.distinct('state');
-    const allDepartments = await Document.distinct('department');
-    
+    const allStates = await Document.distinct("state");
+    const allDepartments = await Document.distinct("department");
+
     const responseData = {
         documents,
         pagination: {
             currentPage: parseInt(page),
             totalPages: Math.ceil(totalDocuments / parseInt(limit)),
             totalDocuments,
-            hasNextPage: parseInt(page) < Math.ceil(totalDocuments / parseInt(limit)),
-            hasPrevPage: parseInt(page) > 1
+            hasNextPage:
+                parseInt(page) < Math.ceil(totalDocuments / parseInt(limit)),
+            hasPrevPage: parseInt(page) > 1,
         },
         filterOptions: {
             states: allStates.sort(),
-            departments: allDepartments.sort()
+            departments: allDepartments.sort(),
         },
         appliedFilters: {
-            search: search || '',
-            state: state || 'all',
-            department: department || 'all',
-            sortBy: sortBy || 'newest'
-        }
+            search: search || "",
+            state: state || "all",
+            department: department || "all",
+            sortBy: sortBy || "newest",
+        },
     };
 
     res.status(200).json(
@@ -185,14 +192,14 @@ const updateDocument = asyncHandler(async (req, res) => {
     if (!document) {
         throw new ApiError(404, "Document not found");
     }
-    
-    
+
     // If state is provided, validate it
     let validatedState = state;
     if (state) {
         const normalizedState = state.trim();
         const matchedState = indianStates.find(
-            validState => validState.toLowerCase() === normalizedState.toLowerCase()
+            (validState) =>
+                validState.toLowerCase() === normalizedState.toLowerCase()
         );
 
         if (!matchedState) {
@@ -209,7 +216,8 @@ const updateDocument = asyncHandler(async (req, res) => {
     document.state = validatedState || document.state;
     document.department = department || document.department;
     document.guidelines = guidelines || document.guidelines;
-    document.requiredDocuments = requiredDocuments || document.requiredDocuments;
+    document.requiredDocuments =
+        requiredDocuments || document.requiredDocuments;
 
     await document.save();
 

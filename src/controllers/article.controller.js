@@ -3,7 +3,7 @@ const User = require("../models/user.model"); // Importing User model
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
-const sanitizeHtml = require('sanitize-html');
+const sanitizeHtml = require("sanitize-html");
 
 // ✅ Create Article
 const createArticle = asyncHandler(async (req, res) => {
@@ -21,7 +21,7 @@ const createArticle = asyncHandler(async (req, res) => {
     const author = req.user?._id || req.body.author;
 
     // Normalize all section-related fields to arrays
-    const toArray = (val) => Array.isArray(val) ? val : (val ? [val] : []);
+    const toArray = (val) => (Array.isArray(val) ? val : val ? [val] : []);
     sectionSubheadings = toArray(sectionSubheadings);
     sectionContents = toArray(sectionContents);
     sectionListTypes = toArray(sectionListTypes);
@@ -33,14 +33,17 @@ const createArticle = asyncHandler(async (req, res) => {
 
     if (
         sectionContents.length === 0 ||
-        sectionContents.every(content => !content.trim())
+        sectionContents.every((content) => !content.trim())
     ) {
-        throw new ApiError(400, "At least one section with content is required");
+        throw new ApiError(
+            400,
+            "At least one section with content is required"
+        );
     }
 
     const sections = sectionContents.map((content, index) => {
         const section = {
-            subheading: sectionSubheadings[index] || '',
+            subheading: sectionSubheadings[index] || "",
             content: content.trim(),
         };
 
@@ -49,9 +52,9 @@ const createArticle = asyncHandler(async (req, res) => {
 
         if (listType && rawListItems) {
             const items = rawListItems
-                .split('\n')
-                .map(item => item.trim())
-                .filter(item => item);
+                .split("\n")
+                .map((item) => item.trim())
+                .filter((item) => item);
 
             if (items.length > 0) {
                 section.list = {
@@ -69,7 +72,7 @@ const createArticle = asyncHandler(async (req, res) => {
         introduction: introduction?.trim(),
         conclusion: conclusion?.trim(),
         sections,
-        tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+        tags: tags ? tags.split(",").map((tag) => tag.trim()) : [],
         author,
     });
 
@@ -78,10 +81,11 @@ const createArticle = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(201)
-            .json(new ApiResponse(201, article, "Article created successfully"));
+            .json(
+                new ApiResponse(201, article, "Article created successfully")
+            );
     }
 });
-
 
 // ✅ Get All Articles
 const getAllArticles = asyncHandler(async (req, res) => {
@@ -97,58 +101,77 @@ const getAllArticles = asyncHandler(async (req, res) => {
 
 // ✅ Sanitize HTML
 const cleanHtml = (html) =>
-  sanitizeHtml(html || '', {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'u', 'strong', 'em', 'ul', 'ol', 'li', 'blockquote', 'br']),
-    allowedAttributes: {
-      '*': ['href', 'src', 'alt'],
-    },
-    transformTags: {
-      '*': (tagName, attribs) => {
-        delete attribs.style; // ✅ Remove all inline styles
-        return { tagName, attribs };
-      },
-      'div': 'p', // Replace <div> with <p> to maintain spacing
-      'span': 'p' // Replace <span> with <p> if outside formatting
-    },
-    exclusiveFilter: frame =>
-      // ✅ Remove empty tags with no visible content
-      (frame.tag === 'p' || frame.tag === 'div' || frame.tag === 'span') &&
-      !frame.text.trim()
-  });
+    sanitizeHtml(html || "", {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+            "img",
+            "h1",
+            "h2",
+            "u",
+            "strong",
+            "em",
+            "ul",
+            "ol",
+            "li",
+            "blockquote",
+            "br",
+        ]),
+        allowedAttributes: {
+            "*": ["href", "src", "alt"],
+        },
+        transformTags: {
+            "*": (tagName, attribs) => {
+                delete attribs.style; // ✅ Remove all inline styles
+                return { tagName, attribs };
+            },
+            div: "p", // Replace <div> with <p> to maintain spacing
+            span: "p", // Replace <span> with <p> if outside formatting
+        },
+        exclusiveFilter: (frame) =>
+            // ✅ Remove empty tags with no visible content
+            (frame.tag === "p" ||
+                frame.tag === "div" ||
+                frame.tag === "span") &&
+            !frame.text.trim(),
+    });
 
 // ✅ Get Article by ID
 const getArticleById = asyncHandler(async (req, res) => {
-  const article = await Article.findById(req.params.id).populate(
-    "author",
-    "name email role"
-  );
-
-  if (!article) {
-    throw new ApiError(404, "Article not found");
-  }
-
-  // ✅ Sanitize all HTML content
-  const sanitizedSections = article.sections.map(section => ({
-    ...section.toObject(),
-    content: cleanHtml(section.content),
-  }));
-
-  const cleanArticle = {
-    ...article.toObject(),
-    introduction: cleanHtml(article.introduction),
-    conclusion: cleanHtml(article.conclusion),
-    sections: sanitizedSections
-  };
-
-  if (req.accepts("html")) {
-    return res.render("pages/article-details", { article: cleanArticle });
-  } else {
-    return res.status(200).json(
-      new ApiResponse(200, cleanArticle, "Article fetched successfully")
+    const article = await Article.findById(req.params.id).populate(
+        "author",
+        "name email role"
     );
-  }
-});
 
+    if (!article) {
+        throw new ApiError(404, "Article not found");
+    }
+
+    // ✅ Sanitize all HTML content
+    const sanitizedSections = article.sections.map((section) => ({
+        ...section.toObject(),
+        content: cleanHtml(section.content),
+    }));
+
+    const cleanArticle = {
+        ...article.toObject(),
+        introduction: cleanHtml(article.introduction),
+        conclusion: cleanHtml(article.conclusion),
+        sections: sanitizedSections,
+    };
+
+    if (req.accepts("html")) {
+        return res.render("pages/article-details", { article: cleanArticle });
+    } else {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    cleanArticle,
+                    "Article fetched successfully"
+                )
+            );
+    }
+});
 
 // ✅ Update Article (Only Author or Admin Can Update)
 const updateArticle = asyncHandler(async (req, res) => {
@@ -179,7 +202,7 @@ const updateArticle = asyncHandler(async (req, res) => {
     }
 
     // Normalize section-related fields
-    const toArray = (val) => Array.isArray(val) ? val : (val ? [val] : []);
+    const toArray = (val) => (Array.isArray(val) ? val : val ? [val] : []);
     sectionSubheadings = toArray(sectionSubheadings);
     sectionContents = toArray(sectionContents);
     sectionListTypes = toArray(sectionListTypes);
@@ -188,15 +211,18 @@ const updateArticle = asyncHandler(async (req, res) => {
     // Validate at least one section has content
     if (
         sectionContents.length === 0 ||
-        sectionContents.every(content => !content.trim())
+        sectionContents.every((content) => !content.trim())
     ) {
-        throw new ApiError(400, "At least one section with content is required");
+        throw new ApiError(
+            400,
+            "At least one section with content is required"
+        );
     }
 
     // Build updated sections
     const updatedSections = sectionContents.map((content, index) => {
         const section = {
-            subheading: sectionSubheadings[index] || '',
+            subheading: sectionSubheadings[index] || "",
             content: content.trim(),
         };
 
@@ -205,9 +231,9 @@ const updateArticle = asyncHandler(async (req, res) => {
 
         if (listType && rawListItems) {
             const items = rawListItems
-                .split('\n')
-                .map(item => item.trim())
-                .filter(item => item);
+                .split("\n")
+                .map((item) => item.trim())
+                .filter((item) => item);
 
             if (items.length > 0) {
                 section.list = {
@@ -225,7 +251,9 @@ const updateArticle = asyncHandler(async (req, res) => {
     article.introduction = introduction?.trim() || article.introduction;
     article.conclusion = conclusion?.trim() || article.conclusion;
     article.sections = updatedSections;
-    article.tags = tags ? tags.split(',').map(tag => tag.trim()) : article.tags;
+    article.tags = tags
+        ? tags.split(",").map((tag) => tag.trim())
+        : article.tags;
 
     await article.save();
 
@@ -234,7 +262,9 @@ const updateArticle = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(200)
-            .json(new ApiResponse(200, article, "Article updated successfully"));
+            .json(
+                new ApiResponse(200, article, "Article updated successfully")
+            );
     }
 });
 

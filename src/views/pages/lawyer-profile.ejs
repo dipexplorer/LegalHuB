@@ -599,179 +599,168 @@
 </div>
 
 <script>
-  const modal = document.getElementById('bookingModal');
-const bookBtn = document.getElementById('bookBtn');
-const closeModalBtn = document.getElementById('closeModal');
-const bookingForm = document.getElementById('bookingForm');
-const timeSlotSelect = document.getElementById('timeSlot');
-const apptDateInput = document.getElementById('apptDate');
-const lawyerIdInput = document.getElementById('lawyerId');
-const loadingIndicator = document.getElementById('loadingIndicator');
-const bookingError = document.getElementById('bookingError');
+    const modal = document.getElementById('bookingModal');
+    const bookBtn = document.getElementById('bookBtn');
+    const closeModalBtn = document.getElementById('closeModal');
+    const bookingForm = document.getElementById('bookingForm');
+    const timeSlotSelect = document.getElementById('timeSlot');
+    const apptDateInput = document.getElementById('apptDate');
+    const lawyerIdInput = document.getElementById('lawyerId');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const bookingError = document.getElementById('bookingError');
 
-function showError(message) {
-  bookingError.textContent = message;
-  bookingError.style.display = 'block';
-}
+    const bookingSuccess = document.createElement('div');
+    bookingSuccess.setAttribute('role', 'alert');
+    bookingSuccess.style.color = 'green';
+    bookingSuccess.style.marginTop = '10px';
+    bookingSuccess.style.display = 'none';
+    bookingForm.insertBefore(bookingSuccess, bookingForm.firstChild);
 
-function clearError() {
-  bookingError.textContent = '';
-  bookingError.style.display = 'none';
-}
-
-// Open modal & initialize
-bookBtn.addEventListener('click', (e) => {
-  const id = e.target.dataset.lawyerId;
-  lawyerIdInput.value = id;
-  bookingForm.reset();
-  timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
-  clearError();
-  modal.classList.add('active');
-  apptDateInput.focus();
-});
-
-// Close modal
-closeModalBtn.addEventListener('click', () => {
-  modal.classList.remove('active');
-  clearError();
-});
-
-// Close modal on outside click or Escape key
-window.addEventListener('click', (e) => {
-  if (e.target === modal) {
-    modal.classList.remove('active');
-    clearError();
-  }
-});
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && modal.classList.contains('active')) {
-    modal.classList.remove('active');
-    clearError();
-  }
-});
-
-// Fetch available slots on date change
-apptDateInput.addEventListener('change', async () => {
-  const date = apptDateInput.value;
-  const lawyerId = lawyerIdInput.value;
-  clearError();
-
-  if (!date) {
-    timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
-    return;
-  }
-
-  loadingIndicator.style.display = 'block';
-  timeSlotSelect.innerHTML = '<option>Loading...</option>';
-
-  try {
-    const res = await fetch(`/api/appointment/slots?lawyerId=${encodeURIComponent(lawyerId)}&date=${encodeURIComponent(date)}`);
-    if (!res.ok) throw new Error('Failed to fetch slots');
-
-    const data = await res.json();
-    const slots = data.data || data;
-
-    timeSlotSelect.innerHTML = '';
-
-    if (!slots || slots.length === 0) {
-      timeSlotSelect.innerHTML = '<option value="">No slots available</option>';
-      showError('No available time slots for the selected date.');
-      return;
+    function showError(message) {
+        bookingError.textContent = message;
+        bookingError.style.display = 'block';
+        bookingSuccess.style.display = 'none';
     }
 
-    slots.forEach(slot => {
-      const opt = document.createElement('option');
-      opt.value = slot;
-      opt.textContent = slot;
-      timeSlotSelect.appendChild(opt);
+    function showSuccess(message) {
+        bookingSuccess.textContent = message;
+        bookingSuccess.style.display = 'block';
+        bookingError.style.display = 'none';
+    }
+
+    function clearMessages() {
+        bookingError.textContent = '';
+        bookingError.style.display = 'none';
+        bookingSuccess.textContent = '';
+        bookingSuccess.style.display = 'none';
+    }
+
+    bookBtn.addEventListener('click', (e) => {
+        lawyerIdInput.value = e.target.dataset.lawyerId;
+        bookingForm.reset();
+        timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
+        clearMessages();
+        modal.classList.add('active');
+        apptDateInput.focus();
     });
-  } catch (error) {
-    timeSlotSelect.innerHTML = '<option value="">Error loading slots</option>';
-    showError('Could not load available slots. Please try again.');
-    console.error('Error fetching slots:', error);
-  } finally {
-    loadingIndicator.style.display = 'none';
-  }
-});
 
-// Before submit, check if slot is selected and available, then submit
-bookingForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearError();
-
-  if (!bookingForm.checkValidity()) {
-    bookingForm.reportValidity();
-    return;
-  }
-
-  if (!timeSlotSelect.value) {
-    showError('Please select a valid time slot.');
-    return;
-  }
-
-  // Double-check slot availability before submit (race condition prevention)
-  const date = apptDateInput.value;
-  const lawyerId = lawyerIdInput.value;
-  const selectedSlot = timeSlotSelect.value;
-
-  try {
-    // Re-fetch available slots to verify
-    const res = await fetch(`/api/appointment/slots?lawyerId=${encodeURIComponent(lawyerId)}&date=${encodeURIComponent(date)}`);
-    if (!res.ok) throw new Error('Failed to verify slots');
-    const data = await res.json();
-    const availableSlots = data.data || data;
-
-    if (!availableSlots.includes(selectedSlot)) {
-      showError('Selected time slot is no longer available. Please choose another slot.');
-      // Refresh slots
-      timeSlotSelect.innerHTML = '';
-      availableSlots.forEach(slot => {
-        const opt = document.createElement('option');
-        opt.value = slot;
-        opt.textContent = slot;
-        timeSlotSelect.appendChild(opt);
-      });
-      return;
+    function closeModal() {
+        modal.classList.remove('active');
+        clearMessages();
     }
-  } catch (error) {
-    console.error('Error verifying slot availability:', error);
-    showError('Could not verify slot availability. Please try again.');
-    return;
-  }
-
-  const submitBtn = bookingForm.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Booking...';
-  submitBtn.disabled = true;
-
-  const payload = {
-    lawyerId: lawyerIdInput.value,
-    date: apptDateInput.value,
-    timeSlot: timeSlotSelect.value,
-    notes: bookingForm.notes.value.trim()
-  };
-
-  try {
-    const res = await fetch('/api/appointment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+    closeModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
     });
-    const json = await res.json();
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
 
-    if (res.ok) {
-      modal.classList.remove('active');
-      window.location.href = '/appointments';
-    } else {
-      showError(json.message || 'Failed to book appointment. Please try again.');
-    }
-  } catch (error) {
-    showError('Network or server error. Please try again later.');
-    console.error('Booking failed:', error);
-  } finally {
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-  }
-});
+    apptDateInput.addEventListener('change', async () => {
+        const date = apptDateInput.value;
+        const lawyerId = lawyerIdInput.value;
+        clearMessages();
 
+        if (!date) {
+            timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
+            return;
+        }
+
+        loadingIndicator.style.display = 'block';
+        try {
+            const res = await fetch(`/api/appointment/slots?lawyerId=${encodeURIComponent(lawyerId)}&date=${encodeURIComponent(date)}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                throw new Error('Invalid server response');
+            }
+
+            if (!res.ok) throw new Error(data.message || data.msg || data.error || 'Failed to fetch slots');
+
+            const slots = data.data || [];
+            timeSlotSelect.innerHTML = '';
+
+            if (slots.length === 0) {
+                timeSlotSelect.innerHTML = '<option value="">No slots available</option>';
+                showError('No available time slots for the selected date.');
+            } else {
+                slots.forEach(slot => {
+                    const opt = document.createElement('option');
+                    opt.value = slot;
+                    opt.textContent = slot;
+                    timeSlotSelect.appendChild(opt);
+                });
+            }
+        } catch (error) {
+            showError(error.message);
+            timeSlotSelect.innerHTML = '<option value="">Error loading slots</option>';
+        } finally {
+            loadingIndicator.style.display = 'none';
+        }
+    });
+
+    bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMessages();
+
+        if (!bookingForm.checkValidity()) {
+            bookingForm.reportValidity();
+            return;
+        }
+        if (!timeSlotSelect.value) {
+            showError('Please select a valid time slot.');
+            return;
+        }
+
+        const submitBtn = bookingForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Booking...';
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/appointment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    lawyerId: lawyerIdInput.value,
+                    date: apptDateInput.value,
+                    timeSlot: timeSlotSelect.value,
+                    notes: bookingForm.notes.value.trim()
+                })
+            });
+
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                throw new Error('Invalid server response');
+            }
+
+            if (!res.ok) {
+                // ✅ Now also checking for backend's `msg` key
+                throw new Error(data.message || data.msg || data.error || 'Failed to book appointment');
+            }
+
+            showSuccess('✅ Appointment booked successfully!');
+            setTimeout(() => {
+                closeModal();
+                location.reload();
+            }, 1200);
+
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
 </script>
+
+
