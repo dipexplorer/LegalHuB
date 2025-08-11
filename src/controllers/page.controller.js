@@ -19,7 +19,6 @@ const renderHome = asyncHandler(async (req, res) => {
     res.render("pages/index", { lawyers });
 });
 
-
 const renderDictionary = (req, res) => {
     res.render("pages/dictionary");
 };

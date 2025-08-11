@@ -180,9 +180,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
     if (!req.user) {
         return res.redirect("/login");
     }
-    const user = await User.findById(req.user._id).select("-password").populate(
-        "lawyerProfile"
-    );
+    const user = await User.findById(req.user._id)
+        .select("-password")
+        .populate("lawyerProfile");
     if (!user) {
         return res.redirect("/login");
     }
