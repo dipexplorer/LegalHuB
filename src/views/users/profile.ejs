@@ -1,127 +1,388 @@
-<%- layout("/layouts/boilerplate") -%>
-    <style>
-        .profile-container {
-            max-width: 800px;
-            margin: 3rem auto;
-            padding: 2rem;
-            background-color: #e7e7e7c5;
-            border-radius: 15px;
-            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.353);
-        }
+<%- layout('/layouts/boilerplate') -%>
 
-        h1 {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #2c3e50;
-        }
+<style>
+:root {
+  --bg-1: #0f1724;
+  --card: #0b1220;
+  --muted: #94a3b8;
+  --accent: #7c3aed;
+  --accent-2: #06b6d4;
+  --success: #22c55e;
+}
 
-        .profile-card {
-            display: flex;
-            justify-content: space-between;
-            padding: 2rem;
-            background-color: #f7f7f7;
-            border-radius: 10px;
-            border: 2px solid rgba(128, 128, 128, 0.593);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+.profile-root {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
 
-        .profile-picture {
-            border-radius: 50% !important;
-            width: 160px;
-            height: 160px;
-            object-fit: cover;
-            box-shadow: 4px 10px 8px rgba(0, 0, 0, 0.534);
-        }
+.profile-header {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
 
-        .profile-picture img {
-            width: inherit;
-            height: inherit;
-            border: 5px solid rgb(124, 124, 124);
-            border-radius: 50% !important;
-        }
+.card-alt {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: #fff;
+}
 
-        .profile-details {
-            flex: 1;
-            margin-left: 2.5rem;
-        }
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 18px;
+  object-fit: cover;
+  border: 4px solid rgba(255,255,255,0.06);
+}
 
-        .profile-details p {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-            color: #878787;
-        }
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: white;
+}
 
-        .profile-details span {
-            color: #34495e;
-            font-weight: 600;
-        }
+.small-badge {
+  background: rgba(255,255,255,0.05);
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
 
-        /* Profile Picture Upload Styling */
-        .upload-container {
-            margin-top: 1.5rem;
-            text-align: center;
-        }
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
 
-        .upload-container input[type="file"] {
-            display: none;
-        }
+.btn-outline-ghost {
+  border: 1px solid rgba(255,255,255,0.06);
+  background: transparent;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
 
-        .upload-container label {
-            font-size: 1rem;
-            color: #ffffff;
-            background-color: #ff385c;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+.danger {
+  background: linear-gradient(90deg,#ff6b6b,#ff3b3b);
+  border: none;
+  color: white;
+}
 
-        @media(max-width: 455px) {
-            .profile-details {
-                margin-left: 0;
-            }
+.progress {
+  height: 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+}
 
-            .profile-card {
-                padding: 2rem 1rem;
-            }
-        }
-    </style>
+.progress-bar {
+  height: 100%;
+  background: var(--success);
+  border-radius: 8px;
+}
 
-    <%- layout("/layouts/boilerplate") -%>
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
 
-        <div class="profile-container">
-            <h1>Welcome, <%= currentUser.username %>!</h1>
+.stat {
+  background: rgba(255,255,255,0.03);
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+}
 
-            <div
-                class="d-flex flex-column align-items-center justify-content-center flex-md-row justify-content-md-around profile-card">
-                <div class="profile-picture">
-                    <% if (currentUser && currentUser.profilePicture) { %>
-                        <img src="<%= currentUser.profilePicture %>" alt="Profile Image">
-                        <% } else { %>
-                            <img src="/pic/profile.jpg" alt="Default Profile Image">
-                            <% } %>
-                </div>
+.info-list dt {
+  font-weight: 600;
+  color: #dbe9ff;
+}
 
-                <div class="profile-details">
-                    <p><span>Username:</span>
-                        <%= currentUser.username %>
-                    </p>
-                    <p><span>Email ID:</span>
-                        <%= currentUser.email %>
-                    </p>
+.info-list dd {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
 
-                    <div class="btn-group">
-                        <a class="btn btn-outline-secondary" href="/account/update">Edit User Profile</a>&nbsp;&nbsp;&nbsp;
-                        <% if (currentUser.role === "lawyer") { %>
-                            <a class="btn btn-outline-secondary" href="/account/update/lawyer">Edit Lawyer Profile</a>&nbsp;&nbsp;&nbsp;
-                        <% } else { %>
-                            <a class="btn btn-outline-secondary" href="/account/applyforlawyer">Apply for Lawyer</a>&nbsp;&nbsp;&nbsp;
-                        <% } %>
-                        <form action="/api/users/delete?_method=DELETE" method="POST" style="margin: 0;">
-                            <button type="submit" class="btn btn-outline-danger">Delete Account</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+.tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.tab.active {
+  color: #fff;
+  border-bottom: 2px solid var(--accent);
+}
+
+@media(max-width: 900px) {
+  .profile-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+.card-alt main,
+main.card-alt {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  color: #fff;
+}
+
+main.card-alt p.muted {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+main.card-alt h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+  color: #f8fafc;
+  background: linear-gradient(to right, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  background: rgba(255,255,255,0.04);
+  padding: 0.9rem;
+  border-radius: 10px;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.07);
+}
+
+.stat .label {
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.stat .num {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.info-list {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 0.4rem 1rem;
+}
+
+.info-list dt {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-2);
+}
+
+.info-list dd {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+@media(max-width: 600px) {
+  .info-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+
+<section class="profile-root">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <!-- Left Column -->
+    <aside class="card-alt" style="text-align:center">
+      <img id="avatarImg" class="avatar" src="<%= user.profilePicture || '/pic/profile.jpg' %>" alt="Avatar">
+      <h3 style="margin:0.5rem 0"><%= user.username %></h3>
+
+      <div>
+        <% if (user.role === 'lawyer') { %>
+          <% if (user.lawyerProfile?.isVerified) { %>
+            <span class="verified-badge">✔ Verified</span>
+          <% } else { %>
+            <span class="small-badge">Unverified</span>
+          <% } %>
+          <span class="small-badge"><%= user.lawyerProfile?.specialization || 'No specialization' %></span>
+        <% } else { %>
+          <span class="small-badge">General User</span>
+        <% } %>
+      </div>
+
+      <div class="profile-actions">
+        <a class="btn btn-outline-secondary" href="/account/update">Edit Profile</a>
+        <% if (user.role === 'lawyer') { %>
+          <a class="btn btn-outline-primary" href="/account/update/lawyer">Edit Lawyer</a>
+        <% } else { %>
+          <a class="btn btn-outline-primary" href="/account/applyforlawyer">Apply for Lawyer</a>
+        <% } %>
+        <label for="avatarInput" class="btn-outline-ghost">Change Avatar</label>
+        <button class="btn btn-outline-ghost danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+      </div>
+
+      <input id="avatarInput" type="file" hidden accept="image/*">
+
+      <div style="margin-top:1rem">
+        <label style="font-size:0.85rem;color:var(--muted)">Profile completeness</label>
+        <div class="progress">
+          <div id="profileProgress" class="progress-bar" style="width:0%"></div>
         </div>
+      </div>
+
+      <small class="muted">Member since <%= new Date(user.createdAt).toLocaleDateString() %></small>
+    </aside>
+
+    <!-- Right Column -->
+    <main class="card-alt">
+      <p class="muted">Email: <strong style="color:#fff"><%= user.email %></strong></p>
+
+      <% if (user.role === 'lawyer') { %>
+        <h2 style="margin:0"><%= user.lawyerProfile?.bio || 'No bio provided.' %></h2>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="label muted">Experience</div>
+            <div class="num"><%= user.lawyerProfile?.experience ? user.lawyerProfile.experience + ' yrs' : '—' %></div>
+          </div>
+          <div class="stat">
+            <div class="label muted">Fees</div>
+            <div class="num">₹<%= user.lawyerProfile?.fees || '—' %></div>
+          </div>
+          <div class="stat">
+            <div class="label muted">Languages</div>
+            <div class="num"><%= user.lawyerProfile?.languagesSpoken?.join(', ') || '—' %></div>
+          </div>
+        </div>
+
+        <dl class="info-list" style="margin-top:1rem">
+          <dt>License number</dt>
+          <dd><%= user.lawyerProfile?.licenseNumber || 'Not provided' %></dd>
+
+          <dt>Location</dt>
+          <dd><%= user.lawyerProfile?.city || '' %><%= user.lawyerProfile?.city && user.lawyerProfile?.state ? ', ' : '' %><%= user.lawyerProfile?.state || 'Not provided' %></dd>
+
+          <dt>Availability</dt>
+          <dd><%= user.lawyerProfile?.availableSlots?.join('; ') || 'Not set' %></dd>
+        </dl>
+      <% } else { %>
+        <h2 style="margin:0">Welcome to LegalHuB</h2>
+        <p class="muted">You can manage your chats and appointments here.</p>
+      <% } %>
+    </main>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="chats">Chats</div>
+    <div class="tab" data-tab="bookings"><%= user.role === 'lawyer' ? 'Client Appointments' : 'My Appointments' %></div>
+    <div class="tab" data-tab="settings">Settings</div>
+  </div>
+
+  <!-- Tab Content -->
+  <div id="tab-chats" class="tab-content">
+    <div class="card-alt">
+      <h4>Chats</h4>
+      <a class="small-badge" href="/chats">Open Chat Inbox</a>
+    </div>
+  </div>
+
+  <div id="tab-bookings" class="tab-content" style="display:none">
+    <div class="card-alt">
+      <h4><%= user.role === 'lawyer' ? 'Client Appointments' : 'My Appointments' %></h4>
+      <a class="small-badge" href="/bookings">View All</a>
+    </div>
+  </div>
+
+  <div id="tab-settings" class="tab-content" style="display:none">
+    <div class="card-alt">
+      <h4>Account Settings</h4>
+      <a class="small-badge" href="/account/security">Security</a>
+      <a class="small-badge" href="/account/notifications">Notifications</a>
+      <a class="small-badge" href="/account/change-password">Change Password</a>
+    </div>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).style.display = 'block';
+  });
+});
+
+document.getElementById('avatarInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => document.getElementById('avatarImg').src = ev.target.result;
+  reader.readAsDataURL(file);
+});
+
+(function computeProfileProgress(){
+  let score = 0, total = 0;
+  <% if (user.role === 'lawyer') { %>
+    const lawyerFields = [
+      Boolean("<%= user.username %>"),
+      Boolean("<%= user.email %>"),
+      Boolean("<%= user.profilePicture %>"),
+      Boolean("<%= user.lawyerProfile?.bio %>"),
+      Boolean("<%= user.lawyerProfile?.licenseNumber %>"),
+      Boolean("<%= user.lawyerProfile?.specialization %>"),
+      Boolean("<%= user.lawyerProfile?.city || user.lawyerProfile?.state %>")
+    ];
+    total = lawyerFields.length;
+    score = lawyerFields.filter(Boolean).length;
+  <% } else { %>
+    const userFields = [
+      Boolean("<%= user.username %>"),
+      Boolean("<%= user.email %>"),
+      Boolean("<%= user.profilePicture %>")
+    ];
+    total = userFields.length;
+    score = userFields.filter(Boolean).length;
+  <% } %>
+  document.getElementById('profileProgress').style.width = Math.round((score / total) * 100) + '%';
+})();
+</script>
