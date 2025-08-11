@@ -299,141 +299,153 @@
         }
 
         /* ✅ Card Styling */
+        /* Lawyer Card Enhancements */
         .lawyer-card {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-            text-align: left;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            max-width: 400px;
-            margin: 0 auto;
+        background: linear-gradient(135deg, rgba(156,39,176,0.15), rgba(123,31,162,0.1));
+        padding: 24px 22px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(123,31,162,0.25);
+        text-align: left;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
+        max-width: 400px;
+        margin: 0 auto;
+        cursor: default;
         }
 
         .lawyer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 32px rgba(123,31,162,0.45);
         }
 
         .lawyer-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 20px;
         }
 
         .lawyer-photo {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #9c27b0;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #9c27b0;
+        box-shadow: 0 0 8px rgba(156,39,176,0.6);
+        transition: box-shadow 0.3s ease;
+        }
+
+        .lawyer-photo:hover {
+        box-shadow: 0 0 14px rgba(156,39,176,0.9);
         }
 
         .lawyer-info h3 {
-            margin: 0;
-            font-size: 1.2rem;
-            color: #ffffff;
+        margin: 0;
+        font-size: 1.4rem;
+        color: #e0e0e0;
+        font-weight: 700;
+        letter-spacing: 0.03em;
         }
 
-        .lawyer-info p {
-            margin: 2px 0;
-            font-size: 0.95rem;
-            color: #bdbdbd;
+        .lawyer-info p.specialization {
+        margin: 6px 0 4px 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #d1bee7;
+        font-style: italic;
         }
 
-        .lawyer-card p {
-            margin: 6px 0;
-            font-size: 0.95rem;
-            color: #d0d0d0;
+        .verified-badge {
+        display: inline-block;
+        background: #7c4dff;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 9999px;
+        box-shadow: 0 0 8px #7c4dffaa;
+        margin-top: 4px;
+        user-select: none;
+        }
+
+        .small-badge {
+        display: inline-block;
+        background: rgba(255 255 255 / 0.1);
+        padding: 3px 10px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        color: #b0a7c3;
+        user-select: none;
+        }
+
+        .lawyer-card p.experience,
+        .lawyer-card p.location,
+        .lawyer-card p.rating {
+        margin: 6px 0;
+        font-size: 1rem;
+        color: #c9c1e3;
+        font-weight: 500;
         }
 
         .rating {
-            color: #ffd54f;
-            font-weight: 600;
+        color: #ffd54f;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-shadow: 0 0 5px #ffea00cc;
         }
 
-        /* ✅ Buttons */
         .lawyer-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .contact-btn,
-        .appointment-btn {
-            flex: 1 1 auto;
-            text-align: center;
-            text-decoration: none;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: background-color 0.3s ease;
+        display: flex;
+        gap: 14px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
         }
 
         .contact-btn {
-            background-color: #7b1fa2;
-            color: #ffffff;
+        background-color: #9c27b0;
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-align: center;
+        flex: 1 1 auto;
+        text-decoration: none;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 12px rgba(156,39,176,0.4);
         }
 
         .contact-btn:hover {
-            background-color: #9c27b0;
+        background-color: #7b1fa2;
+        box-shadow: 0 6px 16px rgba(123,31,162,0.7);
         }
 
-        .appointment-btn {
-            background-color: #4a148c;
-            color: #ffffff;
-        }
-
-        .appointment-btn:hover {
-            background-color: #6a1b9a;
-        }
-
-        /* ✅ View All Button */
-        .lawyer-action {
-            margin-top: 40px;
-        }
-
-        .view-all-btn {
-            display: inline-block;
-            background-color: transparent;
-            color: #ce93d8;
-            border: 2px solid #9c27b0;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .view-all-btn:hover {
-            background-color: #9c27b0;
-            color: #ffffff;
-        }
-
-        /* ✅ Responsive Adjustments */
+        /* Responsive tweaks */
         @media (max-width: 768px) {
-            .lawyer-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        .lawyer-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
-            .lawyer-photo {
-                width: 80px;
-                height: 80px;
-            }
+        .lawyer-photo {
+            width: 90px;
+            height: 90px;
+        }
 
-            .lawyer-actions {
-                flex-direction: column;
-            }
+        .lawyer-actions {
+            flex-direction: column;
+        }
 
-            .contact-btn,
-            .appointment-btn {
-                width: 100%;
-            }
-        }   
+        .contact-btn {
+            width: 100%;
+        }
+    }
+    .view-all-btn{
+        margin-top: 20px !important;
+        padding: 12px 18px;
+    }
+
+
     </style>
 
     <body>
@@ -461,67 +473,36 @@
             <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
             <p class="subheading">Connect with verified experts in your area</p>
 
-            <div class="lawyer-grid">
-                <!-- Lawyer Card 1 -->
-                <article class="lawyer-card">
+           <div class="lawyer-grid">
+                <% lawyers.forEach(lawyer => { %>
+                    <article class="lawyer-card">
                     <div class="lawyer-header">
-                        <img src="/images/lawyers/jane.jpg" alt="Jane Doe" class="lawyer-photo" />
+                        <img 
+                        src="<%= lawyer.photo || '/pic/profile.jpg' %>" 
+                        alt="<%= lawyer.name %>" 
+                        class="lawyer-photo" 
+                        />
                         <div class="lawyer-info">
-                            <h3>Jane Doe</h3>
-                            <p class="specialization">Criminal Defense</p>
-                            <p class="license">License #: CA-14539</p>
+                        <h3><%= lawyer.name %></h3>
+                        <p class="specialization"><%= lawyer.lawyerProfile?.specialization || 'No specialization' %></p>
+                        <% if (lawyer.lawyerProfile?.isVerified) { %>
+                            <span class="verified-badge">✔ Verified</span>
+                        <% } else { %>
+                            <span class="small-badge">Unverified</span>
+                        <% } %>
+                        <!-- <p class="license">License #: <%= lawyer.lawyerProfile?.licenseNumber || 'N/A' %></p> -->
                         </div>
                     </div>
-                    <p class="experience">Experience: 12 years</p>
-                    <p class="location">State: California</p>
-                    <p class="rating">⭐ 4.9 / 5.0</p>
+                    <p class="experience">Experience: <%= lawyer.lawyerProfile?.experience || 'N/A' %> years</p>
+                    <p class="location">State: <%= lawyer.lawyerProfile?.state || 'N/A' %></p>
+                    <p class="rating">⭐ <%= lawyer.lawyerProfile?.rating ? lawyer.lawyerProfile.rating.toFixed(1) : '—' %> / 5.0</p>
                     <div class="lawyer-actions">
-                        <!-- <a href="mailto:jane@example.com" class="contact-btn">📩 Contact</a>
-                        <a href="/book-appointment/jane" class="appointment-btn">📅 Book Appointment</a> -->
-                        <a href="/lawyers" class="contact-btn">📩 Connect </a>
+                        <a href="/lawyers/<%= lawyer._id %>" class="contact-btn">📩 Connect </a>
                     </div>
-                </article>
-
-                <!-- Repeat for more lawyers -->
-                <article class="lawyer-card">
-                    <div class="lawyer-header">
-                        <img src="/images/lawyers/john.jpg" alt="John Smith" class="lawyer-photo" />
-                        <div class="lawyer-info">
-                            <h3>John Smith</h3>
-                            <p class="specialization">Family Law</p>
-                            <p class="license">License #: NY-22985</p>
-                        </div>
-                    </div>
-                    <p class="experience">Experience: 9 years</p>
-                    <p class="location">State: New York</p>
-                    <p class="rating">⭐ 4.8 / 5.0</p>
-                    <div class="lawyer-actions">
-                        <!-- <a href="mailto:john@example.com" class="contact-btn">📩 Contact</a>
-                        <a href="/book-appointment/john" class="appointment-btn">📅 Book Appointment</a> -->
-                        <a href="/lawyers" class="contact-btn">📩 Connect </a>
-                    </div>
-                </article>
-                
-                <!-- Add more as needed -->
-                <article class="lawyer-card">
-                    <div class="lawyer-header">
-                        <img src="/images/lawyers/john.jpg" alt="John Smith" class="lawyer-photo" />
-                        <div class="lawyer-info">
-                            <h3>John Smith</h3>
-                            <p class="specialization">Family Law</p>
-                            <p class="license">License #: NY-22985</p>
-                        </div>
-                    </div>
-                    <p class="experience">Experience: 9 years</p>
-                    <p class="location">State: New York</p>
-                    <p class="rating">⭐ 4.8 / 5.0</p>
-                    <div class="lawyer-actions">
-                        <!-- <a href="mailto:john@example.com" class="contact-btn">📩 Contact</a>
-                        <a href="/book-appointment/john" class="appointment-btn">📅 Book Appointment</a> -->
-                        <a href="/lawyers" class="contact-btn">📩 Connect </a>
-                    </div>
-                </article>
+                    </article>
+                <% }) %>
             </div>
+
 
             <div class="lawyer-action">
                 <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>

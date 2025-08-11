@@ -7,9 +7,18 @@ const ApiResponse = require("../utils/apiResponse.js");
 const User = require("../models/user.model.js");
 const LawyerProfile = require("../models/lawyer.model.js");
 
-const renderHome = (req, res) => {
-    res.render("pages/index");
-};
+const renderHome = asyncHandler(async (req, res) => {
+    const lawyers = await User.find({ role: "lawyer" })
+        .populate({
+            path: "lawyerProfile",
+            model: LawyerProfile,
+            select: "specialization experience city state fees isVerified",
+        })
+        .limit(3); // ✅ Show only 3 lawyers
+
+    res.render("pages/index", { lawyers });
+});
+
 
 const renderDictionary = (req, res) => {
     res.render("pages/dictionary");

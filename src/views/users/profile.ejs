@@ -362,6 +362,7 @@ document.getElementById('avatarInput').addEventListener('change', e => {
 
 (function computeProfileProgress(){
   let score = 0, total = 0;
+  
   <% if (user.role === 'lawyer') { %>
     const lawyerFields = [
       Boolean("<%= user.username %>"),
