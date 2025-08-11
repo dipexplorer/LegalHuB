@@ -300,10 +300,42 @@ const getAvailableSlots = asyncHandler(async (req, res) => {
         .json(new apiResponse(200, freeSlots, "Available slots fetched"));
 });
 
+const renderAppointmentStats = asyncHandler(async (req, res) => {
+  const user = req.user;
+
+  let filter = {};
+  if (user.role === "user") {
+    // User sees only their own appointments as client
+    filter = { client: user._id };
+  } else if (user.role === "lawyer") {
+    // Lawyer sees only appointments where they are the lawyer
+    filter = { lawyer: user._id };
+  } else {
+    // Admin sees all appointments
+    filter = {};
+  }
+  const appointments = await Appointment.find(filter)
+    .populate("client", "username email")
+    .populate({
+      path: "lawyer",
+      populate: {
+        path: "lawyerProfile",
+        select: "username specialization licenseNumber experience isVerified",
+      },
+    })
+    .sort({ date: 1, timeSlot: 1 });
+
+  res.render("pages/appointments", {
+    appointments,
+    user,
+  });
+});
+
 module.exports = {
     bookAppointment,
     getAppointments,
     updateAppointmentStatus,
     cancelAppointment,
     getAvailableSlots,
+    renderAppointmentStats,
 };
