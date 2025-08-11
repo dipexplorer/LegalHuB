@@ -333,106 +333,445 @@
             flex-direction: column;
         }
     }
+
+ /* Booking Modal Styles */
+#bookingModal {
+  display: none; /* hide modal by default */
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+#bookingModal.active {
+  display: flex; /* show modal when active */
+}
+
+/* Style the form inside the modal */
+#bookingModal form {
+  background: linear-gradient(145deg, #1b1b2b, #1a1a24);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#bookingModal h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #e58fff;
+  font-weight: 700;
+}
+
+  #bookingForm label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #f5f5f5;
+  }
+
+  #bookingForm input[type="date"],
+  #bookingForm select,
+  #bookingForm textarea {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+    background: rgba(35, 35, 58, 0.85);
+    color: #eee;
+    resize: vertical;
+    transition: all 0.3s ease;
+  }
+
+  #bookingForm input[type="date"]:focus,
+  #bookingForm select:focus,
+  #bookingForm textarea:focus {
+    outline: none;
+    border-color: #b347ff;
+    box-shadow: 0 0 0 3px rgba(179, 71, 255, 0.3);
+  }
+
+  #bookingForm textarea {
+    min-height: 100px;
+  }
+
+  #bookingForm .form-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  #bookingForm button[type="submit"] {
+    flex: 1;
+    background: linear-gradient(90deg, #8e2de2, #b347ff);
+    border: none;
+    padding: 14px 0;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(179, 71, 255, 0.5);
+    transition: all 0.3s ease;
+  }
+  
+  #bookingForm button[type="submit"]:hover {
+    background: linear-gradient(90deg, #7218c2, #9c27b0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(179, 71, 255, 0.6);
+  }
+
+  #bookingForm button[type="button"] {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 14px 0;
+    color: #f5f5f5;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  #bookingForm button[type="button"]:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  #loadingIndicator {
+    text-align: center;
+    color: #e58fff;
+    font-size: 0.9rem;
+    margin: 10px 0;
+    display: none;
+  }
+
+  #loadingIndicator.show {
+    display: block;
+  }
+
+
 </style>
 
 <div class="profile-wrapper">
-    <div class="profile-card">
-        <!-- Left Column -->
-        <div class="profile-left">
-            <img src="<%= lawyer.profilePicture %>" 
-                 alt="<%= lawyer.username %>" 
-                 class="<%= lawyer.lawyerProfile.isVerified ? 'verified-avatar' : 'not-verified-avatar' %>">
-            
-            <h2>
-                <%= lawyer.username %>
-                <% if (lawyer.lawyerProfile.isVerified) { %>
-                    <span class="status-badge status-verified">✔ Verified</span>
-                <% } else { %>
-                    <span class="status-badge status-not-verified">✖ Not Verified</span>
-                <% } %>
-            </h2>
+  <div class="profile-card">
+    <!-- Left Column -->
+    <div class="profile-left">
+      <img src="<%= lawyer.profilePicture %>" 
+           alt="<%= lawyer.username %>" 
+           class="<%= lawyer.lawyerProfile.isVerified ? 'verified-avatar' : 'not-verified-avatar' %>">
+      
+      <h2>
+        <%= lawyer.username %>
+        <% if (lawyer.lawyerProfile.isVerified) { %>
+          <span class="status-badge status-verified">✔ Verified</span>
+        <% } else { %>
+          <span class="status-badge status-not-verified">✖ Not Verified</span>
+        <% } %>
+      </h2>
 
-            <p><%= lawyer.email %></p>
-            <div class="specialization-badge"><%= lawyer.lawyerProfile.specialization %></div>
+      <p><%= lawyer.email %></p>
+      <div class="specialization-badge"><%= lawyer.lawyerProfile.specialization %></div>
 
-            <div class="cta-buttons">
-                <a href="/appointments/book/<%= lawyer.id %>" class="cta-btn">📅 Book</a>
-                <a href="/chat/<%= lawyer.id %>" class="cta-btn">💬 Chat</a>
-            </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="profile-right">
-
-            <!-- About -->
-            <div class="section about-section">
-                <h3><span class="section-icon">ℹ️</span> About</h3>
-                <p><%= lawyer.lawyerProfile.bio %></p>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">⏳</div>
-                    <div class="stat-info">
-                        <strong><%= lawyer.lawyerProfile.experience %></strong>
-                        <span>Years Experience</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📜</div>
-                    <div class="stat-info">
-                        <strong><%= lawyer.lawyerProfile.licenseNumber %></strong>
-                        <span>License</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Languages -->
-            <div class="section">
-                <h3><span class="section-icon">🌐</span> Languages Spoken</h3>
-                <div class="tag-list">
-                    <% lawyer.lawyerProfile.languagesSpoken.forEach(lang => { %>
-                        <span class="tag"><%= lang %></span>
-                    <% }) %>
-                </div>
-            </div>
-
-            <!-- Contact Info -->
-            <div class="section contact-section">
-                <h3><span class="section-icon">📞</span> Contact Info</h3>
-                <div class="contact-row">
-                    <span class="contact-label">Email:</span> 
-                    <span class="contact-value"><a href="mailto:<%= lawyer.email %>"><%= lawyer.email %></a></span>
-                </div>
-                <% if (lawyer.phone) { %>
-                    <div class="contact-row">
-                        <span class="contact-label">Phone:</span> 
-                        <span class="contact-value"><%= lawyer.phone %></span>
-                    </div>
-                <% } %>
-                <div class="contact-row">
-                    <span class="contact-label">Location:</span> 
-                    <span class="contact-value"><%= lawyer.lawyerProfile.city %>, <%= lawyer.lawyerProfile.state %></span>
-                </div>
-            </div>
-
-            <!-- Availability & Fees -->
-            <div class="section availability-section">
-                <h3><span class="section-icon">💰</span> Availability & Fees</h3>
-                <div class="availability-row">
-                    <span class="availability-label">Available:</span>
-                    <span class="availability-value"><%= lawyer.lawyerProfile.availableSlots %></span>
-                </div>
-                <div class="availability-row">
-                    <span class="availability-label">Fees:</span>
-                    <span class="availability-value">$<%= lawyer.lawyerProfile.fees %></span>
-                </div>
-            </div>
-
-            <a href="/lawyers" class="cta-btn" style="max-width:200px;">⬅ Back to List</a>
-        </div>
+      <div class="cta-buttons">
+        <button id="bookBtn" data-lawyer-id="<%= lawyer._id %>" class="cta-btn">📅 Book</button>
+        <a href="/chat/<%= lawyer.id %>" class="cta-btn">💬 Chat</a>
+      </div>
     </div>
+
+    <!-- Right Column -->
+    <div class="profile-right">
+      <!-- About -->
+      <div class="section about-section">
+        <h3><span class="section-icon">ℹ️</span> About</h3>
+        <p><%= lawyer.lawyerProfile.bio %></p>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <strong><%= lawyer.lawyerProfile.experience %></strong>
+            <span>Years Experience</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📜</div>
+          <div class="stat-info">
+            <strong><%= lawyer.lawyerProfile.licenseNumber %></strong>
+            <span>License</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="section">
+        <h3><span class="section-icon">🌐</span> Languages Spoken</h3>
+        <div class="tag-list">
+          <% lawyer.lawyerProfile.languagesSpoken.forEach(lang => { %>
+            <span class="tag"><%= lang %></span>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="section contact-section">
+        <h3><span class="section-icon">📞</span> Contact Info</h3>
+        <div class="contact-row">
+          <span class="contact-label">Email:</span> 
+          <span class="contact-value"><a href="mailto:<%= lawyer.email %>"><%= lawyer.email %></a></span>
+        </div>
+        <% if (lawyer.phone) { %>
+          <div class="contact-row">
+            <span class="contact-label">Phone:</span> 
+            <span class="contact-value"><%= lawyer.phone %></span>
+          </div>
+        <% } %>
+        <div class="contact-row">
+          <span class="contact-label">Location:</span> 
+          <span class="contact-value"><%= lawyer.lawyerProfile.city %>, <%= lawyer.lawyerProfile.state %></span>
+        </div>
+      </div>
+
+      <!-- Availability & Fees -->
+      <div class="section availability-section">
+        <h3><span class="section-icon">💰</span> Availability & Fees</h3>
+        <div class="availability-row">
+          <span class="availability-label">Available Slots:</span>
+          <span class="availability-value">
+            <% if (lawyer.lawyerProfile.availableSlots && lawyer.lawyerProfile.availableSlots.length > 0) { %>
+              <%= lawyer.lawyerProfile.availableSlots.join(', ') %>
+            <% } else { %>
+              Not specified
+            <% } %>
+          </span>
+        </div>
+        <div class="availability-row">
+          <span class="availability-label">Fees:</span>
+          <span class="availability-value">$<%= lawyer.lawyerProfile.fees %></span>
+        </div>
+      </div>
+
+      <a href="/lawyers" class="cta-btn" style="max-width:200px;">⬅ Back to List</a>
+    </div>
+  </div>
 </div>
 
-<a href="/chat/<%= lawyer.id %>" class="chat-float">💬</a>
+<!-- Booking Modal -->
+<div id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle" tabindex="-1">
+  <form id="bookingForm" novalidate>
+    <div id="bookingError" role="alert" style="color:red; margin-top:10px; display:none;"></div>
+
+    <h2 id="bookingTitle">Book Appointment</h2>
+    <input type="hidden" name="lawyerId" id="lawyerId" />
+
+    <label for="apptDate">Date:
+      <input type="date" id="apptDate" name="date" required min="<%= new Date().toISOString().split('T')[0] %>"/>
+    </label>
+
+    <label for="timeSlot">Time slot:
+      <select id="timeSlot" name="timeSlot" required>
+        <option value="">Select a date first</option>
+      </select>
+    </label>
+
+    <div id="loadingIndicator">Loading available slots...</div>
+
+    <label for="notes">Notes:
+      <textarea name="notes" id="notes" placeholder="Optional details..."></textarea>
+    </label>
+
+    <div class="form-buttons">
+      <button type="submit">Book</button>
+      <button type="button" id="closeModal">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const modal = document.getElementById('bookingModal');
+const bookBtn = document.getElementById('bookBtn');
+const closeModalBtn = document.getElementById('closeModal');
+const bookingForm = document.getElementById('bookingForm');
+const timeSlotSelect = document.getElementById('timeSlot');
+const apptDateInput = document.getElementById('apptDate');
+const lawyerIdInput = document.getElementById('lawyerId');
+const loadingIndicator = document.getElementById('loadingIndicator');
+const bookingError = document.getElementById('bookingError');
+
+function showError(message) {
+  bookingError.textContent = message;
+  bookingError.style.display = 'block';
+}
+
+function clearError() {
+  bookingError.textContent = '';
+  bookingError.style.display = 'none';
+}
+
+// Open modal & initialize
+bookBtn.addEventListener('click', (e) => {
+  const id = e.target.dataset.lawyerId;
+  lawyerIdInput.value = id;
+  bookingForm.reset();
+  timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
+  clearError();
+  modal.classList.add('active');
+  apptDateInput.focus();
+});
+
+// Close modal
+closeModalBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+  clearError();
+});
+
+// Close modal on outside click or Escape key
+window.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.classList.remove('active');
+    clearError();
+  }
+});
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('active')) {
+    modal.classList.remove('active');
+    clearError();
+  }
+});
+
+// Fetch available slots on date change
+apptDateInput.addEventListener('change', async () => {
+  const date = apptDateInput.value;
+  const lawyerId = lawyerIdInput.value;
+  clearError();
+
+  if (!date) {
+    timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
+    return;
+  }
+
+  loadingIndicator.style.display = 'block';
+  timeSlotSelect.innerHTML = '<option>Loading...</option>';
+
+  try {
+    const res = await fetch(`/api/appointment/slots?lawyerId=${encodeURIComponent(lawyerId)}&date=${encodeURIComponent(date)}`);
+    if (!res.ok) throw new Error('Failed to fetch slots');
+
+    const data = await res.json();
+    const slots = data.data || data;
+
+    timeSlotSelect.innerHTML = '';
+
+    if (!slots || slots.length === 0) {
+      timeSlotSelect.innerHTML = '<option value="">No slots available</option>';
+      showError('No available time slots for the selected date.');
+      return;
+    }
+
+    slots.forEach(slot => {
+      const opt = document.createElement('option');
+      opt.value = slot;
+      opt.textContent = slot;
+      timeSlotSelect.appendChild(opt);
+    });
+  } catch (error) {
+    timeSlotSelect.innerHTML = '<option value="">Error loading slots</option>';
+    showError('Could not load available slots. Please try again.');
+    console.error('Error fetching slots:', error);
+  } finally {
+    loadingIndicator.style.display = 'none';
+  }
+});
+
+// Before submit, check if slot is selected and available, then submit
+bookingForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearError();
+
+  if (!bookingForm.checkValidity()) {
+    bookingForm.reportValidity();
+    return;
+  }
+
+  if (!timeSlotSelect.value) {
+    showError('Please select a valid time slot.');
+    return;
+  }
+
+  // Double-check slot availability before submit (race condition prevention)
+  const date = apptDateInput.value;
+  const lawyerId = lawyerIdInput.value;
+  const selectedSlot = timeSlotSelect.value;
+
+  try {
+    // Re-fetch available slots to verify
+    const res = await fetch(`/api/appointment/slots?lawyerId=${encodeURIComponent(lawyerId)}&date=${encodeURIComponent(date)}`);
+    if (!res.ok) throw new Error('Failed to verify slots');
+    const data = await res.json();
+    const availableSlots = data.data || data;
+
+    if (!availableSlots.includes(selectedSlot)) {
+      showError('Selected time slot is no longer available. Please choose another slot.');
+      // Refresh slots
+      timeSlotSelect.innerHTML = '';
+      availableSlots.forEach(slot => {
+        const opt = document.createElement('option');
+        opt.value = slot;
+        opt.textContent = slot;
+        timeSlotSelect.appendChild(opt);
+      });
+      return;
+    }
+  } catch (error) {
+    console.error('Error verifying slot availability:', error);
+    showError('Could not verify slot availability. Please try again.');
+    return;
+  }
+
+  const submitBtn = bookingForm.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Booking...';
+  submitBtn.disabled = true;
+
+  const payload = {
+    lawyerId: lawyerIdInput.value,
+    date: apptDateInput.value,
+    timeSlot: timeSlotSelect.value,
+    notes: bookingForm.notes.value.trim()
+  };
+
+  try {
+    const res = await fetch('/api/appointment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+
+    if (res.ok) {
+      modal.classList.remove('active');
+      window.location.href = '/appointments';
+    } else {
+      showError(json.message || 'Failed to book appointment. Please try again.');
+    }
+  } catch (error) {
+    showError('Network or server error. Please try again later.');
+    console.error('Booking failed:', error);
+  } finally {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  }
+});
+
+</script>

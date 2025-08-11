@@ -93,8 +93,9 @@ const documentsRoutes = require("./routes/document.routes.js");
 const { smartSearch } = require("./controllers/search.controller.js");
 const articleRoutes = require("./routes/article.routes.js");
 const userRoutes = require("./routes/user.routes.js");
-const pageRoutes = require("./routes/page.routes");
+const pageRoutes = require("./routes/page.routes.js");
 const lawyerRoutes = require("./routes/lawyer.routes.js");
+const appointmentRoutes = require("./routes/appointment.routes.js")
 
 // ✅ Define the test route first
 // app.get("/", (req, res) => {
@@ -114,6 +115,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/lawyers", lawyerRoutes);
 app.use("/", pageRoutes);
+app.use("/api/appointment", appointmentRoutes);
 
 // Smart Search
 app.get("/api/search", smartSearch);

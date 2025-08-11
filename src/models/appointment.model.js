@@ -9,7 +9,7 @@ const appointmentSchema = new Schema({
     },
     lawyer: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "User", // storing the User._id of lawyer
         required: true
     },
     date: {
@@ -17,7 +17,7 @@ const appointmentSchema = new Schema({
         required: true
     },
     timeSlot: {
-        type: String, // e.g., "10:00 AM"
+        type: [String],
         required: true
     },
     status: {
@@ -33,6 +33,7 @@ const appointmentSchema = new Schema({
     timestamps: true
 });
 
-appointmentSchema.index({ lawyer: 1, date: 1, timeSlot: 1 }, { unique: true }); // Ensure unique lawyer-date-timeSlot combination
+// Prevent double-booking: unique per lawyer+date+timeSlot
+appointmentSchema.index({ lawyer: 1, date: 1, timeSlot: 1 }, { unique: true });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);

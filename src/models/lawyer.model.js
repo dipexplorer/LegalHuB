@@ -52,8 +52,8 @@ const lawyerProfileSchema = new Schema({
         default: [],
     },
     availableSlots: {
-        type: String,
-        trim: true,
+        type: [String],
+        default: [],
     },
     fees: {
         type: Number,

@@ -433,7 +433,10 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
             city,
             state,
             languagesSpoken: languagesSpoken ? languagesSpoken.split(",").map(l => l.trim()) : [],
-            availableSlots,
+            // Handle available slots as array for new profiles too
+            availableSlots: Array.isArray(availableSlots)
+                ? availableSlots.filter(slot => slot && slot.trim() !== '')
+                : (availableSlots ? availableSlots.split(',').map(slot => slot.trim()).filter(slot => slot !== '') : []),
             fees
         });
         await lawyerProfileDoc.save();
@@ -449,7 +452,16 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
         lawyerProfileDoc.city = city || lawyerProfileDoc.city;
         lawyerProfileDoc.state = state || lawyerProfileDoc.state;
         lawyerProfileDoc.languagesSpoken = languagesSpoken ? languagesSpoken.split(",").map(l => l.trim()) : [];
-        lawyerProfileDoc.availableSlots = availableSlots || lawyerProfileDoc.availableSlots;
+        // Handle available slots as array
+        if (Array.isArray(availableSlots)) {
+            // Filter out empty slots
+            lawyerProfileDoc.availableSlots = availableSlots.filter(slot => slot && slot.trim() !== '');
+        } else if (availableSlots) {
+            // If it's a string, split by comma (fallback for backward compatibility)
+            lawyerProfileDoc.availableSlots = availableSlots.split(',').map(slot => slot.trim()).filter(slot => slot !== '');
+        } else {
+            lawyerProfileDoc.availableSlots = [];
+        }
         lawyerProfileDoc.fees = fees ?? lawyerProfileDoc.fees;
         await lawyerProfileDoc.save();
     }

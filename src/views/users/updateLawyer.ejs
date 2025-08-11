@@ -14,7 +14,7 @@
 /* Heading */
 .profile-update-container h2 {
     font-weight: 700;
-    color: #4e00ff;
+    color: #1f1c25;
     text-align: center;
     margin-bottom: 1.5rem;
 }
@@ -36,37 +36,65 @@
 }
 
 .form-control:focus {
-    border-color: #8e00ff;
+    border-color: #89838d;
     box-shadow: 0 0 6px rgba(142, 0, 255, 0.4);
     outline: none;
 }
 
-/* Button styling */
-.btn {
-    width: 100%;
-    padding: 14px 25px;
-    background: linear-gradient(90deg, #4e00ff, #8e00ff);
-    border: none;
-    border-radius: 25px;
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
+/* Slot input styling */
+.slot-input-group .input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
+.slot-input-group .form-control {
+    flex: 1;
+}
+
+/* Remove slot button */
+.slot-input-group .btn.remove-slot {
+    width: auto;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    box-shadow: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.slot-input-group .btn.remove-slot:hover {
+    background: #d9363e;
+    box-shadow: 0 4px 12px rgba(217, 54, 62, 0.4);
+    transform: none;
+}
+
+/* Smaller buttons inside the input group should not transform on hover */
+.slot-input-group .btn:hover {
+    transform: none;
+}
+
+.input-group input {
+    width: 100% !important;
+    padding: 15px 20px;
+    border: 1px solid rgba(85, 85, 85, 0.281) !important;
+    border-radius: 21px 5px 21px 5px !important;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #241d1d;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
 }
 </style>
 
 <div class="profile-update-container">
     <h2>Update Lawyer Profile</h2>
 
-    <form method="POST" action="/api/users/update-lawyer?_method=PUT" method="POST" class="needs-validation" novalidate>
-
+    <form method="POST" action="/api/users/update-lawyer?_method=PUT" class="needs-validation" novalidate>
         <!-- Row: Specialization + License Number -->
         <div class="row g-3">
             <div class="col-md-6">
@@ -145,11 +173,28 @@
 
         <!-- Available Slots -->
         <div class="mt-3">
-            <label for="slots" class="form-label">Available Slots</label>
-            <input type="text" id="slots" name="availableSlots" class="form-control"
-                   value="<%= lawyerProfile?.availableSlots || '' %>"
-                   placeholder="e.g. Mon-Fri 9am-5pm" required>
-            <div class="invalid-feedback">Please enter your available slots.</div>
+            <label class="form-label">Available Time Slots</label>
+            <div id="slots-container">
+                <% if (lawyerProfile?.availableSlots && lawyerProfile.availableSlots.length > 0) { %>
+                    <% lawyerProfile.availableSlots.forEach((slot, index) => { %>
+                        <div class="slot-input-group mb-2">
+                            <div class="input-group">
+                                <input type="text" name="availableSlots" class="form-control" value="<%= slot %>" placeholder="e.g. 10:00 AM - 12:00 PM" required>
+                                <button class="btn remove-slot" type="button" aria-label="Remove time slot">&times;</button>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="slot-input-group mb-2">
+                        <div class="input-group">
+                            <input type="text" name="availableSlots" class="form-control" placeholder="e.g. 10:00 AM - 12:00 PM" required>
+                            <button class="btn remove-slot" type="button" aria-label="Remove time slot">&times;</button>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+            <button id="add-slot" class="btn btn-outline-secondary mt-2" type="button">Add Another Slot</button>
+            <div class="form-text">Add your available time slots for appointments.</div>
         </div>
 
         <!-- Bio -->
@@ -160,16 +205,61 @@
             <div class="invalid-feedback">Please write your bio.</div>
         </div>
 
-        <button type="submit" class="btn mt-4">Update Profile</button>
+        <button type="submit" class="btn btn-outline-primary mt-4">Update Profile</button>
     </form>
 </div>
 
 <script>
 (() => {
     'use strict';
+
+    const addSlotBtn = document.getElementById('add-slot');
+    const slotsContainer = document.getElementById('slots-container');
+
+    // Helper to create slot input group
+    function createSlotInput() {
+        const slotGroup = document.createElement('div');
+        slotGroup.className = 'slot-input-group mb-2';
+        slotGroup.innerHTML = `
+            <div class="input-group">
+                <input type="text" name="availableSlots" class="form-control" placeholder="e.g. 10:00 AM - 12:00 PM" required>
+                <button class="btn remove-slot" type="button" aria-label="Remove time slot">&times;</button>
+            </div>
+        `;
+        // Attach event listener to remove button
+        slotGroup.querySelector('.remove-slot').addEventListener('click', () => {
+            if (document.querySelectorAll('.slot-input-group').length > 1) {
+                slotGroup.remove();
+            } else {
+                // Clear input if it's last slot
+                slotGroup.querySelector('input').value = '';
+            }
+        });
+        return slotGroup;
+    }
+
+    // Add new slot input on button click
+    addSlotBtn.addEventListener('click', () => {
+        const newSlot = createSlotInput();
+        slotsContainer.appendChild(newSlot);
+    });
+
+    // Attach remove event to all existing remove buttons
+    document.querySelectorAll('.remove-slot').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const slotGroup = this.closest('.slot-input-group');
+            if (document.querySelectorAll('.slot-input-group').length > 1) {
+                slotGroup.remove();
+            } else {
+                slotGroup.querySelector('input').value = '';
+            }
+        });
+    });
+
+    // Bootstrap-style form validation
     const forms = document.querySelectorAll('.needs-validation');
-    forms.forEach((form) => {
-        form.addEventListener('submit', (event) => {
+    forms.forEach(form => {
+        form.addEventListener('submit', event => {
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
