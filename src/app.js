@@ -12,6 +12,7 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
+const cookieParser = require("cookie-parser");
 
 // Passport Configuration
 const passport = require("passport");
@@ -37,7 +38,7 @@ app.use(
 // Middleware Setup (✅ Moved to the top)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(methodOverride("_method"));
 
@@ -96,6 +97,7 @@ const userRoutes = require("./routes/user.routes.js");
 const pageRoutes = require("./routes/page.routes.js");
 const lawyerRoutes = require("./routes/lawyer.routes.js");
 const appointmentRoutes = require("./routes/appointment.routes.js");
+const chatRoutes = require("./routes/chat.routes.js");
 
 // ✅ Define the test route first
 // app.get("/", (req, res) => {
@@ -116,6 +118,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/lawyers", lawyerRoutes);
 app.use("/", pageRoutes);
 app.use("/api/appointment", appointmentRoutes);
+app.use("/chat", chatRoutes);
 
 // Smart Search
 app.get("/api/search", smartSearch);

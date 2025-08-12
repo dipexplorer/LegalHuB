@@ -327,7 +327,7 @@ const renderAppointmentStats = asyncHandler(async (req, res) => {
 
     res.render("pages/appointments", {
         appointments,
-        user : req.user,
+        user: req.user,
     });
 });
 

@@ -1,0 +1,98 @@
+<%- layout("/layouts/boilerplate") -%>
+
+<style>
+  .chat-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    background: #2b2b2b;
+    border-radius: 10px;
+    color: #eee;
+    display: flex;
+    height: 600px;
+    box-shadow: 0 0 10px #9c27b0;
+  }
+  .chat-rooms {
+    width: 30%;
+    border-right: 1px solid #444;
+    overflow-y: auto;
+  }
+  .chat-rooms button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background: #3a3a3a;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid #555;
+  }
+  .chat-rooms button:hover,
+  .chat-rooms button.active {
+    background: #9c27b0;
+  }
+  .chat-window {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+  }
+  .messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background: #1e1e1e;
+  }
+  .message {
+    margin-bottom: 1rem;
+    max-width: 70%;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    word-wrap: break-word;
+  }
+  .message.sent {
+    background: #9c27b0;
+    align-self: flex-end;
+  }
+  .message.received {
+    background: #444;
+    align-self: flex-start;
+  }
+  form#messageForm {
+    display: flex;
+    padding: 1rem;
+    background: #333;
+  }
+  form#messageForm input[type="text"] {
+    flex-grow: 1;
+    padding: 0.8rem;
+    border-radius: 20px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+  }
+  form#messageForm button {
+    background: #9c27b0;
+    border: none;
+    padding: 0 1rem;
+    margin-left: 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    font-weight: 700;
+  }
+</style>
+
+<section class="chat-container" aria-label="Chat Application">
+  <div class="chat-rooms" id="chatRoomsList" role="list" aria-label="Chat Rooms">
+    <!-- Chat rooms will load here -->
+  </div>
+  <div class="chat-window" id="chatWindow" aria-live="polite" aria-atomic="false" style="display:none;">
+    <div class="messages" id="messagesContainer" role="log" aria-relevant="additions"></div>
+    <form id="messageForm" aria-label="Send message form">
+      <input type="text" id="messageInput" autocomplete="off" placeholder="Type a message..." required aria-required="true" />
+      <button type="submit" aria-label="Send message">Send</button>
+    </form>
+  </div>
+</section>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
