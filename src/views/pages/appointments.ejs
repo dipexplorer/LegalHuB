@@ -117,7 +117,7 @@
 <section class="appointment-container" aria-label="Appointments List">
   <h1>Your Appointments</h1>
 
-  <% if (appointments.length === 0) { %>
+  <% if (!appointments || appointments.length === 0) { %>
     <p class="no-appointments" role="alert">No appointments found.</p>
   <% } else { %>
     <table role="table">
@@ -152,8 +152,14 @@
               <td><%= appointment.client?.username || 'N/A' %></td>
               <td><%= appointment.lawyer?.username || 'N/A' %></td>
             <% } %>
-            <td><%= appointment.date.toDateString() %></td>
-            <td><%= Array.isArray(appointment.timeSlot) ? appointment.timeSlot.join(", ") : appointment.timeSlot %></td>
+            <td><%= appointment.date ? appointment.date.toDateString() : 'N/A' %></td>
+            <td>
+              <% if (Array.isArray(appointment.timeSlot)) { %>
+                <%= appointment.timeSlot.join(", ") %>
+              <% } else { %>
+                <%= appointment.timeSlot || 'N/A' %>
+              <% } %>
+            </td>
             <td>
               <span class="status-badge status-<%= appointment.status %>" aria-label="Status: <%= appointment.status %>">
                 <%= appointment.status %>
@@ -182,6 +188,11 @@
                     aria-label="Reject appointment"
                     title="Reject this appointment"
                     onclick="updateStatus('<%= appointment._id %>', 'rejected')">Reject</button>
+                  <button
+                    class="action-btn danger"
+                    aria-label="Cancel appointment"
+                    title="Cancel this appointment"
+                    onclick="updateStatus('<%= appointment._id %>', 'cancelled')">Cancel</button>
                 <% } else if (appointment.status === "approved") { %>
                   <button
                     class="action-btn danger"
@@ -193,12 +204,14 @@
                     aria-label="Mark appointment as completed"
                     title="Mark this appointment as completed"
                     onclick="updateStatus('<%= appointment._id %>', 'completed')">Complete</button>
-                <% } else { %>
+                <% } else if (["rejected", "cancelled", "completed"].includes(appointment.status)) { %>
                   <button
                     class="action-btn danger"
                     aria-label="Cancel appointment"
                     title="Cancel this appointment"
                     onclick="cancelAppointment('<%= appointment._id %>')">Cancel</button>
+                <% } else { %>
+                  <span style="color:#bdbdbd; font-size:0.9rem;">No actions available</span>
                 <% } %>
               <% } else { %>
                 <span style="color:#bdbdbd; font-size:0.9rem;">No actions available</span>
@@ -213,9 +226,9 @@
 
 <script>
   async function updateStatus(appointmentId, status) {
-    if (!confirm(`Are you sure you want to mark this appointment as ${status}?`)) return;
+    if (!confirm(`Are you sure you want to mark this appointment as "${status}"?`)) return;
     try {
-      const res = await fetch('/appointments/status', {
+      const res = await fetch('/api/appointment/status', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ appointmentId, status }),
@@ -225,10 +238,10 @@
         alert('Appointment status updated successfully.');
         location.reload();
       } else {
-        alert(data.msg || 'Failed to update status.');
+        alert(data.msg || 'Failed to update appointment status.');
       }
     } catch (err) {
-      alert('Error updating status, please try again.');
+      alert('Error updating appointment status, please try again.');
       console.error(err);
     }
   }
@@ -236,7 +249,7 @@
   async function cancelAppointment(appointmentId) {
     if (!confirm('Are you sure you want to cancel this appointment?')) return;
     try {
-      const res = await fetch(`/appointments/${appointmentId}`, {
+      const res = await fetch(`/api/appointment/${appointmentId}`, {
         method: 'DELETE',
       });
       const data = await res.json();
