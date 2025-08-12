@@ -143,7 +143,7 @@
         <% appointments.forEach(appointment => { %>
           <tr>
             <% if (user.role === "user") { %>
-              <td><%= appointment.lawyer?.username || 'N/A' %></td>
+              <td><%= appointment.lawyer?.username || 'N/A' %> <span><a href="/lawyers/<%= appointment.lawyer?._id %>" class="badge bg-info text-dark">View</a></span></td>
               <td><%= appointment.lawyer?.lawyerProfile?.specialization || 'N/A' %></td>
             <% } else if (user.role === "lawyer") { %>
               <td><%= appointment.client?.username || 'N/A' %></td>

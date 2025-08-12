@@ -2,7 +2,6 @@
 body {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     font-family: rakkas;
-    text-align: center;
     overflow-x: hidden;
     margin: 0;
 }
@@ -289,6 +288,10 @@ nav ul li a:hover {
 
 /* ✅ Footer Container (Fixed) */
 .footer-container {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: linear-gradient(
         135deg,
         #1a1a2e,
