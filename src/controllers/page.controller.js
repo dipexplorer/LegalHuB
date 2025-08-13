@@ -120,20 +120,98 @@ const renderArticles = asyncHandler(async (req, res) => {
 });
 
 const renderFundamental = asyncHandler(async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 5;
-    const skip = (page - 1) * limit;
+    // Extract search and filter parameters from query string
+    const {
+        search,
+        category,
+        articleNumber,
+        page = 1,
+        limit = 12  // Increased for better grid display
+    } = req.query;
 
-    // ✅ Total rights count karo
-    const totalRights = await Right.countDocuments();
+    // Build filter object for smart search
+    let filter = {};
 
-    // ✅ Rights ko paginate karo
-    const rights = await Right.find().skip(skip).limit(limit);
+    // Smart search across multiple fields
+    if (search && search.trim()) {
+        const searchRegex = { $regex: search.trim(), $options: 'i' };
+        filter.$or = [
+            { name: searchRegex },
+            { description: searchRegex },
+            { articleNumber: searchRegex }
+        ];
+    }
+
+    // Category filtering
+    if (category && category !== 'all' && category.trim()) {
+        filter.category = category.trim();
+    }
+
+    // Article number quick search (exact or partial match)
+    if (articleNumber && articleNumber.trim()) {
+        filter.articleNumber = { $regex: articleNumber.trim(), $options: 'i' };
+    }
+
+    // Pagination logic
+    const currentPage = Math.max(1, parseInt(page));
+    const perPage = Math.max(1, parseInt(limit));
+    const skip = (currentPage - 1) * perPage;
+
+    // Execute queries in parallel for better performance
+    const [rights, totalRights, categoryStats] = await Promise.all([
+        Right.find(filter)
+            .sort({ articleNumber: 1 }) // Sort by article number for logical order
+            .skip(skip)
+            .limit(perPage),
+        Right.countDocuments(filter),
+        Right.aggregate([
+            { $group: { _id: '$category', count: { $sum: 1 } } },
+            { $sort: { _id: 1 } }
+        ])
+    ]);
+
+    const totalPages = Math.ceil(totalRights / perPage);
+
+    // Get all unique categories for filter dropdown
+    const allCategories = await Right.distinct('category');
+    
+    // Prepare filter options with counts
+    const filterOptions = {
+        categories: allCategories.sort().map(cat => {
+            const stat = categoryStats.find(s => s._id === cat);
+            return {
+                value: cat,
+                label: cat,
+                count: stat ? stat.count : 0
+            };
+        })
+    };
+
+    // Current filters for form pre-fill and active filter display
+    const currentFilters = {
+        search: search || '',
+        category: category || 'all',
+        articleNumber: articleNumber || ''
+    };
+
+    // Calculate statistics for header display
+    const stats = {
+        totalRights: await Right.countDocuments(),
+        totalCategories: allCategories.length,
+        filteredResults: totalRights
+    };
 
     res.render("pages/fundamental", {
         rights,
-        currentPage: page,
-        totalPages: Math.ceil(totalRights / limit),
+        filterOptions,
+        currentFilters,
+        stats,
+        resultsCount: rights.length,
+        currentPage,
+        totalPages,
+        totalRights: totalRights,
+        hasFilters: !!(search || (category && category !== 'all') || articleNumber),
+        request: req
     });
 });
 

@@ -373,7 +373,7 @@ Pull requests are welcome! For significant changes, please open an issue first t
 ## 📬 Contact
 
 For support, collaboration, or legal partnerships, please contact:  
-📧 **your.email@example.com**
+📧 **legalhub.help@gmail.com**
 
 ---
 
