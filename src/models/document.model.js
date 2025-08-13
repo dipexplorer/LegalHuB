@@ -26,7 +26,7 @@ const documentSchema = new mongoose.Schema(
             enum: {
                 values: indianStates,
                 message: "Not a valid Indian state'",
-            }
+            },
         },
         department: {
             type: String,

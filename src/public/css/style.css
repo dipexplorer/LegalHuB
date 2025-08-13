@@ -1,12 +1,7 @@
 /* 🌌 General Styling */
 body {
-    background: linear-gradient(
-        135deg,
-        #1a1a2e,
-        #16213e
-    );
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
     font-family: rakkas;
-    text-align: center;
     overflow-x: hidden;
     margin: 0;
 }
@@ -19,6 +14,7 @@ nav {
     padding: 18px 40px;
     background: #1a1a2e; /* Dark Blue */
     border-bottom: 2px solid #6a1b9a; /* Dark Purple */
+    position: relative;
 }
 
 .navbar-brand a {
@@ -28,14 +24,16 @@ nav {
     text-decoration: none;
 }
 
-/* ✅ Left Section */
-.left-section {
+/* ✅ Navigation Container */
+.nav-container {
     display: flex;
     align-items: center;
-    gap: 30px;
+    justify-content: space-between;
+    flex: 1;
+    margin-left: 30px;
 }
 
-nav ul {
+.nav-links {
     list-style: none;
     display: flex;
     gap: 20px;
@@ -43,7 +41,7 @@ nav ul {
     margin: 0;
 }
 
-nav ul li a {
+.nav-links li a {
     color: #f4f4f9;
     text-decoration: none;
     font-weight: bold;
@@ -51,13 +49,15 @@ nav ul li a {
     font-size: 1em;
 }
 
-nav ul li a:hover {
+.nav-links li a:hover {
     color: #9c27b0; /* Light Purple */
 }
 
-/* ✅ Auth Links */
+/* ✅ Auth Links - Always on the right */
 .auth-links {
     margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .auth-links a {
@@ -67,10 +67,68 @@ nav ul li a:hover {
     font-weight: bold;
     transition: color 0.3s ease;
     margin-left: 15px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
 }
 
 .auth-links a:hover {
     color: #9c27b0;
+    border-color: #9c27b0;
+    background: rgba(156, 39, 176, 0.1);
+}
+
+/* ✅ Hamburger Menu */
+.hamburger {
+    display: none;
+    font-size: 1.8rem;
+    color: #f4f4f9;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    user-select: none;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.hamburger:hover {
+    color: #9c27b0;
+    background: rgba(156, 39, 176, 0.1);
+}
+
+.hamburger:focus {
+    outline: 2px solid #9c27b0;
+    outline-offset: 2px;
+}
+
+.hamburger.open {
+    color: #9c27b0;
+    transform: rotate(90deg);
+}
+
+/* ✅ Accessibility improvements */
+.nav-links li a:focus,
+.auth-links a:focus {
+    outline: 2px solid #9c27b0;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ✅ Smooth transitions for all interactive elements */
+* {
+    box-sizing: border-box;
+}
+
+/* ✅ Prevent horizontal scroll on mobile */
+body {
+    overflow-x: hidden;
+}
+
+/* ✅ Ensure navbar stays on top */
+nav {
+    z-index: 1000;
 }
 
 /* ✅ Hero Section */
@@ -261,27 +319,112 @@ nav ul li a:hover {
 /* ✅ Responsive Fixes */
 @media (max-width: 768px) {
     nav {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px;
+        padding: 15px 20px;
     }
 
-    .left-section {
-        flex-direction: column;
-        gap: 10px;
+    /* Show hamburger menu on mobile */
+    .hamburger {
+        display: block;
     }
 
-    nav ul {
+    /* Hide navigation container by default on mobile */
+    .nav-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #1a1a2e;
+        border-top: 1px solid #6a1b9a;
         flex-direction: column;
-        gap: 10px;
-        margin-top: 10px;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        margin-left: 0;
+        flex: none;
     }
 
+    /* Show navigation when active */
+    .nav-container.active {
+        max-height: 500px; /* Increased height to accommodate all content */
+        padding: 20px;
+    }
+
+    /* Ensure all mobile menu content is visible */
+    .nav-container.active .nav-links,
+    .nav-container.active .auth-links {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Stack navigation links vertically */
+    .nav-links {
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .nav-links li {
+        width: 100%;
+        /* Remove border from navigation links */
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 15px 0;
+        font-size: 1.1rem;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        border: none; /* Remove any borders */
+    }
+
+    .nav-links li a:hover {
+        background: rgba(156, 39, 176, 0.1);
+        padding-left: 10px;
+    }
+
+    /* Auth links styling for mobile - make sure it's visible */
     .auth-links {
         margin-left: 0;
-        margin-top: 10px;
+        width: 100%;
+        /* Remove border from auth section */
+        padding-top: 15px;
+        display: flex !important; /* Force display */
+        flex-direction: column;
+        opacity: 1 !important; /* Ensure visibility */
+        visibility: visible !important; /* Ensure visibility */
     }
 
+    .auth-links a {
+        display: block !important; /* Force display */
+        margin-left: 0;
+        margin-bottom: 10px;
+        padding: 12px 15px;
+        background: #6a1b9a !important; /* Force background */
+        border-radius: 8px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: none !important; /* Remove any borders */
+        color: #fff !important; /* Ensure text is visible */
+        text-decoration: none !important;
+        font-weight: bold;
+        opacity: 1 !important; /* Ensure visibility */
+        visibility: visible !important; /* Ensure visibility */
+    }
+
+    .auth-links a:hover {
+        background: #9c27b0 !important;
+        transform: translateY(-2px);
+        color: #fff !important;
+    }
+
+    /* Other responsive fixes */
     .buttons {
         flex-direction: column;
     }
@@ -289,15 +432,145 @@ nav ul li a:hover {
     .team-members {
         flex-direction: column;
     }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+}
+
+/* ✅ Desktop layout (ensure proper layout for large screens) */
+@media (min-width: 769px) {
+    .nav-container {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        max-height: none;
+        overflow: visible;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        margin-left: 30px;
+        flex: 1;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        gap: 20px;
+        margin-bottom: 0;
+    }
+
+    .nav-links li {
+        border-bottom: none;
+    }
+
+    .nav-links li a {
+        padding: 0;
+        font-size: 1em;
+    }
+
+    .auth-links {
+        margin-left: auto;
+        border-top: none;
+        padding-top: 0;
+        width: auto;
+    }
+
+    .auth-links a {
+        display: inline-block;
+        margin-bottom: 0;
+        background: transparent;
+        border: 1px solid transparent;
+        text-align: left;
+    }
+
+    .hamburger {
+        display: none;
+    }
+}
+
+/* ✅ Tablet responsive fixes */
+@media (max-width: 1024px) and (min-width: 769px) {
+    nav {
+        padding: 15px 30px;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links li a {
+        font-size: 0.95rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* ✅ Large mobile responsive fixes */
+@media (max-width: 480px) {
+    nav {
+        padding: 12px 15px;
+    }
+
+    .navbar-brand a {
+        font-size: 1.5rem;
+    }
+
+    .hamburger {
+        font-size: 1.6rem;
+        padding: 8px;
+    }
+
+    .nav-container {
+        padding: 0 15px;
+    }
+
+    .nav-container.active {
+        padding: 15px;
+    }
+
+    .nav-links li a {
+        font-size: 1rem;
+        padding: 12px 0;
+    }
+
+    .auth-links a {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        background: #6a1b9a !important;
+        color: #fff !important;
+        border: none !important;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 10px 24px;
+        font-size: 1rem;
+    }
 }
 
 /* ✅ Footer Container (Fixed) */
 .footer-container {
-    background: linear-gradient(
-        135deg,
-        #1a1a2e,
-        #16213e
-    ); /* Same as body gradient */
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1a1a2e, #16213e); /* Same as body gradient */
     color: #e0e0e0;
     padding: 40px 20px;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);

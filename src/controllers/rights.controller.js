@@ -41,11 +41,8 @@ const createRight = asyncHandler(async (req, res) => {
     });
 
     // ✅ Send response
-    res.status(201).json(
-        new ApiResponse(201, right, "Right created successfully")
-    );
+    res.status(201).json(new ApiResponse(201, right, "Right created successfully"));
 });
-
 
 // ✅ Get All Rights
 const getAllRights = asyncHandler(async (req, res) => {
@@ -53,9 +50,7 @@ const getAllRights = asyncHandler(async (req, res) => {
     if (req.accepts("html")) {
         return res.render("pages/fundamental", { rights });
     } else {
-        return res
-            .status(200)
-            .json(new ApiResponse(200, rights, "Rights fetched successfully"));
+        return res.status(200).json(new ApiResponse(200, rights, "Rights fetched successfully"));
     }
 });
 
@@ -70,9 +65,7 @@ const getRightById = asyncHandler(async (req, res) => {
     if (req.accepts("html")) {
         return res.render("pages/right-details", { right });
     } else {
-        return res
-            .status(200)
-            .json(new ApiResponse(200, right, "Right fetched successfully"));
+        return res.status(200).json(new ApiResponse(200, right, "Right fetched successfully"));
     }
 });
 
@@ -102,18 +95,15 @@ const updateRight = asyncHandler(async (req, res) => {
     // 🛠️ Apply updates (fallback to existing values if not provided)
     right.name = name || right.name;
     right.description = description || right.description;
-    right.articleNumber = articleNumber ||right.articleNumber;
+    right.articleNumber = articleNumber || right.articleNumber;
     right.sourceLink = sourceLink || right.sourceLink;
     right.category = category || right.category;
 
     // 💾 Save updated Right
     await right.save();
 
-    res.status(200).json(
-        new ApiResponse(200, right, "Right updated successfully")
-    );
+    res.status(200).json(new ApiResponse(200, right, "Right updated successfully"));
 });
-
 
 // ✅ Delete Right
 const deleteRight = asyncHandler(async (req, res) => {
@@ -124,9 +114,7 @@ const deleteRight = asyncHandler(async (req, res) => {
 
     await right.deleteOne();
 
-    res.status(200).json(
-        new ApiResponse(200, null, "Right deleted successfully")
-    );
+    res.status(200).json(new ApiResponse(200, null, "Right deleted successfully"));
 });
 
 module.exports = {

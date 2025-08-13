@@ -172,25 +172,6 @@
                     <label>Email</label>
                     <input type="email" name="email" value="<%= user.email %>" required>
                 </div>
-
-                <!-- ✅ Specialization + License -->
-                <div class="row mb-3">
-                    <div class="col-md-6 profile-edit-form">
-                        <label>Specialization</label>
-                        <input type="text" name="specialization" value="<%= user.specialization || '' %>">
-                    </div>
-                    <div class="col-md-6 profile-edit-form">
-                        <label>License Number</label>
-                        <input type="text" name="licenseNumber" value="<%= user.licenseNumber || '' %>">
-                    </div>
-                </div>
-
-                <!-- ✅ Experience -->
-                <div class="mb-3 profile-edit-form">
-                    <label>Experience (Years)</label>
-                    <input type="number" name="experience" value="<%= user.experience || '' %>" min="0">
-                </div>
-
                 <!-- ✅ Profile Picture Upload -->
                 <!-- <div class="mb-3 profile-edit-form">
                     <label>Upload Profile Image</label>

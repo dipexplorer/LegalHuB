@@ -1,0 +1,158 @@
+<%- layout("/layouts/boilerplate") -%>
+<style>
+    /* 🌌 Form Container Styling */
+    .outer {
+        margin: 5rem 0;
+    }
+
+    .edit-profile-container {
+        background-color: #1a1a2e;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        border: 2px solid #6a1b9a;
+        color: #f4f4f9;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+        color: #e040fb;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    /* 🖥️ Form Styling */
+    .profile-edit-form input,
+    .profile-edit-form select {
+        background-color: #16213e;
+        color: #f4f4f9;
+        border: 1px solid #6a1b9a;
+        padding: 12px;
+        border-radius: 8px;
+        width: 100%;
+        transition: border-color 0.3s ease;
+    }
+
+    .profile-edit-form input:focus,
+    .profile-edit-form select:focus {
+        border-color: #9c27b0;
+        outline: none;
+        box-shadow: 0px 0px 8px rgba(156, 39, 176, 0.4);
+    }
+
+    label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #f4f4f9;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-text {
+        color: #b0b0b0;
+        font-size: 0.9rem;
+        margin-top: 4px;
+    }
+
+    /* 🎯 Button Styling */
+    .btn-danger {
+        background-color: #9c27b0;
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .btn-danger:hover {
+        background-color: #7a228a;
+        transform: translateY(-2px);
+        box-shadow: 0px 4px 12px rgba(224, 64, 251, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: #16213e;
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #1a1a2e;
+        color: #e040fb;
+    }
+
+    /* 📱 Responsive Styling */
+    @media (max-width: 768px) {
+        .outer {
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="row outer">
+    <div class="col-12 col-md-8 col-lg-6 mx-auto edit-profile-container">
+        <h1>Lawyer Profile</h1>
+
+        <form action="/api/users/apply-lawyer" method="POST" class="needs-validation" novalidate>
+            <!-- ✅ Specialization -->
+            <div class="mb-3 profile-edit-form">
+                <label for="specialization" class="form-label">Specialization</label>
+                <select id="specialization" name="specialization" class="form-control" required>
+                    <option value="">Select Specialization</option>
+                    <% const specs = [
+                        "Criminal Law","Civil Law","Corporate Law","Family Law",
+                        "Intellectual Property","Tax Law","Labor Law","Real Estate Law",
+                        "Immigration Law","Other"
+                    ]; %>
+                    <% specs.forEach(spec => { %>
+                        <option value="<%= spec %>">
+                            <%= spec %>
+                        </option>
+                    <% }) %>
+                </select>
+                <div class="invalid-feedback">Please select a specialization.</div>
+            </div>
+
+            <!-- ✅ License Number -->
+            <div class="mb-3 profile-edit-form">
+                <label for="license-number" class="form-label">License Number</label>
+                <input type="text" id="license-number" name="licenseNumber" 
+                       class="form-control" 
+                       placeholder="Enter license number" required>
+                <div class="invalid-feedback">Please enter your license number.</div>
+            </div>
+
+            <!-- ✅ Buttons -->
+            <div class="d-flex justify-content-center gap-2 mt-3">
+                <button type="submit" class="btn btn-outline-danger">Save Changes</button>
+                <a href="/account" class="btn btn-outline-secondary">Go Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+(() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+})();
+</script>

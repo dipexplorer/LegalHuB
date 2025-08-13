@@ -6,7 +6,8 @@ describe("🛡️ Rights API Testing", () => {
     const mockRight = {
         name: "Protection of Interests of Minorities",
         articleNumber: "Article 29",
-        description: "Ensures that minorities have the right to conserve their distinct language, script, or culture.",
+        description:
+            "Ensures that minorities have the right to conserve their distinct language, script, or culture.",
         sourceLink: "https://indiankanoon.org/doc/1298951/",
         category: "Cultural and Educational Rights",
     };
@@ -26,16 +27,15 @@ describe("🛡️ Rights API Testing", () => {
 
     it("✅ should create a new right", async () => {
         // console.log("📤 Sending request to create new right...");
-        const res = await request(app)
-            .post("/api/rights")
-            .set("Accept", "application/json")
-            .send({
-                name: "Right to Approach Courts for Enforcement of Rights",
-                articleNumber: "Article 32",
-                description: "Grants citizens the right to move the Supreme Court directly for enforcement of fundamental rights through writs like habeas corpus, mandamus, prohibition, quo warranto, and certiorari.",
-                sourceLink: "https://www.constitutionofindia.net/constitution_of_india/fundamental_rights/articles/Article%2032",
-                category: "Right to Constitutional Remedies",
-            });
+        const res = await request(app).post("/api/rights").set("Accept", "application/json").send({
+            name: "Right to Approach Courts for Enforcement of Rights",
+            articleNumber: "Article 32",
+            description:
+                "Grants citizens the right to move the Supreme Court directly for enforcement of fundamental rights through writs like habeas corpus, mandamus, prohibition, quo warranto, and certiorari.",
+            sourceLink:
+                "https://www.constitutionofindia.net/constitution_of_india/fundamental_rights/articles/Article%2032",
+            category: "Right to Constitutional Remedies",
+        });
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(201);
@@ -71,9 +71,7 @@ describe("🛡️ Rights API Testing", () => {
 
     it("✅ should fetch all rights", async () => {
         // console.log("📤 Fetching all rights...");
-        const res = await request(app)
-            .get("/api/rights")
-            .set("Accept", "application/json");
+        const res = await request(app).get("/api/rights").set("Accept", "application/json");
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(200);
@@ -108,11 +106,9 @@ describe("🛡️ Rights API Testing", () => {
 
     it("✅ should update a right successfully", async () => {
         // console.log(`📤 Updating right ID: ${createdRight._id}`);
-        const res = await request(app)
-            .put(`/api/rights/${createdRight._id}`)
-            .send({
-                description: "Updated description",
-            });
+        const res = await request(app).put(`/api/rights/${createdRight._id}`).send({
+            description: "Updated description",
+        });
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(200);
@@ -134,9 +130,7 @@ describe("🛡️ Rights API Testing", () => {
 
     it("✅ should delete a right successfully", async () => {
         // console.log(`📤 Deleting right ID: ${createdRight._id}`);
-        const res = await request(app).delete(
-            `/api/rights/${createdRight._id}`
-        );
+        const res = await request(app).delete(`/api/rights/${createdRight._id}`);
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(200);
@@ -145,9 +139,7 @@ describe("🛡️ Rights API Testing", () => {
     });
 
     it("❌ should return 404 when deleting non-existent right", async () => {
-        const res = await request(app).delete(
-            "/api/rights/64b4c7fe12f84b1f12345678"
-        );
+        const res = await request(app).delete("/api/rights/64b4c7fe12f84b1f12345678");
 
         // console.log("📥 Response received:", res.body);
         expect(res.statusCode).toBe(404);

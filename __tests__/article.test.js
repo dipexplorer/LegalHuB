@@ -57,9 +57,7 @@ describe("📄 Articles API Testing", () => {
 
     it("📥 should fetch all articles and include the one just created", async () => {
         // console.log("📤 Fetching all articles...");
-        const res = await request(app)
-            .get("/api/articles")
-            .set("Accept", "application/json");
+        const res = await request(app).get("/api/articles").set("Accept", "application/json");
 
         // console.log("📥 Fetched:", res.body.data.map(a => a.title));
         expect(res.statusCode).toBe(200);
@@ -67,9 +65,7 @@ describe("📄 Articles API Testing", () => {
         expect(Array.isArray(res.body.data)).toBe(true);
         expect(res.body.msg).toBe("Articles fetched successfully");
 
-        const found = res.body.data.find(
-            (a) => a.title === "Test Article Title"
-        );
+        const found = res.body.data.find((a) => a.title === "Test Article Title");
         expect(found).toBeDefined();
         expect(found.content).toBe("This is the content of the test article.");
         expect(found.author.email).toBe("testuser@example.com");
@@ -121,9 +117,7 @@ describe("📄 Articles API Testing", () => {
     });
 
     it("❌ should not create an article without title/content", async () => {
-        const res = await request(app)
-            .post("/api/articles")
-            .send({ author: testUser._id }); // Missing title and content
+        const res = await request(app).post("/api/articles").send({ author: testUser._id }); // Missing title and content
 
         // console.log("📥 Missing field create response:", res.body);
         expect(res.statusCode).toBe(400);
@@ -183,9 +177,7 @@ describe("📄 Articles API Testing", () => {
 
         expect([403, 404]).toContain(res.statusCode); // in case deleted already
         if (res.statusCode === 403) {
-            expect(res.body.msg).toBe(
-                "You are not authorized to edit/delete this article"
-            );
+            expect(res.body.msg).toBe("You are not authorized to edit/delete this article");
         } else {
             expect(res.body.msg).toBe("Article not found");
         }

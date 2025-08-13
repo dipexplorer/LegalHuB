@@ -1,168 +1,764 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        .profile {
-            background: #1a1a2e;
-            color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            margin-top: 30px;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
+<style>
+    body {
+        background: #0f0f15;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    .profile-wrapper {
+        max-width: 1100px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .profile-card {
+        display: flex;
+        flex-wrap: wrap;
+        background: linear-gradient(145deg, #1b1b2b, #1a1a24);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0px 15px 45px rgba(179, 71, 255, 0.35);
+    }
+
+    /* Left Column */
+    .profile-left {
+        flex: 1 1 320px;
+        background: linear-gradient(160deg, #26264a, #1c1c3a);
+        text-align: center;
+        padding: 40px 20px;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .profile-left img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid transparent;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .verified-avatar {
+        border-color: #28a745;
+        box-shadow: 0px 0px 15px rgba(40, 167, 69, 0.6);
+    }
+
+    .not-verified-avatar {
+        border-color: #dc3545;
+        box-shadow: 0px 0px 15px rgba(220, 53, 69, 0.6);
+    }
+
+    .profile-left img:hover {
+        transform: scale(1.08);
+    }
+
+    .profile-left h2 {
+        margin-top: 20px;
+        font-size: 2rem;
+        color: #e58fff;
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .status-badge {
+        font-size: 0.8rem;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: default;
+        transition: transform 0.2s ease;
+    }
+
+    .status-badge:hover {
+        transform: scale(1.05);
+    }
+
+    .status-verified {
+        background: #28a745;
+        color: white;
+        box-shadow: 0 2px 6px rgba(40, 167, 69, 0.4);
+    }
+
+    .status-not-verified {
+        background: #dc3545;
+        color: white;
+        box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
+    }
+
+    .profile-left p {
+        color: #bdbdbd;
+        font-size: 1rem;
+        margin-top: 5px;
+    }
+
+    .specialization-badge {
+        background: linear-gradient(90deg, #9c27b0, #b347ff);
+        color: white;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-top: 14px;
+        box-shadow: 0px 3px 12px rgba(179, 71, 255, 0.45);
+    }
+
+    /* Buttons */
+    .cta-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .cta-btn {
+        flex: 1;
+        background: linear-gradient(90deg, #8e2de2, #b347ff);
+        color: white;
+        padding: 14px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0px 4px 15px rgba(179, 71, 255, 0.4);
+    }
+
+    .cta-btn:hover {
+        background: linear-gradient(90deg, #7218c2, #9c27b0);
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 18px rgba(179, 71, 255, 0.5);
+    }
+
+    /* Right Column (Improved) */
+    .profile-right {
+        flex: 2 1 600px;
+        padding: 35px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .section {
+        padding: 20px 24px;
+        background: rgba(35, 35, 58, 0.85);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .section:hover {
+        background: rgba(44, 44, 71, 0.95);
+        transform: translateY(-3px);
+    }
+
+    .section h3 {
+        color: #e58fff;
+        font-size: 1.3rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 6px;
+    }
+
+    .section-icon {
+        font-size: 1.2rem;
+        color: #b347ff;
+    }
+
+    .section p {
+        color: #e0e0e0;
+        margin: 6px 0;
+        font-size: 0.95rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .stat-card {
+        flex: 1 1 calc(33.333% - 10px);
+        background: rgba(50, 50, 80, 0.8);
+        border-radius: 14px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .stat-card:hover {
+        background: rgba(60, 60, 100, 0.9);
+        transform: translateY(-4px);
+    }
+
+    .stat-icon {
+        background: linear-gradient(135deg, #8e2de2, #b347ff);
+        color: white;
+        font-size: 1.3rem;
+        padding: 12px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 8px rgba(179, 71, 255, 0.4);
+    }
+
+    .stat-info strong {
+        display: block;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    .stat-info span {
+        font-size: 0.85rem;
+        color: #bbb;
+    }
+
+    /* Tag Chips */
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tag {
+        background: linear-gradient(120deg, #4e4e70, #3a3a55);
+        padding: 7px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #f0f0f0;
+        transition: all 0.3s ease;
+        box-shadow: 0px 2px 8px rgba(179, 71, 255, 0.2);
+    }
+
+    .tag:hover {
+        background: linear-gradient(120deg, #6b52b5, #5e479e);
+        transform: scale(1.08);
+        box-shadow: 0 4px 12px rgba(179, 71, 255, 0.4);
+    }
+
+    /* Contact & Availability Styling */
+    .contact-row, .availability-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 0;
+    }
+
+    .contact-label, .availability-label {
+        color: #aaa;
+        font-weight: 500;
+    }
+
+    .contact-value, .availability-value {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .contact-value a {
+        color: #e58fff;
+        text-decoration: none;
+    }
+
+    /* Floating Chat Button */
+    .chat-float {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background: linear-gradient(135deg, #8e2de2, #b347ff);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0px 4px 20px rgba(179, 71, 255, 0.5);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+
+    .chat-float:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .profile-card {
+            flex-direction: column;
         }
-
-        .profile-container {
-            background: #1e1e2f;
-            padding: 40px;
-            margin: 30px auto;
-            border-radius: 16px;
-            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 800px;
+        .profile-left, .profile-right {
+            padding: 25px;
         }
-
-        /* ✅ Profile Header */
-        .profile-header {
-            text-align: center;
-            margin-bottom: 24px;
+        .cta-buttons {
+            flex-direction: column;
         }
-
-        .profile-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #e040fb;
+        .stats-grid {
+            flex-direction: column;
         }
+    }
 
-        .specialization {
-            font-size: 1.2rem;
-            color: #9c27b0;
-            margin-top: 8px;
-        }
+ /* Booking Modal Styles */
+#bookingModal {
+  display: none; /* hide modal by default */
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
 
-        .rating {
-            font-size: 1.1rem;
-            margin-top: 8px;
-            color: #ffc107;
-        }
+#bookingModal.active {
+  display: flex; /* show modal when active */
+}
 
-        /* ✅ Verified Badge */
-        .verified-badge {
-            background-color: #4caf50;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 8px;
-        }
+/* Style the form inside the modal */
+#bookingModal form {
+  background: linear-gradient(145deg, #1b1b2b, #1a1a24);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-        /* ✅ Profile Details */
-        .profile-details h2 {
-            font-size: 1.6rem;
-            margin-top: 20px;
-            color: #e040fb;
-        }
+#bookingModal h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #e58fff;
+  font-weight: 700;
+}
 
-        .profile-details p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #ddd;
-        }
+  #bookingForm label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #f5f5f5;
+  }
 
-        /* ✅ Contact Info */
-        .contact-info p {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
+  #bookingForm input[type="date"],
+  #bookingForm select,
+  #bookingForm textarea {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+    background: rgba(35, 35, 58, 0.85);
+    color: #eee;
+    resize: vertical;
+    transition: all 0.3s ease;
+  }
 
-        .contact-info a {
-            color: #9c27b0;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+  #bookingForm input[type="date"]:focus,
+  #bookingForm select:focus,
+  #bookingForm textarea:focus {
+    outline: none;
+    border-color: #b347ff;
+    box-shadow: 0 0 0 3px rgba(179, 71, 255, 0.3);
+  }
 
-        .contact-info a:hover {
-            color: #e040fb;
-        }
+  #bookingForm textarea {
+    min-height: 100px;
+  }
 
-        /* ✅ Buttons */
-        .verify-btn,
-        .back-btn {
-            display: inline-block;
-            background-color: #8e2de2;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 20px;
-            transition: background 0.3s ease, transform 0.2s ease;
-            text-decoration: none;
-        }
+  #bookingForm .form-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+  }
 
-        .verify-btn:hover,
-        .back-btn:hover {
-            background-color: #7218c2;
-            transform: translateY(-2px);
-        }
+  #bookingForm button[type="submit"] {
+    flex: 1;
+    background: linear-gradient(90deg, #8e2de2, #b347ff);
+    border: none;
+    padding: 14px 0;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(179, 71, 255, 0.5);
+    transition: all 0.3s ease;
+  }
+  
+  #bookingForm button[type="submit"]:hover {
+    background: linear-gradient(90deg, #7218c2, #9c27b0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(179, 71, 255, 0.6);
+  }
 
-        /* ✅ Responsive Fix */
-        @media (max-width: 768px) {
-            .profile-container {
-                padding: 24px;
-            }
+  #bookingForm button[type="button"] {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 14px 0;
+    color: #f5f5f5;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-            .profile-header h1 {
-                font-size: 2rem;
-            }
+  #bookingForm button[type="button"]:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
 
-            .profile-details h2 {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
+  #loadingIndicator {
+    text-align: center;
+    color: #e58fff;
+    font-size: 0.9rem;
+    margin: 10px 0;
+    display: none;
+  }
 
-    <div class="container profile">
-        <div class="profile-header">
-            <h1>
-                <%= lawyer.name %>
-            </h1>
-            <p class="specialization">
-                <%= lawyer.specialization %>
-            </p>
-            <p class="rating">⭐ <%= lawyer.rating %> / 5</p>
-            <% if (lawyer.verified) { %>
-                <span class="verified-badge">✔ Verified</span>
-                <% } %>
-        </div>
+  #loadingIndicator.show {
+    display: block;
+  }
 
-        <div class="profile-details">
-            <h2>About</h2>
-            <p>
-                <%= lawyer.bio %>
-            </p>
 
-            <h2>Contact Info</h2>
-            <p>📧 Email: <a href="mailto:<%= lawyer.email %>">
-                    <%= lawyer.email %>
-                </a></p>
-            <% if (lawyer.phone) { %>
-                <p>📞 Phone: <%= lawyer.phone %>
-                </p>
-                <% } %>
-                    <p>📍 Location: <%= lawyer.location %>
-                    </p>
+</style>
 
-                    <h2>Experience</h2>
-                    <p>
-                        <%= lawyer.experience %> years
-                    </p>
-        </div>
+<div class="profile-wrapper">
+  <div class="profile-card">
+    <!-- Left Column -->
+    <div class="profile-left">
+      <img src="<%= lawyer.profilePicture %>" 
+           alt="<%= lawyer.username %>" 
+           class="<%= lawyer.lawyerProfile.isVerified ? 'verified-avatar' : 'not-verified-avatar' %>">
+      
+      <h2>
+        <%= lawyer.username %>
+        <% if (lawyer.lawyerProfile.isVerified) { %>
+          <span class="status-badge status-verified">✔ Verified</span>
+        <% } else { %>
+          <span class="status-badge status-not-verified">✖ Not Verified</span>
+        <% } %>
+      </h2>
 
-        <a href="/lawyers" class="back-btn">⬅ Back to List</a>
+      <p><%= lawyer.email %></p>
+      <div class="specialization-badge"><%= lawyer.lawyerProfile.specialization %></div>
+
+      <div class="cta-buttons">
+        <button id="bookBtn" data-lawyer-id="<%= lawyer._id %>" class="cta-btn">📅 Book</button>
+        <a href="/chat/lawyer/<%= lawyer._id %>" class="cta-btn">💬 Chat</a>
+      </div>
     </div>
+
+    <!-- Right Column -->
+    <div class="profile-right">
+      <!-- About -->
+      <div class="section about-section">
+        <h3><span class="section-icon">ℹ️</span> About</h3>
+        <p><%= lawyer.lawyerProfile.bio %></p>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <strong><%= lawyer.lawyerProfile.experience %></strong>
+            <span>Years Experience</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📜</div>
+          <div class="stat-info">
+            <strong><%= lawyer.lawyerProfile.licenseNumber %></strong>
+            <span>License</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="section">
+        <h3><span class="section-icon">🌐</span> Languages Spoken</h3>
+        <div class="tag-list">
+          <% lawyer.lawyerProfile.languagesSpoken.forEach(lang => { %>
+            <span class="tag"><%= lang %></span>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="section contact-section">
+        <h3><span class="section-icon">📞</span> Contact Info</h3>
+        <div class="contact-row">
+          <span class="contact-label">Email:</span> 
+          <span class="contact-value"><a href="mailto:<%= lawyer.email %>"><%= lawyer.email %></a></span>
+        </div>
+        <% if (lawyer.phone) { %>
+          <div class="contact-row">
+            <span class="contact-label">Phone:</span> 
+            <span class="contact-value"><%= lawyer.phone %></span>
+          </div>
+        <% } %>
+        <div class="contact-row">
+          <span class="contact-label">Location:</span> 
+          <span class="contact-value"><%= lawyer.lawyerProfile.city %>, <%= lawyer.lawyerProfile.state %></span>
+        </div>
+      </div>
+
+      <!-- Availability & Fees -->
+      <div class="section availability-section">
+        <h3><span class="section-icon">💰</span> Availability & Fees</h3>
+        <div class="availability-row">
+          <span class="availability-label">Available Slots:</span>
+          <span class="availability-value">
+            <% if (lawyer.lawyerProfile.availableSlots && lawyer.lawyerProfile.availableSlots.length > 0) { %>
+              <%= lawyer.lawyerProfile.availableSlots.join(', ') %>
+            <% } else { %>
+              Not specified
+            <% } %>
+          </span>
+        </div>
+        <div class="availability-row">
+          <span class="availability-label">Fees:</span>
+          <span class="availability-value">$<%= lawyer.lawyerProfile.fees %></span>
+        </div>
+      </div>
+
+      <a href="/lawyers" class="cta-btn" style="max-width:200px;">⬅ Back to List</a>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle" tabindex="-1">
+  <form id="bookingForm" novalidate>
+    <div id="bookingError" role="alert" style="color:red; margin-top:10px; display:none;"></div>
+
+    <h2 id="bookingTitle">Book Appointment</h2>
+    <input type="hidden" name="lawyerId" id="lawyerId" />
+
+    <label for="apptDate">Date:
+      <input type="date" id="apptDate" name="date" required min="<%= new Date().toISOString().split('T')[0] %>"/>
+    </label>
+
+    <label for="timeSlot">Time slot:
+      <select id="timeSlot" name="timeSlot" required>
+        <option value="">Select a date first</option>
+      </select>
+    </label>
+
+    <div id="loadingIndicator">Loading available slots...</div>
+
+    <label for="notes">Notes:
+      <textarea name="notes" id="notes" placeholder="Optional details..."></textarea>
+    </label>
+
+    <div class="form-buttons">
+      <button type="submit">Book</button>
+      <button type="button" id="closeModal">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<script>
+    const modal = document.getElementById('bookingModal');
+    const bookBtn = document.getElementById('bookBtn');
+    const closeModalBtn = document.getElementById('closeModal');
+    const bookingForm = document.getElementById('bookingForm');
+    const timeSlotSelect = document.getElementById('timeSlot');
+    const apptDateInput = document.getElementById('apptDate');
+    const lawyerIdInput = document.getElementById('lawyerId');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const bookingError = document.getElementById('bookingError');
+
+    const bookingSuccess = document.createElement('div');
+    bookingSuccess.setAttribute('role', 'alert');
+    bookingSuccess.style.color = 'green';
+    bookingSuccess.style.marginTop = '10px';
+    bookingSuccess.style.display = 'none';
+    bookingForm.insertBefore(bookingSuccess, bookingForm.firstChild);
+
+    function showError(message) {
+        bookingError.textContent = message;
+        bookingError.style.display = 'block';
+        bookingSuccess.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+        bookingSuccess.textContent = message;
+        bookingSuccess.style.display = 'block';
+        bookingError.style.display = 'none';
+    }
+
+    function clearMessages() {
+        bookingError.textContent = '';
+        bookingError.style.display = 'none';
+        bookingSuccess.textContent = '';
+        bookingSuccess.style.display = 'none';
+    }
+
+    bookBtn.addEventListener('click', (e) => {
+        lawyerIdInput.value = e.target.dataset.lawyerId;
+        bookingForm.reset();
+        timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
+        clearMessages();
+        modal.classList.add('active');
+        apptDateInput.focus();
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        clearMessages();
+    }
+    closeModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    apptDateInput.addEventListener('change', async () => {
+        const date = apptDateInput.value;
+        const lawyerId = lawyerIdInput.value;
+        clearMessages();
+
+        if (!date) {
+            timeSlotSelect.innerHTML = '<option value="">Select a date first</option>';
+            return;
+        }
+
+        loadingIndicator.style.display = 'block';
+        try {
+            const res = await fetch(`/api/appointment/slots?lawyerId=${encodeURIComponent(lawyerId)}&date=${encodeURIComponent(date)}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                throw new Error('Invalid server response');
+            }
+
+            if (!res.ok) throw new Error(data.message || data.msg || data.error || 'Failed to fetch slots');
+
+            const slots = data.data || [];
+            timeSlotSelect.innerHTML = '';
+
+            if (slots.length === 0) {
+                timeSlotSelect.innerHTML = '<option value="">No slots available</option>';
+                showError('No available time slots for the selected date.');
+            } else {
+                slots.forEach(slot => {
+                    const opt = document.createElement('option');
+                    opt.value = slot;
+                    opt.textContent = slot;
+                    timeSlotSelect.appendChild(opt);
+                });
+            }
+        } catch (error) {
+            showError(error.message);
+            timeSlotSelect.innerHTML = '<option value="">Error loading slots</option>';
+        } finally {
+            loadingIndicator.style.display = 'none';
+        }
+    });
+
+    bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMessages();
+
+        if (!bookingForm.checkValidity()) {
+            bookingForm.reportValidity();
+            return;
+        }
+        if (!timeSlotSelect.value) {
+            showError('Please select a valid time slot.');
+            return;
+        }
+
+        const submitBtn = bookingForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Booking...';
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/appointment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    lawyerId: lawyerIdInput.value,
+                    date: apptDateInput.value,
+                    timeSlot: timeSlotSelect.value,
+                    notes: bookingForm.notes.value.trim()
+                })
+            });
+
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                throw new Error('Invalid server response');
+            }
+
+            if (!res.ok) {
+                // ✅ Now also checking for backend's `msg` key
+                throw new Error(data.message || data.msg || data.error || 'Failed to book appointment');
+            }
+
+            showSuccess('✅ Appointment booked successfully!');
+            setTimeout(() => {
+                closeModal();
+                location.reload();
+            }, 1200);
+
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+</script>

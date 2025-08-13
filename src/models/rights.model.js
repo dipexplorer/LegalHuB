@@ -32,7 +32,7 @@ const rightsSchema = new mongoose.Schema(
         sourceLink: {
             type: String,
             required: true,
-        }
+        },
     },
     { timestamps: true }
 );

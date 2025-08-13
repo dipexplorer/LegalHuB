@@ -104,9 +104,7 @@ describe("📄 Documents API", () => {
 
     it("✅ should delete the document", async () => {
         // console.log(`🗑️ Sending DELETE request to /api/documents/${createdDocument._id}`);
-        const res = await request(app).delete(
-            `/api/documents/${createdDocument._id}`
-        );
+        const res = await request(app).delete(`/api/documents/${createdDocument._id}`);
 
         // console.log("📥 Response status:", res.statusCode);
         // console.log("📥 Response body:", res.body);

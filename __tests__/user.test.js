@@ -19,13 +19,10 @@ describe("📄 User API Testing", () => {
         agent = request.agent(app); // to maintain session for login/logout
 
         // Log in the user (assuming login route sets session/cookie)
-        await agent
-            .post("/api/users/login")
-            .set("Accept", "application/json")
-            .send({
-                username: testUser.username,
-                password: testUser.password,
-            });
+        await agent.post("/api/users/login").set("Accept", "application/json").send({
+            username: testUser.username,
+            password: testUser.password,
+        });
     });
 
     afterAll(async () => {
@@ -93,9 +90,7 @@ describe("📄 User API Testing", () => {
     // 📌 Get User Profile
     it("✅ should fetch user profile", async () => {
         // console.log("📤 Fetching user profile...");
-        const res = await agent
-            .get("/api/users/profile")
-            .set("Accept", "application/json");
+        const res = await agent.get("/api/users/profile").set("Accept", "application/json");
 
         // console.log("📥 Response status:", res.statusCode);
         expect(res.statusCode).toBe(200);

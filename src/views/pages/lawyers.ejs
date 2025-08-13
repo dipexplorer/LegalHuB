@@ -1,209 +1,797 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        .law_container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 30px;
-            background: rgba(30, 30, 30, 0.8);
-            border-radius: 16px;
-            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
+<style>
+    /* ✅ Main Container - Inspired by documents.ejs */
+    .lawyers-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 24px;
+        min-height: 100vh;
+    }
+
+    /* ✅ Header Section - Professional gradient */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 50px 0;
+        background: linear-gradient(135deg, #480c61 0%, #9c27b0 50%, #a577ac 100%);
+        border-radius: 20px;
+        color: white;
+        box-shadow: 0px 12px 40px rgba(123, 31, 162, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+        pointer-events: none;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        margin: 0 0 12px 0;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin: 0;
+        font-weight: 400;
+        position: relative;
+        z-index: 1;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* ✅ Filter Section - Dark gradient like documents */
+    .filter-section {
+        background: linear-gradient(135deg, #2e003e, #4a0072);
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        margin-bottom: 32px;
+        border: 1px solid #5c2d91;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .filter-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #f3e5f5;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .clear-filters-btn {
+        background: #4a0072;
+        color: #f3e5f5;
+        border: 1px solid #7b1fa2;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .clear-filters-btn:hover {
+        background: #7b1fa2;
+        color: #ffffff;
+        border-color: #9c27b0;
+    }
+
+    .filter-controls {
+        display: grid;
+        grid-template-columns: minmax(200px, 2fr) minmax(140px, 1fr) minmax(140px, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #e1bee7;
+        margin-bottom: 8px;
+    }
+
+    .search-input-container {
+        position: relative;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #f3e5f5;
+        font-size: 1.1rem;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+
+    .filter-input {
+        padding: 16px 20px 16px 52px;
+        width: 100%;
+        min-width: 350px;
+        font-size: 1rem;
+        border: 2px solid #7b1fa2;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: #311b47;
+        color: #f3e5f5;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .filter-input:focus {
+        border-color: #ba68c8;
+        box-shadow: 0 0 0 4px rgba(186, 104, 200, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: #3a2154;
+        transform: translateY(-1px);
+    }
+
+    .filter-input::placeholder {
+        color: #b39ddb;
+        font-style: italic;
+    }
+
+    .filter-select {
+        padding: 16px 16px;
+        border: 2px solid #7b1fa2;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #311b47;
+        color: #f3e5f5;
+        font-family: inherit;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f3e5f5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        padding-right: 40px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .filter-select:focus {
+        border-color: #ba68c8;
+        box-shadow: 0 0 0 4px rgba(186, 104, 200, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: #3a2154;
+        transform: translateY(-1px);
+    }
+
+    .filter-select:hover {
+        border-color: #ab47bc;
+        background: #3a2154;
+    }
+
+    .search-btn {
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #7b1fa2 0%, #ab47bc 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0px 4px 12px rgba(123, 31, 162, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+    }
+
+    .search-btn:hover {
+        background: linear-gradient(135deg, #6a1b9a 0%, #9c27b0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 16px rgba(123, 31, 162, 0.4);
+    }
+
+    /* ✅ Results Summary */
+    .results-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding: 0 8px;
+    }
+
+    .results-count {
+        font-size: 1rem;
+        color: #cacaca;
+        font-weight: 500;
+    }
+
+    /* ✅ Lawyers Grid - Enhanced card layout */
+    .lawyers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    /* ✅ Lawyer Cards - Professional design */
+    .lawyer-card {
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        border: 1px solid #3c3c3c;
+        border-radius: 16px;
+        padding: 28px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.3);
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        color: #f0f0f0;
+    }
+
+    .lawyer-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ab47bc, #ce93d8);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .lawyer-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0px 12px 32px rgba(123, 31, 162, 0.5);
+        border-color: #ab47bc;
+    }
+
+    .lawyer-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    /* ✅ Card Header with Profile */
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ab47bc;
+        box-shadow: 0 4px 12px rgba(171, 71, 188, 0.3);
+    }
+
+    .lawyer-info h3 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+    }
+
+    .specialization-badge {
+        background: rgba(171, 71, 188, 0.2);
+        color: #ce93d8;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(171, 71, 188, 0.3);
+        display: inline-block;
+    }
+
+    /* ✅ Card Content */
+    .card-content {
+        flex-grow: 1;
+        margin-bottom: 20px;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        color: #dcdcdc;
+    }
+
+    .info-icon {
+        color: #ab47bc;
+        width: 16px;
+        text-align: center;
+    }
+
+    .rating-stars {
+        color: #ffc107;
+        margin-left: 4px;
+    }
+
+    .verified-badge {
+        background: rgba(76, 175, 80, 0.2);
+        color: #a5d6a7;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .not-verified-badge {
+        background: rgba(255, 152, 0, 0.2);
+        color: #ffcc02;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 152, 0, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .availability-status {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .available {
+        color: #a5d6a7;
+    }
+
+    .unavailable {
+        color: #ef9a9a;
+    }
+
+    /* ✅ Card Actions */
+    .card-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: auto;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .btn-primary {
+        background: #29293a;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: #5e1b7a;
+        transform: translateY(-2px);
+        color: #ffffff;
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: #ab47bc;
+        border: 2px solid #ab47bc;
+    }
+
+    .btn-secondary:hover {
+        background: #ab47bc;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* ✅ Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 32px;
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        border-radius: 16px;
+        box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.3);
+        color: #f0f0f0;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: #ffffff;
+        margin: 0 0 12px 0;
+    }
+
+    .empty-state p {
+        color: #dcdcdc;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    /* ✅ Responsive Design */
+    @media (min-width: 1200px) {
+        .lawyers-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .lawyers-page {
+            padding: 0 16px;
         }
 
-        h1 {
-            text-align: center;
-            color: #9c27b0;
-            font-size: 2.4rem;
-            margin-bottom: 20px;
-            font-weight: 700;
+        .filter-controls {
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
-        /* 🔎 Search Bar */
-        .search-lawyer {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
+        .filter-input {
+            min-width: auto;
+        }
+
+        .filter-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
+        }
+
+        .lawyers-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card-actions {
+            flex-direction: column;
+        }
+
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .results-summary {
+            flex-direction: column;
             gap: 12px;
+            align-items: flex-start;
         }
 
-        .search-lawyer input {
-            width: 65%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: #26263e;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            transition: background 0.3s ease;
-        }
-
-        .search-lawyer input:focus {
-            background: #33334d;
-        }
-
-        .search-lawyer button {
-            background: #9c27b0;
-            color: #fff;
-            padding: 14px 24px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            box-shadow: 0 4px 8px rgba(156, 39, 176, 0.4);
-        }
-
-        .search-lawyer button:hover {
-            background: #7218c2;
-        }
-
-        /* 📜 Lawyer List Grid */
-        .lawyer-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
-        /* 📄 Lawyer Card */
-        .lawyer-card {
-            background: rgba(36, 36, 62, 0.9);
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(12px);
-            border: 1px solid transparent;
-            background-clip: padding-box;
-            position: relative;
-            overflow: hidden;
-        }
-
-
-        .lawyer-card:hover::before {
-            opacity: 1;
-        }
-
-        .lawyer-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(156, 39, 176, 0.5);
-        }
-
-        .lawyer-card h3 {
-            color: #e040fb;
-            margin-bottom: 10px;
-            font-size: 1.6rem;
-            font-weight: 600;
-        }
-
-        .lawyer-card p {
-            color: #bbb;
-            font-size: 1rem;
-            margin-bottom: 8px;
-            font-weight: 400;
-        }
-
-        .contact-link {
-            color: #7c4dff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .contact-link:hover {
-            color: #e040fb;
-        }
-
-        /* ✅ Verified Badge */
-        .verified-badge {
-            color: #4caf50;
-            font-weight: bold;
-            margin-top: 5px;
-            display: inline-block;
-        }
-
-        /* ✅ Connect Button (inside div) */
-        .connect-wrapper {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .connect-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #9c27b0, #4a00e0);
-            color: #fff;
-            font-size: 16px;
-            border-radius: 12px;
+        .card-header {
+            flex-direction: column;
             text-align: center;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
-            display: inline-block;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .filter-section {
+            padding: 20px;
         }
 
-        .connect-btn:hover {
-            background: linear-gradient(135deg, #7218c2, #4a00e0);
-            transform: scale(1.05);
+        .lawyer-card {
+            padding: 20px;
         }
-    </style>
 
-    <div class="law_container">
-        <h1>🔎 Connect with a Lawyer</h1>
+        .page-header {
+            padding: 24px 0;
+        }
+    }
+</style>
 
-        <!-- ✅ Search Bar -->
-        <div class="search-lawyer">
-            <input type="text" id="search-input" placeholder="Search by Name, Specialization or Email">
-            <button onclick="searchLawyer()">Search</button>
+    <div class="lawyers-page">
+        <!-- Professional Header Section -->
+        <div class="page-header">
+            <h1 class="page-title">👨‍⚖️ Find Legal Experts</h1>
+            <p class="page-subtitle">
+                Connect with verified lawyers across India. Get expert legal consultation for your specific needs.
+            </p>
+        </div>
+        
+            <!-- Advanced Filter Section -->
+            <section class="filter-section" role="search" aria-labelledby="filter-title">
+                <div class="filter-header">
+                    <h2 class="filter-title" id="filter-title">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    Find Your Lawyer
+                    </h2>
+                    <button type="button" class="clear-filters-btn" onclick="clearAllFilters()" aria-label="Clear all filters">
+                    <i class="fas fa-times" aria-hidden="true"></i> Clear Filters
+                    </button>
+                </div>
+
+                <form method="GET" action="/lawyers" class="filter-form" role="search">
+                    <div class="filter-controls" role="group" aria-labelledby="filter-title">
+
+                    <!-- Search Input -->
+                    <div class="filter-group">
+                        <label for="search" class="filter-label">Search Lawyers</label>
+                        <div class="search-input-container">
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            class="filter-input"
+                            placeholder="Search by name, specialization, or location..."
+                            autocomplete="off"
+                            value="<%= search %>"
+                        />
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Specialization Filter -->
+                    <div class="filter-group">
+                        <label for="specialization" class="filter-label">Specialization</label>
+                        <select id="specialization" name="specialization" class="filter-select">
+                        <option value="all" <%= specialization === 'all' ? 'selected' : '' %>>All Specializations</option>
+                        <% specializations.forEach(spec => { %>
+                            <option value="<%= spec %>" <%= specialization === spec ? 'selected' : '' %>><%= spec %></option>
+                        <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- Location Filter -->
+                    <div class="filter-group">
+                        <label for="location" class="filter-label">Location</label>
+                        <select id="location" name="location" class="filter-select">
+                        <option value="all" <%= location === 'all' ? 'selected' : '' %>>All Locations</option>
+                        <% locations.forEach(loc => { %>
+                            <option value="<%= loc %>" <%= location === loc ? 'selected' : '' %>><%= loc %></option>
+                        <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- Search Button -->
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </button>
+                    </div>
+                </form>
+        </section>
+
+        <!-- Results Summary -->
+        <div class="results-summary" role="status" aria-live="polite">
+            <div class="results-count">
+                Showing <strong><%= lawyers.length || 0 %></strong> lawyer<%= (lawyers.length !== 1) ? 's' : '' %>
+            </div>
         </div>
 
-        <!-- ✅ Lawyer Cards -->
-        <div class="lawyer-list">
-            <% lawyers.forEach(lawyer=> { %>
-                <div class="lawyer-card">
-                    <h3>
-                        <%= lawyer.name %>
-                    </h3>
-                    <p><strong>Specialization:</strong>
-                        <%= lawyer.specialization %>
-                    </p>
-                    <p><strong>Email:</strong> <a href="mailto:<%= lawyer.email %>" class="contact-link">
-                            <%= lawyer.email %>
-                        </a></p>
-                    <p><strong>Rating:</strong> ⭐ <%= lawyer.rating %>/5</p>
-
-                    <% if (!lawyer.verified) { %>
-                        <span class="verified-badge">⚠️ Not Verified</span>
-                        <% } else { %>
-                            <span class="verified-badge">✔ Verified</span>
+        <!-- Lawyers Grid -->
+        <% if (lawyers && lawyers.length > 0) { %>
+            <div class="lawyers-grid">
+                <% lawyers.forEach(lawyer => { %>
+                    <div class="lawyer-card">
+                        <!-- Card Header with Profile -->
+                        <div class="card-header">
+                            <img src="<%= lawyer.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>" 
+                                alt="<%= lawyer.username || 'Unknown Lawyer' %>" 
+                                class="profile-avatar">
+                            <div class="lawyer-info">
+                                <h3><%= lawyer.username || 'Unknown Lawyer' %></h3>
+                                <% if (lawyer.specialization) { %>
+                                    <div class="specialization-badge">
+                                        <%= lawyer.specialization %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Content -->
+                        <div class="card-content">
+                            <!-- Location -->
+                            <% if (lawyer.location && (lawyer.location.city || lawyer.location.state)) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-map-marker-alt info-icon"></i>
+                                    <span>
+                                        <%= lawyer.location.city || '' %>
+                                        <%= (lawyer.location.city && lawyer.location.state) ? ', ' : '' %>
+                                        <%= lawyer.location.state || '' %>
+                                    </span>
+                                </div>
                             <% } %>
 
-                                <!-- ✅ Connect Button (in div) -->
-                                <div class="connect-wrapper">
-                                    <a href="/lawyers/<%= lawyer._id %>" class="connect-btn">Connect</a>
+                            <!-- Experience (allow zero years) -->
+                            <% if (lawyer.lawyerProfile.experience !== undefined) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-briefcase info-icon"></i>
+                                    <span><%= lawyer.lawyerProfile.experience %> years experience</span>
                                 </div>
-                </div>
+                            <% } %>
+
+                            <!-- License Number -->
+                            <% if (lawyer.lawyerProfile.specialization) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-id-card info-icon"></i>
+                                    <b>Specialization:</b><span><%= lawyer.lawyerProfile.specialization %></span>
+                                </div>
+                            <% } %>
+
+                            <!-- Rating -->
+                            <div class="info-row">
+                                <i class="fas fa-star info-icon"></i>
+                                <span>
+                                    <%= lawyer.lawyerProfile.rating || 0 %>/5
+                                    <span class="rating-stars">
+                                        <% for(let i = 1; i <= 5; i++) { %>
+                                            <%= i <= (lawyer.rating || 0) ? '★' : '☆' %>
+                                        <% } %>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <!-- Consultation Fee -->
+                            <% if (lawyer.lawyerProfile.fees) { %>
+                                <div class="info-row">
+                                    <i class="fas fa-rupee-sign info-icon"></i>
+                                    <span><%= lawyer.lawyerProfile.fees %> (₹) consultation</span>
+                                </div>
+                            <% }else { %>
+                                <div class="info-row">
+                                    <i class="fas fa-rupee-sign info-icon"></i>
+                                    <span>Free consultation</span>
+                                </div>
+                            <% } %>
+
+                            <!-- Verification Status -->
+                            <div class="info-row">
+                                <% if (lawyer.lawyerProfile.isVerified) { %>
+                                    <span class="verified-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        Verified
+                                    </span>
+                                <% } else { %>
+                                    <span class="not-verified-badge">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Not Verified
+                                    </span>
+                                <% } %>
+                            </div>
+
+                            <!-- Availability -->
+                            <div class="info-row">
+                                <i class="fas fa-clock info-icon"></i>
+                                <span class="availability-status <%= lawyer.availability ? 'available' : 'unavailable' %>">
+                                    <%= lawyer.availability ? 'Available' : 'Busy' %>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Actions -->
+                        <div class="card-actions">
+                            <a href="/lawyers/<%= lawyer._id %>" class="btn btn-primary">
+                                <i class="fas fa-user"></i>
+                                View Profile
+                            </a>
+                            <% if (lawyer.availability) { %>
+                                <a href="#" class="btn btn-secondary" onclick="bookAppointment('<%= lawyer._id %>')">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    Book Appointment
+                                </a>
+                            <% } else { %>
+                                <button class="btn btn-secondary" disabled>
+                                    <i class="fas fa-calendar-times"></i>
+                                    Unavailable
+                                </button>
+                            <% } %>
+                        </div>
+                    </div>
                 <% }) %>
-        </div>
-    </div>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <h3>No lawyers found</h3>
+                <p>Try adjusting your search criteria or browse all available lawyers.</p>
+            </div>
+        <% } %>
+<script>
+  function clearAllFilters() {
+    document.getElementById('search').value = '';
+    document.getElementById('specialization').value = 'all';
+    document.getElementById('location').value = 'all';
+    applyFilters();
+  }
 
-    <script>
-        function searchLawyer() {
-            const input = document.getElementById('search-input').value.toLowerCase();
-            const cards = document.querySelectorAll('.lawyer-card');
+  function applyFilters() {
+    const search = document.getElementById('search').value.trim();
+    const specialization = document.getElementById('specialization').value;
+    const location = document.getElementById('location').value;
 
-            cards.forEach(card => {
-                const name = card.querySelector('h3').textContent.toLowerCase();
-                const specialization = card.querySelector('p:nth-child(2)').textContent.toLowerCase();
-                const email = card.querySelector('p:nth-child(3)').textContent.toLowerCase();
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (specialization !== 'all') params.set('specialization', specialization);
+    if (location !== 'all') params.set('location', location);
 
-                if (name.includes(input) || specialization.includes(input) || email.includes(input)) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
-    </script>
+    const queryString = params.toString();
+    const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+    window.location.href = newUrl;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+      searchInput.addEventListener('focus', function () {
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+
+      searchInput.addEventListener('blur', function () {
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+    }
+
+    const specializationSelect = document.getElementById('specialization');
+    const locationSelect = document.getElementById('location');
+
+    if (specializationSelect) {
+      specializationSelect.addEventListener('change', function () {
+        applyFilters();
+      });
+    }
+
+    if (locationSelect) {
+      locationSelect.addEventListener('change', function () {
+        applyFilters();
+      });
+    }
+
+    // Clicking the search icon triggers search
+    const searchIcon = document.querySelector('.search-icon');
+    if (searchIcon) {
+      searchIcon.addEventListener('click', applyFilters);
+    }
+
+    // Keyboard shortcut Ctrl+K or Cmd+K to focus search input
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    // Submit button triggers search
+    const filterForm = document.querySelector('.filter-form');
+    if (filterForm) {
+      filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        applyFilters();
+      });
+    }
+  });
+</script>

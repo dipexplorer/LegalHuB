@@ -10,9 +10,7 @@ const healthCheck = asyncHandler(async (req, res) => {
         env: process.env.NODE_ENV || "development", // Useful info
     };
 
-    return res
-        .status(200)
-        .json(new apiResponse(200, healthData, "Health Check Passed"));
+    return res.status(200).json(new apiResponse(200, healthData, "Health Check Passed"));
 });
 
 module.exports = healthCheck;

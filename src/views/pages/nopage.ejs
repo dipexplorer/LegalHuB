@@ -1,26 +1,68 @@
-<% layout("/layouts/boilerplate") -%>
-<!-- nopage -->
- <div class="container">
-     <div class="error-page">
-         <h1>404</h1>
-         <p>Sorry, the page you're looking for doesn't exist.</p>
-         <a href="/products" class="btn-primary">Go to Homepage</a>
-         <p>Please check the URL and try again.</p>
-         <p style="margin-bottom: 13rem;">If you encounter this issue frequently, please contact us at <a href="mailto:support@legalhub.com">support@legalhub.com</a>.</p>
- </div>
-<style>
-    .error-page {
-        text-align: center;
-        padding-top: 150px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>404 - Page Not Found</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+      margin: 0;
     }
-    .error-page h1 {
-        font-size: 72px;
+
+    h1 {
+      font-size: 100px;
+      margin-bottom: 10px;
+      color: #ff6b6b;
     }
-    .error-page p {
-        font-size: 24px;
+
+    p {
+      font-size: 24px;
+      color: #ccc;
+      margin-bottom: 30px;
     }
-    .btn-primary {
-        margin-top: 20px;
+
+    a {
+      padding: 12px 30px;
+      background: #4f46e5;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: 0.3s ease;
     }
- 
-</style>
+
+    a:hover {
+      background: #4338ca;
+    }
+
+    .graphic {
+      max-width: 500px;
+      margin: 40px auto;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>404</h1>
+  <p>Oops! Looks like you’re lost in space.</p>
+
+  <div class="graphic">
+    <img src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="404 graphic" width="100%" />
+  </div>
+
+  <a href="/">Go to Homepage</a>
+
+  <footer>
+    <p>© 2025 LegalHuB | Made with ❤️ for GSSoC</p>
+  </footer>
+</body>
+</html>

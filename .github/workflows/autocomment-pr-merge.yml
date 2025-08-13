@@ -1,55 +1,55 @@
 name: 🔒 Auto Comment on PR Closed
 
 on:
-  pull_request:
-    types: [closed]
-  pull_request_target:
-    types: [closed]
+    pull_request:
+        types: [closed]
+    pull_request_target:
+        types: [closed]
 
 permissions:
-  issues: write
-  pull-requests: write
-  contents: read
+    issues: write
+    pull-requests: write
+    contents: read
 
 jobs:
-  comment-on-pr-close:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🔍 Check if PR is from a fork
-        id: check
-        run: |
-          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
-            echo "is_fork=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_fork=false" >> "$GITHUB_OUTPUT"
-          fi
+    comment-on-pr-close:
+        runs-on: ubuntu-latest
+        steps:
+            - name: 🔍 Check if PR is from a fork
+              id: check
+              run: |
+                  if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+                    echo "is_fork=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "is_fork=false" >> "$GITHUB_OUTPUT"
+                  fi
 
-      - name: 💬 Post comment on closed forked PR
-        if: steps.check.outputs.is_fork == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GH_COMMENT_TOKEN }}
-          script: |
-            const prNumber = context.payload.pull_request.number;
-            const prTitle = context.payload.pull_request.title;
-            const prCloser = context.actor;
-            const prAuthor = context.payload.pull_request.user.login;
-            const merged = context.payload.pull_request.merged;
+            - name: 💬 Post comment on closed forked PR
+              if: steps.check.outputs.is_fork == 'true'
+              uses: actions/github-script@v7
+              with:
+                  github-token: ${{ secrets.GH_COMMENT_TOKEN }}
+                  script: |
+                      const prNumber = context.payload.pull_request.number;
+                      const prTitle = context.payload.pull_request.title;
+                      const prCloser = context.actor;
+                      const prAuthor = context.payload.pull_request.user.login;
+                      const merged = context.payload.pull_request.merged;
 
-            let message;
-            if (merged) {
-              message = `🎉 Congratulations @${prAuthor} — your pull request titled **"${prTitle}"** has been merged by @${prCloser}! 
+                      let message;
+                      if (merged) {
+                        message = `🎉 Congratulations @${prAuthor} — your pull request titled **"${prTitle}"** has been merged by @${prCloser}! 
 
-              Thank you for your contribution from your fork! 🧡`;
-            } else {
-              message = `📪 Your pull request titled **"${prTitle}"** was closed by @${prCloser}. 
+                        Thank you for your contribution from your fork! 🧡`;
+                      } else {
+                        message = `📪 Your pull request titled **"${prTitle}"** was closed by @${prCloser}. 
 
-              If you have any questions, feel free to ask. Thanks for the effort, @${prAuthor}! 🙌`;
-            }
+                        If you have any questions, feel free to ask. Thanks for the effort, @${prAuthor}! 🙌`;
+                      }
 
-            await github.rest.issues.createComment({
-              issue_number: prNumber,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
-            });
+                      await github.rest.issues.createComment({
+                        issue_number: prNumber,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: message
+                      });

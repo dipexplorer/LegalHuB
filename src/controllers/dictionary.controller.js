@@ -45,8 +45,7 @@ const getTerm = asyncHandler(async (req, res, next) => {
                 }
             );
 
-            const responseText =
-                response.data.choices?.[0]?.message?.content?.trim();
+            const responseText = response.data.choices?.[0]?.message?.content?.trim();
             if (!responseText || responseText.length < 10) {
                 throw new apiError(500, "Invalid AI response");
             }
@@ -54,18 +53,10 @@ const getTerm = asyncHandler(async (req, res, next) => {
             console.log("✅ AI Response:", responseText);
             return res
                 .status(200)
-                .json(
-                    new apiResponse(
-                        200,
-                        { term, response: responseText },
-                        "Success"
-                    )
-                );
+                .json(new apiResponse(200, { term, response: responseText }, "Success"));
         } catch (error) {
             if (error.response?.status === 429) {
-                console.warn(
-                    `⚠️ Rate limit hit. Retrying in ${delayTime / 1000} seconds...`
-                );
+                console.warn(`⚠️ Rate limit hit. Retrying in ${delayTime / 1000} seconds...`);
                 await delay(delayTime);
                 delayTime *= 2; // Exponential backoff
             } else {
