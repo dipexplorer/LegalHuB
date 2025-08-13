@@ -16,5 +16,7 @@ exports.adminApproveLawyer = asyncHandler(async (req, res) => {
     }
     lawyer.isApproved = true;
     await lawyer.save();
-    res.status(200).json(new apiResponse(200, lawyer, "Lawyer approved successfully"));
+    res.status(200).json(
+        new apiResponse(200, lawyer, "Lawyer approved successfully")
+    );
 });
