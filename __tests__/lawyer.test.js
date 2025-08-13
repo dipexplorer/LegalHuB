@@ -30,9 +30,7 @@ describe("👨‍⚖️Lawyers API testing", () => {
 
     it("should return 200 and include the inserted lawyer", async () => {
         // console.log("📤 Sending GET request to /api/lawyers...");
-        const res = await request(app)
-            .get("/api/lawyers")
-            .set("Accept", "application/json");
+        const res = await request(app).get("/api/lawyers").set("Accept", "application/json");
 
         // console.log("📥 Response status:", res.statusCode);
         // console.log("📥 Response body:", JSON.stringify(res.body, null, 2));

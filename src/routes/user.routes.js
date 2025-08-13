@@ -13,10 +13,7 @@ const {
     updateLawyerProfile,
     applyForLawyer,
 } = require("../controllers/user.controller.js");
-const {
-    isLoggedIn,
-    saveRedirectUrl,
-} = require("../middlewares/auth.middleware.js");
+const { isLoggedIn, saveRedirectUrl } = require("../middlewares/auth.middleware.js");
 
 const router = express.Router();
 

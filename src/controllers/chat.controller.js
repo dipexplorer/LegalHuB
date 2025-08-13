@@ -15,14 +15,18 @@ const getOrCreateChatRoom = asyncHandler(async (req, res) => {
     }
 
     if (
-        ![appointment.client._id.toString(), appointment.lawyer._id.toString()].includes(userId.toString())
+        ![appointment.client._id.toString(), appointment.lawyer._id.toString()].includes(
+            userId.toString()
+        )
     ) {
         throw new apiError(403, "Unauthorized");
     }
 
     let chatRoom = await ChatRoom.findOne({
         appointment: appointmentId,
-        participants: { $all: [appointment.client._id, appointment.lawyer._id] },
+        participants: {
+            $all: [appointment.client._id, appointment.lawyer._id],
+        },
     });
 
     if (!chatRoom) {
@@ -67,8 +71,7 @@ const getMessages = async (req, res) => {
         const { chatRoomId } = req.params;
 
         const chatRoom = await ChatRoom.findById(chatRoomId);
-        if (!chatRoom)
-            return res.status(404).json({ msg: "Chat room not found" });
+        if (!chatRoom) return res.status(404).json({ msg: "Chat room not found" });
 
         if (!chatRoom.participants.some((p) => p.toString() === userId.toString())) {
             return res.status(403).json({ msg: "Unauthorized" });
@@ -103,12 +106,14 @@ const deleteMessage = async (req, res) => {
 
         await Message.findByIdAndDelete(messageId);
 
-        const last = await Message.find({ chatRoom: room._id })
-            .sort({ createdAt: -1 })
-            .limit(1);
+        const last = await Message.find({ chatRoom: room._id }).sort({ createdAt: -1 }).limit(1);
         if (!last.length) {
             await ChatRoom.findByIdAndUpdate(room._id, {
-                $set: { lastMessage: "", lastMessageAt: null, lastMessageSender: null },
+                $set: {
+                    lastMessage: "",
+                    lastMessageAt: null,
+                    lastMessageSender: null,
+                },
             });
         } else {
             await ChatRoom.findByIdAndUpdate(room._id, {
@@ -176,8 +181,8 @@ const getOrCreateChatRoomWithLawyer = async (req, res) => {
         });
 
         if (!appointment) {
-              req.flash("error", "You must have a confirmed booking to chat with this lawyer.");
-              return res.redirect("/lawyers/" + lawyerId);
+            req.flash("error", "You must have a confirmed booking to chat with this lawyer.");
+            return res.redirect("/lawyers/" + lawyerId);
         }
 
         let chatRoom = await ChatRoom.findOne({
@@ -199,7 +204,6 @@ const getOrCreateChatRoomWithLawyer = async (req, res) => {
         res.status(500).json({ msg: "Server error" });
     }
 };
-
 
 module.exports = {
     getOrCreateChatRoom,

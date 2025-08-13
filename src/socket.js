@@ -3,12 +3,12 @@ const Message = require("./models/message.model");
 
 module.exports = function (io) {
     io.on("connection", (socket) => {
-        console.log("User connected:", socket.id);
+        // console.log("User connected:", socket.id);
 
         // Join a chat room
         socket.on("joinRoom", (chatRoomId) => {
             socket.join(String(chatRoomId));
-            console.log(`Socket ${socket.id} joined room ${chatRoomId}`);
+            // console.log(`Socket ${socket.id} joined room ${chatRoomId}`);
         });
 
         // Typing indicator
@@ -75,7 +75,11 @@ module.exports = function (io) {
         socket.on("markSeen", async ({ chatRoomId, userId }) => {
             try {
                 await Message.updateMany(
-                    { chatRoom: chatRoomId, sender: { $ne: userId }, seen: false },
+                    {
+                        chatRoom: chatRoomId,
+                        sender: { $ne: userId },
+                        seen: false,
+                    },
                     { $set: { seen: true } }
                 );
                 io.to(String(chatRoomId)).emit("messagesSeen", {
@@ -109,7 +113,7 @@ module.exports = function (io) {
         });
 
         socket.on("disconnect", () => {
-            console.log("User disconnected:", socket.id);
+            // console.log("User disconnected:", socket.id);
         });
     });
 };

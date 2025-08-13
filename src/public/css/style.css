@@ -292,11 +292,7 @@ nav ul li a:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(
-        135deg,
-        #1a1a2e,
-        #16213e
-    ); /* Same as body gradient */
+    background: linear-gradient(135deg, #1a1a2e, #16213e); /* Same as body gradient */
     color: #e0e0e0;
     padding: 40px 20px;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);

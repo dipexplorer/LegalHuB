@@ -202,7 +202,6 @@ We welcome contributions to help improve **LegalHuB**! 🚀 Whether you're fixin
 ```
 
 4. Make Your Changes✏️
-
     - Add your desired features, fix bugs, or improve documentation. 🛠️
 
 5. 📦 Stage the Changes
@@ -227,7 +226,6 @@ We welcome contributions to help improve **LegalHuB**! 🚀 Whether you're fixin
 ```
 
 8. 📬 Create a Pull Request
-
     - Visit your forked repository on GitHub.
 
     - Click on "Compare & pull request".

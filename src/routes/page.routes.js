@@ -20,10 +20,7 @@ const {
     renderLawyerUpdateForm,
     renderLawyerApplyForm,
 } = require("../controllers/user.controller.js");
-const {
-    publishArticle,
-    renderEditForm,
-} = require("../controllers/article.controller.js");
+const { publishArticle, renderEditForm } = require("../controllers/article.controller.js");
 const { renderDownCount } = require("../controllers/document.controller.js");
 
 router.get("/", renderHome);

@@ -119,9 +119,7 @@ const renderDocument = asyncHandler(async (req, res) => {
 });
 
 const renderArticles = asyncHandler(async (req, res) => {
-    const articles = await Article.find()
-        .populate("author", "name email")
-        .sort({ createdAt: -1 });
+    const articles = await Article.find().populate("author", "name email").sort({ createdAt: -1 });
     res.render("pages/articles", { articles });
 });
 
@@ -216,11 +214,7 @@ const renderFundamental = asyncHandler(async (req, res) => {
         currentPage,
         totalPages,
         totalRights: totalRights,
-        hasFilters: !!(
-            search ||
-            (category && category !== "all") ||
-            articleNumber
-        ),
+        hasFilters: !!(search || (category && category !== "all") || articleNumber),
         request: req,
     });
 });
@@ -259,8 +253,7 @@ const getLawyers = asyncHandler(async (req, res) => {
         if (!lawyer.lawyerProfile) return false;
 
         const s = search && search.trim().toLowerCase();
-        const specializationFilter =
-            specialization && specialization.toLowerCase();
+        const specializationFilter = specialization && specialization.toLowerCase();
         const locationFilter = location && location.toLowerCase();
 
         // Normalize fields for comparisons (lowercase or empty string)
@@ -279,23 +272,14 @@ const getLawyers = asyncHandler(async (req, res) => {
         }
 
         // Filter location if filter active
-        if (
-            locationFilter &&
-            locationFilter !== "all" &&
-            !city.includes(locationFilter)
-        ) {
+        if (locationFilter && locationFilter !== "all" && !city.includes(locationFilter)) {
             return false;
         }
 
         // Search filter on username, specialization, city, state (partial)
         if (s) {
             if (
-                !(
-                    username.includes(s) ||
-                    spec.includes(s) ||
-                    city.includes(s) ||
-                    state.includes(s)
-                )
+                !(username.includes(s) || spec.includes(s) || city.includes(s) || state.includes(s))
             ) {
                 return false;
             }

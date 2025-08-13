@@ -22,19 +22,11 @@ const isAuthorOrAdmin = asyncHandler(async (req, res, next) => {
 
         if (!article) return next(new ApiError(404, "Article not found"));
 
-        if (
-            article.author.toString() === req.user._id.toString() ||
-            req.user.isAdmin
-        ) {
+        if (article.author.toString() === req.user._id.toString() || req.user.isAdmin) {
             return next(); // ✅ Allow access
         }
 
-        return next(
-            new ApiError(
-                403,
-                "You are not authorized to edit/delete this article"
-            )
-        );
+        return next(new ApiError(403, "You are not authorized to edit/delete this article"));
     } catch (error) {
         next(new ApiError(500, "Server error while checking permissions"));
     }

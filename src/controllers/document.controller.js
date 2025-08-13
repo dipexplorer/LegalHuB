@@ -33,8 +33,7 @@ const createDocument = asyncHandler(async (req, res) => {
     // Check if state is a valid Indian state
     const normalizedState = state.trim();
     const matchedState = indianStates.find(
-        (validState) =>
-            validState.toLowerCase() === normalizedState.toLowerCase()
+        (validState) => validState.toLowerCase() === normalizedState.toLowerCase()
     );
 
     if (!matchedState) {
@@ -52,22 +51,13 @@ const createDocument = asyncHandler(async (req, res) => {
         requiredDocuments,
     });
 
-    res.status(201).json(
-        new ApiResponse(201, document, "Document created successfully")
-    );
+    res.status(201).json(new ApiResponse(201, document, "Document created successfully"));
 });
 
 // ✅ Get All Documents with filtering support
 const getAllDocuments = asyncHandler(async (req, res) => {
     // Extract filter parameters from query string
-    const {
-        search,
-        state,
-        department,
-        sortBy,
-        page = 1,
-        limit = 10,
-    } = req.query;
+    const { search, state, department, sortBy, page = 1, limit = 10 } = req.query;
 
     // Build filter object
     let filter = {};
@@ -119,10 +109,7 @@ const getAllDocuments = asyncHandler(async (req, res) => {
     const skip = (safePage - 1) * safeLimit;
 
     // Fetch filtered and sorted documents with pagination
-    const documents = await Document.find(filter)
-        .sort(sort)
-        .skip(skip)
-        .limit(safeLimit);
+    const documents = await Document.find(filter).sort(sort).skip(skip).limit(safeLimit);
 
     // Get total count for pagination
     const totalDocuments = await Document.countDocuments(filter);
@@ -137,8 +124,7 @@ const getAllDocuments = asyncHandler(async (req, res) => {
             currentPage: parseInt(page),
             totalPages: Math.ceil(totalDocuments / parseInt(limit)),
             totalDocuments,
-            hasNextPage:
-                parseInt(page) < Math.ceil(totalDocuments / parseInt(limit)),
+            hasNextPage: parseInt(page) < Math.ceil(totalDocuments / parseInt(limit)),
             hasPrevPage: parseInt(page) > 1,
         },
         filterOptions: {
@@ -153,9 +139,7 @@ const getAllDocuments = asyncHandler(async (req, res) => {
         },
     };
 
-    res.status(200).json(
-        new ApiResponse(200, responseData, "Documents fetched successfully")
-    );
+    res.status(200).json(new ApiResponse(200, responseData, "Documents fetched successfully"));
 });
 
 // ✅ Get Document by ID
@@ -169,9 +153,7 @@ const getDocumentById = asyncHandler(async (req, res) => {
     if (req.accepts("html")) {
         res.render("pages/documentDetails", { document });
     } else {
-        res.status(200).json(
-            new ApiResponse(200, document, "Document fetched successfully")
-        );
+        res.status(200).json(new ApiResponse(200, document, "Document fetched successfully"));
     }
 });
 
@@ -198,8 +180,7 @@ const updateDocument = asyncHandler(async (req, res) => {
     if (state) {
         const normalizedState = state.trim();
         const matchedState = indianStates.find(
-            (validState) =>
-                validState.toLowerCase() === normalizedState.toLowerCase()
+            (validState) => validState.toLowerCase() === normalizedState.toLowerCase()
         );
 
         if (!matchedState) {
@@ -216,14 +197,11 @@ const updateDocument = asyncHandler(async (req, res) => {
     document.state = validatedState || document.state;
     document.department = department || document.department;
     document.guidelines = guidelines || document.guidelines;
-    document.requiredDocuments =
-        requiredDocuments || document.requiredDocuments;
+    document.requiredDocuments = requiredDocuments || document.requiredDocuments;
 
     await document.save();
 
-    res.status(200).json(
-        new ApiResponse(200, document, "Document updated successfully")
-    );
+    res.status(200).json(new ApiResponse(200, document, "Document updated successfully"));
 });
 
 // ✅ Delete Document
@@ -235,9 +213,7 @@ const deleteDocument = asyncHandler(async (req, res) => {
 
     await document.deleteOne();
 
-    res.status(200).json(
-        new ApiResponse(200, null, "Document deleted successfully")
-    );
+    res.status(200).json(new ApiResponse(200, null, "Document deleted successfully"));
 });
 
 // ✅ Download Document
@@ -274,9 +250,7 @@ const trackDownload = asyncHandler(async (req, res) => {
     }
 
     await document.save();
-    res.status(200).json(
-        new ApiResponse(200, document, "Download tracked successfully")
-    );
+    res.status(200).json(new ApiResponse(200, document, "Download tracked successfully"));
 });
 
 const renderDownCount = asyncHandler(async (req, res) => {

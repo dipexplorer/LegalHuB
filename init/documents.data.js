@@ -3,8 +3,7 @@ const sampleDocuments = [
         title: "Permanent Residential Certificate (PRC) in Rural Areas",
         description:
             "Application process for obtaining a PRC for tribal and non-tribal citizens in rural areas.",
-        downloadLink:
-            "https://drive.google.com/file/d/1b9UxqPQtAUF-JeWnrxZg6KENmLf-6Khb/view",
+        downloadLink: "https://drive.google.com/file/d/1b9UxqPQtAUF-JeWnrxZg6KENmLf-6Khb/view",
         applyLink:
             "https://sewasetu.assam.gov.in/site/service-apply/permanent-residential-certificate-prc-in-rural-areas-nchac",
         state: "Arunachal Pradesh",
@@ -54,8 +53,7 @@ const sampleDocuments = [
     },
     {
         title: "Caste Certificate",
-        description:
-            "Get your SC/ST/OBC caste certificate for reservation and other purposes.",
+        description: "Get your SC/ST/OBC caste certificate for reservation and other purposes.",
         downloadLink: "https://example.com/caste-certificate-guidelines.pdf",
         applyLink: "https://edistrict.up.gov.in/",
         state: "Uttar Pradesh",
@@ -77,8 +75,7 @@ const sampleDocuments = [
     },
     {
         title: "Domicile Certificate",
-        description:
-            "Apply for domicile certificate for state residency proof.",
+        description: "Apply for domicile certificate for state residency proof.",
         downloadLink: "https://example.com/domicile-format.pdf",
         applyLink: "https://aaplesarkar.mahaonline.gov.in/",
         state: "Maharashtra",
@@ -99,8 +96,7 @@ const sampleDocuments = [
     },
     {
         title: "Senior Citizen Certificate",
-        description:
-            "For availing various benefits and schemes for senior citizens.",
+        description: "For availing various benefits and schemes for senior citizens.",
         downloadLink: "https://example.com/senior-citizen-info.pdf",
         applyLink: "https://edistrict.delhigovt.nic.in/",
         state: "Delhi",
@@ -121,8 +117,7 @@ const sampleDocuments = [
     },
     {
         title: "Birth Certificate",
-        description:
-            "Apply for official birth certificate from Municipal records.",
+        description: "Apply for official birth certificate from Municipal records.",
         downloadLink: "https://example.com/birth-certificate-process.pdf",
         applyLink: "https://www.wb.gov.in/",
         state: "West Bengal",
@@ -142,8 +137,7 @@ const sampleDocuments = [
     },
     {
         title: "Death Certificate",
-        description:
-            "Apply for death certificate for legal and official purposes.",
+        description: "Apply for death certificate for legal and official purposes.",
         downloadLink: "https://example.com/death-certificate-guidelines.pdf",
         applyLink: "https://kerala.gov.in/",
         state: "Kerala",
@@ -163,8 +157,7 @@ const sampleDocuments = [
     },
     {
         title: "Ration Card Application",
-        description:
-            "Apply for new ration card for accessing subsidized food grains.",
+        description: "Apply for new ration card for accessing subsidized food grains.",
         downloadLink: "https://example.com/ration-card-format.pdf",
         applyLink: "https://tnesevai.tn.gov.in/",
         state: "Tamil Nadu",
@@ -184,8 +177,7 @@ const sampleDocuments = [
     },
     {
         title: "Marriage Certificate",
-        description:
-            "Legal certificate of marriage for official documentation.",
+        description: "Legal certificate of marriage for official documentation.",
         downloadLink: "https://example.com/marriage-guidelines.pdf",
         applyLink: "https://biharregd.gov.in/",
         state: "Bihar",
@@ -206,8 +198,7 @@ const sampleDocuments = [
     },
     {
         title: "Disability Certificate",
-        description:
-            "For obtaining disability benefits and government support.",
+        description: "For obtaining disability benefits and government support.",
         downloadLink: "https://example.com/disability-cert.pdf",
         applyLink: "https://edistrict.cgstate.gov.in/",
         state: "Chhattisgarh",

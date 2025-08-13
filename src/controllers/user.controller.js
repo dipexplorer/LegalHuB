@@ -21,8 +21,7 @@ const transporter = nodemailer.createTransport({
 
 // 📌 Register User
 const registerAccount = asyncHandler(async (req, res) => {
-    const { username, email, password, confirmPassword, role, lawyerProfile } =
-        req.body;
+    const { username, email, password, confirmPassword, role, lawyerProfile } = req.body;
 
     // Validate role from backend whitelist
     const allowedRoles = ["user", "lawyer"];
@@ -53,9 +52,7 @@ const registerAccount = asyncHandler(async (req, res) => {
             req.flash("error", result.errors.join(", "));
             return res.redirect("/register");
         }
-        return res
-            .status(400)
-            .json({ errors: result.errors, strength: result.strength });
+        return res.status(400).json({ errors: result.errors, strength: result.strength });
     }
 
     // 3️⃣ Password match check
@@ -86,11 +83,7 @@ const registerAccount = asyncHandler(async (req, res) => {
 
         // 6️⃣ If role is lawyer, create LawyerProfile
         if (registeredUser.role === "lawyer") {
-            if (
-                !lawyerProfile ||
-                !lawyerProfile.specialization ||
-                !lawyerProfile.licenseNumber
-            ) {
+            if (!lawyerProfile || !lawyerProfile.specialization || !lawyerProfile.licenseNumber) {
                 const msg =
                     "Specialization and license number are required for lawyer registration";
                 if (req.accepts("html")) {
@@ -128,13 +121,7 @@ const registerAccount = asyncHandler(async (req, res) => {
             } else {
                 return res
                     .status(201)
-                    .json(
-                        new apiResponse(
-                            201,
-                            registeredUser,
-                            "User registered successfully"
-                        )
-                    );
+                    .json(new apiResponse(201, registeredUser, "User registered successfully"));
             }
         });
     } catch (err) {
@@ -166,8 +153,7 @@ const logoutUser = asyncHandler(async (req, res, next) => {
         if (err) return next(new apiError(500, "Logout failed"));
 
         req.session.destroy((err) => {
-            if (err)
-                return next(new apiError(500, "Session destruction failed"));
+            if (err) return next(new apiError(500, "Session destruction failed"));
 
             res.clearCookie("connect.sid"); // ✅ Session cookie clear karo
             return res.redirect("/"); // ✅ Redirect karo flash message ke saath
@@ -180,9 +166,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     if (!req.user) {
         return res.redirect("/login");
     }
-    const user = await User.findById(req.user._id)
-        .select("-password")
-        .populate("lawyerProfile");
+    const user = await User.findById(req.user._id).select("-password").populate("lawyerProfile");
     if (!user) {
         return res.redirect("/login");
     }
@@ -192,9 +176,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(200)
-            .json(
-                new apiResponse(200, user, "User profile fetched successfully")
-            );
+            .json(new apiResponse(200, user, "User profile fetched successfully"));
     }
 });
 
@@ -215,14 +197,9 @@ const renderLawyerUpdateForm = asyncHandler(async (req, res) => {
     if (!req.user) {
         return res.redirect("/login");
     }
-    const user = await User.findById(req.user._id)
-        .select("-password")
-        .populate("lawyerProfile");
+    const user = await User.findById(req.user._id).select("-password").populate("lawyerProfile");
     if (!user || user.role !== "lawyer") {
-        req.flash(
-            "error",
-            "You must be logged in as a lawyer to access this page"
-        );
+        req.flash("error", "You must be logged in as a lawyer to access this page");
         return res.redirect("/login");
     }
     res.render("users/updateLawyer", {
@@ -283,9 +260,7 @@ const updateUser = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(200)
-            .json(
-                new apiResponse(200, user, "User profile updated successfully")
-            );
+            .json(new apiResponse(200, user, "User profile updated successfully"));
     }
 });
 
@@ -296,9 +271,7 @@ const deleteUser = asyncHandler(async (req, res) => {
         req.flash("success", "Account deleted successfully!");
         return res.redirect("/login");
     } else {
-        return res
-            .status(200)
-            .json(new apiResponse(200, null, "User deleted successfully"));
+        return res.status(200).json(new apiResponse(200, null, "User deleted successfully"));
     }
 });
 
@@ -456,9 +429,7 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
             experience,
             city,
             state,
-            languagesSpoken: languagesSpoken
-                ? languagesSpoken.split(",").map((l) => l.trim())
-                : [],
+            languagesSpoken: languagesSpoken ? languagesSpoken.split(",").map((l) => l.trim()) : [],
             // Handle available slots as array for new profiles too
             availableSlots: Array.isArray(availableSlots)
                 ? availableSlots.filter((slot) => slot && slot.trim() !== "")
@@ -477,10 +448,8 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
         // Update existing profile
         lawyerProfileDoc = user.lawyerProfile;
         lawyerProfileDoc.bio = bio || lawyerProfileDoc.bio;
-        lawyerProfileDoc.specialization =
-            specialization || lawyerProfileDoc.specialization;
-        lawyerProfileDoc.licenseNumber =
-            licenseNumber || lawyerProfileDoc.licenseNumber;
+        lawyerProfileDoc.specialization = specialization || lawyerProfileDoc.specialization;
+        lawyerProfileDoc.licenseNumber = licenseNumber || lawyerProfileDoc.licenseNumber;
         lawyerProfileDoc.experience = experience ?? lawyerProfileDoc.experience;
         lawyerProfileDoc.city = city || lawyerProfileDoc.city;
         lawyerProfileDoc.state = state || lawyerProfileDoc.state;
@@ -512,13 +481,7 @@ const updateLawyerProfile = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(200)
-            .json(
-                new apiResponse(
-                    200,
-                    lawyerProfileDoc,
-                    "Lawyer profile updated successfully"
-                )
-            );
+            .json(new apiResponse(200, lawyerProfileDoc, "Lawyer profile updated successfully"));
     }
 });
 
@@ -595,13 +558,7 @@ const applyForLawyer = asyncHandler(async (req, res) => {
         }
         return res
             .status(200)
-            .json(
-                new apiResponse(
-                    200,
-                    lawyerProfile,
-                    "Application submitted successfully"
-                )
-            );
+            .json(new apiResponse(200, lawyerProfile, "Application submitted successfully"));
     } catch (err) {
         if (req.accepts("html")) {
             req.flash("error", err.message);

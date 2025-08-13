@@ -44,9 +44,7 @@ const smartSearch = asyncHandler(async (req, res) => {
         // articles
     };
 
-    res.status(200).json(
-        new ApiResponse(200, results, "Search results fetched successfully")
-    );
+    res.status(200).json(new ApiResponse(200, results, "Search results fetched successfully"));
 });
 
 module.exports = { smartSearch };

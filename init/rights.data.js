@@ -12,8 +12,7 @@ const sampleRights = [
         articleNumber: "Article 17",
         description:
             "Article 17 abolishes 'untouchability' and forbids its practice in any form. Enforcement of any disability arising from 'untouchability' shall be an offence punishable in accordance with law.",
-        sourceLink:
-            "https://www.india.gov.in/my-government/constitution-india/article-17",
+        sourceLink: "https://www.india.gov.in/my-government/constitution-india/article-17",
         category: "Right to Equality",
     },
     {
@@ -21,8 +20,7 @@ const sampleRights = [
         articleNumber: "Article 16",
         description:
             "Ensures equality of opportunity for all citizens in matters relating to employment or appointment to any office under the State.",
-        sourceLink:
-            "https://legislative.gov.in/constitution-of-india/16-equality-opportunity",
+        sourceLink: "https://legislative.gov.in/constitution-of-india/16-equality-opportunity",
         category: "Right to Equality",
     },
     {

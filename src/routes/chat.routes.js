@@ -1,29 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getOrCreateChatRoom,
-  getUserChatRooms,
-  getMessages,
-  renderChatPage,
-  getOrCreateChatRoomWithLawyer,
-  deleteMessage,
-  deleteChatRoom,
+    getOrCreateChatRoom,
+    getUserChatRooms,
+    getMessages,
+    renderChatPage,
+    getOrCreateChatRoomWithLawyer,
+    deleteMessage,
+    deleteChatRoom,
 } = require("../controllers/chat.controller");
+const { isLoggedIn, ownChatRoom } = require("../middlewares/auth.middleware.js");
 
-// Auth middleware example
-const isAuthenticated = (req, res, next) => {
-  if (!req.user) return res.status(401).json({ msg: "Not authenticated" });
-  next();
-};
-
-router.get("/", isAuthenticated, renderChatPage);
-router.get("/rooms", isAuthenticated, getUserChatRooms);
-router.get("/room/:appointmentId", isAuthenticated, getOrCreateChatRoom);
-router.get("/lawyer/:lawyerId", isAuthenticated, getOrCreateChatRoomWithLawyer);
-router.get("/messages/:chatRoomId", isAuthenticated, getMessages);
+router.get("/", isLoggedIn, renderChatPage);
+router.get("/rooms", isLoggedIn, getUserChatRooms);
+router.get("/room/:appointmentId", isLoggedIn, getOrCreateChatRoom);
+router.get("/lawyer/:lawyerId", isLoggedIn, getOrCreateChatRoomWithLawyer);
+router.get("/messages/:chatRoomId", isLoggedIn, ownChatRoom, getMessages);
 
 // NEW
-router.delete("/messages/:messageId", isAuthenticated, deleteMessage);
-router.delete("/room/:chatRoomId", isAuthenticated, deleteChatRoom);
+router.delete("/messages/:messageId", isLoggedIn, deleteMessage);
+router.delete("/room/:chatRoomId", isLoggedIn, ownChatRoom, deleteChatRoom);
 
 module.exports = router;

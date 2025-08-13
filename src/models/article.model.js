@@ -67,10 +67,7 @@ const articleSchema = new mongoose.Schema(
             default: [],
             validate: {
                 validator: function (tags) {
-                    return (
-                        Array.isArray(tags) &&
-                        new Set(tags).size === tags.length
-                    );
+                    return Array.isArray(tags) && new Set(tags).size === tags.length;
                 },
                 message: "Tags must be unique",
             },

@@ -143,13 +143,7 @@ app.use((err, req, res, next) => {
 
     return res
         .status(err.statusCode || 500)
-        .json(
-            new apiResponse(
-                err.statusCode || 500,
-                null,
-                err.message || "Internal Server Error"
-            )
-        );
+        .json(new apiResponse(err.statusCode || 500, null, err.message || "Internal Server Error"));
 });
 
 module.exports = app;

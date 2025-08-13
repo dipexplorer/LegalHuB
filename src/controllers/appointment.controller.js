@@ -29,11 +29,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
         role: "lawyer",
         isActive: true,
     }).populate("lawyerProfile");
-    if (
-        !lawyerUser ||
-        !lawyerUser.lawyerProfile ||
-        !lawyerUser.lawyerProfile.isVerified
-    ) {
+    if (!lawyerUser || !lawyerUser.lawyerProfile || !lawyerUser.lawyerProfile.isVerified) {
         throw new apiError(404, "Lawyer not found or not verified");
     }
 
@@ -91,20 +87,11 @@ const bookAppointment = asyncHandler(async (req, res) => {
         }
         return res
             .status(201)
-            .json(
-                new apiResponse(
-                    201,
-                    appointment,
-                    "Appointment booked successfully"
-                )
-            );
+            .json(new apiResponse(201, appointment, "Appointment booked successfully"));
     } catch (err) {
         // handle duplicate key (unique index) gracefully
         if (err.code === 11000) {
-            throw new apiError(
-                409,
-                "Time slot already taken (race condition). Try another slot."
-            );
+            throw new apiError(409, "Time slot already taken (race condition). Try another slot.");
         }
         throw err;
     }
@@ -146,13 +133,7 @@ const getAppointments = asyncHandler(async (req, res) => {
     }
     return res
         .status(200)
-        .json(
-            new apiResponse(
-                200,
-                appointments,
-                "Appointments fetched successfully"
-            )
-        );
+        .json(new apiResponse(200, appointments, "Appointments fetched successfully"));
 });
 
 /** Update appointment status (approve/reject/cancel/complete) - only lawyer or admin */
@@ -171,16 +152,10 @@ const updateAppointmentStatus = asyncHandler(async (req, res) => {
     // Authorization: lawyer who owns it or admin
     if (user.role === "lawyer") {
         if (appointment.lawyer.toString() !== user._id.toString()) {
-            throw new apiError(
-                403,
-                "You are not authorized to update this appointment"
-            );
+            throw new apiError(403, "You are not authorized to update this appointment");
         }
     } else if (user.role !== "admin") {
-        throw new apiError(
-            403,
-            "You are not authorized to update this appointment"
-        );
+        throw new apiError(403, "You are not authorized to update this appointment");
     }
 
     appointment.status = status;
@@ -192,13 +167,7 @@ const updateAppointmentStatus = asyncHandler(async (req, res) => {
     }
     return res
         .status(200)
-        .json(
-            new apiResponse(
-                200,
-                appointment,
-                "Appointment status updated successfully"
-            )
-        );
+        .json(new apiResponse(200, appointment, "Appointment status updated successfully"));
 });
 
 /** Cancel appointment (client or lawyer who owns it, or admin) */
@@ -214,23 +183,14 @@ const cancelAppointment = asyncHandler(async (req, res) => {
     // client may cancel their own:
     if (user.role === "user") {
         if (appointment.client.toString() !== user._id.toString()) {
-            throw new apiError(
-                403,
-                "You are not authorized to cancel this appointment"
-            );
+            throw new apiError(403, "You are not authorized to cancel this appointment");
         }
     } else if (user.role === "lawyer") {
         if (appointment.lawyer.toString() !== user._id.toString()) {
-            throw new apiError(
-                403,
-                "You are not authorized to cancel this appointment"
-            );
+            throw new apiError(403, "You are not authorized to cancel this appointment");
         }
     } else if (user.role !== "admin") {
-        throw new apiError(
-            403,
-            "You are not authorized to cancel this appointment"
-        );
+        throw new apiError(403, "You are not authorized to cancel this appointment");
     }
 
     appointment.status = "cancelled";
@@ -242,13 +202,7 @@ const cancelAppointment = asyncHandler(async (req, res) => {
     }
     return res
         .status(200)
-        .json(
-            new apiResponse(
-                200,
-                appointment,
-                "Appointment cancelled successfully"
-            )
-        );
+        .json(new apiResponse(200, appointment, "Appointment cancelled successfully"));
 });
 
 /** Get available slots for a lawyer on a date */
@@ -257,8 +211,7 @@ const getAvailableSlots = asyncHandler(async (req, res) => {
     if (!lawyerId || !date) throw new apiError(400, "Missing parameters");
 
     const lawyerUser = await User.findById(lawyerId).populate("lawyerProfile");
-    if (!lawyerUser || !lawyerUser.lawyerProfile)
-        throw new apiError(404, "Lawyer not found");
+    if (!lawyerUser || !lawyerUser.lawyerProfile) throw new apiError(404, "Lawyer not found");
 
     // Normalize date-only
     const appointmentDate = normalizeDateOnly(date);
@@ -291,13 +244,9 @@ const getAvailableSlots = asyncHandler(async (req, res) => {
     }
 
     // remove booked
-    const freeSlots = availableSlots.filter(
-        (slot) => !bookedSlots.includes(slot)
-    );
+    const freeSlots = availableSlots.filter((slot) => !bookedSlots.includes(slot));
 
-    return res
-        .status(200)
-        .json(new apiResponse(200, freeSlots, "Available slots fetched"));
+    return res.status(200).json(new apiResponse(200, freeSlots, "Available slots fetched"));
 });
 
 const renderAppointmentStats = asyncHandler(async (req, res) => {

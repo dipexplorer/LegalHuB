@@ -14,11 +14,7 @@ const getLawyers = asyncHandler(async (req, res) => {
     if (req.accepts("html")) {
         return res.render("pages/lawyers", { lawyers });
     } else {
-        return res
-            .status(200)
-            .json(
-                new apiResponse(200, lawyers, "Lawyers fetched successfully")
-            );
+        return res.status(200).json(new apiResponse(200, lawyers, "Lawyers fetched successfully"));
     }
 });
 
@@ -38,13 +34,7 @@ const viewLawyer = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(200)
-            .json(
-                new apiResponse(
-                    200,
-                    lawyer,
-                    "Lawyer profile fetched successfully"
-                )
-            );
+            .json(new apiResponse(200, lawyer, "Lawyer profile fetched successfully"));
     }
 });
 

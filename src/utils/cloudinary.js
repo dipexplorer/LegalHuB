@@ -36,10 +36,7 @@ const uploadOnCloudinary = async (localFilePath) => {
             await fs.promises.unlink(localFilePath);
             console.log("Local file deleted after failure");
         } catch (unlinkErr) {
-            console.error(
-                "Error deleting local file after failure:",
-                unlinkErr
-            );
+            console.error("Error deleting local file after failure:", unlinkErr);
         }
         return null;
     }

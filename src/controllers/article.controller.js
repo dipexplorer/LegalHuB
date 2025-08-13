@@ -31,14 +31,8 @@ const createArticle = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Title is required");
     }
 
-    if (
-        sectionContents.length === 0 ||
-        sectionContents.every((content) => !content.trim())
-    ) {
-        throw new ApiError(
-            400,
-            "At least one section with content is required"
-        );
+    if (sectionContents.length === 0 || sectionContents.every((content) => !content.trim())) {
+        throw new ApiError(400, "At least one section with content is required");
     }
 
     const sections = sectionContents.map((content, index) => {
@@ -79,11 +73,7 @@ const createArticle = asyncHandler(async (req, res) => {
     if (req.accepts("html")) {
         return res.redirect("/articles");
     } else {
-        return res
-            .status(201)
-            .json(
-                new ApiResponse(201, article, "Article created successfully")
-            );
+        return res.status(201).json(new ApiResponse(201, article, "Article created successfully"));
     }
 });
 
@@ -94,9 +84,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
         .sort({ createdAt: -1 });
 
     // res.render('pages/articles', { articles });
-    return res
-        .status(200)
-        .json(new ApiResponse(200, articles, "Articles fetched successfully"));
+    return res.status(200).json(new ApiResponse(200, articles, "Articles fetched successfully"));
 });
 
 // ✅ Sanitize HTML
@@ -128,18 +116,13 @@ const cleanHtml = (html) =>
         },
         exclusiveFilter: (frame) =>
             // ✅ Remove empty tags with no visible content
-            (frame.tag === "p" ||
-                frame.tag === "div" ||
-                frame.tag === "span") &&
+            (frame.tag === "p" || frame.tag === "div" || frame.tag === "span") &&
             !frame.text.trim(),
     });
 
 // ✅ Get Article by ID
 const getArticleById = asyncHandler(async (req, res) => {
-    const article = await Article.findById(req.params.id).populate(
-        "author",
-        "name email role"
-    );
+    const article = await Article.findById(req.params.id).populate("author", "name email role");
 
     if (!article) {
         throw new ApiError(404, "Article not found");
@@ -163,13 +146,7 @@ const getArticleById = asyncHandler(async (req, res) => {
     } else {
         return res
             .status(200)
-            .json(
-                new ApiResponse(
-                    200,
-                    cleanArticle,
-                    "Article fetched successfully"
-                )
-            );
+            .json(new ApiResponse(200, cleanArticle, "Article fetched successfully"));
     }
 });
 
@@ -195,10 +172,7 @@ const updateArticle = asyncHandler(async (req, res) => {
     // Authorization check
     const isAdmin = req.user?.role === "admin";
     if (article.author.toString() !== req.user?._id.toString() && !isAdmin) {
-        throw new ApiError(
-            403,
-            "Unauthorized: You can only update your own articles"
-        );
+        throw new ApiError(403, "Unauthorized: You can only update your own articles");
     }
 
     // Normalize section-related fields
@@ -209,14 +183,8 @@ const updateArticle = asyncHandler(async (req, res) => {
     sectionListItems = toArray(sectionListItems);
 
     // Validate at least one section has content
-    if (
-        sectionContents.length === 0 ||
-        sectionContents.every((content) => !content.trim())
-    ) {
-        throw new ApiError(
-            400,
-            "At least one section with content is required"
-        );
+    if (sectionContents.length === 0 || sectionContents.every((content) => !content.trim())) {
+        throw new ApiError(400, "At least one section with content is required");
     }
 
     // Build updated sections
@@ -251,20 +219,14 @@ const updateArticle = asyncHandler(async (req, res) => {
     article.introduction = introduction?.trim() || article.introduction;
     article.conclusion = conclusion?.trim() || article.conclusion;
     article.sections = updatedSections;
-    article.tags = tags
-        ? tags.split(",").map((tag) => tag.trim())
-        : article.tags;
+    article.tags = tags ? tags.split(",").map((tag) => tag.trim()) : article.tags;
 
     await article.save();
 
     if (req.accepts("html")) {
         return res.redirect(`/api/articles/${article._id}`);
     } else {
-        return res
-            .status(200)
-            .json(
-                new ApiResponse(200, article, "Article updated successfully")
-            );
+        return res.status(200).json(new ApiResponse(200, article, "Article updated successfully"));
     }
 });
 
@@ -279,10 +241,7 @@ const deleteArticle = asyncHandler(async (req, res) => {
     // Check if the logged-in user is the author or an admin
     const isAdmin = req.user?.role === "admin";
     if (article.author.toString() !== req.user?._id.toString() && !isAdmin) {
-        throw new ApiError(
-            403,
-            "Unauthorized: You can only delete your own articles"
-        );
+        throw new ApiError(403, "Unauthorized: You can only delete your own articles");
     }
 
     await Article.findByIdAndDelete(req.params.id);
@@ -290,9 +249,7 @@ const deleteArticle = asyncHandler(async (req, res) => {
     if (req.accepts("html")) {
         return res.redirect("/articles");
     } else {
-        return res
-            .status(200)
-            .json(new ApiResponse(200, null, "Article deleted successfully"));
+        return res.status(200).json(new ApiResponse(200, null, "Article deleted successfully"));
     }
 });
 
