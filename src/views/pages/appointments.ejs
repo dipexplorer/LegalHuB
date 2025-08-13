@@ -2,7 +2,7 @@
 
 <style>
   .appointment-container {
-    max-width: 1000px;
+    max-width: 80%;
     margin: 2rem auto;
     padding: 0 1rem;
     color: #e0e0e0;
@@ -169,6 +169,11 @@
               <% if (user.role === "user") { %>
                 <% if (["pending", "approved"].includes(appointment.status)) { %>
                   <button
+                    class="action-btn"
+                    aria-label="Chat with lawyer"
+                    title="Chat with lawyer"
+                    onclick="window.location.href='/chat/room/<%= appointment._id %>'">Chat</button>
+                  <button
                     class="action-btn danger"
                     aria-label="Cancel appointment"
                     title="Cancel this appointment"
@@ -178,6 +183,11 @@
                 <% } %>
               <% } else if (user.role === "lawyer") { %>
                 <% if (appointment.status === "pending") { %>
+                  <button
+                    class="action-btn"
+                    aria-label="Chat with client"
+                    title="Chat with client"
+                    onclick="window.location.href='/chat/room/<%= appointment._id %>'">Chat</button>
                   <button
                     class="action-btn"
                     aria-label="Approve appointment"
@@ -194,6 +204,11 @@
                     title="Cancel this appointment"
                     onclick="updateStatus('<%= appointment._id %>', 'cancelled')">Cancel</button>
                 <% } else if (appointment.status === "approved") { %>
+                  <button
+                    class="action-btn"
+                    aria-label="Chat with client"
+                    title="Chat with client"
+                    onclick="window.location.href='/chat/room/<%= appointment._id %>'">Chat</button>
                   <button
                     class="action-btn danger"
                     aria-label="Cancel appointment"

@@ -1,98 +1,341 @@
 <%- layout("/layouts/boilerplate") -%>
 
 <style>
+  body { background: #181818; font-family: Inter, system-ui, Arial, sans-serif; }
+
   .chat-container {
-    max-width: 900px;
-    margin: 2rem auto;
-    background: #2b2b2b;
-    border-radius: 10px;
-    color: #eee;
-    display: flex;
-    height: 600px;
-    box-shadow: 0 0 10px #9c27b0;
+    max-width: 1100px; margin: 2rem auto; background: #222; border-radius: 12px;
+    color: #eee; display: flex; height: 80vh; box-shadow: 0 0 15px #9c27b0; overflow: hidden;
   }
-  .chat-rooms {
-    width: 30%;
-    border-right: 1px solid #444;
-    overflow-y: auto;
+
+  /* SIDEBAR */
+  .chat-rooms { width: 32%; border-right: 1px solid #333; overflow-y: auto; background: #1a1a1a; }
+  .chat-rooms-header { padding: .9rem 1rem; font-weight: 700; border-bottom: 1px solid #333; }
+  .chat-room-item {
+    display: flex; align-items: center; gap: .75rem; padding: .8rem 1rem;
+    border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: background .2s;
   }
-  .chat-rooms button {
-    width: 100%;
-    padding: 1rem;
-    border: none;
-    background: #3a3a3a;
-    color: white;
-    text-align: left;
-    cursor: pointer;
-    border-bottom: 1px solid #555;
+  .chat-room-item:hover, .chat-room-item.active { background: #262626; }
+  .avatar {
+    width: 40px; height: 40px; background: #9c27b0; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
   }
-  .chat-rooms button:hover,
-  .chat-rooms button.active {
-    background: #9c27b0;
+  .room-info { flex: 1; min-width: 0; }
+  .room-name { font-weight: 700; font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .last-message { font-size: .8rem; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .room-meta { font-size: .7rem; opacity: .6; white-space: nowrap; }
+
+  /* MAIN */
+  .chat-window { width: 68%; display: flex; flex-direction: column; background: #121212; }
+  .chat-header {
+    display: flex; align-items: center; gap: .8rem; padding: .8rem 1rem; border-bottom: 1px solid #333; background: #1a1a1a;
   }
-  .chat-window {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
+  .chat-header .user-details { flex: 1; }
+  .chat-header .user-name { font-weight: 700; font-size: 1rem; }
+  .chat-header .user-meta { font-size: .8rem; opacity: .7; }
+
+  .header-actions { display: flex; gap: .5rem; }
+  .icon-btn {
+    background: transparent; color: #ddd; border: 1px solid #444; padding: .35rem .6rem; border-radius: 8px; cursor: pointer;
   }
+  .icon-btn:hover { background: #2a2a2a; }
+
+  /* MESSAGES */
   .messages {
-    flex-grow: 1;
-    padding: 1rem;
-    overflow-y: auto;
-    background: #1e1e1e;
+    flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: .5rem;
+    background: #101010;
   }
   .message {
-    margin-bottom: 1rem;
-    max-width: 70%;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    word-wrap: break-word;
+    max-width: 70%; padding: .55rem .8rem; border-radius: 14px; word-wrap: break-word; position: relative;
   }
-  .message.sent {
-    background: #9c27b0;
-    align-self: flex-end;
+  .message.sent { background: #9c27b0; color: #fff; align-self: flex-end; }
+  .message.received { background: #2f2f2f; align-self: flex-start; }
+  .message.deleted { background: #444 !important; color: #bbb !important; font-style: italic; }
+  .message .meta { font-size: .7rem; opacity: .8; margin-top: .25rem; text-align: right; }
+  .message .bubble-actions {
+    position: absolute; top: -10px; right: -10px; display: none;
   }
-  .message.received {
-    background: #444;
-    align-self: flex-start;
+  .message:hover .bubble-actions { display: block; }
+  .bubble-actions button {
+    background: #1f1f1f; border: 1px solid #444; color: #ddd; padding: .2rem .4rem; border-radius: 6px; cursor: pointer; font-size: .75rem;
   }
-  form#messageForm {
-    display: flex;
-    padding: 1rem;
-    background: #333;
+  .bubble-actions button:hover { background: #2b2b2b; }
+
+  /* INPUT */
+  .typing { font-size: .8rem; padding: .3rem 1rem; opacity: .7; }
+  form#messageForm { display: flex; gap: .8rem; padding: .8rem; border-top: 1px solid #333; background: #1a1a1a; }
+  #messageInput {
+    flex: 1; padding: .9rem 1rem; border-radius: 22px; border: none; outline: none; font-size: 1rem; background: #2b2b2b; color: #fff;
   }
-  form#messageForm input[type="text"] {
-    flex-grow: 1;
-    padding: 0.8rem;
-    border-radius: 20px;
-    border: none;
-    font-size: 1rem;
-    outline: none;
-  }
-  form#messageForm button {
-    background: #9c27b0;
-    border: none;
-    padding: 0 1rem;
-    margin-left: 1rem;
-    border-radius: 20px;
-    cursor: pointer;
-    color: white;
-    font-weight: 700;
+  #sendBtn { background: #9c27b0; border: none; color: #fff; font-weight: 700; padding: 0 1rem; border-radius: 18px; cursor: pointer; }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    .chat-container { flex-direction: column; height: calc(100vh - 3rem); }
+    .chat-rooms, .chat-window { width: 100%; }
+    .chat-rooms { max-height: 45%; }
   }
 </style>
 
-<section class="chat-container" aria-label="Chat Application">
-  <div class="chat-rooms" id="chatRoomsList" role="list" aria-label="Chat Rooms">
-    <!-- Chat rooms will load here -->
+<section class="chat-container" id="chatContainer" data-user-id="<%= user._id %>">
+  <div class="chat-rooms">
+    <div class="chat-rooms-header">Chats</div>
+    <div id="chatRoomsList"></div>
   </div>
-  <div class="chat-window" id="chatWindow" aria-live="polite" aria-atomic="false" style="display:none;">
+
+  <div class="chat-window" id="chatWindow" style="display:none;">
+    <div class="chat-header" id="chatHeader"></div>
+    <div class="typing" id="typingIndicator" style="display:none;">Typing…</div>
     <div class="messages" id="messagesContainer" role="log" aria-relevant="additions"></div>
-    <form id="messageForm" aria-label="Send message form">
-      <input type="text" id="messageInput" autocomplete="off" placeholder="Type a message..." required aria-required="true" />
-      <button type="submit" aria-label="Send message">Send</button>
+    <form id="messageForm" autocomplete="off">
+      <input type="text" id="messageInput" placeholder="Type a message…" required />
+      <button id="sendBtn" type="submit">Send</button>
     </form>
   </div>
 </section>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/chat.js"></script>
+<script>
+  const socket = io();
+  const state = {
+    currentChatRoomId: null,
+    currentUserId: document.getElementById('chatContainer').dataset.userId,
+    currentParticipants: [],
+    roomDomMap: new Map(),
+  };
+
+  const fmtTime = (d) => new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  async function loadChatRooms(initialRoomId) {
+    const res = await fetch("/chat/rooms");
+    if (!res.ok) return;
+    const rooms = await res.json();
+    const list = document.getElementById("chatRoomsList");
+    list.innerHTML = rooms.length ? "" : "<p style='padding:1rem;color:#bbb;'>No active chats</p>";
+    state.roomDomMap.clear();
+
+    rooms.forEach((room, index) => {
+      const other = (room.participants || []).find(p => String(p._id) !== String(state.currentUserId));
+      const name = other?.name || other?.username || "Unknown";
+      const avatarLetter = (name || "U").charAt(0).toUpperCase();
+      const lastMsg = room.lastMessage || "No messages yet";
+      const updatedAt = room.lastMessageAt || room.updatedAt;
+
+      const div = document.createElement("div");
+      div.className = "chat-room-item";
+      div.dataset.roomId = room._id;
+      div.innerHTML = `
+        <div class="avatar">${avatarLetter}</div>
+        <div class="room-info">
+          <div class="room-name">${name}</div>
+          <div class="last-message" id="prev-${room._id}">${lastMsg}</div>
+        </div>
+        <div class="room-meta" id="time-${room._id}">${updatedAt ? fmtTime(updatedAt) : ""}</div>
+      `;
+      div.addEventListener("click", () => openChatRoom(room, div));
+
+      state.roomDomMap.set(String(room._id), div);
+      list.appendChild(div);
+
+      if ((initialRoomId && String(room._id) === String(initialRoomId)) || (!initialRoomId && index === 0)) {
+        setTimeout(() => openChatRoom(room, div), 0);
+      }
+    });
+  }
+
+  async function openChatRoom(room, el) {
+    if (!room || !room._id) return;
+    state.currentChatRoomId = String(room._id);
+    state.currentParticipants = (room.participants || []).map(p => (typeof p === 'string') ? p : (p._id || p.id));
+
+    socket.emit("joinRoom", state.currentChatRoomId);
+    document.querySelectorAll(".chat-room-item").forEach(b => b.classList.remove("active"));
+    el.classList.add("active");
+    document.getElementById("chatWindow").style.display = "flex";
+
+    const other = (room.participants || []).find(p => String(p._id) !== String(state.currentUserId));
+    const name = other?.name || other?.username || "Unknown";
+    const avatarLetter = name.charAt(0).toUpperCase();
+    const appointmentDate = room.appointment?.date ? new Date(room.appointment.date).toLocaleDateString() : "N/A";
+    document.getElementById("chatHeader").innerHTML = `
+      <div class="avatar" style="width:44px;height:44px;">${avatarLetter}</div>
+      <div class="user-details">
+        <div class="user-name">${name}</div>
+        <div class="user-meta">Appointment: ${appointmentDate}</div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="deleteChatBtn" title="Delete chat">Delete Chat</button>
+      </div>
+    `;
+    document.getElementById("deleteChatBtn").onclick = onDeleteChat;
+
+    const res = await fetch(`/chat/messages/${state.currentChatRoomId}`);
+    if (!res.ok) return;
+    const msgs = await res.json();
+
+    const container = document.getElementById("messagesContainer");
+    container.innerHTML = "";
+    msgs.forEach(addMessageToContainer);
+    container.scrollTop = container.scrollHeight;
+
+    socket.emit("markSeen", { chatRoomId: state.currentChatRoomId, userId: state.currentUserId });
+  }
+
+  function addMessageToContainer(msg) {
+    const container = document.getElementById("messagesContainer");
+    const div = document.createElement("div");
+    div.classList.add("message");
+
+    const senderId = msg.sender?._id || msg.sender;
+    const isSent = String(senderId) === String(state.currentUserId);
+    div.classList.add(isSent ? "sent" : "received");
+    div.dataset.messageId = msg._id;
+
+    const contentEl = document.createElement("div");
+    contentEl.className = "content";
+    if (msg.deleted) {
+      div.classList.add("deleted");
+      contentEl.textContent = "This message has been deleted";
+    } else {
+      contentEl.textContent = msg.content;
+    }
+    div.appendChild(contentEl);
+
+    const metaEl = document.createElement("div");
+    metaEl.className = "meta";
+    const ticks = isSent ? (msg.seen ? "✔✔" : "✔") : "";
+    metaEl.innerHTML = `${fmtTime(msg.createdAt)} ${ticks}`;
+    div.appendChild(metaEl);
+
+    if (isSent && !msg.deleted) {
+      const actions = document.createElement("div");
+      actions.className = "bubble-actions";
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => onDeleteMessage(msg._id, div, contentEl));
+      actions.appendChild(delBtn);
+      div.appendChild(actions);
+    }
+
+    container.appendChild(div);
+  }
+
+  async function onDeleteMessage(messageId, bubbleEl, contentEl) {
+    if (!confirm("Delete this message for everyone?")) return;
+    const res = await fetch(`/chat/messages/${messageId}`, { method: "DELETE" });
+    if (res.ok) {
+      bubbleEl.classList.add("deleted");
+      contentEl.textContent = "This message has been deleted";
+      const btnActions = bubbleEl.querySelector(".bubble-actions");
+      if (btnActions) btnActions.remove();
+      refreshRoomListAfterChange();
+    }
+  }
+
+  async function onDeleteChat() {
+    if (!state.currentChatRoomId) return;
+    if (!confirm("Delete this entire chat? This cannot be undone.")) return;
+    const res = await fetch(`/chat/room/${state.currentChatRoomId}`, { method: "DELETE" });
+    if (res.ok) {
+      const el = state.roomDomMap.get(state.currentChatRoomId);
+      if (el) el.remove();
+      document.getElementById("messagesContainer").innerHTML = "";
+      document.getElementById("chatWindow").style.display = "none";
+      state.currentChatRoomId = null;
+      refreshRoomListAfterChange();
+    }
+  }
+
+  document.getElementById("messageForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = document.getElementById("messageInput");
+    const content = input.value.trim();
+    if (!content || !state.currentChatRoomId) return;
+
+    const receiverId = state.currentParticipants.find(id => String(id) !== String(state.currentUserId)) || null;
+
+    socket.emit("sendMessage", {
+      chatRoomId: state.currentChatRoomId,
+      senderId: state.currentUserId,
+      receiverId,
+      content
+    });
+
+    socket.emit("stopTyping", { chatRoomId: state.currentChatRoomId, userId: state.currentUserId });
+    input.value = "";
+  });
+
+  const messageInput = document.getElementById("messageInput");
+  let typingTimeout;
+  messageInput.addEventListener("input", () => {
+    if (!state.currentChatRoomId) return;
+    socket.emit("typing", { chatRoomId: state.currentChatRoomId, userId: state.currentUserId });
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      socket.emit("stopTyping", { chatRoomId: state.currentChatRoomId, userId: state.currentUserId });
+    }, 900);
+  });
+
+  socket.on("newMessage", (msg) => {
+    const roomId = String(msg.chatRoom?._id || msg.chatRoom);
+    const prev = document.getElementById(`prev-${roomId}`);
+    const time = document.getElementById(`time-${roomId}`);
+    if (prev) prev.textContent = msg.content;
+    if (time) time.textContent = fmtTime(msg.createdAt);
+    bumpRoomToTop(roomId);
+
+    if (state.currentChatRoomId && roomId === state.currentChatRoomId) {
+      addMessageToContainer(msg);
+      const container = document.getElementById("messagesContainer");
+      container.scrollTop = container.scrollHeight;
+      socket.emit("markSeen", { chatRoomId: state.currentChatRoomId, userId: state.currentUserId });
+    }
+  });
+
+  socket.on("messageDeleted", ({ messageId }) => {
+    const bubble = document.querySelector(`.message[data-message-id="${messageId}"]`);
+    if (bubble) {
+      bubble.classList.add("deleted");
+      const contentEl = bubble.querySelector(".content");
+      if (contentEl) contentEl.textContent = "This message has been deleted";
+      const actions = bubble.querySelector(".bubble-actions");
+      if (actions) actions.remove();
+    }
+  });
+
+  socket.on("typing", (userId) => {
+    if (String(userId) !== String(state.currentUserId)) {
+      document.getElementById("typingIndicator").style.display = "block";
+    }
+  });
+  socket.on("stopTyping", () => {
+    document.getElementById("typingIndicator").style.display = "none";
+  });
+
+  socket.on("messagesSeen", ({ chatRoomId }) => {
+    if (state.currentChatRoomId && String(chatRoomId) === String(state.currentChatRoomId)) {
+      document.querySelectorAll(".message.sent .meta").forEach(meta => {
+        meta.innerHTML = meta.innerHTML.replace(/✔✔|✔/g, "").trim(); // remove old ticks
+        meta.innerHTML = `${meta.innerHTML} ✔✔`.trim();
+      });
+    }
+  });
+
+  function bumpRoomToTop(roomId) {
+    const el = state.roomDomMap.get(roomId);
+    if (!el || !el.parentElement) return;
+    el.parentElement.prepend(el);
+  }
+
+  async function refreshRoomListAfterChange() {
+    const url = new URL(window.location.href);
+    const roomId = url.searchParams.get('roomId') || "<%= roomId %>";
+    await loadChatRooms(roomId);
+  }
+
+  window.onload = async () => {
+    const url = new URL(window.location.href);
+    const roomId = url.searchParams.get('roomId') || "<%= roomId %>";
+    await loadChatRooms(roomId);
+  };
+</script>

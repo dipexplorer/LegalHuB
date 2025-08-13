@@ -15,6 +15,11 @@ const chatRoomSchema = new Schema(
             ref: "Appointment",
         }, // link to booking
         lastMessage: { type: String },
+        lastMessageAt: { type: Date }, // helpful for sorting; set on send
+        lastMessageSender: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
     },
     {
         timestamps: true,
