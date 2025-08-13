@@ -81,31 +81,24 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 // 📌 Login User
-const loginUser = asyncHandler(async (req, res, next) => {
-    // console.log("login");
+const loginUser = asyncHandler(async (req, res) => {
+//  console.log("login");
     req.flash("success", "Logged in successfully!");
     return res.redirect("/"); // ✅ Redirect after login
 });
 
 // 📌 Logout User
-const logoutUser = asyncHandler(async (req, res, next) => {
+const logoutUser = asyncHandler(async (req, res, next) => { 
+    // console.log("logout");
     if (!req.session) {
         return next(new apiError(500, "Session not found"));
     }
-
-    // ✅ Pehle flash message store karo
-    req.flash("success", "Logged out successfully");
-
+        
     req.logout((err) => {
         if (err) return next(new apiError(500, "Logout failed"));
-
-        req.session.destroy((err) => {
-            if (err)
-                return next(new apiError(500, "Session destruction failed"));
-
-            res.clearCookie("connect.sid"); // ✅ Session cookie clear karo
-            return res.redirect("/"); // ✅ Redirect karo flash message ke saath
-        });
+        // ✅ Pehle flash message store karo
+        req.flash("success", "Logged out successfully!");
+        return res.redirect("/"); // ✅ Redirect karo flash message ke saath
     });
 });
 
