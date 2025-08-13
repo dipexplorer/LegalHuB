@@ -94,8 +94,51 @@ module.exports = function (io) {
         // Delete message
         socket.on("deleteMessage", async ({ messageId, chatRoomId }) => {
             try {
-                await Message.findByIdAndDelete(messageId);
-                io.to(String(chatRoomId)).emit("messageDeleted", messageId);
+                const msg = await Message.findById(messageId);
+                if (!msg) return;
+
+                // Mark message as deleted instead of removing it
+                await Message.findByIdAndUpdate(messageId, {
+                    $set: {
+                        deleted: true,
+                        deletedAt: new Date(),
+                    },
+                });
+
+                // Update chat room's last message if this was the last message
+                const last = await Message.find({ chatRoom: chatRoomId, deleted: false })
+                    .sort({ createdAt: -1 })
+                    .limit(1);
+
+                if (!last.length) {
+                    await ChatRoom.findByIdAndUpdate(chatRoomId, {
+                        $set: {
+                            lastMessage: "This message was deleted",
+                            lastMessageAt: new Date(),
+                            lastMessageSender: msg.sender,
+                        },
+                    });
+                } else if (last[0]._id.toString() !== messageId) {
+                    // Only update if the deleted message wasn't the last message
+                    await ChatRoom.findByIdAndUpdate(chatRoomId, {
+                        $set: {
+                            lastMessage: last[0].content,
+                            lastMessageAt: last[0].createdAt,
+                            lastMessageSender: last[0].sender,
+                        },
+                    });
+                } else {
+                    // If the deleted message was the last message, show "This message was deleted"
+                    await ChatRoom.findByIdAndUpdate(chatRoomId, {
+                        $set: {
+                            lastMessage: "This message was deleted",
+                            lastMessageAt: msg.createdAt,
+                            lastMessageSender: msg.sender,
+                        },
+                    });
+                }
+
+                io.to(String(chatRoomId)).emit("messageDeleted", { messageId });
             } catch (err) {
                 console.error("deleteMessage error:", err);
             }

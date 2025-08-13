@@ -195,7 +195,7 @@
     contentEl.className = "content";
     if (msg.deleted) {
       div.classList.add("deleted");
-      contentEl.textContent = "This message has been deleted";
+      contentEl.textContent = "This message was deleted";
     } else {
       contentEl.textContent = msg.content;
     }
@@ -203,7 +203,13 @@
 
     const metaEl = document.createElement("div");
     metaEl.className = "meta";
-    const ticks = isSent ? (msg.seen ? "✔✔" : "✔") : "";
+
+    // Debug: log the message seen status to help verify the fix
+    if (isSent) {
+      console.log(`Message ${msg._id} seen status:`, msg.seen, typeof msg.seen);
+    }
+
+    const ticks = isSent ? (msg.seen === true ? "✔✔" : "✔") : "";
     metaEl.innerHTML = `${fmtTime(msg.createdAt)} ${ticks}`;
     div.appendChild(metaEl);
 
@@ -297,10 +303,12 @@
     if (bubble) {
       bubble.classList.add("deleted");
       const contentEl = bubble.querySelector(".content");
-      if (contentEl) contentEl.textContent = "This message has been deleted";
+      if (contentEl) contentEl.textContent = "This message was deleted";
       const actions = bubble.querySelector(".bubble-actions");
       if (actions) actions.remove();
     }
+    // Refresh the chat room list to update last message
+    refreshRoomListAfterChange();
   });
 
   socket.on("typing", (userId) => {
@@ -314,9 +322,13 @@
 
   socket.on("messagesSeen", ({ chatRoomId }) => {
     if (state.currentChatRoomId && String(chatRoomId) === String(state.currentChatRoomId)) {
+      // Only update messages that currently have single tick (not already seen)
       document.querySelectorAll(".message.sent .meta").forEach(meta => {
-        meta.innerHTML = meta.innerHTML.replace(/✔✔|✔/g, "").trim(); // remove old ticks
-        meta.innerHTML = `${meta.innerHTML} ✔✔`.trim();
+        const currentContent = meta.innerHTML;
+        // Only update if it has single tick (✔) but not double tick (✔✔)
+        if (currentContent.includes("✔") && !currentContent.includes("✔✔")) {
+          meta.innerHTML = currentContent.replace(/✔/g, "✔✔");
+        }
       });
     }
   });

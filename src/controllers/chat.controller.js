@@ -93,6 +93,11 @@ const deleteMessage = asyncHandler(async (req, res) => {
         throw new apiError(404, "Message not found");
     }
 
+    // Check if message is already deleted
+    if (msg.deleted) {
+        throw new apiError(400, "Message is already deleted");
+    }
+
     const room = await ChatRoom.findById(msg.chatRoom);
     if (!room) {
         throw new apiError(404, "Chat room not found");
@@ -103,18 +108,35 @@ const deleteMessage = asyncHandler(async (req, res) => {
         throw new apiError(403, "Unauthorized");
     }
 
-    await Message.findByIdAndDelete(messageId);
+    // Mark message as deleted instead of removing it
+    await Message.findByIdAndUpdate(messageId, {
+        $set: {
+            deleted: true,
+            deletedAt: new Date(),
+        },
+    });
 
-    const last = await Message.find({ chatRoom: room._id }).sort({ createdAt: -1 }).limit(1);
+    // Emit socket event to notify all participants
+    const io = req.app.get("io");
+    if (io) {
+        io.to(String(msg.chatRoom)).emit("messageDeleted", { messageId });
+    }
+
+    // Update chat room's last message if this was the last message
+    const last = await Message.find({ chatRoom: room._id, deleted: false })
+        .sort({ createdAt: -1 })
+        .limit(1);
+
     if (!last.length) {
         await ChatRoom.findByIdAndUpdate(room._id, {
             $set: {
-                lastMessage: "",
-                lastMessageAt: null,
-                lastMessageSender: null,
+                lastMessage: "This message was deleted",
+                lastMessageAt: new Date(),
+                lastMessageSender: msg.sender,
             },
         });
-    } else {
+    } else if (last[0]._id.toString() !== messageId) {
+        // Only update if the deleted message wasn't the last message
         await ChatRoom.findByIdAndUpdate(room._id, {
             $set: {
                 lastMessage: last[0].content,
@@ -122,9 +144,18 @@ const deleteMessage = asyncHandler(async (req, res) => {
                 lastMessageSender: last[0].sender,
             },
         });
+    } else {
+        // If the deleted message was the last message, show "This message was deleted"
+        await ChatRoom.findByIdAndUpdate(room._id, {
+            $set: {
+                lastMessage: "This message was deleted",
+                lastMessageAt: msg.createdAt,
+                lastMessageSender: msg.sender,
+            },
+        });
     }
 
-    return res.json({ ok: true });
+    return res.json({ ok: true, messageId });
 });
 
 // Delete an entire chat room

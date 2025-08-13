@@ -20,6 +20,8 @@ const messageSchema = new Schema(
         },
         content: { type: String, required: true },
         seen: { type: Boolean, default: false },
+        deleted: { type: Boolean, default: false },
+        deletedAt: { type: Date, default: null },
     },
     {
         timestamps: true,
