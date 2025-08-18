@@ -42,8 +42,7 @@
         margin-bottom: 8px;
     }
 
-    .form-group input,
-    .form-group textarea {
+    .form-group input {
         width: 100%;
         padding: 12px 15px;
         border: 1px solid #555;
@@ -55,9 +54,38 @@
         transition: border 0.3s ease;
     }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group input:focus {
         border-color: var(--primary);
+    }
+
+    /* Quill Editor */
+    .ql-editor {
+        min-height: 150px;
+        color: #fff;
+    }
+
+   .ql-toolbar {
+    background: rgba(255, 255, 255, 0.484);
+    border: 1px solid #666;
+    border-radius: 8px 8px 0 0;
+}
+
+   .ql-container {
+    border: 1px solid #666;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background: var(--input-bg);
+    color: #fff;
+    min-height: 200px;
+}
+
+    /* Quill icons white */
+    .ql-toolbar button svg {
+        stroke: #fff;
+    }
+
+    .ql-toolbar .ql-picker {
+        color: #fff;
     }
 
     .form-actions {
@@ -111,12 +139,36 @@
     .add-section:hover {
         background: rgba(255, 255, 255, 0.12);
     }
+
+    .section-wrapper {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+    }
+
+    .remove-section {
+        background: #c62828;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .remove-section:hover {
+        background: #e53935;
+    }
 </style>
+
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <div class="form-wrapper">
     <h1 class="form-title">📝 Publish New Legal Article</h1>
 
-    <form action="/api/articles" method="POST">
+    <form action="/api/articles" method="POST" id="articleForm">
         <!-- Title -->
         <div class="form-group">
             <label for="title">Title</label>
@@ -126,16 +178,19 @@
         <!-- Introduction -->
         <div class="form-group">
             <label for="introduction">Introduction</label>
-            <textarea id="introduction" name="introduction" rows="5" placeholder="Write introduction..." required></textarea>
+            <div id="introductionEditor"></div>
+            <textarea id="introduction" name="introduction" hidden></textarea>
         </div>
 
-        <!-- Add Section -->
+        <!-- Sections -->
+        <div id="sections"></div>
         <div class="add-section">+ Add Section</div>
 
         <!-- Conclusion -->
         <div class="form-group">
             <label for="conclusion">Conclusion</label>
-            <textarea id="conclusion" name="conclusion" rows="5" placeholder="Write conclusion..." required></textarea>
+            <div id="conclusionEditor"></div>
+            <textarea id="conclusion" name="conclusion" hidden></textarea>
         </div>
 
         <!-- Tags -->
@@ -151,3 +206,67 @@
         </div>
     </form>
 </div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    // Quill editor config
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        ['link', 'blockquote', 'code-block'],
+        [{ 'header': [1, 2, 3, false] }],
+        [{ 'align': [] }],
+        ['clean']
+    ];
+
+    const introductionEditor = new Quill('#introductionEditor', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions }
+    });
+
+    const conclusionEditor = new Quill('#conclusionEditor', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions }
+    });
+
+    let sectionCount = 0;
+
+    document.querySelector('.add-section').addEventListener('click', () => {
+        sectionCount++;
+        const sectionDiv = document.createElement('div');
+        sectionDiv.classList.add('section-wrapper');
+        sectionDiv.innerHTML = `
+            <label>Section ${sectionCount} Title</label>
+            <input type="text" name="sections[${sectionCount}][title]" placeholder="Enter section title" required>
+            
+            <label>Section ${sectionCount} Content</label>
+            <div id="sectionEditor${sectionCount}"></div>
+            <textarea name="sections[${sectionCount}][content]" hidden></textarea>
+
+            <button type="button" class="remove-section">Remove Section</button>
+        `;
+        document.getElementById('sections').appendChild(sectionDiv);
+
+        const editor = new Quill(`#sectionEditor${sectionCount}`, {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
+
+        sectionDiv.querySelector('.remove-section').addEventListener('click', () => {
+            sectionDiv.remove();
+        });
+
+        sectionDiv.quill = editor;
+    });
+
+    // Sync content on submit
+    document.getElementById('articleForm').addEventListener('submit', () => {
+        document.getElementById('introduction').value = introductionEditor.root.innerHTML;
+        document.getElementById('conclusion').value = conclusionEditor.root.innerHTML;
+
+        document.querySelectorAll('#sections .section-wrapper').forEach((sectionDiv, index) => {
+            const textarea = sectionDiv.querySelector('textarea');
+            textarea.value = sectionDiv.quill.root.innerHTML;
+        });
+    });
+</script>
