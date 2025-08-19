@@ -143,8 +143,8 @@
     text-align: center;
   }
 }
-.card-alt main,
-main.card-alt {
+.card-alt div,
+div.card-alt {
   background: var(--card);
   border-radius: 16px;
   padding: 1.5rem;
@@ -152,13 +152,13 @@ main.card-alt {
   color: #fff;
 }
 
-main.card-alt p.muted {
+div.card-alt p.muted {
   margin-bottom: 0.75rem;
   font-size: 0.95rem;
   color: var(--muted);
 }
 
-main.card-alt h2 {
+div.card-alt h2 {
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1.2rem;
@@ -224,14 +224,12 @@ main.card-alt h2 {
     grid-template-columns: 1fr;
   }
 }
-
 </style>
 
-<section class="profile-root">
+<div class="profile-root">
   <!-- Profile Header -->
   <div class="profile-header">
-    <!-- Left Column -->
-    <aside class="card-alt" style="text-align:center">
+    <div class="card-alt" style="text-align:center">
       <img id="avatarImg" class="avatar" src="<%= user.profilePicture || '/pic/profile.jpg' %>" alt="Avatar">
       <h3 style="margin:0.5rem 0"><%= user.username %></h3>
 
@@ -269,10 +267,10 @@ main.card-alt h2 {
       </div>
 
       <small class="muted">Member since <%= new Date(user.createdAt).toLocaleDateString() %></small>
-    </aside>
+    </div>
 
     <!-- Right Column -->
-    <main class="card-alt">
+    <div class="card-alt">
       <p class="muted">Email: <strong style="color:#fff"><%= user.email %></strong></p>
 
       <% if (user.role === 'lawyer') { %>
@@ -307,7 +305,7 @@ main.card-alt h2 {
         <h2 style="margin:0">Welcome to LegalHuB</h2>
         <p class="muted">You can manage your chats and appointments here.</p>
       <% } %>
-    </main>
+    </div>
   </div>
 
   <!-- Tabs -->
@@ -340,7 +338,7 @@ main.card-alt h2 {
       <a class="small-badge" href="/account/change-password">Change Password</a>
     </div>
   </div>
-</section>
+</div>
 
 <script>
 document.querySelectorAll('.tab').forEach(tab => {
@@ -363,7 +361,7 @@ document.getElementById('avatarInput').addEventListener('change', e => {
 (function computeProfileProgress(){
   let score = 0, total = 0;
   
-  <% if (user.role === 'lawyer') { %>
+  if (user.role === 'lawyer') { 
     const lawyerFields = [
       Boolean("<%= user.username %>"),
       Boolean("<%= user.email %>"),
@@ -375,7 +373,7 @@ document.getElementById('avatarInput').addEventListener('change', e => {
     ];
     total = lawyerFields.length;
     score = lawyerFields.filter(Boolean).length;
-  <% } else { %>
+  } else { 
     const userFields = [
       Boolean("<%= user.username %>"),
       Boolean("<%= user.email %>"),
@@ -383,7 +381,7 @@ document.getElementById('avatarInput').addEventListener('change', e => {
     ];
     total = userFields.length;
     score = userFields.filter(Boolean).length;
-  <% } %>
+  }
   document.getElementById('profileProgress').style.width = Math.round((score / total) * 100) + '%';
 })();
 </script>

@@ -4,6 +4,11 @@ const LawyerProfile = require("../models/lawyer.model.js");
 const asyncHandler = require("../utils/asyncHandler.js");
 const apiError = require("../utils/apiError.js");
 const apiResponse = require("../utils/apiResponse.js");
+const shortid = require("shortid");
+const QRCode = require("qrcode");
+const path = require("path");
+const ejs = require("ejs");
+const puppeteer = require("puppeteer");
 
 /**
  * Helper: normalize date to date-only (midnight local)
@@ -81,13 +86,30 @@ const bookAppointment = asyncHandler(async (req, res) => {
             status: "pending",
         });
 
+        // Generate unique appointment card ID and expiration date
+        const cardId = `LH-${shortid.generate().toUpperCase()}`;
+        const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes from now
+
+        // Optional: QR code with appointmentId
+        const qrData = `${process.env.APP_URL}/lawyers/${lawyerId}`;
+        const qrCode = await QRCode.toDataURL(qrData);
+
+        appointment.appointmentCard = { cardId, expiresAt, qrCode };
+        await appointment.save();
+
         if (req.accepts("html")) {
             req.flash("success", "Appointment Booked Successfully!");
             return res.redirect("/appointments");
         }
         return res
             .status(201)
-            .json(new apiResponse(201, appointment, "Appointment booked successfully"));
+            .json(
+                new apiResponse(
+                    201,
+                    appointment,
+                    "Appointment booked successfully with visiting card."
+                )
+            );
     } catch (err) {
         // handle duplicate key (unique index) gracefully
         if (err.code === 11000) {
@@ -280,6 +302,86 @@ const renderAppointmentStats = asyncHandler(async (req, res) => {
     });
 });
 
+const viewAppointmentCard = asyncHandler(async (req, res) => {
+    const appointmentId = req.params.appointmentId || req.params.id;
+    if (!appointmentId) throw new apiError(400, "Missing appointment id");
+
+    const appointment = await Appointment.findById(appointmentId)
+        .populate("client", "username email")
+        .populate({
+            path: "lawyer",
+            select: "username email",
+            populate: {
+                path: "lawyerProfile",
+                select: "specialization licenseNumber experience isVerified",
+            },
+        });
+    if (!appointment) throw new apiError(404, "Appointment not found");
+
+    res.render("pages/appointment-card", { appointment });
+});
+
+// Generate Appointment Card PDF
+const downloadAppointmentCard = asyncHandler(async (req, res) => {
+    const appointmentId = req.params.appointmentId || req.params.id;
+    if (!appointmentId) throw new apiError(400, "Missing appointment id");
+    const appointment = await Appointment.findById(appointmentId)
+        .populate("client", "username email")
+        .populate({
+            path: "lawyer",
+            select: "username email",
+            populate: {
+                path: "lawyerProfile",
+                select: "specialization licenseNumber experience isVerified",
+            },
+        });
+    if (!appointment) throw new apiError(404, "Appointment not found");
+    if (!appointment.appointmentCard) throw new apiError(404, "Appointment card not found");
+
+    // 🔹 Prepare data for template
+    const templateData = {
+        lawyer: appointment.lawyer.fullName || appointment.lawyer.username,
+        client: appointment.client
+            ? appointment.client.fullName || appointment.client.username
+            : "N/A",
+        venue: appointment.venue || "To be decided",
+        date: appointment.date,
+        timeSlot: appointment.timeSlot,
+        cardId: appointment.appointmentCard.cardId,
+        address: appointment.address || "Not provided",
+        qrCode: appointment.appointmentCard.qrCode,
+    };
+
+    // 🔹 Render EJS template to HTML
+    const html = await ejs.renderFile(
+        path.join(__dirname, "../views/pages/download_appointment_card.ejs"),
+        templateData
+    );
+
+    // 🔹 Launch Puppeteer
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
+
+    // 🔹 Convert to PDF and send
+    const pdfBuffer = await page.pdf({
+        format: "A4",
+        printBackground: true,
+        margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" },
+    });
+
+    await browser.close();
+
+    // 🔹 Send as download
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=appointment_${appointment._id}.pdf`);
+
+    return res.end(pdfBuffer); // ✅ use res.end() instead of res.send()
+});
+
 module.exports = {
     bookAppointment,
     getAppointments,
@@ -287,4 +389,6 @@ module.exports = {
     cancelAppointment,
     getAvailableSlots,
     renderAppointmentStats,
+    viewAppointmentCard,
+    downloadAppointmentCard,
 };

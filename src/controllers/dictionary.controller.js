@@ -8,7 +8,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const getTerm = asyncHandler(async (req, res, next) => {
     const { term } = req.params;
 
-    console.log("🔎 Requesting Mistral AI for:", term);
+    // console.log("🔎 Requesting Mistral AI for:", term);
 
     if (!process.env.MISTRAL_API_KEY) {
         return next(new apiError(500, "Missing Mistral AI API key"));
@@ -50,13 +50,13 @@ const getTerm = asyncHandler(async (req, res, next) => {
                 throw new apiError(500, "Invalid AI response");
             }
 
-            console.log("✅ AI Response:", responseText);
+            // console.log("✅ AI Response:", responseText);
             return res
                 .status(200)
                 .json(new apiResponse(200, { term, response: responseText }, "Success"));
         } catch (error) {
             if (error.response?.status === 429) {
-                console.warn(`⚠️ Rate limit hit. Retrying in ${delayTime / 1000} seconds...`);
+                // console.warn(`⚠️ Rate limit hit. Retrying in ${delayTime / 1000} seconds...`);
                 await delay(delayTime);
                 delayTime *= 2; // Exponential backoff
             } else {

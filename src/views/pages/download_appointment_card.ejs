@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Appointment Card</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #eef1f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      color: #333;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 750px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.08);
+      overflow: hidden;
+      border: 1px solid #dce1e8;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Watermark Branding */
+    .card::before {
+      content: "LegalHuB";
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-20deg);
+      font-size: 4rem;
+      font-weight: 700;
+      color: rgba(0,0,0,0.05);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header */
+    .card-header {
+      background: linear-gradient(135deg, #1e2a38, #273849);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 30px;
+      z-index: 1;
+    }
+    .brand {
+      font-size: 1.8em;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    .brand span { color: #f1c40f; }
+    .logo { width: 45px; height: 45px; }
+
+    /* Card ID */
+    .card-id {
+      text-align: right;
+      font-size: 0.9em;
+      color: #777;
+      background: #f9fafb;
+      padding: 8px 20px;
+      border-bottom: 1px solid #eee;
+      font-family: monospace;
+    }
+
+    /* Content */
+    .card-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 28px;
+      gap: 24px;
+      z-index: 1;
+    }
+    .details {
+      flex: 2;
+      padding-right: 24px;
+      border-right: 1px solid #eee;
+    }
+    .info {
+      margin-bottom: 14px;
+      font-size: 1.05em;
+      display: flex;
+      align-items: flex-start;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #e0e0e0;
+    }
+    .info:last-child { border-bottom: none; }
+    .info i {
+      color: #1e2a38;
+      margin-right: 12px;
+      font-size: 1.2em;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .label {
+      font-weight: 600;
+      margin-right: 6px;
+      color: #111;
+    }
+    .value {
+      color: #444;
+      font-weight: 500;
+    }
+
+    /* QR Section */
+    .qr-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .qr-box {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+    .qr-box img {
+      width: 160px;
+      height: 160px;
+      border-radius: 6px;
+    }
+
+    /* Footer */
+    .card-footer {
+      background: #fafbfc;
+      text-align: center;
+      padding: 18px 24px;
+      font-size: 0.95em;
+      color: #555;
+      border-top: 1px solid #eee;
+      z-index: 1;
+    }
+    .card-footer strong { color: #1e2a38; }
+
+    @media (max-width: 640px) {
+      .card-content { flex-direction: column; padding: 20px; }
+      .details {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+      }
+    }
+
+    /* Print/PDF-friendly */
+    @media print {
+      body { background: #fff; }
+      .card { box-shadow: none; border: 1px solid #ccc; }
+      .card::before { opacity: 0.08; }
+      .card-header, .card-footer { background: #fff; color: #000; }
+      .info i { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <article class="card" id="appointment-card" aria-label="Appointment Card">
+    <!-- Header -->
+    <header class="card-header">
+      <div class="brand">Legal<span>HuB</span></div>
+      <img src="https://cdn-icons-png.flaticon.com/512/1041/1041888.png" alt="LegalHuB Logo" class="logo"/>
+    </header>
+
+    <!-- Card ID -->
+    <div class="card-id">
+      Card ID: <%= cardId || appointmentId || "N/A" %>
+    </div>
+
+    <!-- Content -->
+    <section class="card-content">
+      <div class="details">
+        <div class="info">
+          <i class="fa-solid fa-scale-balanced"></i>
+          <span class="label">Lawyer:</span>
+          <span class="value"><%= lawyer %></span>
+        </div>
+        <div class="info">
+          <i class="fa-solid fa-user"></i>
+          <span class="label">Client:</span>
+          <span class="value"><%= client %></span>
+        </div>
+        <div class="info">
+          <i class="fa-solid fa-building"></i>
+          <span class="label">Venue:</span>
+          <span class="value"><%= venue || "To be decided" %></span>
+        </div>
+        <div class="info">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span class="label">Date:</span>
+          <span class="value"><%= new Date(date).toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'short',day:'numeric'}) %></span>
+        </div>
+        <div class="info">
+          <i class="fa-solid fa-clock"></i>
+          <span class="label">Time:</span>
+          <span class="value"><%= timeSlot.join(', ') %></span>
+        </div>
+        <div class="info">
+          <i class="fa-solid fa-map-marker-alt"></i>
+          <span class="label">Address:</span>
+          <span class="value"><%= address || "Not provided" %></span>
+        </div>
+      </div>
+
+      <aside class="qr-section">
+        <div class="qr-box" aria-label="Appointment QR Code">
+            <img src="<%= qrCode %>" alt="Appointment QR Code"/>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Footer -->
+    <footer class="card-footer">
+      Please arrive <strong>10 minutes</strong> before your scheduled appointment.<br>
+      For assistance, contact <b>LegalHuB Support</b>.
+    </footer>
+  </article>
+</body>
+</html>

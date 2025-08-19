@@ -57,11 +57,6 @@ const sessionOptions = {
     secret: process.env.SESSION_SECRET || "mysecret",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: process.env.DB_URL,
-        collectionName: "sessions",
-        ttl: 7 * 24 * 60 * 60, // 7 days
-    }),
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -69,6 +64,15 @@ const sessionOptions = {
         secure: process.env.NODE_ENV === "production",
     },
 };
+
+// Only add MongoStore in non-test environments to prevent open handles in Jest
+if (process.env.NODE_ENV !== "test") {
+    sessionOptions.store = MongoStore.create({
+        mongoUrl: process.env.DB_URL,
+        collectionName: "sessions",
+        ttl: 7 * 24 * 60 * 60, // 7 days
+    });
+}
 
 app.use(session(sessionOptions));
 app.use(flash());

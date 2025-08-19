@@ -135,6 +135,7 @@
           <% } %>
           <th scope="col">Date</th>
           <th scope="col">Time Slot(s)</th>
+          <th scope="col">Appointment Card</th>
           <th scope="col">Status</th>
           <th scope="col">Actions</th>
         </tr>
@@ -160,11 +161,25 @@
                 <%= appointment.timeSlot || 'N/A' %>
               <% } %>
             </td>
+            <!-- view button to view appointment card -->
+             <td>
+              <% if (appointment.appointmentCard) { %>
+                <button
+                  class="action-btn"
+                  aria-label="View appointment card"
+                  title="View appointment card"
+                  onclick="window.location.href='/api/appointment/<%= appointment._id %>/card/view'">View</button>
+              <% } else { %>
+                <span style="color:#bdbdbd; font-size:0.9rem;">No card generated yet</span>
+              <% } %>
+            </td>
+            <!-- status -->
             <td>
               <span class="status-badge status-<%= appointment.status %>" aria-label="Status: <%= appointment.status %>">
                 <%= appointment.status %>
               </span>
             </td>
+            <!-- actions -->
             <td>
               <% if (user.role === "user") { %>
                 <% if (["pending", "approved"].includes(appointment.status)) { %>
@@ -238,6 +253,37 @@
     </table>
   <% } %>
 </section>
+
+<div id="tab-bookings" class="tab-content" style="display:none">
+  <div class="card-alt">
+    <h4><%= user.role === 'lawyer' ? 'Client Appointments' : 'My Appointments' %></h4>
+
+    <% if (appointments && appointments.length > 0) { %>
+      <% appointments.forEach(appt => { %>
+        <div class="card-alt" style="margin-top:1rem">
+          <h5>Appointment with <%= user.role === 'lawyer' ? appt.client.username : appt.lawyer.username %></h5>
+          <p>Date: <%= new Date(appt.date).toLocaleDateString() %></p>
+          <p>Time: <%= appt.timeSlot.join(", ") %></p>
+          <p>Card ID: <%= appt.appointmentCard?.cardId %></p>
+
+          <% if (appt.appointmentCard) { %>
+            <img src="<%= appt.appointmentCard.qrCode %>" alt="QR Code" style="width:120px;height:120px"/>
+
+            <div style="margin-top:0.8rem">
+              <a href="/api/appointment/<%= appt._id %>/card/download" 
+                 class="btn btn-outline-primary">Download Card (PDF)</a>
+            </div>
+          <% } else { %>
+            <small class="muted">No appointment card generated yet</small>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="muted">No appointments found.</p>
+    <% } %>
+  </div>
+</div>
+
 
 <script>
   async function updateStatus(appointmentId, status) {

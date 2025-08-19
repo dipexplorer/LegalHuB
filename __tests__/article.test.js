@@ -40,8 +40,11 @@ describe("📄 Articles API Testing", () => {
             .set("Accept", "application/json")
             .send({
                 title: "Test Article Title",
-                content: "This is the content of the test article.",
-                tags: ["testing", "article"],
+                introduction: "This is the introduction of the test article.",
+                sectionSubheadings: ["Section 1"],
+                sectionContents: ["This is the content of section 1."],
+                conclusion: "This is the conclusion.",
+                tags: "testing,article",
                 author: testUser._id,
             });
 
@@ -67,7 +70,7 @@ describe("📄 Articles API Testing", () => {
 
         const found = res.body.data.find((a) => a.title === "Test Article Title");
         expect(found).toBeDefined();
-        expect(found.content).toBe("This is the content of the test article.");
+        expect(found.introduction).toBe("This is the introduction of the test article.");
         expect(found.author.email).toBe("testuser@example.com");
     });
 
@@ -91,7 +94,9 @@ describe("📄 Articles API Testing", () => {
             .send({
                 author: testUser._id,
                 title: "Updated Article Title",
-                content: "This is the updated content of the test article.",
+                introduction: "This is the updated introduction.",
+                sectionSubheadings: ["Updated Section 1"],
+                sectionContents: ["This is the updated content of section 1."],
             });
 
         // console.log("📥 Update response:", res.body);
@@ -116,13 +121,13 @@ describe("📄 Articles API Testing", () => {
         expect(deletedArticle).toBeNull();
     });
 
-    it("❌ should not create an article without title/content", async () => {
-        const res = await request(app).post("/api/articles").send({ author: testUser._id }); // Missing title and content
+    it("❌ should not create an article without title", async () => {
+        const res = await request(app).post("/api/articles").send({ author: testUser._id }); // Missing title
 
         // console.log("📥 Missing field create response:", res.body);
         expect(res.statusCode).toBe(400);
         expect(res.body.success).toBe(false);
-        expect(res.body.msg).toMatch(/title and content are required/i);
+        expect(res.body.msg).toMatch(/title is required/i);
     });
 
     it("❌ should return 404 for non-existent article", async () => {
@@ -163,7 +168,8 @@ describe("📄 Articles API Testing", () => {
         // Create article again for this test
         const article = await Article.create({
             title: "Protected Article",
-            content: "Only owner can delete",
+            introduction: "Only owner can delete",
+            sections: [{ subheading: "Section 1", content: "Content 1" }],
             tags: ["protected"],
             author: testUser._id,
         });
@@ -180,6 +186,30 @@ describe("📄 Articles API Testing", () => {
             expect(res.body.msg).toBe("You are not authorized to edit/delete this article");
         } else {
             expect(res.body.msg).toBe("Article not found");
+        }
+    });
+
+    it("❌ should not allow unauthorized user to update an article", async () => {
+        // Create article for this test
+        const article = await Article.create({
+            title: "Another Protected Article",
+            introduction: "Only owner can update",
+            sections: [{ subheading: "Section 1", content: "Content 1" }],
+            tags: ["protected"],
+            author: testUser._id,
+        });
+
+        const res = await request(app)
+            .put(`/api/articles/${article._id}`)
+            .set("Accept", "application/json")
+            .send({
+                author: anotherUser._id,
+                title: "Unauthorized Update",
+            });
+
+        expect([403, 404]).toContain(res.statusCode);
+        if (res.statusCode === 403) {
+            expect(res.body.msg).toBe("You are not authorized to edit/delete this article");
         }
     });
 });

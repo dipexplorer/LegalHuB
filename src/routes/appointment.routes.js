@@ -7,6 +7,8 @@ const {
     cancelAppointment,
     getAvailableSlots,
     renderAppointmentStats,
+    viewAppointmentCard,
+    downloadAppointmentCard,
 } = require("../controllers/appointment.controller.js");
 
 Router.route("/").post(bookAppointment);
@@ -16,5 +18,7 @@ Router.route("/status").put(updateAppointmentStatus);
 Router.route("/:appointmentId").delete(cancelAppointment);
 Router.route("/slots").get(getAvailableSlots);
 Router.route("/bookings").get(renderAppointmentStats);
+Router.route("/:appointmentId/card/view").get(viewAppointmentCard);
+Router.route("/:appointmentId/card/download").get(downloadAppointmentCard);
 
 module.exports = Router;

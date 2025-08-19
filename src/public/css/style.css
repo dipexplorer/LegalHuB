@@ -341,7 +341,9 @@ nav {
         gap: 0;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease, padding 0.3s ease;
+        transition:
+            max-height 0.3s ease,
+            padding 0.3s ease;
         padding: 0 20px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         margin-left: 0;

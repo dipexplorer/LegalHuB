@@ -22,15 +22,32 @@ const viewLawyer = asyncHandler(async (req, res) => {
     const lawyer = await User.findById(req.params.id).populate({
         path: "lawyerProfile",
         model: LawyerProfile,
-        select: "bio specialization licenseNumber experience city state languagesSpoken availableSlots fees isVerified",
+        // ✅ Include reviews field in select
+        select: "bio specialization licenseNumber experience city state languagesSpoken availableSlots fees isVerified reviews",
+        populate: {
+            path: "reviews",
+            model: "Review",
+            select: "rating comment author",
+            populate: {
+                path: "author",
+                model: "User",
+                select: "username profilePicture",
+            },
+        },
     });
-
     if (!lawyer) {
         return res.status(404).send("Lawyer not found");
     }
-    // res.render('pages/lawyer-profile', { lawyer });
+
+    let userHasReviewed = false;
+    if (req.user && lawyer.lawyerProfile && lawyer.lawyerProfile.reviews) {
+        userHasReviewed = lawyer.lawyerProfile.reviews.some(
+            (review) => review.author && review.author._id && review.author._id.equals(req.user._id)
+        );
+    }
+
     if (req.accepts("html")) {
-        return res.render("pages/lawyer-profile", { lawyer });
+        return res.render("pages/lawyer-profile", { lawyer, userHasReviewed });
     } else {
         return res
             .status(200)

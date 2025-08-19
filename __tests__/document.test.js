@@ -158,4 +158,42 @@ describe("📄 Documents API", () => {
         expect(res.body.msg).toBe("Document not found");
         // console.log("📥 Response body:", res.body);
     });
+
+    // ❌ Create document with missing required fields
+    it("❌ should return 400 when creating document with missing fields", async () => {
+        const incompleteDoc = {
+            title: "Incomplete Document",
+            // Missing required fields
+        };
+
+        const res = await request(app)
+            .post("/api/documents")
+            .send(incompleteDoc)
+            .set("Accept", "application/json");
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.success).toBe(false);
+    });
+
+    // ❌ Create document with invalid state
+    it("❌ should return 400 when creating document with invalid state", async () => {
+        const invalidDoc = {
+            title: "Invalid State Document",
+            description: "Test description",
+            downloadLink: "https://example.com/download",
+            applyLink: "https://example.com/apply",
+            state: "Invalid State",
+            department: "Test Department",
+            guidelines: ["Test guideline"],
+            requiredDocuments: ["Test document"],
+        };
+
+        const res = await request(app)
+            .post("/api/documents")
+            .send(invalidDoc)
+            .set("Accept", "application/json");
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.success).toBe(false);
+    });
 });

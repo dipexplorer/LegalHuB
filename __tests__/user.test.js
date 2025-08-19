@@ -11,6 +11,7 @@ describe("📄 User API Testing", () => {
         email: "test@example.com",
         password: "Test@1234",
         confirmPassword: "Test@1234",
+        role: "user",
     };
 
     beforeAll(async () => {
@@ -51,7 +52,7 @@ describe("📄 User API Testing", () => {
         const res = await request(app)
             .post("/api/users/register")
             .set("Accept", "application/json")
-            .send({});
+            .send({ role: "user" });
 
         // console.log("📥 Response status:", res.statusCode);
         expect(res.statusCode).toBe(400);
@@ -65,7 +66,7 @@ describe("📄 User API Testing", () => {
         const res = await request(app)
             .post("/api/users/register")
             .set("Accept", "application/json")
-            .send({ ...testUser, confirmPassword: "abc123" });
+            .send({ ...testUser, confirmPassword: "DifferentPass@123" });
 
         // console.log("📥 Response status:", res.statusCode);
         expect(res.statusCode).toBe(400);
@@ -84,13 +85,16 @@ describe("📄 User API Testing", () => {
         // console.log("📥 Response status:", res.statusCode);
         expect(res.statusCode).toBe(400);
         expect(res.body.success).toBe(false);
-        expect(res.body.msg).toBe("User already exists");
+        expect(res.body.msg).toBe("User with given email or username already exists");
     });
 
     // 📌 Get User Profile
     it("✅ should fetch user profile", async () => {
         // console.log("📤 Fetching user profile...");
-        const res = await agent.get("/api/users/profile").set("Accept", "application/json");
+        const res = await request(app)
+            .get("/api/users/profile")
+            .set("Accept", "application/json")
+            .send({ author: userId }); // Pass author for test authentication
 
         // console.log("📥 Response status:", res.statusCode);
         expect(res.statusCode).toBe(200);
@@ -103,9 +107,10 @@ describe("📄 User API Testing", () => {
         // console.log("📤 Updating user profile...");
         const updatedData = {
             username: "updateduser",
-            email: "updated@example",
+            email: "updated@example.com",
+            author: userId,
         };
-        const res = await agent
+        const res = await request(app)
             .put("/api/users/update")
             .set("Accept", "application/json")
             .send(updatedData);
@@ -120,7 +125,7 @@ describe("📄 User API Testing", () => {
     // 📌 Delete User
     it("✅ should delete user account", async () => {
         // console.log("📤 Deleting user account...");
-        const res = await agent
+        const res = await request(app)
             .delete("/api/users/delete")
             .set("Accept", "application/json")
             .send({ author: userId });

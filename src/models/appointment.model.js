@@ -30,6 +30,18 @@ const appointmentSchema = new Schema(
             type: String,
             trim: true,
         },
+        appointmentCard: {
+            cardId: {
+                type: String,
+                unique: true,
+            },
+            qrCode: {
+                type: String,
+            },
+            expiresAt: {
+                type: Date,
+            },
+        },
     },
     {
         timestamps: true,

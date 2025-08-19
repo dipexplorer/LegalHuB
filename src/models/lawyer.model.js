@@ -90,5 +90,4 @@ lawyerProfileSchema.post("findOneAndDelete", async (lawyerProfile) => {
     }
 });
 
-
 module.exports = mongoose.model("LawyerProfile", lawyerProfileSchema);

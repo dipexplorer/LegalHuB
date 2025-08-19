@@ -4,26 +4,47 @@ const User = require("../src/models/user.model");
 
 describe("👨‍⚖️Lawyers API testing", () => {
     const mockLawyer = {
+        username: "testlawyer",
         name: "Test Lawyer",
         email: "lawyer@example.com",
-        role: "user",
+        role: "lawyer",
+    };
+
+    const mockLawyerProfile = {
         specialization: "Criminal Law",
         licenseNumber: "ABC123",
         experience: 5,
+        city: "Mumbai",
+        state: "Maharashtra",
     };
 
     let createdUser;
+    let createdLawyerProfile;
 
     // Insert mock data before test run
     beforeAll(async () => {
         // console.log("⏳ Inserting mock lawyer...");
         createdUser = await User.create(mockLawyer);
+
+        // Create lawyer profile
+        const LawyerProfile = require("../src/models/lawyer.model");
+        createdLawyerProfile = await LawyerProfile.create({
+            user: createdUser._id,
+            ...mockLawyerProfile,
+        });
+
+        // Link lawyer profile to user
+        createdUser.lawyerProfile = createdLawyerProfile._id;
+        await createdUser.save();
+
         // console.log("✅ Inserted lawyer:", createdUser.toObject());
     });
 
     // Clean DB after tests
     afterAll(async () => {
         // console.log("🧹 Cleaning up users...");
+        const LawyerProfile = require("../src/models/lawyer.model");
+        await LawyerProfile.deleteMany({});
         const result = await User.deleteMany({});
         // console.log("✅ Cleanup result:", result);
     });
@@ -46,9 +67,8 @@ describe("👨‍⚖️Lawyers API testing", () => {
 
         expect(lawyer).toBeDefined();
         expect(lawyer.name).toBe(mockLawyer.name);
-        expect(lawyer.specialization).toBe(mockLawyer.specialization);
-        expect(lawyer.experience).toBe(mockLawyer.experience);
-        expect(lawyer.licenseNumber).toBe(mockLawyer.licenseNumber);
+        expect(lawyer.lawyerProfile.specialization).toBe(mockLawyerProfile.specialization);
+        expect(lawyer.lawyerProfile.experience).toBe(mockLawyerProfile.experience);
     });
 
     it("✅ should fetch a single lawyer by ID", async () => {

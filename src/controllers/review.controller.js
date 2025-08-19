@@ -7,7 +7,7 @@ const apiResponse = require("../utils/apiResponse.js");
 
 const createReview = asyncHandler(async (req, res) => {
     const { lawyerId } = req.params;
-    const { rating, comment } = req.body;
+    const { rating, comment } = req.body.review;
     const authorId = req.user._id;
 
     // Validate inputs
@@ -23,7 +23,7 @@ const createReview = asyncHandler(async (req, res) => {
     }
 
     // Check if the lawyer exists
-    const lawyer = await LawyerProfile.findById(lawyerId);
+    const lawyer = await User.findById(lawyerId).populate("lawyerProfile");
     if (!lawyer) {
         req.flash("error", "Lawyer not found");
         return res.redirect(`/lawyers/${lawyerId}`);
@@ -51,8 +51,8 @@ const createReview = asyncHandler(async (req, res) => {
     });
 
     // Add the review to the lawyer's profile
-    lawyer.reviews.push(review._id);
-    await lawyer.save();
+    lawyer.lawyerProfile.reviews.push(review._id);
+    await lawyer.lawyerProfile.save();
 
     if (req.accepts("html")) {
         req.flash("success", "Review added successfully!");
@@ -82,7 +82,9 @@ const deleteReview = asyncHandler(async (req, res) => {
     await Review.findByIdAndDelete(reviewId);
 
     // Remove the review from the lawyer's profile
-    const lawyer = await LawyerProfile.findByIdAndUpdate(lawyerId, { $pull: { reviews: reviewId } });
+    const lawyer = await User.findByIdAndUpdate(lawyerId, {
+        $pull: { reviews: reviewId },
+    });
     if (!lawyer) {
         req.flash("error", "Lawyer not found");
         return res.redirect(`/lawyers/${lawyerId}`);

@@ -1,0 +1,587 @@
+<%- layout("/layouts/boilerplate") -%>
+
+<style>
+:root {
+  --glass: rgba(255, 255, 255, 0.03);
+  --primary: #6d28d9;
+  --primary-2: #7c3aed;
+  --muted: #9aa6b2;
+  --success: #10b981;
+  --danger: #f97373;
+  --text: #e6eef8;
+
+  --bg: linear-gradient(180deg, #071029 0%, #020617 100%);
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+
+  --font-stack: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --max-width: 980px;
+  --card-width: 680px;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --shadow-lg: 0 20px 50px rgba(3, 7, 18, 0.6);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.4;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Remove default focus outlines but keep strong accessible focus */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 3px solid rgba(125, 90, 255, 0.24);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Respect user motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.container {
+  min-height: 100%;
+  padding: 32px 18px;
+  display: block;
+  box-sizing: border-box;
+}
+
+.page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* card wrapper to center horizontally */
+.card-wrap {
+  flex: 1 1 640px;
+  display: flex;
+  justify-content: center;
+}
+
+.appointment-card {
+  width: var(--card-width);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar with brand */
+.card-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  background: linear-gradient(90deg, rgba(109, 40, 217, 0.12), rgba(76, 29, 149, 0.06));
+}
+
+/* brand / logo */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand .logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+}
+
+.brand h1 {
+  font-size: 1.05rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 22px;
+  padding: 22px;
+}
+
+/* Left column stack */
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Profile row */
+.profile {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+}
+
+.lawyer-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary-2);
+  margin: 0;
+}
+
+.specialization {
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.client {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-top: 6px;
+}
+
+/* Details container */
+.details {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, rgba(255,255,255,0.005), transparent);
+}
+
+/* Row inside details */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 8px;
+}
+
+.detail-row + .detail-row {
+  margin-top: 6px;
+}
+
+.label {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.value.small {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.tip {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* QR box */
+.qr-box {
+  width: 200px;
+  height: 200px;
+  border-radius: 14px;
+  padding: 12px;
+  background: white;
+  display: grid;
+  place-items: center;
+}
+
+.qr-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Card id + badge */
+.card-id {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.id-badge {
+  background: rgba(255,255,255,0.03);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border-top: 1px solid rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.005));
+}
+
+.expires {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.badge-exp {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.exp-ok {
+  background: linear-gradient(90deg, var(--success), #34d399);
+  color: #032018;
+}
+
+.exp-soon {
+  background: linear-gradient(90deg, var(--danger), #fb7185);
+  color: #210308;
+}
+
+.side {
+  width: 300px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.02);
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.side h3 {
+  margin: 0 0 10px 0;
+}
+
+/* Actions / buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* primary / ghost / plain */
+.btn-primary {
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+  color: white;
+  box-shadow: 0 6px 18px rgba(109, 40, 217, 0.12);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(109, 40, 217, 0.14);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.015);
+  transform: translateY(-2px);
+}
+
+.btn-plain {
+  background: var(--glass);
+  color: var(--text);
+}
+
+.btn[disabled],
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.text-muted { color: var(--muted); }
+.text-small { font-size: 0.85rem; }
+
+@media (max-width: 920px) {
+  .page {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .appointment-card {
+    width: 100%;
+  }
+
+  .card-body {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .right {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .qr-box {
+    width: 140px;
+    height: 140px;
+  }
+
+  .side {
+    width: 100%;
+  }
+}
+
+@media print {
+  .container,
+  .page {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .appointment-card {
+    box-shadow: none !important;
+    border: 1px solid #eee !important;
+    background: #fff !important;
+  }
+  .qr-box { background: #fff !important; }
+  .btn { display: none !important; }
+}
+
+</style>
+
+<div class="container">
+  <div class="page">
+    <div class="card-wrap">
+      <article class="appointment-card">
+        <div class="card-topbar">
+          <div class="brand">
+            <div class="logo">
+              <!-- logo svg -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="5" fill="white" fill-opacity="0.06"></rect>
+                <path d="M7 14L10.5 9L14 14" stroke="white" stroke-opacity="0.95" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                <circle cx="17" cy="7" r="1.6" fill="white" fill-opacity="0.95"></circle>
+              </svg>
+            </div>
+            <div>
+              <h1>LegalHuB</h1>
+              <p>Appointment Card</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <section class="left">
+            <div class="profile">
+              <div class="avatar">
+                <% if (appointment.lawyer.avatarUrl) { %>
+                  <img src="<%= appointment.lawyer.avatarUrl %>" alt="<%= appointment.lawyer.username %>" />
+                <% } else { %>
+                  <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+                    <rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.02)"></rect>
+                    <text x="50%" y="55%" text-anchor="middle" fill="white" font-size="10" font-weight="700">
+                      <%= (appointment.lawyer.username || 'L').slice(0,2).toUpperCase() %>
+                    </text>
+                  </svg>
+                <% } %>
+              </div>
+              <div class="names">
+                <div class="lawyer-name"><%= appointment.lawyer.fullName || appointment.lawyer.username %></div>
+                <div class="specialization"><%= appointment.lawyer.specialization || 'Legal Counsel' %></div>
+                <div class="client">Client: <strong><%= appointment.client ? appointment.client.fullName || appointment.client.username : 'Guest' %></strong></div>
+              </div>
+            </div>
+
+            <div class="details">
+              <div class="detail-row">
+                <div class="label">📅 Date</div>
+                <div class="value"><%= new Date(appointment.date).toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'short',day:'numeric'}) %></div>
+              </div>
+              <div class="detail-row">
+                <div class="label">⏰ Time</div>
+                <div class="value"><%= appointment.timeSlot.join(', ') %></div>
+              </div>
+              <div class="detail-row">
+                <div class="label">📍 Venue</div>
+                <div class="value small">LegalHuB Virtual Meeting (Join link on appointment page)</div>
+              </div>
+              <div class="detail-row">
+                <div class="label">🔖 Purpose</div>
+                <div class="value small"><%= appointment.purpose || 'Consultation' %></div>
+              </div>
+              <div class="detail-row">
+                <div class="label">🆔 Card ID</div>
+                <div class="value small"><%= appointment.appointmentCard.cardId %></div>
+              </div>
+              <div class="detail-row">
+                <div class="label">⏳ Expires</div>
+                <div class="value small"><%= new Date(appointment.appointmentCard.expiresAt || appointment.expirationDate || (new Date(appointment.date).getTime()+24*60*60*1000)).toLocaleString('en-GB',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) %></div>
+              </div>
+            </div>
+
+            <!-- helper tip -->
+            <div class="tip">💡 Tip: Click or scan the QR code to view appointment details and join the meeting. You can download or email this card for easy sharing.</div>
+          </section>
+
+          <aside class="right">
+            <a href="<%= appointment.appointmentCard.qrRedirect || ('/appointment/' + appointment._id) %>" target="_blank" class="qr-box">
+              <img src="<%= appointment.appointmentCard.qrCode %>" alt="Appointment QR code" />
+            </a>
+
+            <div class="card-id">
+              <div class="id-badge" id="cardId"><%= appointment.appointmentCard.cardId %></div>
+              <button class="btn btn-plain" id="copyBtn">📋 Copy</button>
+            </div>
+          </aside>
+        </div>
+
+        <div class="card-footer">
+          <div class="expires">
+            Valid until
+            <% 
+              const exp = new Date(appointment.appointmentCard.expiresAt || appointment.expirationDate || (new Date(appointment.date).getTime()+24*60*60*1000));
+              const isSoon = (exp.getTime() - Date.now()) < (12 * 60 * 60 * 1000);
+            %>
+            <span class="badge-exp <%= isSoon ? 'exp-soon' : 'exp-ok' %>">
+              <%= exp.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) %>
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="side">
+      <h3>Actions</h3>
+      <p class="tip">Download, share or email this appointment card. The PDF will include the same verified QR code and metadata so it can be stored by both client and lawyer profiles.</p>
+      <div class="actions">
+        <a class="btn btn-primary" id="downloadPdf" href="/api/appointment/<%= appointment._id %>/card/download">⬇ Download PDF</a>
+        <button class="btn btn-ghost" id="emailPdf">📧 Email to client</button>
+        <button class="btn btn-plain" id="copyLink">🔗 Copy appointment link</button>
+        <button class="btn btn-plain" id="printCard">🖨️ Print</button>
+      </div>
+    </aside>
+  </div>
+  </div>
+
+  <script>
+    document.getElementById('copyBtn')?.addEventListener('click', function(){
+      const id=document.getElementById('cardId')?.textContent?.trim();
+      if(!id)return;
+      navigator.clipboard.writeText(id).then(()=>{
+        this.textContent='✅ Copied';setTimeout(()=>this.textContent='📋 Copy',1600);
+      });
+    });
+    document.getElementById('copyLink')?.addEventListener('click',function(){
+      const url=window.location.origin+'/api/appointment/<%= appointment._id %>/card/view';
+      navigator.clipboard.writeText(url).then(()=>{
+        this.textContent='✅ Copied';setTimeout(()=>this.textContent='🔗 Copy appointment link',1600);
+      });
+    });
+    document.getElementById('printCard')?.addEventListener('click',()=>window.print());
+    document.getElementById('emailPdf')?.addEventListener('click',async function(){
+      this.disabled=true;this.textContent='Sending...';
+      try{
+        const resp=await fetch('/api/appointment/<%= appointment._id %>/card/email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:'<%= appointment.client ? appointment.client.email || '' : '' %>'})});
+        this.textContent=resp.ok?'📧 Sent':'Failed';
+      }catch{this.textContent='Failed';}
+      setTimeout(()=>{this.disabled=false;this.textContent='📧 Email to client';},1800);
+    });
+  </script>
+

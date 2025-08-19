@@ -459,6 +459,197 @@
     display: block;
   }
 
+  /* Review Section Container */
+.reviews-section,
+.review-view {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Review Cards Grid */
+.review-view .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Review Card Styling */
+.review-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* forces equal height */
+    padding: 20px;
+    background: linear-gradient(145deg, #1b1b2b, #1a1a24);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(179, 71, 255, 0.4);
+}
+
+/* Reviewer Header */
+.review-card .heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;  
+}
+
+.reviewer-profile {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #b347ff;
+}
+
+/* Reviewer Name */
+.review-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Star Ratings */
+.star {
+    color: #f5b301;
+    font-size: 1rem;
+    margin-right: 2px;
+}
+
+/* Review Comment */
+.review-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    flex-grow: 1;
+}
+
+/* "Read More" link */
+.review-card a.text-primary {
+    color: #b347ff !important;
+    font-weight: 500;
+}
+
+.review-card a.text-primary:hover {
+    text-decoration: underline;
+}
+
+/* Verified Text */
+.review-card small {
+    color: #bbb;
+}
+
+/* Review Form Styling */
+.review-form textarea {
+    background: rgba(35, 35, 58, 0.85);
+    color: #eee;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px;
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: #b347ff;
+    box-shadow: 0 0 0 2px rgba(179, 71, 255, 0.3);
+}
+
+/* Review Buttons */
+.review-form button,
+.reviews-section button {
+    background: linear-gradient(90deg, #8e2de2, #b347ff);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.review-form button:hover,
+.reviews-section button:hover {
+    background: linear-gradient(90deg, #7218c2, #9c27b0);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(179, 71, 255, 0.4);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .review-view .row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.custom-modal-content {
+    background: linear-gradient(145deg, #1b1b2b, #1a1a24);
+    padding: 25px;
+    border-radius: 14px;
+    max-width: 500px;
+    width: 90%;
+    color: #fff;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.custom-modal .close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    color: #bbb;
+}
+
+.custom-modal .close:hover {
+    color: #fff;
+}
+.username {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #e040fb;
+}
+.owner-label {
+    background: #e040fb;
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+}
+.model-stars{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+/* Stars in modal */
+.stars .star {
+    padding-bottom: 20px;  
+    color: #f5b301;
+    font-size: 0.9rem;
+}
+
+/* Review Full Text */
+.review-full-text {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-top: 10px;
+}
 
 </style>
 
@@ -597,6 +788,179 @@
     </div>
   </form>
 </div>
+
+
+<!-- Reviews -->
+<div class="reviews-section">
+  <% if (currentUser) { %>
+    <% if (lawyer._id.toString() !== currentUser._id.toString()) { %>
+      <% if (!userHasReviewed) { %>  <!-- Check if the user hasn't already left a review -->
+        <hr>
+        <p>
+          <button class="btn btn-outline-danger btn-sm mt-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample"> Leave a review </button>
+        </p>
+        <div class="collapse" id="collapseWidthExample">
+          <div class="card review-card card-body mx-auto ms-0" style="width: 100%;">
+            <!-- Form for adding reviews -->
+             <form action="/api/reviews/<%= lawyer._id %>" method="post" novalidate class="needs-validation">
+              <div class="review-form">
+                <label for="rating" class="form-label bold2"><b>Rating:</b></label>
+                <fieldset class="starability-coinFlip">
+                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                  <input type="radio" id="rate1" name="review[rating]" value="1" />
+                  <label for="rate1">1 star.</label>
+                  <input type="radio" id="rate2" name="review[rating]" value="2" />
+                  <label for="rate2">2 stars.</label>
+                  <input type="radio" id="rate3" name="review[rating]" value="3" />
+                  <label for="rate3">3 stars.</label>
+                  <input type="radio" id="rate4" name="review[rating]" value="4" />
+                  <label for="rate4">4 stars.</label>
+                  <input type="radio" id="rate5" name="review[rating]" value="5" />
+                  <label for="rate5">5 stars.</label>
+                  <span class="starability-focus-ring"></span>
+                </fieldset>
+              </div>
+              <div class="review-form">
+                <label for="comment" class="form-label bold2"><b>Comments:</b></label>
+                <textarea name="review[comment]" class="form-control focus-ring focus-ring-secondary border rounded-1" id="comment" placeholder="Add some comments here..." rows="4" required></textarea>
+                <div class="invalid-feedback">Please add some comments for review!</div>
+                <button class="btn btn-outline-secondary btn-sm mt-4">Submit</button>
+              </div>
+             </form>
+          </div>
+        </div>
+      <% } else { %>
+        <hr>
+        <p class="text-secondary">⚠️ You have already left a review for this lawyer.</p>
+      <% } %>
+    <% } %>
+  <% } %>
+</div>
+
+<!-- All Reviews -->
+<hr>
+<div class="review-view">
+    <% if (lawyer.lawyerProfile.reviews.length == 0) { %>
+        <h6>⭐ No review posted yet for this lawyer.</h6>
+    <% } %>
+    <% if (lawyer.lawyerProfile.reviews.length > 0) { %>
+        <h4>🌟 All Reviews</h4>
+        <div class="row mt-4">
+            <% for (let i = 0; i < lawyer.lawyerProfile.reviews.length; i++) { %>
+                <% let review = lawyer.lawyerProfile.reviews[i]; %>
+                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card review-card h-100 ms-0">
+                        <div class="card-body d-flex flex-column">
+                            <div class="heading">
+                                <h4 class="card-title">
+                                    <% if (review.author && review.author.profilePicture && review.author.profilePicture.purl) { %>
+                                        <% let normalReviewerProfile = review.author.profilePicture.purl; %>
+                                        <img id="review_logo" src="<%=normalReviewerProfile%>" alt="Reviewer" class="reviewer-profile n-review-profile">
+                                    <% } else { %>
+                                        <img id="review_logo" src="/pic/profile.jpg" alt="Reviewer" class="reviewer-profile n-review-profile">
+                                    <% } %>
+                                    <% if (review.author) { %>
+                                        <%= review.author.username %> <span style="font-size: 9px; opacity: 0.7;">owner</span>
+                                    <% } else { %>
+                                        <span style="font-size: 9px; opacity: 0.7;">Unknown author</span>
+                                    <% } %>
+
+                                    <% if (review.author && review.author._id.equals(currentUser._id)) { %>
+                                        <form action="/api/reviews/<%= lawyer._id %>/<%= review._id %>?_method=DELETE" method="POST" style="display:inline;">
+                                          <button type="submit" class="btn btn-danger btn-sm ms-2">
+                                              <i class="fa-solid fa-trash"></i>
+                                          </button>
+                                      </form>
+                                    <% } %>
+                                </h4>
+                            </div>
+                            <p class="card-text mt-2">
+                                <% for (let j = 1; j <= 5; j++) { %>
+                                    <% if (j <= review.rating) { %>
+                                        <i class="fa-solid fa-star star"></i>
+                                    <% } else { %>
+                                        <i class="fa-regular fa-star star"></i>
+                                    <% } %>
+                                <% } %>
+                            </p>
+
+                            <p class="flex-grow-1" onclick="openReviewModal('<%= i %>')" style="cursor:pointer;">
+                                <%= review.comment && review.comment.length > 150
+                                    ? review.comment.substring(0, 150) + '...'
+                                    : review.comment %>
+                                <% if (review.comment && review.comment.length > 150) { %>
+                                    <span class="text-primary"> Read more</span>
+                                <% } %>
+                            </p>
+
+                            <small style="font-size: 10px;">
+                                <i class='bx bx-error-circle'></i> Verified by LegalHuB
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for full review text -->
+                <div id="modal-<%= i %>" class="custom-modal">
+                    <div class="custom-modal-content">
+                        <span class="close" onclick="closeReviewModal('<%= i %>')">&times;</span>
+                         <div class="heading d-flex align-items-center mb-3">
+                            <% if (review.author && review.author.profilePicture?.purl) { %>
+                                <img src="<%= review.author.profilePicture.purl %>" alt="Reviewer" class="reviewer-profile">
+                            <% } else { %>
+                                <img src="/pic/profile.jpg" alt="Reviewer" class="reviewer-profile">
+                            <% } %>
+
+                            <div class="ms-2">
+                              <div class="d-flex align-items-center gap-2">
+                                  <h5 class="username mb-0"><%= review.author ? review.author.username : "Unknown author" %></h5>
+                                  <% if (review.author && currentUser && currentUser._id.toString() === review.author._id.toString()) { %>
+                                      <span class="owner-label">Owner</span>
+                                  <% } %>
+                              </div>
+                            </div>
+                        </div>
+
+                        <div class="model-stars">
+                            <% for (let j = 1; j <= 5; j++) { %>
+                                <% if (j <= review.rating) { %>
+                                    <i class="fa-solid fa-star star"></i>
+                                <% } else { %>
+                                    <i class="fa-regular fa-star star"></i>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <p><%= review.comment %></p>
+                    </div>
+                </div>
+            <% } %> 
+        </div>
+    <% } %>
+</div>
+
+<script>
+function openReviewModal(id) {
+    document.getElementById("modal-" + id).style.display = "flex";
+    document.addEventListener("keydown", escClose);
+}
+
+function closeReviewModal(id) {
+    document.getElementById("modal-" + id).style.display = "none";
+    document.removeEventListener("keydown", escClose);
+}
+
+function modalClickOutside(event, id) {
+    if (event.target.classList.contains("custom-modal")) {
+        closeReviewModal(id);
+    }
+}
+
+function escClose(e) {
+    if (e.key === "Escape") {
+        document.querySelectorAll(".custom-modal").forEach(m => m.style.display = "none");
+        document.removeEventListener("keydown", escClose);
+    }
+}
+</script>
 
 <script>
     const modal = document.getElementById('bookingModal');
