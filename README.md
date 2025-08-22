@@ -41,8 +41,8 @@
 
 ---
 
-Create Article Page
-<img width="663" height="855" alt="Create Account" src="https://github.com/user-attachments/assets/d95be0a0-52d5-4cf5-b4ca-ce2d47244e11" />
+
+![Create Article Page]<img width="663" height="855" alt="Create Account" src="https://github.com/user-attachments/assets/d95be0a0-52d5-4cf5-b4ca-ce2d47244e11" />
 
 ---
 
