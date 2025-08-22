@@ -250,8 +250,8 @@ const updateUser = asyncHandler(async (req, res) => {
 
         // Set new profile picture
         user.profilePicture = {
-            url: req.file.secure_url || req.file.url,
-            publicId: req.file.public_id || req.file.filename
+            url: req.file.secure_url || req.file?.path,
+            publicId: req.file.public_id || req.file?.filename
         };
     }
 

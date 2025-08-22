@@ -39,7 +39,14 @@ router.route("/logout").get(logoutUser);
 router.route("/profile").get(isLoggedIn, getUserProfile);
 
 // Update - with profile picture upload
-router.route("/update").put(isLoggedIn, uploadProfilePic, updateUser);
+// Example usage in routes
+router.put('/update', isLoggedIn, (req, res, next) => {
+  uploadProfilePic(req, res, function(err) {
+    if (err) return next(err);
+    next();
+  });
+}, updateUser);
+
 
 // Delete
 router.route("/delete").delete(isLoggedIn, deleteUser);
