@@ -82,12 +82,14 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Local strategy (passport-local-mongoose helpers)
+// Choose ONE local strategy registration. Using passport-local-mongoose helpers:
 passport.use(new LocalStrategy(User.authenticate()));
+// If you prefer, you can replace the above with: passport.use(User.createStrategy());
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Load Google OAuth strategy (make sure file exists at this path)
+// Load Google OAuth strategy (ensure file exists)
 require("./config/passport.google.js");
 
 // Locals for templates
@@ -111,6 +113,7 @@ const lawyerRoutes = require("./routes/lawyer.routes.js");
 const appointmentRoutes = require("./routes/appointment.routes.js");
 const chatRoutes = require("./routes/chat.routes.js");
 const reviewRoutes = require("./routes/review.routes.js");
+const adminRoutes = require("./routes/admin.routes.js");
 
 // Google auth routes (top-level, not under /api)
 const authRoutes = require("./routes/auth.routes.js");
@@ -127,6 +130,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/lawyers", lawyerRoutes);
 app.use("/api/appointment", appointmentRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Non-API routes
 app.use("/", pageRoutes);
@@ -147,7 +151,7 @@ const isTest = process.env.NODE_ENV === "test";
 
 if (!isProd && !isTest) {
 if (err.name === "apiError" || err instanceof apiError) {
-console.error(`❌ ${err.message} [${err.statusCode}]`);
+console.error(❌ ${err.message} [${err.statusCode}]);
 } else {
 console.error("🔥 Unexpected Error:", err);
 }

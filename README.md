@@ -19,45 +19,46 @@
 
 ### 🏠 Homepage
 
-![Homepage](https://github.com/user-attachments/assets/b3a791fe-29b3-4acd-99ba-5fd452cd20d7)
+![Homepage](https://github.com/user-attachments/assets/c7b71c5a-f2f5-4e13-b62c-d73e386b9ef5)
 
 ---
 
-### 📘 Legal Dictionary
+![Link](https://github.com/user-attachments/assets/080411fe-122b-4341-ab8b-5d6c338b5c15)
+---
 
-![Legal Dictionary](https://github.com/user-attachments/assets/33660235-dc58-4196-8cdc-c450068312e2)
+![Link](https://github.com/user-attachments/assets/217a11da-4355-497f-bb23-1b7ce36002fc)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/a7f5e868-29c7-44c5-8ef3-e4cce2c8b4dc)
+![Link](https://github.com/user-attachments/assets/a6a9817f-0076-4b7e-948c-18e8cc5fcf34)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/bd66169d-f22a-48d6-8a93-2f89f165b9dc)
+![Link](https://github.com/user-attachments/assets/e668f549-4c1e-48d3-a4b2-4004ee019db2)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/bebb21ce-971c-46ab-a8d4-3c072fedb304)
+![Link](https://github.com/user-attachments/assets/4133c4c7-7bc8-458e-9833-3ce0b66ba8d4)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/37cbfc4e-6113-435b-be48-50d8b212bcf3)
+![Link](https://github.com/user-attachments/assets/c9a661d1-45c3-4ff5-8b00-9640b3ae2b61)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/91a40e6f-7124-42c2-bfa1-beeedeaf7394)
+![Link](https://github.com/user-attachments/assets/cd7a33f5-612c-474b-9088-cccd13b9f694)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/42e338d4-26f8-46bb-9f93-bc56e9203f84)
+![Link](https://github.com/user-attachments/assets/2158e3f5-96b9-4db2-9dec-aaab866e0d5f)
 
 ---
 
-![Link](https://github.com/user-attachments/assets/13da2694-85d7-4495-9545-5955123d9950)
+![Link](https://github.com/user-attachments/assets/36a36485-97ad-4c1e-aadc-2a2781e3b120)
 
----
+------
 
-![Link](https://github.com/user-attachments/assets/aea9cc35-7cb3-4c87-8d28-a27f64b73eee)
+![Link](https://github.com/user-attachments/assets/f438d2bd-b5b7-4e64-abc4-b66e9a12d7c8)
 
 ---
 
