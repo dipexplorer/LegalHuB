@@ -568,122 +568,141 @@ nav {
 
 /* ✅ Footer Container (Fixed) */
 .footer-container {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #1a1a2e, #16213e); /* Same as body gradient */
-    color: #e0e0e0;
-    padding: 40px 20px;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #1a1a2e, #0f172a);
+  color: #e0e0e0;
+  padding: 60px 20px 30px;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
+  font-family: "Poppins", sans-serif;
 }
 
-/* ✅ Add Container to Limit Width */
 .footer-container .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 45px;
 }
 
-/* ✅ Left Section */
-.footer-left .brand h3 {
-    color: #ffffff;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 8px;
+/* --- Left Section --- */
+.footer-left .brand h2 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-.footer-left p {
-    font-size: 1rem;
-    color: #b0b0b0;
-    line-height: 1.5;
-}
-
-/* ✅ Contact Info */
-.contact-info {
-    margin-top: 20px;
+.footer-left .brand p {
+  font-size: 1rem;
+  color: #b0b0b0;
+  margin-bottom: 20px;
 }
 
 .contact-info .email,
 .contact-info .phone {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
 .contact-icon {
-    color: #9c27b0;
-    font-size: 1.5rem;
-    transition: color 0.3s ease;
+  background: #9c27b0;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 12px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
 }
 
 .contact-info a {
-    color: #d1d1d1;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+  color: #d1d1d1;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .contact-info a:hover {
-    color: #9c27b0;
+  color: #9c27b0;
 }
 
-/* ✅ Middle Section */
+.contact-info:hover .contact-icon {
+  transform: scale(1.1);
+}
+
+/* --- Middle Section --- */
 .footer-middle h3 {
-    color: #ffffff;
-    font-size: 1.2rem;
-    margin-bottom: 12px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-left: 4px solid #9c27b0;
+  padding-left: 10px;
 }
 
 .footer-middle ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .footer-middle ul li {
-    margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .footer-middle ul li a {
-    color: #d1d1d1;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s ease;
+  color: #d1d1d1;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease, padding-left 0.3s ease;
 }
 
 .footer-middle ul li a:hover {
-    color: #9c27b0;
+  color: #9c27b0;
+  padding-left: 5px;
 }
 
-/* ✅ Right Section */
+/* --- Right Section --- */
 .footer-right h3 {
-    color: #ffffff;
-    font-size: 1.2rem;
-    margin-bottom: 12px;
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
 }
 
-/* ✅ Social Media Icons */
 .social-media {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
+  display: flex;
+  gap: 18px;
 }
 
 .social-media a {
-    color: #9c27b0;
-    font-size: 1.5rem;
-    transition:
-        color 0.3s ease,
-        transform 0.2s ease;
+  background: #9c27b0;
+  color: #fff;
+  height: 40px;
+  width: 40px;
+  display: flex;                
+  align-items: center;           
+  justify-content: center;      
+  font-size: 20px;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: background 0.3s ease, transform 0.3s ease;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
 }
 
 .social-media a:hover {
-    color: #ffffff;
-    transform: scale(1.1);
+  background: #ffffff;
+  color: #9c27b0;
+  transform: scale(1.2);
+}
+
+/* --- Bottom --- */
+.copyright {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #aaa;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
 }
 
 /* ✅ Feedback Button */
