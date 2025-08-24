@@ -1,0 +1,311 @@
+<%- layout("/layouts/boilerplate") -%>
+
+<style>
+  body {
+    font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(160deg, #0f172a, #1e293b, #111827);
+    color: #f1f5f9;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+
+  .dashboard-container {
+    padding: 50px 30px;
+    max-width: 1350px;
+    margin: auto;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #ffffff;
+    letter-spacing: 0.8px;
+    text-align: center;
+    text-shadow: 0px 3px 8px rgba(0,0,0,0.6);
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  /* Section Headings */
+  h2 {
+    font-size: 24px;
+    margin: 20px 0 18px;
+    color: #f9fafb;
+    font-weight: 700;
+    position: relative;
+  }
+
+  h2::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 3px;
+    background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+    margin-top: 6px;
+    border-radius: 2px;
+  }
+
+  /* Stats Section */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 26px;
+    margin-bottom: 55px;
+  }
+
+  .stat-card {
+    background: linear-gradient(145deg, #3b0764, #6d28d9);
+    padding: 26px;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.65);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 34px rgba(0,0,0,0.7);
+  }
+
+  .stat-icon {
+    font-size: 34px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+
+  .stat-label {
+    font-size: 15px;
+    color: #e2e8f0;
+    margin-bottom: 6px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  /* Filters (optional future use) */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 30px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Table Section */
+  .table-container {
+    background: #1e293b;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.55);
+    padding: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #f1f5f9;
+  }
+
+  thead {
+    background: linear-gradient(90deg, #312e81, #4338ca);
+  }
+
+  th, td {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  th {
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 2px solid #4338ca;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #24344c;
+  }
+
+  tbody tr:hover {
+    background: #33425c;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 30px 0;
+  }
+
+  /* Badges */
+  .badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .badge-approved { background: #22c55e; color: white; }
+  .badge-pending { background: #facc15; color: #111; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    margin-right: 6px;
+    font-weight: 500;
+  }
+
+  .btn-approve {
+    background: #22c55e;
+    border-color: #16a34a;
+    color: white;
+  }
+  .btn-approve:hover { background: #16a34a; }
+
+  .btn-suspend {
+    background: #f97316;
+    border-color: #ea580c;
+    color: white;
+  }
+  .btn-suspend:hover { background: #ea580c; }
+
+  .btn-view {
+    background: #3b82f6;
+    border-color: #2563eb;
+    color: white;
+  }
+  .btn-view:hover { background: #2563eb; }
+</style>
+
+<div class="dashboard-container">
+  <h1>Administrator Dashboard</h1>
+  <p class="subtitle">A centralized panel to manage users, lawyers, and content effectively.</p>
+
+  <!-- Statistics -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div>
+        <div class="stat-label">Total Registered Users</div>
+        <div class="stat-value"><%= totalUsers %></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⚖️</div>
+      <div>
+        <div class="stat-label">Verified Lawyers</div>
+        <div class="stat-value"><%= totalLawyers %></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div>
+        <div class="stat-label">Pending Approvals</div>
+        <div class="stat-value"><%= pendingLawyers %></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📰</div>
+      <div>
+        <div class="stat-label">Published Articles</div>
+        <div class="stat-value"><%= totalArticles %></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📄</div>
+      <div>
+        <div class="stat-label">Uploaded Documents</div>
+        <div class="stat-value"><%= totalDocuments %></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lawyers Table -->
+  <div class="table-container">
+    <h2>Lawyers Directory</h2>
+    <p style="color:#cbd5e1; font-size:14px; margin-bottom:15px;">
+      Manage and review registered lawyers. Approve pending requests or update statuses.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Lawyer Name</th>
+          <th>Specialization</th>
+          <th>State</th>
+          <th>Experience</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (lawyers && lawyers.length > 0) { %>
+          <% lawyers.forEach(lawyer => { %>
+            <tr>
+              <td><%= lawyer.user.username %></td>
+              <td><%= Array.isArray(lawyer.specialization) ? lawyer.specialization.join(", ") : lawyer.specialization || "-" %></td>
+              <td><%= lawyer.state || "-" %></td>
+              <td><%= lawyer.experience ? lawyer.experience + " yrs" : "-" %></td>
+              <td>
+                <% if(lawyer.isVerified) { %>
+                  <span class="badge badge-approved">Approved</span>
+                <% } else { %>
+                  <span class="badge badge-pending">Pending</span>
+                <% } %>
+              </td>
+              <td>
+                <% if(lawyer.isActive) { %>
+                  <form method="POST" action="/admin/approve-lawyer/<%= lawyer._id %>" style="display:inline;">
+                    <button type="submit" class="btn btn-approve">✅ Active</button>
+                  </form>
+                <% } else { %>
+                  <form method="POST" action="/admin/suspend-lawyer/<%= lawyer._id %>" style="display:inline;">
+                    <button type="submit" class="btn btn-suspend">🚫 Deactivate</button>
+                  </form>
+                <% } %>
+                <a href="/lawyers/<%= lawyer.user._id %>" class="btn btn-view">👁 View</a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="empty-state">No lawyers found at this time.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
