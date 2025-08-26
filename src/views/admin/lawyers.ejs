@@ -1,0 +1,180 @@
+<%- layout("/layouts/boilerplate") -%>
+
+<style>
+  .lawyers-container {
+    padding: 40px 30px;
+    max-width: 1400px;
+    margin: auto;
+    color: #f1f5f9;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .table-container {
+    background: #1e293b;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #f1f5f9;
+  }
+
+  thead {
+    background: #312e81;
+  }
+
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  th {
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 2px solid #4338ca;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #24344c;
+  }
+
+  tbody tr:hover {
+    background: #33425c;
+  }
+
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-verified { background: #22c55e; color: white; }
+  .badge-pending { background: #f97316; color: white; }
+  .badge-active { background: #3b82f6; color: white; }
+  .badge-inactive { background: #6b7280; color: white; }
+
+  .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    margin: 2px;
+    border: none;
+  }
+
+  .btn-verify { background: #22c55e; color: #fff; }
+  .btn-reject { background: #dc2626; color: #fff; }
+  .btn-verify:hover { background: #16a34a; }
+  .btn-reject:hover { background: #b91c1c; }
+
+  .btn-toggle { background: #facc15; color: #111; }
+  .btn-toggle:hover { background: #eab308; }
+
+  .btn-delete { background: #dc2626; color: #fff; }
+  .btn-delete:hover { background: #b91c1c; }
+</style>
+
+<div class="lawyers-container">
+  <h1>Manage Lawyers</h1>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Lawyer</th>
+          <th>Email</th>
+          <th>Specialization</th>
+          <th>License</th>
+          <th>Experience</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Verified</th>
+          <th>Fees</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (lawyers && lawyers.length > 0) { %>
+          <% lawyers.forEach(lawyer => { %>
+            <tr>
+              <td>
+                <img src="<%= lawyer.user.profilePicture %>" class="profile-pic" alt="">
+                <%= lawyer.user.name %>
+              </td>
+              <td><%= lawyer.user.email %></td>
+              <td><%= lawyer.specialization %></td>
+              <td><%= lawyer.licenseNumber %></td>
+              <td><%= lawyer.experience %> yrs</td>
+              <td><%= lawyer.city %>, <%= lawyer.state %></td>
+              <td>
+                <% if (lawyer.isActive) { %>
+                  <span class="badge badge-active">Active</span>
+                <% } else { %>
+                  <span class="badge badge-inactive">Inactive</span>
+                <% } %>
+              </td>
+              <td>
+                <% if (lawyer.isVerified) { %>
+                  <span class="badge badge-verified">Verified</span>
+                <% } else { %>
+                  <span class="badge badge-pending">Pending</span>
+                <% } %>
+              </td>
+              <td>$<%= lawyer.fees %></td>
+              <td>
+                <!-- Toggle Verify -->
+                <% if(lawyer.isVerified) { %>
+                  <form action="/api/admin/dashboard/lawyers/verify/<%= lawyer._id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-reject">✖ Reject</button>
+                  </form>
+                  <!-- <a href="/lawyers/<%= lawyer.user._id %>/reject" class="btn-action btn-reject">✖ Reject</a> -->
+                <% } else { %>
+                   <form action="/api/admin/dashboard/lawyers/verify/<%= lawyer._id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-verify">Verify</button>
+                  </form>
+                <% } %>
+
+                <!-- Toggle active -->
+                <form action="/api/admin/dashboard/lawyers/toggle-status/<%= lawyer._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-toggle">
+                    <%= lawyer.isActive ? "Deactivate" : "Activate" %>
+                  </button>
+                </form>
+
+                <!-- Delete -->
+                <form action="/api/admin/dashboard/lawyers/delete/<%= lawyer._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this lawyer?');">
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="10" style="text-align:center;">No lawyers found</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

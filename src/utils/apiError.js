@@ -5,6 +5,13 @@ class apiError extends Error {
         this.name = "apiError";
         Error.captureStackTrace(this, this.constructor);
     }
+    toJSON() {
+        return {
+            statusCode: this.statusCode,
+            name: this.name,
+            message: this.message, // ✅ include message
+        };
+    }
 }
 
 module.exports = apiError;

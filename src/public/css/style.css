@@ -656,6 +656,18 @@ nav {
 /* ✅ Simplified Contact Info */
 .contact-info {
     margin-top: 0;
+/* --- Left Section --- */
+.footer-left .brand h2 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.footer-left .brand p {
+  font-size: 1rem;
+  color: #b0b0b0;
+  margin-bottom: 20px;
 }
 
 .contact-info .email,
@@ -739,11 +751,47 @@ nav {
 
 .footer-middle:hover h3::after {
     width: 50px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.contact-icon {
+  background: #9c27b0;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 12px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.contact-info a {
+  color: #d1d1d1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-info a:hover {
+  color: #9c27b0;
+}
+
+.contact-info:hover .contact-icon {
+  transform: scale(1.1);
+}
+
+/* --- Middle Section --- */
+.footer-middle h3 {
+  color: #ffffff;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-left: 4px solid #9c27b0;
+  padding-left: 10px;
 }
 
 .footer-middle ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .footer-middle ul li {
@@ -864,6 +912,65 @@ nav {
 
 .social-media a:hover .fa-twitter {
     color: #1da1f2;
+  margin-bottom: 10px;
+}
+
+.footer-middle ul li a {
+  color: #d1d1d1;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+}
+
+.footer-middle ul li a:hover {
+  color: #9c27b0;
+  padding-left: 5px;
+}
+
+/* --- Right Section --- */
+.footer-right h3 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.social-media {
+  display: flex;
+  gap: 18px;
+}
+
+.social-media a {
+  background: #9c27b0;
+  color: #fff;
+  height: 40px;
+  width: 40px;
+  display: flex;                
+  align-items: center;           
+  justify-content: center;      
+  font-size: 20px;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: background 0.3s ease, transform 0.3s ease;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+
+.social-media a:hover {
+  background: #ffffff;
+  color: #9c27b0;
+  transform: scale(1.2);
+}
+
+/* --- Bottom --- */
+.copyright {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #aaa;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
 }
 
 /* ✅ Modern Feedback Button */

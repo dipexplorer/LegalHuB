@@ -1,0 +1,142 @@
+<%- layout("/layouts/boilerplate") -%>
+
+<style>
+  .articles-container {
+    padding: 40px 30px;
+    max-width: 1400px;
+    margin: auto;
+    color: #f1f5f9;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .table-container {
+    background: #1e293b;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #f1f5f9;
+  }
+
+  thead {
+    background: #312e81;
+  }
+
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  th {
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 2px solid #4338ca;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #24344c;
+  }
+
+  tbody tr:hover {
+    background: #33425c;
+  }
+
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-tag { background: #3b82f6; color: white; margin: 0 3px; }
+
+  .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    margin: 2px;
+    border: none;
+  }
+
+  .btn-view { background: #22c55e; color: #fff; }
+  .btn-view:hover { background: #16a34a; }
+
+  .btn-delete { background: #dc2626; color: #fff; }
+  .btn-delete:hover { background: #b91c1c; }
+</style>
+
+<div class="articles-container">
+  <h1>Manage Articles</h1>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Tags</th>
+          <th>Published At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (articles && articles.length > 0) { %>
+          <% articles.forEach(article => { %>
+            <tr>
+              <td><%= article.title %></td>
+              <td>
+                <img src="<%= article.author.profilePicture %>" class="profile-pic" alt="">
+                <%= article.author.name || article.author.username %>
+              </td>
+              <td>
+                <% if (article.tags && article.tags.length > 0) { %>
+                  <% article.tags.forEach(tag => { %>
+                    <span class="badge badge-tag"><%= tag %></span>
+                  <% }) %>
+                <% } else { %>
+                  <span style="color:#9ca3af;">No tags</span>
+                <% } %>
+              </td>
+              <td><%= new Date(article.publishedAt).toLocaleDateString() %></td>
+              <td>
+                <!-- View -->
+                <a href="/api/articles/<%= article._id %>" class="btn btn-view">View</a>
+
+                <!-- Delete -->
+                <form action="/api/admin/dashboard/articles/delete/<%= article._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this article?');">
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="5" style="text-align:center;">No articles found</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

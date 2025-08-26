@@ -81,7 +81,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport Local Strategy
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -108,6 +108,7 @@ const lawyerRoutes = require("./routes/lawyer.routes.js");
 const appointmentRoutes = require("./routes/appointment.routes.js");
 const chatRoutes = require("./routes/chat.routes.js");
 const reviewRoutes = require("./routes/review.routes.js");
+const adminRoutes = require("./routes/admin.routes.js");
 
 // ✅ Define the test route first
 // app.get("/", (req, res) => {
@@ -130,6 +131,7 @@ app.use("/", pageRoutes);
 app.use("/api/appointment", appointmentRoutes);
 app.use("/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Smart Search
 app.get("/api/search", smartSearch);
