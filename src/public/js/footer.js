@@ -1,11 +1,16 @@
 // 🚀 LegalHuB Footer JavaScript
 // This script handles footer functionality and enhancements
 
+// Feature flags
+const ENABLE_SCROLL_TO_TOP = false;
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 LegalHuB Footer JavaScript loaded successfully!');
     
-    // Initialize scroll to top functionality
-    initScrollToTop();
+    // Initialize scroll to top functionality (disabled via flag)
+    if (ENABLE_SCROLL_TO_TOP) {
+        initScrollToTop();
+    }
     
     // Initialize other footer features
     initFooterFeatures();
@@ -22,6 +27,9 @@ function initScrollToTop() {
 
     // Use CSS for all visuals (no inline styles)
     document.body.appendChild(scrollBtn);
+
+    // Install safe-zone logic to avoid overlapping chat widgets
+    setupScrollToTopSafeZone(scrollBtn);
 
     // Show/hide button based on scroll position
     window.addEventListener('scroll', function() {
@@ -48,6 +56,69 @@ function initScrollToTop() {
     });
 
     console.log('✅ Scroll to top button initialized');
+}
+
+// Detect common chat/help widgets and lift or reposition the button
+function setupScrollToTopSafeZone(btn) {
+    const chatSelectors = [
+        '#crisp-chatbox, .crisp-client',
+        '#tidio-chat, .tidio-chat',
+        '.intercom-lightweight-app, #intercom-container',
+        '#chat-widget-container, .chat-widget, .help-chat, [data-help-chat]',
+        '#tawkchat-container, #tawkchat, .tawk-button, .tawk-min-container',
+        '#hubspot-messages-iframe-container, .hs-beacon',
+        '.zsiq_floatmain, .zsiq_flt_rel',
+        '.drift-open-chat, .drift-widget',
+        '.fc_widget, .freshwidget-button, #freshworks-frame',
+        '.bp-widget, .botpress-webchat',
+        '.support-bubble, .help-bubble, .chat-bubble'
+    ];
+
+    const findChatEl = () => {
+        for (const sel of chatSelectors) {
+            const el = document.querySelector(sel);
+            if (el) return el;
+        }
+        return null;
+    };
+
+    const applySafeZone = () => {
+        const chatEl = findChatEl();
+        const hasChat = !!chatEl;
+        if (hasChat) {
+            btn.classList.add('safe-zone');
+            // Try to estimate height and set a CSS variable for bottom offset
+            let safeBottom = 96; // default
+            try {
+                const rect = chatEl.getBoundingClientRect();
+                if (rect && rect.height) {
+                    // add a small gap above the chat widget
+                    safeBottom = Math.min(Math.max(Math.round(rect.height) + 24, 80), 200);
+                }
+            } catch (_) {}
+            document.documentElement.style.setProperty('--scroll-to-top-safe-bottom', safeBottom + 'px');
+
+            // On very small screens, prefer left docking to avoid crowding
+            if (window.innerWidth <= 420) {
+                btn.classList.add('left-docked');
+            } else {
+                btn.classList.remove('left-docked');
+            }
+        } else {
+            btn.classList.remove('safe-zone');
+            btn.classList.remove('left-docked');
+            // reset to defaults if previously set
+            document.documentElement.style.removeProperty('--scroll-to-top-safe-bottom');
+        }
+    };
+
+    // Run immediately
+    applySafeZone();
+    // Re-evaluate on resize (chat bubbles can resize or move)
+    window.addEventListener('resize', applySafeZone);
+    // Observe DOM changes (many chat widgets inject late)
+    const mo = new MutationObserver(() => applySafeZone());
+    mo.observe(document.body, { childList: true, subtree: true });
 }
 
 // 🎯 Additional footer features
