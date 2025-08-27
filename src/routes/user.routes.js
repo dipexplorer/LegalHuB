@@ -3,71 +3,73 @@ const passport = require("passport");
 const upload = require("../middlewares/multer.middleware");
 
 const {
-registerAccount,
-loginUser,
-logoutUser,
-getUserProfile,
-updateUser,
-uploadProfilePicture,
-deleteProfilePicture,
-deleteUser,
-requestPasswordReset,
-renderResetPasswordPage,
-resetPassword,
-updateLawyerProfile,
-applyForLawyer,
+    registerAccount,
+    loginUser,
+    logoutUser,
+    getUserProfile,
+    updateUser,
+    uploadProfilePicture,
+    deleteProfilePicture,
+    deleteUser,
+    requestPasswordReset,
+    renderResetPasswordPage,
+    resetPassword,
+    updateLawyerProfile,
+    applyForLawyer,
 } = require("../controllers/user.controller.js");
-
 const { isLoggedIn, saveRedirectUrl } = require("../middlewares/auth.middleware.js");
 
 const router = express.Router();
 
 // Register
-router.post("/register", registerAccount);
+router.route("/register").post(registerAccount);
 
 // Login
 router.post(
-"/login",
-saveRedirectUrl,
-passport.authenticate("local", {
-failureRedirect: "/login",
-failureFlash: true,
-}),
-loginUser
+    "/login",
+    saveRedirectUrl,
+    passport.authenticate("local", {
+        failureRedirect: "/login",
+        failureFlash: true,
+    }),
+    loginUser
 );
 
 // Logout
-router.get("/logout", logoutUser);
+router.route("/logout").get(logoutUser);
 
 // Profile
-router.get("/profile", isLoggedIn, getUserProfile);
+router.route("/profile").get(isLoggedIn, getUserProfile);
 
-// Update basic fields (username, name, email) — not image
-router.put("/update", isLoggedIn, updateUser);
+// Update - with profile picture upload
+router.route("/update").put(isLoggedIn, updateUser);
 
 // Profile picture management
 router
-.route("/profile-picture")
-.post(isLoggedIn, upload.single("profilePicture"), uploadProfilePicture)
-.delete(isLoggedIn, deleteProfilePicture);
+    .route("/profile-picture")
+    .post(isLoggedIn, upload.single("profilePicture"), uploadProfilePicture);
+router.route("/profile-picture").delete(isLoggedIn, deleteProfilePicture);
 
-// Delete account
-router.delete("/delete", isLoggedIn, deleteUser);
+// Delete
+router.route("/delete").delete(isLoggedIn, deleteUser);
 
 // Apply for Lawyer
-router.post("/apply-lawyer", isLoggedIn, applyForLawyer);
+router.route("/apply-lawyer").post(isLoggedIn, applyForLawyer);
 
-// Update Lawyer Profile
-router.put("/update-lawyer", isLoggedIn, updateLawyerProfile);
+// Update Lawyer Profile - with profile picture upload
+router.route("/update-lawyer").put(isLoggedIn, updateLawyerProfile);
 
-// Password reset flow
+// Request password reset (email form submission)
 router.post("/request-reset", requestPasswordReset);
+
+// Reset password form (via token in URL)
 router.get("/reset-password/:token", renderResetPasswordPage);
+
+// Submit new password (after user enters new password)
 router.post("/reset-password", resetPassword);
 
-// Forgot password page
 router.get("/forgot-password", (req, res) => {
-res.render("pages/forgot-password");
+    res.render("pages/forgot-password");
 });
 
 module.exports = router;
