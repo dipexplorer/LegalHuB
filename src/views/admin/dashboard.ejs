@@ -1,29 +1,20 @@
 <%- layout("/layouts/boilerplate") -%>
 
 <style>
-  body {
-    font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(160deg, #0f172a, #1e293b, #111827);
-    color: #f1f5f9;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-  }
 
   .dashboard-container {
     padding: 50px 30px;
-    max-width: 1350px;
+    max-width: 1500px;
     margin: auto;
   }
 
   h1 {
-    font-size: 36px;
-    font-weight: 800;
+    font-size: 40px;
+    font-weight: 900;
     margin-bottom: 12px;
     color: #ffffff;
-    letter-spacing: 0.8px;
     text-align: center;
-    text-shadow: 0px 3px 8px rgba(0,0,0,0.6);
+    text-shadow: 0px 4px 10px rgba(0,0,0,0.7);
   }
 
   .subtitle {
@@ -33,10 +24,10 @@
     margin-bottom: 40px;
   }
 
-  /* Section Headings */
+  /* === Section Headings === */
   h2 {
-    font-size: 24px;
-    margin: 20px 0 18px;
+    font-size: 22px;
+    margin: 30px 0 18px;
     color: #f9fafb;
     font-weight: 700;
     position: relative;
@@ -52,19 +43,19 @@
     border-radius: 2px;
   }
 
-  /* Stats Section */
+  /* === Stats Cards === */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 26px;
     margin-bottom: 55px;
   }
 
   .stat-card {
-    background: linear-gradient(145deg, #3b0764, #6d28d9);
+    background: linear-gradient(135deg, #4c1d95, #7c3aed);
     padding: 26px;
     border-radius: 18px;
-    box-shadow: 0 8px 22px rgba(0,0,0,0.65);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7);
     display: flex;
     align-items: center;
     gap: 18px;
@@ -73,13 +64,13 @@
 
   .stat-card:hover {
     transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 16px 34px rgba(0,0,0,0.7);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
   }
 
   .stat-icon {
-    font-size: 34px;
-    width: 60px;
-    height: 60px;
+    font-size: 36px;
+    width: 64px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,32 +84,67 @@
     color: #e2e8f0;
     margin-bottom: 6px;
     font-weight: 500;
-    letter-spacing: 0.4px;
   }
 
   .stat-value {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 34px;
+    font-weight: 800;
     color: #ffffff;
+    animation: counterUp 2s ease;
   }
 
-  /* Filters (optional future use) */
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 30px;
-    align-items: center;
-    justify-content: center;
+  @keyframes counterUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 
-  /* Table Section */
+  /* === Table Containers === */
   .table-container {
     background: #1e293b;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.55);
-    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    padding: 22px;
+    margin-top: 40px;
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .table-header input {
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: #334155;
+    color: #f1f5f9;
+  }
+
+  .table-header .actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .export-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    background: #6d28d9;
+    transition: background 0.2s ease;
+  }
+  .export-btn:hover {
+    background: #4c1d95;
   }
 
   table {
@@ -132,17 +158,16 @@
   }
 
   th, td {
-    padding: 16px 20px;
+    padding: 14px 18px;
     text-align: left;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   th {
     font-weight: 600;
     color: #ffffff;
-    border-bottom: 2px solid #4338ca;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 0.5px;
   }
 
@@ -154,6 +179,39 @@
     background: #33425c;
   }
 
+  /* === Badges === */
+  .badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  .bg-success { background: #16a34a; color: #fff; }
+  .bg-warning { background: #facc15; color: #000; }
+  .bg-danger { background: #dc2626; color: #fff; }
+  .bg-secondary { background: #6b7280; color: #fff; }
+
+  /* === Buttons === */
+  .btn-action {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .btn-approve { background: #16a34a; color: #fff; }
+  .btn-reject { background: #dc2626; color: #fff; }
+  .btn-view { background: #6b7280; color: #fff; }
+
+  .btn-approve:hover { background: #15803d; }
+  .btn-reject:hover { background: #b91c1c; }
+  .btn-view:hover { background: #4b5563; }
+
   /* Empty state */
   .empty-state {
     text-align: center;
@@ -162,111 +220,99 @@
     padding: 30px 0;
   }
 
-  /* Badges */
-  .badge {
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pagination a {
     padding: 6px 12px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .badge-approved { background: #22c55e; color: white; }
-  .badge-pending { background: #facc15; color: #111; }
-
-  /* Buttons */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    font-size: 14px;
     border-radius: 6px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-    margin-right: 6px;
-    font-weight: 500;
+    background: #334155;
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 13px;
   }
 
-  .btn-approve {
-    background: #22c55e;
-    border-color: #16a34a;
-    color: white;
+  .pagination a.active {
+    background: #6d28d9;
+    font-weight: bold;
   }
-  .btn-approve:hover { background: #16a34a; }
 
-  .btn-suspend {
-    background: #f97316;
-    border-color: #ea580c;
-    color: white;
+  .pagination a:hover {
+    background: #4f46e5;
   }
-  .btn-suspend:hover { background: #ea580c; }
 
-  .btn-view {
-    background: #3b82f6;
-    border-color: #2563eb;
-    color: white;
+  /* === Responsive Tables === */
+  @media (max-width: 768px) {
+    th, td { font-size: 12px; padding: 10px; }
+    .stat-card { flex-direction: column; text-align: center; }
+    table, thead, tbody, th, td, tr {
+      display: block;
+      width: 100%;
+    }
+    thead { display: none; }
+    tbody tr {
+      margin-bottom: 15px;
+      background: #24344c;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    td {
+      text-align: right;
+      position: relative;
+      padding-left: 50%;
+    }
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #cbd5e1;
+    }
   }
-  .btn-view:hover { background: #2563eb; }
 </style>
 
 <div class="dashboard-container">
   <h1>Administrator Dashboard</h1>
-  <p class="subtitle">A centralized panel to manage users, lawyers, and content effectively.</p>
+  <p class="subtitle">Centralized panel to manage users, lawyers, appointments, and platform content.</p>
 
-  <!-- Statistics -->
+  <!-- === Statistics === -->/api/admin/dashboard/lawyers
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon">👥</div>
-      <div>
-        <div class="stat-label">Total Registered Users</div>
-        <div class="stat-value"><%= totalUsers %></div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">⚖️</div>
-      <div>
-        <div class="stat-label">Verified Lawyers</div>
-        <div class="stat-value"><%= totalLawyers %></div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">⏳</div>
-      <div>
-        <div class="stat-label">Pending Approvals</div>
-        <div class="stat-value"><%= pendingLawyers %></div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">📰</div>
-      <div>
-        <div class="stat-label">Published Articles</div>
-        <div class="stat-value"><%= totalArticles %></div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">📄</div>
-      <div>
-        <div class="stat-label">Uploaded Documents</div>
-        <div class="stat-value"><%= totalDocuments %></div>
-      </div>
-    </div>
+    <div class="stat-card"><div class="stat-icon">👥</div><div><div class="stat-label"><a href="/api/admin/dashboard/users" class="text-decoration-none text-white">Total Users</a></div><div class="stat-value"><%= totalUsers %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">⚖️</div><div><div class="stat-label"><a href="/api/admin/dashboard/lawyers" class="text-decoration-none text-white">Verified Lawyers</a></div><div class="stat-value"><%= totalVerifiedLawyers %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div><div class="stat-label">Pending Lawyers</div><div class="stat-value"><%= pendingLawyers %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">📰</div><div><div class="stat-label">Articles</div><div class="stat-value"><%= totalArticles %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">📄</div><div><div class="stat-label">Documents</div><div class="stat-value"><%= totalDocuments %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">📜</div><div><div class="stat-label">Rights</div><div class="stat-value"><%= totalRights %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">📅</div><div><div class="stat-label">Appointments</div><div class="stat-value"><%= totalAppointments %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">🕒</div><div><div class="stat-label">Pending</div><div class="stat-value"><%= pendingAppointments %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div><div class="stat-label">Approved</div><div class="stat-value"><%= approvedAppointments %></div></div></div>
+    <div class="stat-card"><div class="stat-icon">🏁</div><div><div class="stat-label">Completed</div><div class="stat-value"><%= completedAppointments %></div></div></div>
   </div>
 
-  <!-- Lawyers Table -->
+  <!-- === Lawyers Table === -->
   <div class="table-container">
-    <h2>Lawyers Directory</h2>
-    <p style="color:#cbd5e1; font-size:14px; margin-bottom:15px;">
-      Manage and review registered lawyers. Approve pending requests or update statuses.
-    </p>
-
-    <table>
+    <div class="table-header">
+      <h2>Lawyers Directory</h2>
+      <div class="actions">
+        <input type="text" placeholder="🔍 Search lawyers..." onkeyup="filterTable('lawyerTable', this.value)">
+        <button class="export-btn" onclick="exportTable('lawyerTable','lawyers.csv')">⬇ Export CSV</button>
+      </div>
+    </div>
+    <table id="lawyerTable">
       <thead>
         <tr>
-          <th>Lawyer Name</th>
+          <th>Name</th>
           <th>Specialization</th>
           <th>State</th>
           <th>Experience</th>
+          <th>Verification</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -275,37 +321,131 @@
         <% if (lawyers && lawyers.length > 0) { %>
           <% lawyers.forEach(lawyer => { %>
             <tr>
-              <td><%= lawyer.user.username %></td>
-              <td><%= Array.isArray(lawyer.specialization) ? lawyer.specialization.join(", ") : lawyer.specialization || "-" %></td>
-              <td><%= lawyer.state || "-" %></td>
-              <td><%= lawyer.experience ? lawyer.experience + " yrs" : "-" %></td>
-              <td>
+              <td data-label="Name"><%= lawyer.user.username %></td>
+              <td data-label="Specialization"><%= lawyer.specialization || "-" %></td>
+              <td data-label="State"><%= lawyer.state || "NA" %></td>
+              <td data-label="Experience"><%= lawyer.experience ? lawyer.experience + " yrs" : "0 Yrs" %></td>
+              <td data-label="Verification">
                 <% if(lawyer.isVerified) { %>
-                  <span class="badge badge-approved">Approved</span>
+                  <span class="badge bg-success">Verified</span>
                 <% } else { %>
-                  <span class="badge badge-pending">Pending</span>
+                  <span class="badge bg-warning">Unverified</span>
                 <% } %>
               </td>
-              <td>
-                <% if(lawyer.isActive) { %>
-                  <form method="POST" action="/admin/approve-lawyer/<%= lawyer._id %>" style="display:inline;">
-                    <button type="submit" class="btn btn-approve">✅ Active</button>
-                  </form>
+              <td data-label="Status">
+                <% if(lawyer.isVerified && lawyer.isActive) { %>
+                  <span class="badge bg-success">Active</span>
                 <% } else { %>
-                  <form method="POST" action="/admin/suspend-lawyer/<%= lawyer._id %>" style="display:inline;">
-                    <button type="submit" class="btn btn-suspend">🚫 Deactivate</button>
+                  <span class="badge bg-danger">Inactive</span>
+                <% } %>
+              </td>
+              <td data-label="Actions">
+                <a href="/lawyers/<%= lawyer.user._id %>" class="btn-action btn-view">👁 View</a>
+                <% if(lawyer.isVerified) { %>
+                  <form action="/api/admin/dashboard/lawyers/verify/<%= lawyer._id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn-action btn-reject">✖ Reject</button>
+                  </form>
+                  <!-- <a href="/lawyers/<%= lawyer.user._id %>/reject" class="btn-action btn-reject">✖ Reject</a> -->
+                <% } else { %>
+                   <form action="/api/admin/dashboard/lawyers/verify/<%= lawyer._id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn-action btn-approve">✔ Approve</button>
                   </form>
                 <% } %>
-                <a href="/lawyers/<%= lawyer.user._id %>" class="btn btn-view">👁 View</a>
+              </td>
               </td>
             </tr>
           <% }) %>
         <% } else { %>
-          <tr>
-            <td colspan="6" class="empty-state">No lawyers found at this time.</td>
-          </tr>
+          <tr><td colspan="7" class="empty-state">No lawyers found at this time.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <a href="#">«</a>
+      <a href="#" class="active">1</a>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">»</a>
+    </div>
+  </div>
+
+  <!-- === Appointments Table === -->
+  <div class="table-container">
+    <div class="table-header">
+      <h2>Recent Appointments</h2>
+      <div class="actions">
+        <input type="text" placeholder="🔍 Search appointments..." onkeyup="filterTable('appointmentTable', this.value)">
+        <button class="export-btn" onclick="exportTable('appointmentTable','appointments.csv')">⬇ Export CSV</button>
+      </div>
+    </div>
+    <table id="appointmentTable">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Lawyer</th>
+          <th>Date</th>
+          <th>Time Slot</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (appointments && appointments.length > 0) { %>
+          <% appointments.forEach(app => { %>
+            <tr>
+              <td data-label="Client"><%= app.client?.username || "-" %></td>
+              <td data-label="Lawyer"><%= app.lawyer?.username || "-" %></td>
+              <td data-label="Date"><%= app.date.toDateString() %></td>
+              <td data-label="Time Slot"><%= app.timeSlot %></td>
+              <td data-label="Status">
+                <span class="badge 
+                  <%= app.status === 'approved' ? 'bg-success' 
+                  : app.status === 'pending' ? 'bg-warning'
+                  : app.status === 'completed' ? 'bg-secondary'
+                  : 'bg-danger' %>">
+                  <%= app.status %>
+                </span>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="5" class="empty-state">No recent appointments available.</td></tr>
         <% } %>
       </tbody>
     </table>
   </div>
 </div>
+
+<script>
+  // === Simple client-side table filter ===
+  function filterTable(tableId, query) {
+    const filter = query.toLowerCase();
+    const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  }
+
+  // === Export table to CSV ===
+  function exportTable(tableId, filename) {
+    const rows = document.querySelectorAll(`#${tableId} tr`);
+    let csv = [];
+    rows.forEach(row => {
+      const cols = row.querySelectorAll("td, th");
+      let rowData = [];
+      cols.forEach(col => rowData.push(col.innerText.replace(/,/g,""))); // remove commas
+      csv.push(rowData.join(","));
+    });
+    downloadCSV(csv.join("\n"), filename);
+  }
+
+  function downloadCSV(csv, filename) {
+    const csvFile = new Blob([csv], { type: "text/csv" });
+    const downloadLink = document.createElement("a");
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+  }
+</script>

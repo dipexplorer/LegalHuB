@@ -1,0 +1,161 @@
+<%- layout("/layouts/boilerplate") -%>
+
+<style>
+  .users-container {
+    padding: 40px 30px;
+    max-width: 1400px;
+    margin: auto;
+    color: #f1f5f9;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .table-container {
+    background: #1e293b;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #f1f5f9;
+  }
+
+  thead {
+    background: #312e81;
+  }
+
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  th {
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 2px solid #4338ca;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #24344c;
+  }
+
+  tbody tr:hover {
+    background: #33425c;
+  }
+
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-active { background: #22c55e; color: white; }
+  .badge-inactive { background: #f97316; color: white; }
+  .badge-admin { background: #3b82f6; color: white; }
+  .badge-lawyer { background: #8b5cf6; color: white; }
+  .badge-user { background: #6b7280; color: white; }
+
+  .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    margin: 2px;
+    border: none;
+  }
+
+  .btn-delete { background: #dc2626; color: #fff; }
+  .btn-delete:hover { background: #b91c1c; }
+
+  .btn-toggle { background: #facc15; color: #111; }
+  .btn-toggle:hover { background: #eab308; }
+
+</style>
+
+<div class="users-container">
+  <h1>Manage Users</h1>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users && users.length > 0) { %>
+          <% users.forEach(user => { %>
+            <tr>
+              <td>
+                <img src="<%= user.profilePicture %>" class="profile-pic" alt="">
+                <%= user.name || "N/A" %>
+              </td>
+              <td><%= user.email %></td>
+              <td>
+                <span class="badge badge-<%= user.role %>"><%= user.role %></span>
+              </td>
+              <td>
+                <% if (user.isActive) { %>
+                  <span class="badge badge-active">Active</span>
+                <% } else { %>
+                  <span class="badge badge-inactive">Inactive</span>
+                <% } %>
+              </td>
+              <td><%= user.createdAt.toDateString() %></td>
+              <td>
+                <!-- Toggle active -->
+                <form action="/api/admin/dashboard/users/toggle-status/<%= user._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-toggle">
+                    <%= user.isActive ? "Deactivate" : "Activate" %>
+                  </button>
+                </form>
+
+                <!-- Change role -->
+                <form action="/api/admin/dashboard/users/change-role/<%= user._id %>" method="POST" style="display:inline;">
+                  <select name="role" onchange="this.form.submit()" class="btn btn-secondary">
+                    <option value="user" <%= user.role === "user" ? "selected" : "" %>>User</option>
+                    <option value="lawyer" <%= user.role === "lawyer" ? "selected" : "" %>>Lawyer</option>
+                  </select>
+                </form>
+
+                <!-- Delete -->
+                <form action="/admin/users/delete/<%= user._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" style="text-align:center;">No users found</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
