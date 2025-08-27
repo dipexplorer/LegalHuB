@@ -5,14 +5,14 @@ const asyncHandler = require("../utils/asyncHandler");
 const ChatRoom = require("../models/chatRoom.model.js");
 
 const isLoggedIn = (req, res, next) => {
-// test bypass
+// Test bypass
 if (process.env.NODE_ENV === "test" && req.body.author) {
 req.user = { _id: req.body.author };
 return next();
 }
 
 if (!req.isAuthenticated || !req.isAuthenticated()) {
-req.flash("error", "Please log in first");
+if (req.flash) req.flash("error", "Please log in first");
 return res.redirect("/login");
 }
 
@@ -75,5 +75,5 @@ isLoggedIn,
 isAdmin,
 saveRedirectUrl,
 requireRole,
-ownChatRoom
+ownChatRoom,
 };
