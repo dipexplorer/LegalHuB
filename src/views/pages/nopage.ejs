@@ -1,68 +1,255 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>404 - Page Not Found</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-      color: #fff;
-      text-align: center;
-      padding: 50px;
-      margin: 0;
-    }
+<% layout("layouts/boilerplate") %>
 
-    h1 {
-      font-size: 100px;
-      margin-bottom: 10px;
-      color: #ff6b6b;
-    }
+<style>
+  .error-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
 
-    p {
-      font-size: 24px;
-      color: #ccc;
-      margin-bottom: 30px;
-    }
+  .error-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
 
-    a {
-      padding: 12px 30px;
-      background: #4f46e5;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: 0.3s ease;
-    }
+  .error-content {
+    text-align: center;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
 
-    a:hover {
-      background: #4338ca;
-    }
+  .error-number {
+    font-size: 8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 50px rgba(168, 85, 247, 0.3);
+    animation: glow 2s ease-in-out infinite alternate;
+  }
 
-    .graphic {
-      max-width: 500px;
-      margin: 40px auto;
-    }
+  p{ 
+    font-size: 24px;
+    color: #ccc;
+    margin-bottom: 30px;  
+  }
 
-    footer {
-      margin-top: 60px;
-      font-size: 14px;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
-  <h1>404</h1>
-  <p>Oops! Looks like you’re lost in space.</p>
 
-  <div class="graphic">
-    <img src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="404 graphic" width="100%" />
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+    }
+    to {
+      text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+    }
+  }
+
+  .error-title {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .error-graphic {
+    position: relative;
+    margin: 2rem 0 3rem;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .floating-scales {
+    position: absolute;
+    color: rgba(168, 85, 247, 0.3);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .error-icon {
+    font-size: 4rem;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+  }
+
+  .helpful-links {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .helpful-links h3 {
+    color: #a855f7;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .helpful-links ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .helpful-links li a {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    display: block;
+    transition: all 0.3s ease;
+  }
+
+  .helpful-links li a:hover {
+    color: white;
+    background: rgba(168, 85, 247, 0.2);
+    transform: translateX(5px);
+  }
+
+  @media (max-width: 768px) {
+    .error-number {
+      font-size: 6rem;
+    }
+    
+    .error-title {
+      font-size: 2rem;
+    }
+    
+    .error-description {
+      font-size: 1.1rem;
+    }
+    
+    .error-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .btn-primary, .btn-secondary {
+      width: 100%;
+      max-width: 280px;
+      justify-content: center;
+    }
+    
+    .helpful-links ul {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .error-container {
+      padding: 1rem;
+    }
+    
+    .error-number {
+      font-size: 4rem;
+    }
+    
+    .helpful-links {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<div class="error-container">
+  <div class="error-content">
+    <div class="error-number">404</div>
+    <h1 class="error-title">Oops! Looks like you're lost in space</h1>
+    
+    <div class="error-graphic">
+      <div class="floating-scales">
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="error-icon">⚖️</div>
+    </div>
+
+    <div class="error-actions">
+      <a href="/" class="btn-primary">
+        <span>🏠</span>
+        Return Home
+      </a>
+      <a href="/articles" class="btn-secondary">
+        <span>📚</span>
+        Browse Articles
+      </a>
+    </div>
+    <p >© 2025 LegalHuB | Made with ❤️ for GSSoC</p>
   </div>
-
-  <a href="/">Go to Homepage</a>
-
-  <footer>
-    <p>© 2025 LegalHuB | Made with ❤️ for GSSoC</p>
-  </footer>
-</body>
-</html>
+</div>
