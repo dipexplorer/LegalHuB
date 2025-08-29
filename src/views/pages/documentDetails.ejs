@@ -1,0 +1,191 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+.document-details-wrapper {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    background: linear-gradient(135deg, #121220, #263253);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    color: #f0f0f0;
+}
+
+.doc-main {
+    padding: 20px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 10px 18px;
+    background: transparent;
+    border: 2px solid #9c27b0;
+    color: #9c27b0;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.back-button:hover {
+    background: #9c27b0;
+    color: #fff;
+}
+
+.doc-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.doc-description {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: #ddd;
+}
+
+.doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+    color: #bbb;
+}
+.doc-meta i { color: #9c27b0; }
+
+.doc-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.btn {
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-download {
+    background: #6a1b9a;
+    color: #fff;
+}
+.btn-download:hover {
+    background: #9c27b0;
+}
+
+.btn-apply {
+    border: 2px solid #9c27b0;
+    color: #9c27b0;
+    background: transparent;
+}
+.btn-apply:hover {
+    background: #9c27b0;
+    color: #fff;
+}
+
+/* Sidebar */
+.doc-sidebar {
+    background: #161627;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.doc-section {
+    margin-bottom: 28px;
+}
+.doc-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: #d6a8ff;
+    border-left: 4px solid #9c27b0;
+    padding-left: 10px;
+}
+.doc-section ul {
+    list-style: disc;
+    padding-left: 24px;
+    color: #ddd;
+}
+.doc-section ul li { margin-bottom: 8px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .document-details-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .doc-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<div class="document-details-wrapper">
+    <!-- Main Content -->
+    <div class="doc-main">
+        <a href="/documents" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Documents
+        </a>
+
+        <h1 class="doc-title"><%= document.title %></h1>
+        <p class="doc-description"><%= document.description %></p>
+
+        <div class="doc-meta">
+            <div><i class="fas fa-map-marker-alt"></i> <%= document.state %></div>
+            <div><i class="fas fa-building"></i> <%= document.department %></div>
+            <div><i class="fas fa-download"></i> <%= document.downloadCount %> downloads</div>
+        </div>
+
+        <div class="doc-actions">
+            <a href="/api/documents/<%= document._id %>/download" 
+               class="btn btn-download"
+               onclick="trackDownload('<%= document._id %>')">
+                <i class="fas fa-download"></i> Download PDF
+            </a>
+            <a href="<%= document.applyLink %>" target="_blank" 
+               class="btn btn-apply">
+                <i class="fas fa-external-link-alt"></i> Apply Online
+            </a>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="doc-sidebar">
+        <div class="doc-section">
+            <h3>📋 Required Documents</h3>
+            <ul>
+                <% document.requiredDocuments.forEach(docItem => { %>
+                    <li><%= docItem %></li>
+                <% }) %>
+            </ul>
+        </div>
+
+        <div class="doc-section">
+            <h3>📝 Guidelines</h3>
+            <ul>
+                <% document.guidelines.forEach(g => { %>
+                    <li><%= g %></li>
+                <% }) %>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script>
+function trackDownload(docId) {
+    fetch(`/api/documents/${docId}/track`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => console.log("Download tracked", data))
+        .catch(console.error);
+}
+</script>

@@ -213,7 +213,12 @@ const deleteDocument = asyncHandler(async (req, res) => {
 
     await document.deleteOne();
 
-    res.status(200).json(new ApiResponse(200, null, "Document deleted successfully"));
+    if (req.accepts("html")) {
+        req.flash("success", "Document deleted successfully");
+        return res.redirect("/api/admin/dashboard/documents");
+    }
+
+    return res.status(200).json(new ApiResponse(200, null, "Document deleted successfully"));
 });
 
 // ✅ Download Document
