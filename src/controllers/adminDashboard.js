@@ -62,7 +62,7 @@ const toggleLawyerApprove = asyncHandler(async (req, res) => {
     lawyer.isVerified = !lawyer.isVerified;
     await lawyer.save();
 
-    if(req.accepts("html")) {
+    if (req.accepts("html")) {
         req.flash("success", "Lawyer approved successfully");
         return res.redirect("/api/admin/dashboard");
     }
@@ -71,5 +71,5 @@ const toggleLawyerApprove = asyncHandler(async (req, res) => {
 
 module.exports = {
     dashboardStats,
-    toggleLawyerApprove
-}
+    toggleLawyerApprove,
+};

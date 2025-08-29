@@ -20,10 +20,10 @@ const isLoggedIn = (req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
-  if (!req.user || req.user.role !== "admin") {
-    return res.status(403).json(new ApiError(403, "Forbidden: Admins only"));
-  }
-  next();
+    if (!req.user || req.user.role !== "admin") {
+        return res.status(403).json(new ApiError(403, "Forbidden: Admins only"));
+    }
+    next();
 };
 
 const saveRedirectUrl = (req, res, next) => {

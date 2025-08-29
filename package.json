@@ -44,6 +44,7 @@
         "express-flash": "^0.0.2",
         "express-rate-limit": "^8.0.1",
         "express-session": "^1.18.1",
+        "json2csv": "^6.0.0-alpha.2",
         "jsonwebtoken": "^9.0.2",
         "method-override": "^3.0.0",
         "mongoose": "^8.17.0",

@@ -413,12 +413,12 @@ tbody tr:hover { background: #12213d; }
                   data-apply="<%= encodeURIComponent(doc.applyLink||'') %>"
                   data-state="<%= encodeURIComponent(doc.state||'') %>"
                   data-dept="<%= encodeURIComponent(doc.department||'') %>"
-                  data-guidelines="<%= encodeURIComponent((doc.guidelines||[]).join(', ')) %>"
-                  data-reqdocs="<%= encodeURIComponent((doc.requiredDocuments||[]).join(', ')) %>">
+                  data-guidelines="<%= encodeURIComponent((doc.guidelines||[]).join('||')) %>"
+                  data-reqdocs="<%= encodeURIComponent((doc.requiredDocuments||[]).join('||')) %>">
                   ✏️ Edit
                 </button>
 
-                <form action="/admin/documents/delete/<%= doc._id %>" method="POST" class="inline-delete" style="display:inline">
+                <form action="/api/documents/<%= doc._id %>?_method=DELETE" method="POST" class="inline-delete" style="display:inline">
                   <button type="submit" class="btn btn-danger">🗑 Delete</button>
                 </form>
               </div>
@@ -461,7 +461,7 @@ tbody tr:hover { background: #12213d; }
   <div class="panel">
     <div class="card">
       <h3 id="formHeading">➕ Add New Document</h3>
-      <form id="docForm" action="/admin/documents/add" method="POST" novalidate>
+      <form id="docForm" action="/api/documents" method="POST" novalidate>
         <!-- hidden id for edit -->
         <input type="hidden" name="_id" id="docId" value="">
         <div class="form-grid">
@@ -488,6 +488,12 @@ tbody tr:hover { background: #12213d; }
             <label for="downloadLink" style="display:block;font-weight:700;margin-bottom:6px">Download Link (URL)</label>
             <input id="downloadLink" name="downloadLink" class="input" type="url" placeholder="https://">
           </div>
+
+          <div>
+            <label for="applyLink" style="display:block;font-weight:700;margin-bottom:6px">Apply Link (optional)</label>
+            <input id="applyLink" name="applyLink" class="input" type="url" placeholder="https://">
+          </div>
+
 
           <div class="col-span-2">
             <label for="description" style="display:block;font-weight:700;margin-bottom:6px">Description</label>
@@ -519,7 +525,7 @@ tbody tr:hover { background: #12213d; }
         <p style="color:var(--muted)">Select a document to edit. You can also preview, delete, or export filtered results.</p>
         <hr style="border-color:var(--border)" />
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a id="quickExport" class="btn btn-primary" href="/admin/documents/export-csv?q=<%= encodeURIComponent(filtersSafe.q||'') %>&state=<%= encodeURIComponent(filtersSafe.state||'') %>&dept=<%= encodeURIComponent(filtersSafe.dept||'') %>">Export filtered CSV</a>
+          <a id="quickExport" class="btn btn-primary" href="/api/admin/dashboard/documents/export-csv?q=<%= encodeURIComponent(filtersSafe.q||'') %>&state=<%= encodeURIComponent(filtersSafe.state||'') %>&dept=<%= encodeURIComponent(filtersSafe.dept||'') %>">Export filtered CSV</a>
           <button class="btn" id="refreshBtn">↻ Refresh</button>
         </div>
 
@@ -534,7 +540,6 @@ tbody tr:hover { background: #12213d; }
       </div>
     </div>
   </div>
-</div>
 
 <!-- Preview Modal -->
 <div class="modal" id="previewModal" aria-hidden="true">
@@ -584,23 +589,29 @@ tbody tr:hover { background: #12213d; }
     setTimeout(()=>toast.classList.remove('show'), timeout);
   }
 
-  // Build URLSearchParams from current filters
+  // Build params from the filter form directly
   function currentFilterParams(){
-    const params = new URLSearchParams(window.location.search);
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    formData.forEach((val, key) => {
+      if (val) params.append(key, val);
+    });
     return params;
   }
+
 
   // Export CSV using current filters
   exportCsvBtn && exportCsvBtn.addEventListener('click', () => {
     const params = currentFilterParams();
     // fallback defaults
-    window.location.href = '/admin/documents/export-csv?' + params.toString();
+    window.location.href = '/api/admin/dashboard/documents/export-csv?' + params.toString();
   });
 
   // quick export link already set server-side; keep it in sync if filter form changes
   filterForm && filterForm.addEventListener('change', () => {
     const params = currentFilterParams();
-    quickExport && (quickExport.href = '/admin/documents/export-csv?' + params.toString());
+    quickExport && (quickExport.href = '/api/admin/dashboard/documents/export-csv?' + params.toString());
   });
 
   // Clear filters
@@ -656,19 +667,19 @@ tbody tr:hover { background: #12213d; }
     btn.addEventListener('click', () => {
       const id = btn.dataset.id;
       document.getElementById('formHeading').textContent = '✏️ Edit Document';
-      docForm.setAttribute('action', '/admin/documents/edit/' + id);
-      // set hidden id
+      docForm.setAttribute('action', '/api/documents/' + id);
       document.getElementById('docId').value = id;
       document.getElementById('title').value = decodeSafe(btn.dataset.title);
       document.getElementById('department').value = decodeSafe(btn.dataset.dept);
       document.getElementById('state').value = decodeSafe(btn.dataset.state);
       document.getElementById('description').value = decodeSafe(btn.dataset.desc);
       document.getElementById('downloadLink').value = decodeSafe(btn.dataset.download);
-      document.getElementById('applyLink') && (document.getElementById('applyLink').value = decodeSafe(btn.dataset.apply) || '');
-      // guidelines and req docs sent as comma separated in data-edit
-      document.getElementById('guidelines').value = decodeSafe(btn.dataset.guidelines);
-      document.getElementById('requiredDocuments').value = decodeSafe(btn.dataset.reqdocs);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('applyLink').value = decodeSafe(btn.dataset.apply) || '';
+      // Convert server "||" delimiter to newline for textarea
+      document.getElementById('guidelines').value = decodeSafe(btn.dataset.guidelines).split('||').join('\n');
+      document.getElementById('requiredDocuments').value = decodeSafe(btn.dataset.reqdocs).split('||').join('\n');
+      // ✅ Scroll to edit form
+      document.getElementById('docForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
@@ -690,69 +701,70 @@ tbody tr:hover { background: #12213d; }
   // Reset form to "Add New"
   resetFormBtn && resetFormBtn.addEventListener('click', () => {
     docForm.reset();
-    docForm.setAttribute('action', '/admin/documents/add');
+    docForm.setAttribute('action', '/api/documents'); // or '/admin/documents/add'
     document.getElementById('docId').value = '';
     document.getElementById('formHeading').textContent = '➕ Add New Document';
   });
 
-  // Submit form: try AJAX, fallback to normal POST (keeps compatibility)
-  docForm && docForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+ docForm && docForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    // client-side simple validation
-    const title = document.getElementById('title').value.trim();
-    const dept = document.getElementById('department').value.trim();
-    const state = document.getElementById('state').value;
-    const description = document.getElementById('description').value.trim();
-    if (!title || !dept || !state || !description) {
-      showToast('Please fill required fields (title, department, state, description)');
-      return;
+  const id = document.getElementById('docId').value;
+  const isEdit = !!id;
+
+  // simple validation
+  const title = document.getElementById('title').value.trim();
+  const dept = document.getElementById('department').value.trim();
+  const state = document.getElementById('state').value;
+  const description = document.getElementById('description').value.trim();
+  if (!title || !dept || !state || !description) {
+    showToast('Please fill required fields (title, department, state, description)');
+    return;
+  }
+
+  // Normalize guidelines & reqDocs
+  function normalizeTextarea(val) {
+    return val.toString().replace(/\r/g,'')
+      .split(/[\n,]+/)
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
+  const payload = {
+    title,
+    department: dept,
+    state,
+    description,
+    downloadLink: document.getElementById('downloadLink').value.trim(),
+    applyLink: document.getElementById('applyLink').value.trim(),
+    guidelines: normalizeTextarea(document.getElementById('guidelines').value),
+    requiredDocuments: normalizeTextarea(document.getElementById('requiredDocuments').value),
+  };
+
+  const action = isEdit ? `/api/documents/${id}` : '/api/documents';
+  const method = isEdit ? 'PUT' : 'POST';
+
+  try {
+    const resp = await fetch(action, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
+    });
+
+    const data = await resp.json();
+    if (resp.ok) {
+      showToast(data.message || 'Saved successfully');
+      setTimeout(()=>window.location.reload(), 700);
+    } else {
+      showToast(data.message || 'Save failed');
     }
+  } catch (err) {
+    console.error('Save failed', err);
+    showToast('Network error');
+  }
+});
 
-    // prepare FormData
-    const formData = new FormData(docForm);
-
-    // Normalize guidelines & requiredDocuments to arrays on server-friendly format (comma-separated)
-    // If user used newlines, replace with commas
-    if (formData.has('guidelines')) {
-      formData.set('guidelines', formData.get('guidelines').toString().replace(/\r/g,'').split(/\n+/).map(s=>s.trim()).filter(Boolean).join(', '));
-    }
-    if (formData.has('requiredDocuments')) {
-      formData.set('requiredDocuments', formData.get('requiredDocuments').toString().replace(/\r/g,'').split(/\n+/).map(s=>s.trim()).filter(Boolean).join(', '));
-    }
-
-    // try AJAX submit
-    const action = docForm.getAttribute('action') || '/admin/documents/add';
-    try {
-      const resp = await fetch(action, {
-        method: 'POST',
-        body: formData,
-        credentials: 'same-origin'
-      });
-
-      // try JSON parse
-      const contentType = resp.headers.get('content-type') || '';
-      if (contentType.includes('application/json')) {
-        const data = await resp.json();
-        if (resp.ok) {
-          showToast(data.message || 'Saved successfully');
-          // reload to reflect changes (could update DOM instead)
-          setTimeout(()=>window.location.reload(), 700);
-        } else {
-          // show validation errors
-          showToast(data.message || 'Save failed');
-          console.error('save error', data);
-        }
-      } else {
-        // not JSON (server might have redirected or returned HTML) -> reload
-        window.location.reload();
-      }
-    } catch (err) {
-      console.error('AJAX submit failed, falling back to form submit', err);
-      // fallback: create a normal POST
-      docForm.submit();
-    }
-  });
 
   // DELETE confirm + AJAX fallback
   document.querySelectorAll('.inline-delete').forEach(form => {
