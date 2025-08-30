@@ -206,6 +206,12 @@
             transition: border-color 0.3s ease, background-color 0.3s ease;
         }
 
+        @media (max-width: 768px) {
+            #search-form input {
+                min-width: unset;
+            }
+        }
+
         #search-form input:focus {
             border-color: #9c27b0;
             background-color: #2b2a2d;
