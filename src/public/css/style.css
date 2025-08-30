@@ -566,27 +566,96 @@ nav {
     }
 }
 
-/* ✅ Footer Container (Fixed) */
+/* ✅ Modern Glassmorphism Footer */
 .footer-container {
     position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #1a1a2e, #16213e); /* Same as body gradient */
-    color: #e0e0e0;
-    padding: 40px 20px;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: 60px;
+    background: rgba(26, 26, 46, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 60px 0 30px;
+    overflow: hidden;
 }
 
+.footer-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(156, 39, 176, 0.05) 0%, 
+        rgba(26, 26, 46, 0.1) 50%, 
+        rgba(224, 64, 251, 0.03) 100%);
+    pointer-events: none;
+}
+
+/* ✅ Modern Container Layout */
 .footer-container .container {
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 30px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 60px;
+    position: relative;
+    z-index: 2;
 }
 
+/* Remove individual card styling for seamless look */
+.footer-left,
+.footer-middle,
+.footer-right {
+    transition: all 0.3s ease;
+}
+
+.footer-left:hover,
+.footer-middle:hover,
+.footer-right:hover {
+    transform: translateY(-2px);
+}
+
+/* ✅ Contact Section Styling */
+.footer-left .brand h3 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, #e040fb 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 18px rgba(224, 64, 251, 0.05);
+}
+
+.footer-left .brand h3::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, #9c27b0, #e040fb);
+    margin-top: 8px;
+    border-radius: 1px;
+    transition: width 0.3s ease;
+}
+
+.footer-left:hover .brand h3::after {
+    width: 60px;
+}
+
+.footer-left p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+/* ✅ Simplified Contact Info */
+.contact-info {
+    margin-top: 0;
 /* --- Left Section --- */
 .footer-left .brand h2 {
     color: #fff;
@@ -605,6 +674,87 @@ nav {
 .contact-info .phone {
     display: flex;
     align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.contact-info .email:hover,
+.contact-info .phone:hover {
+    transform: translateX(4px);
+}
+
+.contact-icon {
+    color: #9c27b0;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    min-width: 20px;
+}
+
+.contact-info .email:hover .contact-icon,
+.contact-info .phone:hover .contact-icon {
+    color: #e040fb;
+    transform: scale(1.1);
+}
+
+.contact-info a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 400;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.contact-info a:hover {
+    color: #e040fb;
+    text-shadow: 0 0 4px rgba(224, 64, 251, 0.16), 0 0 6px rgba(156, 39, 176, 0.10);
+    filter: drop-shadow(0 2px 6px rgba(156, 39, 176, 0.12));
+}
+
+/* Clean underline animation */
+.contact-info a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #e040fb;
+    transition: width 0.3s ease;
+}
+
+.contact-info a:hover::after {
+    width: 100%;
+}
+
+/* ✅ Quick Links Section */
+.footer-middle h3 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    font-weight: 600;
+    position: relative;
+    text-shadow: 0 0 16px rgba(224, 64, 251, 0.06);
+}
+
+.footer-middle h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #9c27b0, #e040fb);
+    border-radius: 1px;
+    transition: width 0.3s ease;
+}
+
+.footer-middle:hover h3::after {
+    width: 50px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
     gap: 14px;
     margin-bottom: 14px;
 }
@@ -647,6 +797,124 @@ nav {
 }
 
 .footer-middle ul li {
+    margin-bottom: 12px;
+}
+
+.footer-middle ul li a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    position: relative;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.footer-middle ul li a:hover {
+    color: #e040fb;
+    transform: translateX(4px);
+    text-shadow: 0 0 4px rgba(224, 64, 251, 0.16), 0 0 6px rgba(156, 39, 176, 0.10);
+    filter: drop-shadow(0 2px 6px rgba(156, 39, 176, 0.12));
+}
+
+/* Simple underline animation */
+.footer-middle ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #e040fb;
+    transition: width 0.3s ease;
+}
+
+.footer-middle ul li a:hover::after {
+    width: 100%;
+}
+
+/* ✅ Social Media Section */
+.footer-right h3 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    font-weight: 600;
+    position: relative;
+    text-shadow: 0 0 16px rgba(224, 64, 251, 0.06);
+}
+
+.footer-right h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #9c27b0, #e040fb);
+    border-radius: 1px;
+    transition: width 0.3s ease;
+}
+
+.footer-right:hover h3::after {
+    width: 50px;
+}
+
+/* ✅ Modern Circular Social Icons */
+.social-media {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.social-media a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.social-media a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.3), rgba(224, 64, 251, 0.3));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.social-media a:hover::before {
+    opacity: 1;
+}
+
+.social-media a:hover {
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(156, 39, 176, 0.3);
+}
+
+/* Platform specific hover effects */
+.social-media a:hover .fa-instagram {
+    color: #e4405f;
+}
+
+.social-media a:hover .fa-facebook {
+    color: #1877f2;
+}
+
+.social-media a:hover .fa-twitter {
+    color: #1da1f2;
+  margin-bottom: 10px;
     margin-bottom: 10px;
 }
 
@@ -712,55 +980,153 @@ nav {
     padding-top: 15px;
 }
 
-/* ✅ Feedback Button */
+/* ✅ Modern Feedback Button */
 #feedback {
-    background-color: #9c27b0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(224, 64, 251, 0.8));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #ffffff;
     padding: 12px 24px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
     cursor: pointer;
-    transition:
-        background 0.3s ease,
-        transform 0.2s;
-    box-shadow: 0 4px 12px rgba(107, 33, 168, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#feedback::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(156, 39, 176, 1), rgba(224, 64, 251, 1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 24px;
+}
+
+#feedback:hover::before {
+    opacity: 1;
 }
 
 #feedback:hover {
-    background-color: #7b1fa2;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(156, 39, 176, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* ✅ Copyright Section */
+#feedback span {
+    position: relative;
+    z-index: 1;
+}
+
+/* ✅ Clean Copyright Section */
 .copyright {
+    grid-column: 1 / -1;
     text-align: center;
-    padding-top: 12px;
+    padding-top: 40px;
+    margin-top: 40px;
     font-size: 0.9rem;
-    color: #b0b0b0;
-    border-top: 1px solid #444;
+    color: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
 }
 
-/* ✅ Responsive Fixes */
-@media (max-width: 768px) {
-    .footer-container .container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 20px;
-    }
+.copyright::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #9c27b0, transparent);
+}
 
-    .contact-info {
+/* ✅ Clean Responsive Design */
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 40px 0 20px;
+    }
+    
+    .footer-container .container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 20px;
+    }
+    
+    .footer-left,
+    .footer-middle,
+    .footer-right {
+        text-align: center;
+    }
+    
+    .footer-left .brand h3::after,
+    .footer-middle h3::after,
+    .footer-right h3::after {
+        margin: 8px auto 0;
+    }
+    
+    .contact-info .email,
+    .contact-info .phone {
         justify-content: center;
     }
-
+    
     .social-media {
         justify-content: center;
     }
+}
 
+@media (max-width: 480px) {
+    .footer-container {
+        padding: 30px 0 15px;
+    }
+    
+    .footer-container .container {
+        gap: 30px;
+        padding: 0 16px;
+    }
+    
+    .footer-left .brand h3 {
+        font-size: 1.8rem;
+    }
+    
+    .social-media a {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
     #feedback {
-        width: 100%;
-        max-width: 250px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ✅ Tablet responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .footer-container .container {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    .footer-right {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+    
+    .footer-right h3::after {
+        margin: 8px auto 0;
+    }
+    
+    .social-media {
+        justify-content: center;
     }
 }
 
@@ -831,4 +1197,66 @@ nav {
     .gt_float_switcher-arrow {
         color: #fff !important;
     }
+}
+
+/* ✅ Glassmorphism Utility Classes */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-hover:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(156, 39, 176, 0.3);
+    transform: translateY(-2px);
+}
+
+/* ✅ Smooth Scroll Enhancement */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ✅ Focus states for accessibility */
+.footer-middle ul li a:focus,
+.contact-info a:focus,
+.social-media a:focus,
+#feedback:focus {
+    outline: 2px solid #9c27b0;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ✅ Hover state for entire footer */
+.footer-container:hover {
+    box-shadow: 
+        0 -12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Premium glow for footer links */
+/* ✅ Premium Glow Effects for Footer Links */
+/* Enhance contact links */
+.contact-info a {
+    display: inline-block;
+    transition: color 0.3s ease, text-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.contact-info a:hover {
+    color: #e040fb;
+    text-shadow: 0 0 4px rgba(224, 64, 251, 0.16), 0 0 6px rgba(156, 39, 176, 0.10);
+    filter: drop-shadow(0 2px 6px rgba(156, 39, 176, 0.12));
+}
+
+/* Enhance quick links */
+.footer-middle ul li a {
+    transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.footer-middle ul li a:hover {
+    color: #e040fb;
+    transform: translateX(4px);
+    text-shadow: 0 0 4px rgba(224, 64, 251, 0.16), 0 0 6px rgba(156, 39, 176, 0.10);
+    filter: drop-shadow(0 2px 6px rgba(156, 39, 176, 0.12));
 }
