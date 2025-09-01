@@ -13,6 +13,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
+const emailRoutes = require("../src/routes/email.routes.js");
 
 // ✅ Render ke proxy ko trust karo (production me)
 if (process.env.NODE_ENV === "production") {
@@ -66,12 +67,24 @@ const sessionOptions = {
 };
 
 // Only add MongoStore in non-test environments to prevent open handles in Jest
-if (process.env.NODE_ENV !== "test") {
+// if (process.env.NODE_ENV !== "test") {
+//     sessionOptions.store = MongoStore.create({
+//         mongoUrl: process.env.DB_URL,
+//         collectionName: "sessions",
+//         ttl: 7 * 24 * 60 * 60, // 7 days
+//     });
+// }
+
+if (process.env.NODE_ENV !== "test" && process.env.USE_FAKE_DATA !== "true") {
+    // Normal case → use MongoDB
     sessionOptions.store = MongoStore.create({
         mongoUrl: process.env.DB_URL,
         collectionName: "sessions",
         ttl: 7 * 24 * 60 * 60, // 7 days
     });
+} else {
+    // Fake mode (no Mongo, MemoryStore used)
+    console.log("⚠️ Running without MongoStore (MemoryStore in use)");
 }
 
 app.use(session(sessionOptions));
@@ -132,6 +145,7 @@ app.use("/api/appointment", appointmentRoutes);
 app.use("/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api", emailRoutes);
 
 // Smart Search
 app.get("/api/search", smartSearch);
