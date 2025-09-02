@@ -1,142 +1,456 @@
 <%- layout("/layouts/boilerplate") -%>
 
 <style>
+  body {
+    background: #0f172a;
+    color: #f1f5f9;
+    line-height: 1.6;
+  }
+
   .articles-container {
     padding: 40px 30px;
-    max-width: 1400px;
+    max-width: 1500px;
     margin: auto;
-    color: #f1f5f9;
+    flex: 1;
   }
 
-  h1 {
-    font-size: 30px;
-    font-weight: 700;
-    margin-bottom: 25px;
+  .stats-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    flex: 1;
+    min-width: 220px;
+    max-width: 300px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    padding: 20px;
+    border-radius: 14px;
     text-align: center;
-    color: #fff;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid rgba(59, 130, 246, 0.2);
   }
 
+  .card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.35);
+    border-color: rgba(59, 130, 246, 0.5);
+  }
+
+  .card h3 {
+    font-size: 13px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Centered floating icon */
+  .card .icon {
+    display: block;
+    font-size: 40px;
+    margin: 10px auto 0;
+    opacity: 0.25;
+    color: #60a5fa;
+    transition: transform 0.4s ease, opacity 0.3s ease;
+  }
+
+  .card:hover .icon {
+    transform: scale(1.2) rotate(8deg);
+    opacity: 0.4;
+  }
+
+  /* Color themes */
+  .card:nth-child(1) p {
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .card:nth-child(2) p {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .card:nth-child(3) p {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 25px;
+    align-items: center;
+  }
+  .controls input,
+  .controls select,
+  .controls button,
+  .controls a {
+    padding: 10px 14px;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    font-size: 14px;
+    background: #1e293b;
+    color: #f1f5f9;
+    transition: border .2s ease, background .2s ease;
+  }
+  .controls input:focus,
+  .controls select:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+  .controls input { min-width: 220px; }
+  .controls button {
+    background: #2563eb;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+  }
+  .controls button:hover { background: #1d4ed8; }
+  .add-btn { background: #22c55e; border: none; color:#fff; }
+  .add-btn:hover { background: #16a34a; }
+  .reset-btn { background: #dc2626; border:none; color:#fff; cursor:pointer; }
+  .reset-btn:hover { background: #b91c1c; }
+
+  /* Table */
   .table-container {
     background: #1e293b;
     border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+    overflow-x: auto;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.55);
   }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    color: #f1f5f9;
-  }
-
+  table { width: 100%; border-collapse: collapse; }
   thead {
     background: #312e81;
+    position: sticky;
+    top: 0;
+    z-index: 5;
   }
-
   th, td {
-    padding: 14px 18px;
+    padding: 16px 20px;
     text-align: left;
-    font-size: 14px;
+    font-size: 15px;
   }
+  th { font-weight: 600; border-bottom: 2px solid #4338ca; color: #f9fafb; }
+  tbody tr:nth-child(even) { background: #24344c; }
+  tbody tr:hover { background: #3b4a63; transition: background .2s ease; }
 
-  th {
-    font-weight: 600;
-    color: #ffffff;
-    border-bottom: 2px solid #4338ca;
+  /* Author */
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-
-  tbody tr:nth-child(even) {
-    background: #24344c;
-  }
-
-  tbody tr:hover {
-    background: #33425c;
-  }
-
   .profile-pic {
-    width: 40px;
-    height: 40px;
+    width: 38px; height: 38px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 10px;
+    border: 2px solid #3b82f6;
   }
 
+  /* Badges */
   .badge {
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 12px;
     font-size: 12px;
     font-weight: 600;
+    margin: 2px;
+    display: inline-block;
+    white-space: nowrap;
   }
+  .badge-tag { background: #3b82f6; color: white; }
+  .badge-date { background: #0ea5e9; color: white; }
 
-  .badge-tag { background: #3b82f6; color: white; margin: 0 3px; }
-
+  /* Buttons */
   .btn {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 7px 14px;
     border-radius: 6px;
     font-size: 13px;
     cursor: pointer;
     margin: 2px;
     border: none;
+    transition: background .2s ease;
   }
-
   .btn-view { background: #22c55e; color: #fff; }
   .btn-view:hover { background: #16a34a; }
-
   .btn-delete { background: #dc2626; color: #fff; }
   .btn-delete:hover { background: #b91c1c; }
+
+  /* Pagination */
+  .pagination { 
+    margin-top: 30px; 
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 6px;
+  }
+  .pagination a {
+    display: inline-block;
+    min-width: 38px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #334155;
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .2s ease;
+  }
+  .pagination a:hover { 
+    background: #475569; 
+    transform: translateY(-2px);
+  }
+  .pagination a.active { 
+    background: #2563eb; 
+    color: #fff; 
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(37,99,235,0.5);
+    pointer-events: none;
+  }
+  .pagination a.disabled {
+    background: #1e293b;
+    color: #64748b;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.75);
+    justify-content: center;
+    align-items: center;
+    z-index:1000;
+    animation: fadeIn .25s ease;
+  }
+  .modal-content {
+    background:#1e293b;
+    color:#f1f5f9;
+    padding:30px;
+    border-radius:14px;
+    max-width:900px;
+    width:90%;
+    max-height:85%;
+    overflow-y:auto;
+    position:relative;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.85);
+    animation: slideUp .3s ease;
+  }
+  .modal-content h2 { font-size:26px; margin-bottom:14px; }
+  .modal-content h3 { margin-top:22px; margin-bottom:8px; color:#38bdf8; font-size:18px; }
+  .modal-content p, 
+  .modal-content div { margin-bottom:14px; font-size:15px; }
+  .close-btn {
+    position:absolute; top:12px; right:18px;
+    font-size:28px; cursor:pointer; color:#f1f5f9;
+  }
+
+  @keyframes fadeIn {
+    from {opacity:0;} to {opacity:1;}
+  }
+  @keyframes slideUp {
+    from {transform:translateY(40px); opacity:0;}
+    to {transform:translateY(0); opacity:1;}
+  }
 </style>
 
-<div class="articles-container">
-  <h1>Manage Articles</h1>
 
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Tags</th>
-          <th>Published At</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (articles && articles.length > 0) { %>
-          <% articles.forEach(article => { %>
-            <tr>
-              <td><%= article.title %></td>
-              <td>
-                <img src="<%= article.author.profilePicture %>" class="profile-pic" alt="">
-                <%= article.author.name || article.author.username %>
-              </td>
-              <td>
-                <% if (article.tags && article.tags.length > 0) { %>
-                  <% article.tags.forEach(tag => { %>
+<div class="main">
+  <div class="articles-container">
+    <!-- Stats -->
+    <div class="stats-cards">
+      <div class="card">
+        <h3>Total Articles</h3>
+        <p><%= totalArticles %></p>
+        <span class="icon">📑</span>
+      </div>
+      <div class="card">
+        <h3>Unique Tags</h3>
+        <p><%= uniqueTags.length %></p>
+        <span class="icon">🏷️</span>
+      </div>
+      <div class="card">
+        <h3>Newest Published</h3>
+        <p><%= articles.length ? new Date(articles[0].publishedAt).toLocaleDateString() : '-' %></p>
+        <span class="icon">🕒</span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" class="controls" id="filterForm">
+      <input type="text" name="search" placeholder="🔍 Search articles..." value="<%= search || '' %>">
+      <select name="tag">
+        <option value="">All Tags</option>
+        <% uniqueTags.forEach(t => { %>
+          <option value="<%= t %>" <%= tag===t?'selected':'' %>><%= t %></option>
+        <% }) %>
+      </select>
+      <select name="sort">
+        <option value="createdAt_desc" <%= sort==='createdAt_desc'?'selected':'' %>>Newest</option>
+        <option value="createdAt_asc" <%= sort==='createdAt_asc'?'selected':'' %>>Oldest</option>
+        <option value="title_asc" <%= sort==='title_asc'?'selected':'' %>>Title (A-Z)</option>
+        <option value="title_desc" <%= sort==='title_desc'?'selected':'' %>>Title (Z-A)</option>
+      </select>
+
+      <!-- ✅ Limit selector -->
+      <select name="limit">
+        <option value="5"  <%= limit==5 ? 'selected' : '' %>>5 / page</option>
+        <option value="10" <%= limit==10 ? 'selected' : '' %>>10 / page</option>
+        <option value="25" <%= limit==25 ? 'selected' : '' %>>25 / page</option>
+        <option value="50" <%= limit==50 ? 'selected' : '' %>>50 / page</option>
+      </select>
+
+      <button type="submit">Apply</button>
+      <button type="button" class="reset-btn" onclick="resetFilters()">Reset</button>
+      <a href="/articles/publish" class="add-btn">➕ Add Article</a>
+    </form>
+
+    <!-- Articles Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Tags</th>
+            <th>Published</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (articles && articles.length > 0) { %>
+            <% articles.forEach(article => { %>
+              <tr>
+                <td><%= article.title %></td>
+                <td>
+                  <div class="author-info" title="<%= article.author.email %>">
+                    <img src="<%= article.author.profilePicture %>" class="profile-pic">
+                    <%= article.author.name || article.author.username %>
+                  </div>
+                </td>
+                <td>
+                  <% (article.tags || []).forEach(tag => { %>
                     <span class="badge badge-tag"><%= tag %></span>
                   <% }) %>
-                <% } else { %>
-                  <span style="color:#9ca3af;">No tags</span>
-                <% } %>
-              </td>
-              <td><%= new Date(article.publishedAt).toLocaleDateString() %></td>
-              <td>
-                <!-- View -->
-                <a href="/api/articles/<%= article._id %>" class="btn btn-view">View</a>
+                </td>
+                <td>
+                  <span class="badge badge-date">
+                    <%= article.publishedAt ? new Date(article.publishedAt).toLocaleDateString() : '-' %>
+                  </span>
+                </td>
+                <td style="text-align:right;">
+                  <button class="btn btn-view" onclick="openPreview('<%= article._id %>')">Preview</button>
+                  <form action="/api/admin/dashboard/articles/delete/<%= article._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Delete this article?');">
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <!-- Hidden preview content -->
+              <div id="preview-<%= article._id %>" style="display:none;">
+                <h2><%= article.title %></h2>
+                <p><em>By <%= article.author.name || article.author.username %></em></p>
+                <h3>Introduction</h3>
+                <p><%- article.introduction %></p>
+                <% article.sections.forEach(sec => { %>
+                  <h3><%= sec.subheading %></h3>
+                  <div><%- sec.content %></div>
+                  <% if (sec.list) { %>
+                    <ul style="margin-left:20px;">
+                      <% sec.list.items.forEach(i => { %>
+                        <li><%= i %></li>
+                      <% }) %>
+                    </ul>
+                  <% } %>
+                <% }) %>
+                <h3>Conclusion</h3>
+                <p><%- article.conclusion %></p>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="5" style="text-align:center;">No articles found</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
 
-                <!-- Delete -->
-                <form action="/api/admin/dashboard/articles/delete/<%= article._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this article?');">
-                  <button type="submit" class="btn btn-delete">Delete</button>
-                </form>
-              </td>
-            </tr>
-          <% }) %>
-        <% } else { %>
-          <tr>
-            <td colspan="5" style="text-align:center;">No articles found</td>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
+    <!-- Pagination -->
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+        <a href="?page=1&limit=<%= limit %>&search=<%= search %>&tag=<%= tag %>&sort=<%= sort %>">« First</a>
+        <a href="?page=<%= currentPage-1 %>&limit=<%= limit %>&search=<%= search %>&tag=<%= tag %>&sort=<%= sort %>">‹ Prev</a>
+      <% } else { %>
+        <a class="disabled">« First</a>
+        <a class="disabled">‹ Prev</a>
+      <% } %>
+
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <a href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>&tag=<%= tag %>&sort=<%= sort %>" 
+           class="<%= currentPage==i?'active':'' %>"><%= i %></a>
+      <% } %>
+
+      <% if (currentPage < totalPages) { %>
+        <a href="?page=<%= currentPage+1 %>&limit=<%= limit %>&search=<%= search %>&tag=<%= tag %>&sort=<%= sort %>">Next ›</a>
+        <a href="?page=<%= totalPages %>&limit=<%= limit %>&search=<%= search %>&tag=<%= tag %>&sort=<%= sort %>">Last »</a>
+      <% } else { %>
+        <a class="disabled">Next ›</a>
+        <a class="disabled">Last »</a>
+      <% } %>
+    </div>
   </div>
 </div>
+
+<!-- Preview Modal -->
+<div id="articleModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closePreview()">&times;</span>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  function openPreview(id){
+    const content = document.getElementById('preview-'+id).innerHTML;
+    document.getElementById('modalBody').innerHTML = content;
+    document.getElementById('articleModal').style.display='flex';
+    document.body.style.overflow='hidden';
+  }
+  function closePreview(){
+    document.getElementById('articleModal').style.display='none';
+    document.body.style.overflow='';
+  }
+  window.onclick = function(e){
+    if(e.target==document.getElementById('articleModal')){
+      closePreview();
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape") closePreview();
+  });
+
+  function resetFilters() {
+    window.location.href = "/api/admin/dashboard/articles";
+  }
+</script>
