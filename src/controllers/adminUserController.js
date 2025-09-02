@@ -3,14 +3,46 @@ const asyncHandler = require("../utils/asyncHandler.js");
 const apiResponse = require("../utils/apiResponse.js");
 const apiError = require("../utils/apiError.js");
 
-// Render pages
+// Render users page with filters & pagination
 const renderUserPage = asyncHandler(async (req, res) => {
-    const users = await User.find({ role: "user" }).sort({ createdAt: -1 });
-    if (req.accepts("html")) {
-        return res.render("admin/usersPage", { users });
+    let { page = 1, limit = 10, search = "", status = "" } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    const filter = {};
+
+    if (search) {
+        filter.$or = [{ name: new RegExp(search, "i") }, { email: new RegExp(search, "i") }];
     }
 
-    res.status(200).json(new apiResponse(200, users, "Users fetched successfully"));
+    if (status) filter.isActive = status === "active";
+
+    const totalUsers = await User.countDocuments(filter);
+    const users = await User.find(filter)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+    // Stats
+    const stats = {
+        total: await User.countDocuments(),
+        active: await User.countDocuments({ isActive: true }),
+        inactive: await User.countDocuments({ isActive: false }),
+    };
+
+    if (req.accepts("html")) {
+        return res.render("admin/usersPage", {
+            users,
+            stats,
+            page,
+            totalPages: Math.ceil(totalUsers / limit),
+            search,
+            status,
+            limit,
+        });
+    }
+
+    res.status(200).json(new apiResponse(200, { users, stats }, "Users fetched successfully"));
 });
 
 // Toggle active/inactive
