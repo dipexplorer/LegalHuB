@@ -486,6 +486,7 @@ img {
                 <div class="lawyer-name"><%= appointment.lawyer.fullName || appointment.lawyer.username %></div>
                 <div class="specialization"><%= appointment.lawyer.specialization || 'Legal Counsel' %></div>
                 <div class="client">Client: <strong><%= appointment.client ? appointment.client.fullName || appointment.client.username : 'Guest' %></strong></div>
+                <div class="client_email">Email: <%= appointment.client?.email || "NA" %></div>
               </div>
             </div>
 
@@ -561,27 +562,59 @@ img {
   </div>
 
   <script>
-    document.getElementById('copyBtn')?.addEventListener('click', function(){
-      const id=document.getElementById('cardId')?.textContent?.trim();
-      if(!id)return;
-      navigator.clipboard.writeText(id).then(()=>{
-        this.textContent='✅ Copied';setTimeout(()=>this.textContent='📋 Copy',1600);
+    // 📋 Copy card ID
+    document.getElementById('copyBtn')?.addEventListener('click', function () {
+      const id = document.getElementById('cardId')?.textContent?.trim();
+      if (!id) return;
+
+      navigator.clipboard.writeText(id).then(() => {
+        this.textContent = '✅ Copied';
+        setTimeout(() => (this.textContent = '📋 Copy'), 1600);
       });
     });
-    document.getElementById('copyLink')?.addEventListener('click',function(){
-      const url=window.location.origin+'/api/appointment/<%= appointment._id %>/card/view';
-      navigator.clipboard.writeText(url).then(()=>{
-        this.textContent='✅ Copied';setTimeout(()=>this.textContent='🔗 Copy appointment link',1600);
+
+    // 🔗 Copy appointment link
+    document.getElementById('copyLink')?.addEventListener('click', function () {
+      const url = `${window.location.origin}/api/appointment/<%= appointment._id %>/card/view`;
+      navigator.clipboard.writeText(url).then(() => {
+        this.textContent = '✅ Copied';
+        setTimeout(() => (this.textContent = '🔗 Copy appointment link'), 1600);
       });
     });
-    document.getElementById('printCard')?.addEventListener('click',()=>window.print());
-    document.getElementById('emailPdf')?.addEventListener('click',async function(){
-      this.disabled=true;this.textContent='Sending...';
-      try{
-        const resp=await fetch('/api/appointment/<%= appointment._id %>/card/email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:'<%= appointment.client ? appointment.client.email || '' : '' %>'})});
-        this.textContent=resp.ok?'📧 Sent':'Failed';
-      }catch{this.textContent='Failed';}
-      setTimeout(()=>{this.disabled=false;this.textContent='📧 Email to client';},1800);
+
+    // 🖨️ Print card
+    document.getElementById('printCard')?.addEventListener('click', () => window.print());
+
+    // 📧 Email PDF to client
+    document.getElementById('emailPdf')?.addEventListener('click', async function () {
+      const originalText = this.textContent;
+      this.disabled = true;
+      this.textContent = 'Sending...';
+
+      try {
+        const resp = await fetch('/api/appointment/<%= appointment._id %>/card/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        const data = await resp.json().catch(() => ({}));
+
+        if (resp.ok) {
+          this.textContent = '✅ Sent';
+          alert('📧 Appointment card was emailed successfully to the client.');
+        } else {
+          this.textContent = '❌ Failed';
+          alert(data.message || 'Failed to send appointment card. Please try again.');
+        }
+      } catch (err) {
+        console.error('Email request failed:', err);
+        this.textContent = '❌ Failed';
+        alert('Network error while sending email. Please try again.');
+      }
+
+      setTimeout(() => {
+        this.disabled = false;
+        this.textContent = originalText;
+      }, 2000);
     });
   </script>
-

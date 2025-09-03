@@ -56,7 +56,7 @@
         "passport": "^0.7.0",
         "passport-local": "^1.0.0",
         "passport-local-mongoose": "^8.0.0",
-        "puppeteer": "^24.16.2",
+        "puppeteer": "^24.18.0",
         "qrcode": "^1.5.4",
         "sanitize-html": "^2.17.0",
         "shortid": "^2.2.17",

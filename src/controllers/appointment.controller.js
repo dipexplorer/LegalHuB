@@ -9,17 +9,43 @@ const QRCode = require("qrcode");
 const path = require("path");
 const ejs = require("ejs");
 const puppeteer = require("puppeteer");
+const nodemailer = require("nodemailer");
 
-/**
- * Helper: normalize date to date-only (midnight local)
- */
+//Helper: normalize date to date-only (midnight local)
 function normalizeDateOnly(dateInput) {
     const d = new Date(dateInput);
     d.setHours(0, 0, 0, 0);
     return d;
 }
 
-/** Book Appointment */
+// Helper fn convert EJS to HTML and return PDF buffer ---
+async function generateAppointmentPdfBuffer(templatePath, templateData) {
+    // 🔹 Render EJS template to HTML
+    const html = await ejs.renderFile(templatePath, templateData);
+
+    // 🔹 launch puppeteer, convert HTML to PDF buffer
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+
+    try {
+        const page = await browser.newPage();
+        await page.setContent(html, { waitUntil: "networkidle0" });
+        //🔹 Convert to PDF
+        const pdfBuffer = await page.pdf({
+            format: "A4",
+            printBackground: true,
+            margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" },
+        });
+
+        return pdfBuffer;
+    } finally {
+        await browser.close();
+    }
+}
+
+// Book Appointment
 const bookAppointment = asyncHandler(async (req, res) => {
     const clientId = req.user._id;
     const { lawyerId, date, timeSlot, notes } = req.body;
@@ -326,21 +352,22 @@ const downloadAppointmentCard = asyncHandler(async (req, res) => {
     const appointmentId = req.params.appointmentId || req.params.id;
     if (!appointmentId) throw new apiError(400, "Missing appointment id");
     const appointment = await Appointment.findById(appointmentId)
-        .populate("client", "username email")
+        .populate("client", "username fullName email")
         .populate({
             path: "lawyer",
-            select: "username email",
+            select: "username fullName email",
             populate: {
                 path: "lawyerProfile",
                 select: "specialization licenseNumber experience isVerified",
             },
         });
+
     if (!appointment) throw new apiError(404, "Appointment not found");
     if (!appointment.appointmentCard) throw new apiError(404, "Appointment card not found");
 
     // 🔹 Prepare data for template
     const templateData = {
-        lawyer: appointment.lawyer.fullName || appointment.lawyer.username,
+        lawyer: appointment.lawyer?.fullName || appointment.lawyer?.username || "N/A",
         client: appointment.client
             ? appointment.client.fullName || appointment.client.username
             : "N/A",
@@ -350,36 +377,131 @@ const downloadAppointmentCard = asyncHandler(async (req, res) => {
         cardId: appointment.appointmentCard.cardId,
         address: appointment.address || "Not provided",
         qrCode: appointment.appointmentCard.qrCode,
+        appointment,
     };
 
-    // 🔹 Render EJS template to HTML
-    const html = await ejs.renderFile(
-        path.join(__dirname, "../views/pages/download_appointment_card.ejs"),
-        templateData
-    );
-
-    // 🔹 Launch Puppeteer
-    const browser = await puppeteer.launch({
-        headless: "new",
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
-
-    // 🔹 Convert to PDF and send
-    const pdfBuffer = await page.pdf({
-        format: "A4",
-        printBackground: true,
-        margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" },
-    });
-
-    await browser.close();
+    const templatePath = path.join(__dirname, "../views/pages/download_appointment_card.ejs");
+    const pdfBuffer = await generateAppointmentPdfBuffer(templatePath, templateData);
 
     // 🔹 Send as download
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=appointment_${appointment._id}.pdf`);
 
     return res.end(pdfBuffer); // ✅ use res.end() instead of res.send()
+});
+
+// --- NEW: Email the appointment card to the client ---
+const emailAppointmentCard = asyncHandler(async (req, res) => {
+    const appointmentId = req.params.appointmentId || req.params.id;
+    if (!appointmentId) throw new apiError(400, "Missing appointment id");
+
+    const appointment = await Appointment.findById(appointmentId)
+        .populate("client", "username email fullName")
+        .populate({
+            path: "lawyer",
+            select: "username email fullName",
+            populate: {
+                path: "lawyerProfile",
+                select: "specialization licenseNumber experience isVerified",
+            },
+        });
+
+    if (!appointment) throw new apiError(404, "Appointment not found");
+    if (!appointment.appointmentCard) throw new apiError(404, "Appointment card not found");
+    if (!appointment.client || !appointment.client.email)
+        throw new apiError(400, "Client has no email");
+
+    // template data same as download
+    const templateData = {
+        lawyer: appointment.lawyer?.fullName || appointment.lawyer?.username || "N/A",
+        client: appointment.client?.fullName || appointment.client?.username || "N/A",
+        venue: appointment.venue || "To be decided",
+        date: appointment.date,
+        timeSlot: appointment.timeSlot,
+        cardId: appointment.appointmentCard.cardId,
+        address: appointment.address || "Not provided",
+        qrCode: appointment.appointmentCard.qrCode,
+        appointment,
+    };
+
+    const templatePath = path.join(__dirname, "../views/pages/download_appointment_card.ejs");
+
+    // Generate PDF buffer
+    const pdfBuffer = await generateAppointmentPdfBuffer(templatePath, templateData);
+
+    // prepare nodemailer transport (from .env)
+    const smtpPort = Number(process.env.SMTP_PORT) || 587;
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: smtpPort,
+        secure: smtpPort === 465, // true for 465, false for other ports
+        auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        },
+    });
+
+    // optional: verify connection (helps detect auth issues early)
+    try {
+        await transporter.verify();
+    } catch (err) {
+        // don't leak credentials in response
+        console.error("SMTP verify failed:", err);
+        throw new apiError(500, "Email configuration error. Check server logs.");
+    }
+
+    // construct email
+    const appointmentUrl =
+        (process.env.APP_URL || `${req.protocol}://${req.get("host")}`) +
+        `/api/appointment/${appointment._id}/card/view`;
+
+    const formattedDate = new Date(templateData.date).toLocaleDateString("en-IN", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+    const formattedTime = templateData.timeSlot || "Time not specified";
+
+    const mailOptions = {
+        from: `"LegalHub" <${process.env.SMTP_USER}>`, // ✅ Gmail safe sender
+        to: appointment.client.email,
+        subject: `Appointment Confirmation with ${templateData.lawyer} — ${formattedDate}`,
+        text: `Hello ${templateData.client},
+
+    Your appointment has been scheduled successfully.
+
+    📅 Date: ${formattedDate}
+    🕒 Time: ${formattedTime}
+    👨‍⚖️ Lawyer: ${templateData.lawyer}
+    📍 Venue: ${templateData.venue}
+    🏠 Address: ${templateData.address}
+
+    We have attached your appointment card as a PDF.  
+    You can also view it online here: ${appointmentUrl}
+
+    Thank you for choosing LegalHub.  
+
+    Best regards,  
+    LegalHub Team`,
+        attachments: [
+            {
+                filename: `appointment_${appointment._id}.pdf`,
+                content: pdfBuffer,
+                contentType: "application/pdf",
+            },
+        ],
+    };
+
+    // send
+    try {
+        await transporter.sendMail(mailOptions);
+    } catch (err) {
+        console.error("Error sending email:", err);
+        throw new apiError(500, "Failed to send email. See server logs.");
+    }
+
+    return res.status(200).json({ message: "Appointment card emailed to client" });
 });
 
 module.exports = {
@@ -391,4 +513,5 @@ module.exports = {
     renderAppointmentStats,
     viewAppointmentCard,
     downloadAppointmentCard,
+    emailAppointmentCard,
 };

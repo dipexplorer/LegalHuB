@@ -403,7 +403,7 @@
                     <%= user.isActive ? "Deactivate" : "Activate" %>
                   </button>
                 </form>
-                <form action="/api/admin/users/delete/<%= user._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                <form action="/api/admin/dashboard/users/delete/<%= user._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
                   <button type="submit" class="btn btn-delete">Delete</button>
                 </form>
               </td>
