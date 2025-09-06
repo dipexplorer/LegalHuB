@@ -165,20 +165,22 @@
             margin: 40px auto;
             padding: 20px;
             backdrop-filter: blur(6px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 18px var(--shadow-color);
             border-radius: 12px;
-            color: #e0e0e0;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             transition: all 0.3s ease-in-out;
         }
 
         .dic_container:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 24px var(--shadow-color);
         }
 
         /* ✅ Title */
         .title {
             font-size: 2.2rem;
-            color: #9c27b0;
+            color: var(--accent-primary);
             margin-bottom: 20px;
             text-align: center;
         }
@@ -197,13 +199,13 @@
             flex: 1 1 60%;
             min-width: 240px;
             padding: 14px;
-            border: 2px solid #b39ddb;
+            border: 2px solid var(--border-color);
             border-radius: 6px;
             font-size: 1rem;
-            background-color: #1e1d1f;
-            color: #e0e0e0;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
             outline: none;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
 
         @media (max-width: 768px) {
@@ -213,12 +215,16 @@
         }
 
         #search-form input:focus {
-            border-color: #9c27b0;
-            background-color: #2b2a2d;
+            border-color: var(--accent-primary);
+            background-color: var(--bg-primary);
+        }
+
+        #search-form input::placeholder {
+            color: var(--text-muted);
         }
 
         #search-form button {
-            background-color: #7b1fa2;
+            background-color: var(--accent-primary);
             color: #fff;
             border: none;
             padding: 14px 24px;
@@ -230,22 +236,23 @@
         }
 
         #search-form button:hover {
-            background-color: #9c27b0;
+            background-color: var(--accent-hover);
         }
 
         /* ✅ Result Box */
         #result {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             padding: 20px;
             border-radius: 10px;
-            color: #cfcfcf;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            color: var(--text-primary);
+            box-shadow: 0px 4px 12px var(--shadow-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .term-title {
             font-size: 1.5rem;
-            color: #ce93d8;
+            color: var(--accent-secondary);
             margin-bottom: 10px;
         }
 
