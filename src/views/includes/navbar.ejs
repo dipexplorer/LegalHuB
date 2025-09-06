@@ -17,6 +17,16 @@
 
       <!-- Auth Links (Right for large screens, inside menu for small) -->
       <div class="auth-links">
+        <!-- Theme Toggle Button -->
+        <button 
+          class="theme-toggle" 
+          id="theme-toggle" 
+          aria-label="Toggle dark/light theme"
+          title="Toggle theme"
+        >
+          <span class="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+        
         <% if (currentUser) { %>
           <a href="/api/users/logout">Logout</a>
         <% } else { %>

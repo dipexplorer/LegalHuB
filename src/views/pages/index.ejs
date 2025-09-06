@@ -14,20 +14,20 @@
             padding: 30px;
             width: 30%;
             border-radius: 12px;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 14px var(--shadow-color);
             transition: transform 0.3s ease;
         }
 
         .faq-left h2 {
             font-size: 2rem;
-            color: #ffffff;
+            color: var(--text-primary);
             font-weight: 700;
             margin-bottom: 15px;
         }
 
         .faq-left p {
             font-size: 1rem;
-            color: #bdbdbd;
+            color: var(--text-muted);
             margin-bottom: 20px;
             line-height: 1.6;
         }
@@ -40,24 +40,24 @@
             display: flex;
             align-items: center;
             font-size: 1rem;
-            color: #bdbdbd;
+            color: var(--text-muted);
             gap: 10px;
         }
 
         .faq-left .contact-info i {
-            color: #9c27b0;
+            color: var(--accent-primary);
             font-size: 1.4rem;
         }
 
         .faq-left .contact-info a {
-            color: #9c27b0;
+            color: var(--accent-primary);
             font-weight: 600;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .faq-left .contact-info a:hover {
-            color: #1e1d1f;
+            color: var(--text-primary);
         }
 
         /* ✅ Right Section */
@@ -70,28 +70,28 @@
             padding: 18px;
             border-radius: 10px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px var(--shadow-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
 
         .faq-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px var(--shadow-color);
         }
 
         .faq-item h3 {
             display: flex;
             justify-content: space-between;
             font-size: 1.1rem;
-            color: #ffffff;
+            color: var(--text-primary);
             margin: 0;
             align-items: center;
         }
 
         .faq-item h3 i {
             font-size: 1.4rem;
-            color: #9c27b0;
+            color: var(--accent-primary);
             transition: transform 0.3s ease;
         }
 
@@ -104,7 +104,7 @@
             overflow: hidden;
             padding-top: 5px;
             font-size: 1rem;
-            color: #dbe3e9;
+            color: var(--text-secondary);
             line-height: 1.6;
             transition: max-height 0.5s ease;
         }
@@ -115,7 +115,7 @@
 
         .faq-answer p {
             font-size: 1rem;
-            color: #bdbdbd;
+            color: var(--text-muted);
             line-height: 1.6;
             margin-top: 10px;
         }
