@@ -500,6 +500,15 @@
         }
     }
 
+    @media screen and (max-width:1000px) and (min-width:770px) {
+        .filter-group:first-child{
+            grid-column: 1/-1;
+        }
+        .filter-group:not(:first-child){
+            grid-column: span 1;
+        }
+    }
+
     @media (max-width: 480px) {
         .filter-section {
             padding: 20px;

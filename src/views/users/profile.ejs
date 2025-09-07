@@ -149,6 +149,10 @@
 @media(max-width: 900px) { .profile-header { grid-template-columns: 1fr; text-align: center; } }
 @media(max-width: 600px) { .info-list { grid-template-columns: 1fr; } }
 
+.btn-outline-ghost{
+  border-color:#848181;
+}
+
 /* Delete modal */
 .delete-modal { border-radius: 12px; border: none; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25); }
 .delete-modal .modal-title { font-size: 1.1rem; font-weight: 600; color: #dc3545; }
@@ -194,7 +198,7 @@
         <form id="avatarForm" action="/api/users/profile-picture" method="POST" enctype="multipart/form-data" style="display:none;">
           <input type="file" id="avatarInput" name="profilePicture" accept="image/*">
         </form>
-        <label for="avatarInput" class="btn btn-outline-ghost">Change Avatar</label>
+        <label for="avatarInput" class="btn btn-outline-ghost" style="color: #848181;">Change Avatar</label>
 
         <!-- Delete profile picture -->
         <button class="btn btn-outline-ghost danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
