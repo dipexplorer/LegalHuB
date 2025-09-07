@@ -53,6 +53,65 @@ nav {
     color: #9c27b0; /* Light Purple */
 }
 
+/* Profile Avatar and Dropdown */
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 15px;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #1a1a2e; /* dark theme */
+    color: #fff;
+    min-width: 180px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 8px;
+}
+.dropdown-content a {
+    display: block;
+    padding: 12px;
+    color: #fff;
+    text-decoration: none;
+}
+.dropdown-content a:hover {
+    background-color: #333;
+}
+.dropdown.show .dropdown-content {
+    display: block;
+}
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.dropdown-links {
+    display: flex;
+    flex-direction: column;
+}
+/* Close button */
+.close-btn {
+    font-size: 25px;
+    cursor: pointer;
+    position: absolute;
+    color: #bbb;
+    top: 0px;
+    right: 10px;
+}
+.close-btn:hover {
+    color: #fff;
+}
+
 /* ✅ Auth Links - Always on the right */
 .auth-links {
     margin-left: auto;
@@ -84,7 +143,6 @@ nav {
     font-size: 1.8rem;
     color: #f4f4f9;
     cursor: pointer;
-    padding: 10px;
     border-radius: 5px;
     transition: all 0.3s ease;
     user-select: none;
@@ -358,7 +416,7 @@ nav {
 
     /* Ensure all mobile menu content is visible */
     .nav-container.active .nav-links,
-    .nav-container.active .auth-links {
+    .nav-container.active {
         display: flex !important;
         opacity: 1 !important;
         visibility: visible !important;
@@ -377,6 +435,11 @@ nav {
         /* Remove border from navigation links */
     }
 
+    .navbar-right-section {
+        display: flex;
+        align-items: center;
+    }
+
     .nav-links li a {
         display: block;
         padding: 15px 0;
@@ -389,41 +452,6 @@ nav {
     .nav-links li a:hover {
         background: rgba(156, 39, 176, 0.1);
         padding-left: 10px;
-    }
-
-    /* Auth links styling for mobile - make sure it's visible */
-    .auth-links {
-        margin-left: 0;
-        width: 100%;
-        /* Remove border from auth section */
-        padding-top: 15px;
-        display: flex !important; /* Force display */
-        flex-direction: column;
-        opacity: 1 !important; /* Ensure visibility */
-        visibility: visible !important; /* Ensure visibility */
-    }
-
-    .auth-links a {
-        display: block !important; /* Force display */
-        margin-left: 0;
-        margin-bottom: 10px;
-        padding: 12px 15px;
-        background: #6a1b9a !important; /* Force background */
-        border-radius: 8px;
-        text-align: center;
-        transition: all 0.3s ease;
-        border: none !important; /* Remove any borders */
-        color: #fff !important; /* Ensure text is visible */
-        text-decoration: none !important;
-        font-weight: bold;
-        opacity: 1 !important; /* Ensure visibility */
-        visibility: visible !important; /* Ensure visibility */
-    }
-
-    .auth-links a:hover {
-        background: #9c27b0 !important;
-        transform: translateY(-2px);
-        color: #fff !important;
     }
 
     /* Other responsive fixes */
