@@ -21,12 +21,12 @@ body:
       validations:
           required: true
 
-    - type: Expected Improvements
-      id: expected-improvements
+    - type: textarea
+      id: Expected-Improvements
       attributes:
           label: 💡 Expected Improvements
-          description: Improvements expected from this feature.
-          placeholder: Describe the improvements you expect from this feature.
+          description: Describe the expected improvements from this feature.
+          placeholder: What improvements or enhancements do you expect this feature to bring?
       validations:
           required: true
 
