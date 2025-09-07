@@ -1,3 +1,47 @@
+<!-- GSSoC banner and project insights -->
+<h1 align="center">
+  <img width="64" height="64" alt="LegalHuB Logo" src="https://raw.githubusercontent.com/itspavant/LegalHuB/feat/gssoc-project-insights/src/public/pic/logo1.png" />
+  <br>
+  LegalHuB
+</h1>
+
+
+<p align="center">
+  <b>This project is now OFFICIALLY accepted for:</b>
+</p>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/itspavant/LegalHuB/feat/gssoc-project-insights/src/public/pic/gssoc.png" alt="GSSOC" width="80%">
+</div>
+
+**📊 Project Insights**
+
+<table align="center">
+    <thead align="center">
+        <tr>
+            <td><b>🌟 Stars</b></td>
+            <td><b>🍴 Forks</b></td>
+            <td><b>🐛 Issues</b></td>
+            <td><b>🔔 Open PRs</b></td>
+            <td><b>🔕 Closed PRs</b></td>
+            <td><b>🛠️ Languages</b></td>
+            <td><b>👥 Contributors</b></td>
+        </tr>
+     </thead>
+    <tbody>
+         <tr>
+            <td><img alt="Stars" src="https://img.shields.io/github/stars/dipexplorer/LegalHuB?style=flat&logo=github"/></td>
+            <td><img alt="Forks" src="https://img.shields.io/github/forks/dipexplorer/LegalHuB?style=flat&logo=github"/></td>
+            <td><img alt="Issues" src="https://img.shields.io/github/issues/dipexplorer/LegalHuB?style=flat&logo=github"/></td>
+            <td><img alt="Open PRs" src="https://img.shields.io/github/issues-pr/dipexplorer/LegalHuB?style=flat&logo=github"/></td>
+            <td><img alt="Closed PRs" src="https://img.shields.io/github/issues-pr-closed/dipexplorer/LegalHuB?style=flat&color=critical&logo=github"/></td>
+            <td><img alt="Languages Count" src="https://img.shields.io/github/languages/count/dipexplorer/LegalHuB?style=flat&color=green&logo=github"></td>
+            <td><img alt="Contributors Count" src="https://img.shields.io/github/contributors/dipexplorer/LegalHuB?style=flat&color=blue&logo=github"/></td>
+        </tr>
+    </tbody>
+</table>
+
+
 # 📚 LegalHuB
 
 **LegalHuB** is a web-based platform designed to simplify access to legal resources. Users can explore legal terms, download state-specific legal documents, understand their rights, read comprehensive legal guides, and apply for legal services through official links — all in one place.
