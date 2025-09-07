@@ -439,6 +439,15 @@
         }
     }
 
+    @media screen and (max-width:1000px) and (min-width:770px) {
+        .filter-group:first-child{
+            grid-column: 1/-1;
+        }
+        .filter-group:not(:first-child){
+            grid-column: span 1;
+        }
+    }
+
     @media (max-width: 768px) {
         .documents-page {
             padding: 0 16px;

@@ -526,9 +526,17 @@ nav {
 }
 
 /* ✅ Tablet responsive fixes */
-@media (max-width: 1024px) and (min-width: 769px) {
+@media (max-width: 1024px) and (min-width: 800px) {
     nav {
-        padding: 15px 30px;
+        width: 100%;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #nav-container{
+        margin-left: 100px;
     }
 
     .nav-links {
@@ -543,7 +551,39 @@ nav {
         font-size: 2.5rem;
     }
 }
+@media screen and (min-width:1200px) {
+    .logo{
+        margin-right: 100px;
+    }
+}
+@media screen and (min-width:900px) {
+    #nav-container{
+        margin-left: 200px;
+    }
+}
+@media screen and (max-width:800px) {
+    
+    nav {
+        padding: 15px 20px;
+        justify-content: space-between;
+    }
 
+    #nav-container{
+        margin-left: 3rem;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links li a {
+        font-size: 0.95rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
 /* ✅ Large mobile responsive fixes */
 @media (max-width: 480px) {
     nav {
@@ -658,6 +698,16 @@ nav {
 
 .contact-info:hover .contact-icon {
     transform: scale(1.1);
+}
+
+@media screen and (max-width:770px) {
+    .contact-info{
+        max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 /* --- Middle Section --- */
