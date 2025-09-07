@@ -14,28 +14,89 @@
         <li><a href="/about">About</a></li>
         <li><a href="/#FAQs">FAQs</a></li>
       </ul>
-
-      <!-- Auth Links (Right for large screens, inside menu for small) -->
-      <div class="auth-links">
-        <% if (currentUser) { %>
-          <a href="/api/users/logout">Logout</a>
-        <% } else { %>
-          <a href="/login">Login</a>
-        <% } %>
-      </div>
     </div>
 
-    <!-- Hamburger for small screens -->
-    <div class="hamburger" id="hamburger">&#9776;</div>
+    <div class="navbar-right-section">
+      <!-- Hamburger for small screens -->
+      <div class="hamburger" id="hamburger">&#9776;</div>
+
+      <!-- Auth Links (Right side of navbar) -->
+        <div class="auth-links">
+          <% if (currentUser) { %>
+            <div class="dropdown" id="profileDropdown">
+              <img src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>" 
+              alt="Profile" 
+              class="profile-avatar" 
+              id="avatarBtn" />
+
+              <div class="dropdown-content">
+                <div class="profile-info">
+                  <img src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>" 
+                  alt="Profile" 
+                  class="profile-avatar" 
+                  id="avatarBtn" />
+                  <div>
+                    <span><%= currentUser.username %></span>
+                    <span><%= currentUser.email %></span>
+                  </div>
+                  <span class="close-btn" id="closeBtn">&times;</span>
+                </div>
+                <hr />
+                <div class="dropdown-links">
+                  <a href="/api/users/profile" style="margin-left: 0px;"><i class="fa-solid fa-user" style="padding-right: 8px; "></i>Profile</a>
+                  <a href="/api/users/logout" style="margin-left: 0px;"><i class="fa-solid fa-right-from-bracket" style="padding-right: 8px;"></i>Logout</a>
+                </div>
+              </div>
+            </div>
+          <% } else { %>
+            <a href="/login">Login</a>
+          <% } %>
+        </div>
+      </div>
+
+
+    
   </nav>
 </header>
 
 <script>
+  // elements
   const hamburger = document.getElementById('hamburger');
   const navContainer = document.getElementById('nav-container');
 
-  hamburger.addEventListener('click', () => {
+  // desktop
+  const avatarBtn = document.getElementById('avatarBtn');
+  const profileDropdown = document.getElementById('profileDropdown');
+  const closeBtn = document.getElementById('closeBtn');
+
+  // hamburger toggle
+  hamburger?.addEventListener('click', () => {
     navContainer.classList.toggle('active');
     hamburger.classList.toggle('open');
   });
+
+  // desktop avatar toggle
+  avatarBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    profileDropdown?.classList.toggle('show');
+  });
+
+
+  // close buttons
+  closeBtn?.addEventListener('click', () => profileDropdown?.classList.remove('show'));
+
+  // click outside closes any open panel
+  window.addEventListener('click', (e) => {
+    if (profileDropdown?.classList.contains('show') && !profileDropdown.contains(e.target)) {
+      profileDropdown.classList.remove('show');
+    }
+  });
+
+  // Esc closes panels
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      profileDropdown?.classList.remove('show');
+    }
+  });
+
 </script>
