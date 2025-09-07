@@ -1,6 +1,6 @@
 <!-- GSSoC banner and project insights -->
 <h1 align="center">
-  <img width="64" height="64" alt="LegalHuB Logo" src="https://raw.githubusercontent.com/itspavant/LegalHuB/feat/gssoc-project-insights/src/public/pic/logo1.png" />
+  <img width="64" height="64" alt="LegalHuB Logo" src="src/public/pic/logo1.png"/>
   <br>
   LegalHuB
 </h1>
@@ -11,7 +11,7 @@
 </p>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/itspavant/LegalHuB/feat/gssoc-project-insights/src/public/pic/gssoc.png" alt="GSSOC" width="80%">
+  <img src="src/public/pic/gssoc.png" alt="GSSOC" width="80%">
 </div>
 
 **📊 Project Insights**
