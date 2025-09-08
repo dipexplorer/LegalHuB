@@ -5,7 +5,6 @@
   LegalHuB
 </h1>
 
-
 <p align="center">
   <b>This project is now OFFICIALLY accepted for:</b>
 </p>
@@ -40,7 +39,6 @@
         </tr>
     </tbody>
 </table>
-
 
 # 📚 LegalHuB
 

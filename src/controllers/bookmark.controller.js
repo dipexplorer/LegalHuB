@@ -3,7 +3,6 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
 
-
 // @desc Create a new bookmark
 const createBookmark = asyncHandler(async (req, res) => {
     const userId = req.user._id;
@@ -63,7 +62,6 @@ const getAllBookmarkforright = asyncHandler(async (req, res) => {
     const bookmark = await Bookmark.find({ userId }).select("-documents").populate("rights");
     res.status(201).json(new ApiResponse(200, bookmark));
 });
-
 
 // delete a bookmark for a user
 const deleteBookmark = asyncHandler(async (req, res) => {

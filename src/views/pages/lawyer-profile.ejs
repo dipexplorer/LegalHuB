@@ -654,286 +654,305 @@
 </style>
 
 <div class="profile-wrapper">
-  <div class="profile-card">
-    <!-- Left Column -->
-    <div class="profile-left">
-      <img src="<%= lawyer.profilePicture %>" 
-           alt="<%= lawyer.username %>" 
-           class="<%= lawyer.lawyerProfile.isVerified ? 'verified-avatar' : 'not-verified-avatar' %>">
-      
-      <h2>
-        <%= lawyer.username %>
-        <% if (lawyer.lawyerProfile.isVerified) { %>
-          <span class="status-badge status-verified">✔ Verified</span>
-        <% } else { %>
-          <span class="status-badge status-not-verified">✖ Not Verified</span>
-        <% } %>
-      </h2>
-
-      <p><%= lawyer.email %></p>
-      <div class="specialization-badge"><%= lawyer.lawyerProfile.specialization %></div>
-
-      <div class="cta-buttons">
-        <button id="bookBtn" data-lawyer-id="<%= lawyer._id %>" class="cta-btn">📅 Book</button>
-        <a href="/chat/lawyer/<%= lawyer._id %>" class="cta-btn">💬 Chat</a>
-      </div>
-    </div>
-
-    <!-- Right Column -->
-    <div class="profile-right">
-      <!-- About -->
-      <div class="section about-section">
-        <h3><span class="section-icon">ℹ️</span> About</h3>
-        <p><%= lawyer.lawyerProfile.bio %></p>
-      </div>
-
-      <!-- Quick Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">⏳</div>
-          <div class="stat-info">
-            <strong><%= lawyer.lawyerProfile.experience %></strong>
-            <span>Years Experience</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📜</div>
-          <div class="stat-info">
-            <strong><%= lawyer.lawyerProfile.licenseNumber %></strong>
-            <span>License</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Languages -->
-      <div class="section">
-        <h3><span class="section-icon">🌐</span> Languages Spoken</h3>
-        <div class="tag-list">
-          <% lawyer.lawyerProfile.languagesSpoken.forEach(lang => { %>
-            <span class="tag"><%= lang %></span>
-          <% }) %>
-        </div>
-      </div>
-
-      <!-- Contact Info -->
-      <div class="section contact-section">
-        <h3><span class="section-icon">📞</span> Contact Info</h3>
-        <div class="contact-row">
-          <span class="contact-label">Email:</span> 
-          <span class="contact-value"><a href="mailto:<%= lawyer.email %>"><%= lawyer.email %></a></span>
-        </div>
-        <% if (lawyer.phone) { %>
-          <div class="contact-row">
-            <span class="contact-label">Phone:</span> 
-            <span class="contact-value"><%= lawyer.phone %></span>
-          </div>
-        <% } %>
-        <div class="contact-row">
-          <span class="contact-label">Location:</span> 
-          <span class="contact-value"><%= lawyer.lawyerProfile.city %> | <%= lawyer.lawyerProfile.state %></span>
-        </div>
-      </div>
-
-      <!-- Availability & Fees -->
-      <div class="section availability-section">
-        <h3><span class="section-icon">💰</span> Availability & Fees</h3>
-        <div class="availability-row">
-          <span class="availability-label">Available Slots:</span>
-          <span class="availability-value">
-            <% if (lawyer.lawyerProfile.availableSlots && lawyer.lawyerProfile.availableSlots.length > 0) { %>
-              <%= lawyer.lawyerProfile.availableSlots.join(', ') %>
+    <div class="profile-card">
+        <!-- Left Column -->
+        <div class="profile-left">
+        <img src="<%= lawyer.profilePicture %>" 
+            alt="<%= lawyer.username %>" 
+                class="<%= lawyer.lawyerProfile && lawyer.lawyerProfile.isVerified ? 'verified-avatar' : 'not-verified-avatar' %>">
+        
+        <h2>
+            <%= lawyer.username %>
+            <% if (lawyer.lawyerProfile && lawyer.lawyerProfile.isVerified) { %>
+            <span class="status-badge status-verified">✔ Verified</span>
             <% } else { %>
-              Not specified
+            <span class="status-badge status-not-verified">✖ Not Verified</span>
             <% } %>
-          </span>
-        </div>
-        <div class="availability-row">
-          <span class="availability-label">Fees:</span>
-          <span class="availability-value">$<%= lawyer.lawyerProfile.fees %></span>
-        </div>
-      </div>
+        </h2>
 
-      <a href="/lawyers" class="cta-btn" style="max-width:200px;">⬅ Back to List</a>
+        <p><%= lawyer.email %></p>
+            <div class="specialization-badge">
+            <%= lawyer.lawyerProfile && lawyer.lawyerProfile.specialization ? lawyer.lawyerProfile.specialization : 'No specialization provided' %>
+            </div>
+
+            <div class="cta-buttons">
+                <button id="bookBtn" data-lawyer-id="<%= lawyer._id %>" class="cta-btn">📅 Book</button>
+                <a href="/chat/lawyer/<%= lawyer._id %>" class="cta-btn">💬 Chat</a>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="profile-right">
+        <!-- About -->
+        <div class="section about-section">
+            <h3><span class="section-icon">ℹ️</span> About</h3>
+            <p><%= lawyer.lawyerProfile && lawyer.lawyerProfile.bio ? lawyer.lawyerProfile.bio : 'No bio available' %></p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <strong>
+                <%= lawyer.lawyerProfile && lawyer.lawyerProfile.experience 
+                        ? lawyer.lawyerProfile.experience 
+                        : '0' %>
+                </strong>
+                <span>Years Experience</span>
+            </div>
+            </div>
+            <div class="stat-card">
+            <div class="stat-icon">📜</div>
+            <div class="stat-info">
+                <strong>
+                <%= lawyer.lawyerProfile && lawyer.lawyerProfile.licenseNumber 
+                        ? lawyer.lawyerProfile.licenseNumber 
+                        : 'N/A' %>
+                </strong>
+                <span>License</span>
+            </div>
+            </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="section">
+            <h3><span class="section-icon">🌐</span> Languages Spoken</h3>
+            <div class="tag-list">
+                <% if (lawyer.lawyerProfile && Array.isArray(lawyer.lawyerProfile.languagesSpoken)) { %>
+                <% lawyer.lawyerProfile.languagesSpoken.forEach(lang => { %>
+                    <span class="tag"><%= lang %></span>
+                <% }) %>
+                <% } else { %>
+                <span class="tag">No languages specified</span>
+                <% } %>
+            </div>
+        </div>
+
+            <!-- Contact Info -->
+            <div class="section contact-section">
+                <h3><span class="section-icon">📞</span> Contact Info</h3>
+                <div class="contact-row">
+                <span class="contact-label">Email:</span> 
+                <span class="contact-value">
+                    <a href="mailto:<%= lawyer.email %>"><%= lawyer.email %></a>
+                </span>
+            </div>
+
+            <% if (lawyer.phone) { %>
+            <div class="contact-row">
+                <span class="contact-label">Phone:</span> 
+                <span class="contact-value"><%= lawyer.phone %></span>
+            </div>
+            <% } %>
+            <div class="contact-row">
+                <span class="contact-label">Location:</span> 
+                <span class="contact-value">
+                <%= lawyer.lawyerProfile && lawyer.lawyerProfile.city ? lawyer.lawyerProfile.city : 'Unknown City' %> |
+                <%= lawyer.lawyerProfile && lawyer.lawyerProfile.state ? lawyer.lawyerProfile.state : 'Unknown State' %>
+                </span>
+            </div>
+        </div>
+
+        <!-- Availability & Fees -->
+        <div class="section availability-section">
+            <h3><span class="section-icon">💰</span> Availability & Fees</h3>
+            <div class="availability-row">
+            <span class="availability-label">Available Slots:</span>
+            <span class="availability-value">
+                <% if (lawyer.lawyerProfile && lawyer.lawyerProfile.availableSlots && lawyer.lawyerProfile.availableSlots.length > 0) { %>
+                <%= lawyer.lawyerProfile.availableSlots.join(', ') %>
+                <% } else { %>
+                Not specified
+                <% } %>
+            </span>
+            </div>
+            <div class="availability-row">
+                <span class="availability-label">Fees:</span>
+                <span class="availability-value">
+                $<%= lawyer.lawyerProfile && lawyer.lawyerProfile.fees ? lawyer.lawyerProfile.fees : '0' %>
+                </span>
+            </div>
+        </div>
+        <a href="/lawyers" class="cta-btn" style="max-width:200px;">⬅ Back to List</a>
+        </div>
     </div>
-  </div>
-</div>
-
-<!-- Booking Modal -->
-<div id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle" tabindex="-1">
-  <form id="bookingForm" novalidate>
-    <div id="bookingError" role="alert" style="color:red; margin-top:10px; display:none;"></div>
-
-    <h2 id="bookingTitle">Book Appointment</h2>
-    <input type="hidden" name="lawyerId" id="lawyerId" />
-
-    <label for="apptDate">Date:
-      <input type="date" id="apptDate" name="date" required min="<%= new Date().toISOString().split('T')[0] %>"/>
-    </label>
-
-    <label for="timeSlot">Time slot:
-      <select id="timeSlot" name="timeSlot" required>
-        <option value="">Select a date first</option>
-      </select>
-    </label>
-
-    <div id="loadingIndicator">Loading available slots...</div>
-
-    <label for="notes">Notes:
-      <textarea name="notes" id="notes" placeholder="Optional details..."></textarea>
-    </label>
-
-    <div class="form-buttons">
-      <button type="submit">Book</button>
-      <button type="button" id="closeModal">Cancel</button>
     </div>
-  </form>
-</div>
 
+    <!-- Booking Modal -->
+    <div id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle" tabindex="-1">
+    <form id="bookingForm" novalidate>
+        <div id="bookingError" role="alert" style="color:red; margin-top:10px; display:none;"></div>
 
-<!-- Reviews -->
-<div class="reviews-section">
-  <% if (currentUser) { %>
-    <% if (lawyer._id.toString() !== currentUser._id.toString()) { %>
-      <% if (!userHasReviewed) { %>  <!-- Check if the user hasn't already left a review -->
-        <hr>
-        <p>
-          <button class="btn btn-outline-danger btn-sm mt-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample"> Leave a review </button>
-        </p>
-        <div class="collapse" id="collapseWidthExample">
-          <div class="card review-card card-body mx-auto ms-0" style="width: 100%;">
-            <!-- Form for adding reviews -->
-             <form action="/api/reviews/<%= lawyer._id %>" method="post" novalidate class="needs-validation">
-              <div class="review-form">
-                <label for="rating" class="form-label bold2"><b>Rating:</b></label>
-                <fieldset class="starability-coinFlip">
-                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                  <input type="radio" id="rate1" name="review[rating]" value="1" />
-                  <label for="rate1">1 star.</label>
-                  <input type="radio" id="rate2" name="review[rating]" value="2" />
-                  <label for="rate2">2 stars.</label>
-                  <input type="radio" id="rate3" name="review[rating]" value="3" />
-                  <label for="rate3">3 stars.</label>
-                  <input type="radio" id="rate4" name="review[rating]" value="4" />
-                  <label for="rate4">4 stars.</label>
-                  <input type="radio" id="rate5" name="review[rating]" value="5" />
-                  <label for="rate5">5 stars.</label>
-                  <span class="starability-focus-ring"></span>
-                </fieldset>
-              </div>
-              <div class="review-form">
-                <label for="comment" class="form-label bold2"><b>Comments:</b></label>
-                <textarea name="review[comment]" class="form-control focus-ring focus-ring-secondary border rounded-1" id="comment" placeholder="Add some comments here..." rows="4" required></textarea>
-                <div class="invalid-feedback">Please add some comments for review!</div>
-                <button class="btn btn-outline-secondary btn-sm mt-4">Submit</button>
-              </div>
-             </form>
-          </div>
+        <h2 id="bookingTitle">Book Appointment</h2>
+        <input type="hidden" name="lawyerId" id="lawyerId" />
+
+        <label for="apptDate">Date:
+        <input type="date" id="apptDate" name="date" required min="<%= new Date().toISOString().split('T')[0] %>"/>
+        </label>
+
+        <label for="timeSlot">Time slot:
+        <select id="timeSlot" name="timeSlot" required>
+            <option value="">Select a date first</option>
+        </select>
+        </label>
+
+        <div id="loadingIndicator">Loading available slots...</div>
+
+        <label for="notes">Notes:
+        <textarea name="notes" id="notes" placeholder="Optional details..."></textarea>
+        </label>
+
+        <div class="form-buttons">
+        <button type="submit">Book</button>
+        <button type="button" id="closeModal">Cancel</button>
         </div>
-      <% } else { %>
-        <hr>
-        <p class="text-secondary">⚠️ You have already left a review for this lawyer.</p>
-      <% } %>
+    </form>
+    </div>
+
+
+    <!-- Reviews -->
+    <div class="reviews-section">
+    <% if (currentUser) { %>
+        <% if (lawyer._id.toString() !== currentUser._id.toString()) { %>
+        <% if (!userHasReviewed) { %>  <!-- Check if the user hasn't already left a review -->
+            <hr>
+            <p>
+            <button class="btn btn-outline-danger btn-sm mt-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample"> Leave a review </button>
+            </p>
+            <div class="collapse" id="collapseWidthExample">
+            <div class="card review-card card-body mx-auto ms-0" style="width: 100%;">
+                <!-- Form for adding reviews -->
+                <form action="/api/reviews/<%= lawyer._id %>" method="post" novalidate class="needs-validation">
+                <div class="review-form">
+                    <label for="rating" class="form-label bold2"><b>Rating:</b></label>
+                    <fieldset class="starability-coinFlip">
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                    <input type="radio" id="rate1" name="review[rating]" value="1" />
+                    <label for="rate1">1 star.</label>
+                    <input type="radio" id="rate2" name="review[rating]" value="2" />
+                    <label for="rate2">2 stars.</label>
+                    <input type="radio" id="rate3" name="review[rating]" value="3" />
+                    <label for="rate3">3 stars.</label>
+                    <input type="radio" id="rate4" name="review[rating]" value="4" />
+                    <label for="rate4">4 stars.</label>
+                    <input type="radio" id="rate5" name="review[rating]" value="5" />
+                    <label for="rate5">5 stars.</label>
+                    <span class="starability-focus-ring"></span>
+                    </fieldset>
+                </div>
+                <div class="review-form">
+                    <label for="comment" class="form-label bold2"><b>Comments:</b></label>
+                    <textarea name="review[comment]" class="form-control focus-ring focus-ring-secondary border rounded-1" id="comment" placeholder="Add some comments here..." rows="4" required></textarea>
+                    <div class="invalid-feedback">Please add some comments for review!</div>
+                    <button class="btn btn-outline-secondary btn-sm mt-4">Submit</button>
+                </div>
+                </form>
+            </div>
+            </div>
+        <% } else { %>
+            <hr>
+            <p class="text-secondary">⚠️ You have already left a review for this lawyer.</p>
+        <% } %>
+        <% } %>
     <% } %>
-  <% } %>
-</div>
+    </div>
 
 <!-- All Reviews -->
 <hr>
 <div class="review-view">
-    <% if (lawyer.lawyerProfile.reviews.length == 0) { %>
-        <h6>⭐ No review posted yet for this lawyer.</h6>
+    <% if (lawyer.lawyerProfile && Array.isArray(lawyer.lawyerProfile.reviews) && lawyer.lawyerProfile.reviews.length === 0) { %>
+    <h6>⭐ No review posted yet for this lawyer.</h6>
     <% } %>
-    <% if (lawyer.lawyerProfile.reviews.length > 0) { %>
-        <h4>🌟 All Reviews</h4>
-        <div class="row mt-4">
-            <% for (let i = 0; i < lawyer.lawyerProfile.reviews.length; i++) { %>
-                <% let review = lawyer.lawyerProfile.reviews[i]; %>
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card review-card h-100 ms-0">
-                        <div class="card-body d-flex flex-column">
-                            <div class="heading">
-                                <h4 class="card-title">
-                                    <% if (review.author && review.author.profilePicture && review.author.profilePicture.purl) { %>
-                                        <% let normalReviewerProfile = review.author.profilePicture.purl; %>
-                                        <img id="review_logo" src="<%=normalReviewerProfile%>" alt="Reviewer" class="reviewer-profile n-review-profile">
-                                    <% } else { %>
-                                        <img id="review_logo" src="/pic/profile.jpg" alt="Reviewer" class="reviewer-profile n-review-profile">
-                                    <% } %>
-                                    <% if (review.author) { %>
-                                        <%= review.author.username %> <span style="font-size: 9px; opacity: 0.7;">owner</span>
-                                    <% } else { %>
-                                        <span style="font-size: 9px; opacity: 0.7;">Unknown author</span>
-                                    <% } %>
+    <% if (lawyer.lawyerProfile && Array.isArray(lawyer.lawyerProfile.reviews) && lawyer.lawyerProfile.reviews.length > 0) { %>
+    <h4>🌟 All Reviews</h4>
+    <div class="row mt-4">
+        <% lawyer.lawyerProfile.reviews.forEach((review, i) => { %>
+        <div class="col-12 col-sm-6 col-md-4 mb-3">
+            <div class="card review-card h-100 ms-0">
+            <div class="card-body d-flex flex-column">
+                <div class="heading">
+                <h4 class="card-title">
+                    <% if (review.author && review.author.profilePicture && review.author.profilePicture.purl) { %>
+                    <img id="review_logo" src="<%= review.author.profilePicture.purl %>" alt="Reviewer" class="reviewer-profile n-review-profile">
+                    <% } else { %>
+                    <img id="review_logo" src="/pic/profile.jpg" alt="Reviewer" class="reviewer-profile n-review-profile">
+                    <% } %>
 
-                                    <% if (review.author && review.author._id.equals(currentUser._id)) { %>
-                                        <form action="/api/reviews/<%= lawyer._id %>/<%= review._id %>?_method=DELETE" method="POST" style="display:inline;">
-                                          <button type="submit" class="btn btn-danger btn-sm ms-2">
-                                              <i class="fa-solid fa-trash"></i>
-                                          </button>
-                                      </form>
-                                    <% } %>
-                                </h4>
-                            </div>
-                            <p class="card-text mt-2">
-                                <% for (let j = 1; j <= 5; j++) { %>
-                                    <% if (j <= review.rating) { %>
-                                        <i class="fa-solid fa-star star"></i>
-                                    <% } else { %>
-                                        <i class="fa-regular fa-star star"></i>
-                                    <% } %>
-                                <% } %>
-                            </p>
-
-                            <p class="flex-grow-1" onclick="openReviewModal('<%= i %>')" style="cursor:pointer;">
-                                <%= review.comment && review.comment.length > 150
-                                    ? review.comment.substring(0, 150) + '...'
-                                    : review.comment %>
-                                <% if (review.comment && review.comment.length > 150) { %>
-                                    <span class="text-primary"> Read more</span>
-                                <% } %>
-                            </p>
-
-                            <small style="font-size: 10px;">
-                                <i class='bx bx-error-circle'></i> Verified by LegalHuB
-                            </small>
-                        </div>
-                    </div>
+                    <%= review.author ? review.author.username : "Unknown author" %>
+                    <% if (review.author && currentUser && currentUser._id.toString() === review.author._id.toString()) { %>
+                    <span style="font-size: 9px; opacity: 0.7;">owner</span>
+                    <form action="/api/reviews/<%= lawyer._id %>/<%= review._id %>?_method=DELETE" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm ms-2">
+                        <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </form>
+                    <% } %>
+                </h4>
                 </div>
-                <!-- Modal for full review text -->
-                <div id="modal-<%= i %>" class="custom-modal">
-                    <div class="custom-modal-content">
-                        <span class="close" onclick="closeReviewModal('<%= i %>')">&times;</span>
-                         <div class="heading d-flex align-items-center mb-3">
-                            <% if (review.author && review.author.profilePicture?.purl) { %>
-                                <img src="<%= review.author.profilePicture.purl %>" alt="Reviewer" class="reviewer-profile">
-                            <% } else { %>
-                                <img src="/pic/profile.jpg" alt="Reviewer" class="reviewer-profile">
-                            <% } %>
 
-                            <div class="ms-2">
-                              <div class="d-flex align-items-center gap-2">
-                                  <h5 class="username mb-0"><%= review.author ? review.author.username : "Unknown author" %></h5>
-                                  <% if (review.author && currentUser && currentUser._id.toString() === review.author._id.toString()) { %>
-                                      <span class="owner-label">Owner</span>
-                                  <% } %>
-                              </div>
-                            </div>
-                        </div>
+                <p class="card-text mt-2">
+                <% for (let j = 1; j <= 5; j++) { %>
+                    <% if (j <= review.rating) { %>
+                    <i class="fa-solid fa-star star"></i>
+                    <% } else { %>
+                    <i class="fa-regular fa-star star"></i>
+                    <% } %>
+                <% } %>
+                </p>
 
-                        <div class="model-stars">
-                            <% for (let j = 1; j <= 5; j++) { %>
-                                <% if (j <= review.rating) { %>
-                                    <i class="fa-solid fa-star star"></i>
-                                <% } else { %>
-                                    <i class="fa-regular fa-star star"></i>
-                                <% } %>
-                            <% } %>
-                        </div>
-                        <p><%= review.comment %></p>
-                    </div>
-                </div>
-            <% } %> 
+                <p class="flex-grow-1" onclick="openReviewModal('<%= i %>')" style="cursor:pointer;">
+                <%= review.comment && review.comment.length > 150
+                        ? review.comment.substring(0, 150) + '...'
+                        : review.comment %>
+                <% if (review.comment && review.comment.length > 150) { %>
+                    <span class="text-primary"> Read more</span>
+                <% } %>
+                </p>
+
+                <small style="font-size: 10px;">
+                <i class='bx bx-error-circle'></i> Verified by LegalHuB
+                </small>
+            </div>
+            </div>
         </div>
+
+        <!-- Modal for full review text -->
+        <div id="modal-<%= i %>" class="custom-modal">
+            <div class="custom-modal-content">
+            <span class="close" onclick="closeReviewModal('<%= i %>')">&times;</span>
+            <div class="heading d-flex align-items-center mb-3">
+                <% if (review.author && review.author.profilePicture && review.author.profilePicture.purl) { %>
+                <img src="<%= review.author.profilePicture.purl %>" alt="Reviewer" class="reviewer-profile">
+                <% } else { %>
+                <img src="/pic/profile.jpg" alt="Reviewer" class="reviewer-profile">
+                <% } %>
+                <div class="ms-2">
+                <div class="d-flex align-items-center gap-2">
+                    <h5 class="username mb-0"><%= review.author ? review.author.username : "Unknown author" %></h5>
+                    <% if (review.author && currentUser && currentUser._id.toString() === review.author._id.toString()) { %>
+                    <span class="owner-label">Owner</span>
+                    <% } %>
+                </div>
+                </div>
+            </div>
+
+            <div class="model-stars">
+                <% for (let j = 1; j <= 5; j++) { %>
+                <% if (j <= review.rating) { %>
+                    <i class="fa-solid fa-star star"></i>
+                <% } else { %>
+                    <i class="fa-regular fa-star star"></i>
+                <% } %>
+                <% } %>
+            </div>
+            <p><%= review.comment %></p>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+    <% } else { %>
+    <h6>⭐ No review posted yet for this lawyer.</h6>
     <% } %>
 </div>
 

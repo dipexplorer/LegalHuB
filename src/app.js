@@ -294,7 +294,8 @@ app.use((err, req, res, next) => {
         // In production avoid exposing stack traces
         return res.status(statusCode).render("pages/error", {
             statusCode,
-            message: isProd ? "Internal Server Error" : err.message,
+            msg: isProd ? "Internal Server Error" : err.message,
+            status: statusCode,
             stack: isProd ? null : err.stack,
         });
     }

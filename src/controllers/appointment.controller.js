@@ -10,6 +10,7 @@ const path = require("path");
 const ejs = require("ejs");
 const puppeteer = require("puppeteer");
 const nodemailer = require("nodemailer");
+const { createNotification } = require("../utils/notificationService.js");
 
 //Helper: normalize date to date-only (midnight local)
 function normalizeDateOnly(dateInput) {
@@ -122,6 +123,18 @@ const bookAppointment = asyncHandler(async (req, res) => {
 
         appointment.appointmentCard = { cardId, expiresAt, qrCode };
         await appointment.save();
+
+        // after saving appointment
+        await createNotification({
+            user: lawyerUser._id,
+            type: "appointment.created",
+            title: "New Appointment",
+            message: `${req.user.username} booked an appointment with you on ${appointment.date}`,
+            relatedId: appointment._id,
+            relatedModel: "Appointment",
+            priority: "high",
+            channels: { inApp: true, email: true },
+        });
 
         if (req.accepts("html")) {
             req.flash("success", "Appointment Booked Successfully!");
