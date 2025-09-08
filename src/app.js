@@ -17,6 +17,7 @@ const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
 
+
 // Security + utilities
 const helmet = require("helmet");
 const hpp = require("hpp");
@@ -28,6 +29,8 @@ const xssClean = require("xss-clean");
 // Passport Configuration
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Import User model (Fix for passport authentication)
 const User = require("./models/user.model.js");
@@ -116,6 +119,7 @@ if (!IS_TEST) {
 //     })
 // );
 
+
 // CORS Configuration
 app.use(
     cors({
@@ -176,6 +180,47 @@ app.use(passport.session());
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                let user = await User.findOne({ googleId: profile.id });
+
+                if (!user) {
+                    user = await User.create({
+                        googleId: profile.id,
+                        username: profile.emails[0].value,
+                        email: profile.emails[0].value,
+                        name: profile.displayName,
+                        profilePic: profile.photos[0]?.value,
+                    });
+                }
+                return done(null, user);
+            } catch (err) {
+                return done(err, null);
+            }
+        }
+    )
+);
+
+// ------------------------- Google OAuth Routes -------------------------
+app.get("/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get("/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/login", failureFlash: true }),
+    (req, res) => {
+        // Successful login
+        res.redirect("/");
+    }
+);
 
 // Global locals
 app.use((req, res, next) => {
