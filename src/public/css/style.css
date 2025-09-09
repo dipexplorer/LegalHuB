@@ -1,10 +1,19 @@
 /* 🌌 General Styling */
-body {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    font-family: rakkas;
-    overflow-x: hidden;
-    margin: 0;
+:root {
+  --accent: #9c27b0;
+  --accent-dark: #6a1b9a;
+  --text: #f4f4f9;
+  --muted: #bdbdbd;
 }
+
+body {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  font-family: 'Inter', sans-serif;  /* cleaner, modern */
+  overflow-x: hidden;
+  margin: 0;
+  color: var(--text);
+}
+
 
 /* ✅ Navbar */
 nav {
@@ -18,11 +27,13 @@ nav {
 }
 
 .navbar-brand a {
-    color: #9c27b0; /* Light Purple */
-    font-size: 1.8rem;
-    font-weight: bold;
-    text-decoration: none;
+  font-family: 'Rakkas', cursive; /* decorative font only for logo */
+  color: var(--accent);
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
 }
+
 
 /* ✅ Navigation Container */
 .nav-container {

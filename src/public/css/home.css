@@ -1,0 +1,185 @@
+:root{
+  --bg:#0f1724;
+  --card-bg: rgba(255,255,255,0.03);
+  --muted:#bdbdbd;
+  --accent:#9c27b0;
+  --accent-2:#7b1fa2;
+  --glass: rgba(255,255,255,0.04);
+  --max-width: 900px;
+  --radius: 12px;
+  --glass-blur: 6px;
+  --text: #e6eef8;
+}
+
+/* Base */
+html,body{
+  height:100%;
+  margin:0;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, #0b1220 0%, #101827 60%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Hero */
+.hero{
+  padding: 56px 20px 36px;
+  text-align:center;
+  max-width:1200px;
+  margin:0 auto;
+}
+.hero h1{
+  font-size:2.4rem;
+  margin:0 0 10px;
+  color:var(--text);
+  font-weight:800;
+  letter-spacing: -0.02em;
+}
+.hero p.lead{
+  margin:0 auto 22px;
+  max-width:820px;
+  color:var(--muted);
+  font-size:1.05rem;
+  line-height:1.6;
+}
+.title{
+  font-size:1.9rem;
+  color:var(--accent);
+  margin: 22px 0;
+  font-weight:700;
+}
+
+/* Dictionary container */
+.dic_container{
+  width:100%;
+  max-width:var(--max-width);
+  margin: 18px auto 36px;
+  padding:20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: 0 8px 36px rgba(2,6,23,0.6);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.dic_container:focus-within{ transform: translateY(-4px); box-shadow: 0 12px 44px rgba(2,6,23,0.7); }
+
+/* Search form */
+#search-form{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+#search-form label{ position:absolute; left:-9999px; }
+#term-input{
+  flex:1 1 520px;
+  min-width:200px;
+  max-width:760px;
+  padding:14px 16px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: #0f1113;
+  color:var(--text);
+  font-size:1rem;
+  outline:none;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+#term-input::placeholder{ color: #9aa3b2; }
+#term-input:focus{ box-shadow: 0 6px 18px rgba(124,58,237,0.08); border-color: var(--accent); }
+
+#search-button{
+  background: linear-gradient(180deg,var(--accent), var(--accent-2));
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  min-width:110px;
+  transition: transform .12s ease, box-shadow .12s ease;
+  box-shadow: 0 6px 18px rgba(124,58,237,0.18);
+}
+#search-button:hover{ transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.22); }
+#search-button:active{ transform: translateY(0); }
+
+/* result */
+#result{
+  display:none;
+  margin-top:12px;
+  padding:16px;
+  border-radius:10px;
+  background:var(--card-bg);
+  border:1px solid rgba(255,255,255,0.03);
+  color:var(--muted);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+}
+#result.show{ display:block; }
+.term-title{ color: rgba(255,255,255,0.92); font-weight:700; margin:0 0 8px; font-size:1.15rem; }
+#term-definition{ margin:0; color:var(--muted); line-height:1.6; }
+
+/* Lawyers */
+.lawyer-section{
+  padding:54px 20px;
+  text-align:center;
+  max-width:1200px;
+  margin: 0 auto 40px;
+}
+.lawyer-section h2{ font-size:1.9rem; color:var(--accent); margin:0 0 8px; }
+.lawyer-section .subheading{ color:var(--muted); margin-bottom:26px; }
+.lawyer-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:22px;
+  align-items:stretch;
+}
+.lawyer-card{
+  background: linear-gradient(135deg, rgba(156,39,176,0.06), rgba(123,31,162,0.03));
+  padding:18px;
+  border-radius:14px;
+  box-shadow: 0 8px 22px rgba(2,6,23,0.6);
+  transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s ease;
+  text-align:left;
+}
+.lawyer-card:hover{ transform: translateY(-8px); box-shadow: 0 18px 36px rgba(2,6,23,0.65); }
+.lawyer-header{ display:flex; gap:14px; align-items:center; margin-bottom:10px; }
+.lawyer-photo{ width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); box-shadow: 0 4px 12px rgba(124,58,237,0.12); }
+.lawyer-info h3{ margin:0; color:var(--text); font-size:1.05rem; font-weight:700; }
+.lawyer-info .specialization{ color:#d7c7ec; margin:4px 0; font-weight:600; font-size:0.95rem; }
+.small-badge, .verified-badge{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:0.75rem; margin-top:6px; }
+.verified-badge{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; box-shadow: 0 6px 18px rgba(124,58,237,0.14); }
+.small-badge{ background: rgba(255,255,255,0.03); color:var(--muted); }
+.lawyer-card p{ margin:6px 0; color:var(--muted); font-weight:600; font-size:0.95rem; }
+.rating{ color:#ffd54f; font-weight:800; text-shadow: 0 0 6px #ffd54f33; }
+.lawyer-actions{ margin-top:12px; display:flex; gap:10px; }
+.contact-btn{ background: transparent; border:1px solid rgba(255,255,255,0.06); padding:10px 12px; border-radius:10px; color:var(--text); text-decoration:none; font-weight:700; cursor:pointer; }
+.contact-btn:hover{ background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.09); }
+.view-all-btn{ display:inline-block; margin-top:18px; padding:10px 14px; border-radius:10px; background:var(--card-bg); color:var(--text); text-decoration:none; border:1px solid rgba(255,255,255,0.03); }
+
+/* FAQ */
+.faq-container{ display:flex; gap:28px; align-items:flex-start; justify-content:center; max-width:1200px; margin: 40px auto; padding:0 20px; }
+.faq-left{ flex: 0 0 320px; background:var(--card-bg); padding:18px; border-radius:12px; color:var(--muted); }
+.faq-left h2{ color:var(--text); margin-top:0; }
+.faq-right{ flex:1 1 520px; }
+.faq-item{ background: rgba(255,255,255,0.02); padding:14px; margin-bottom:12px; border-radius:10px; cursor:pointer; }
+.faq-item h3{ margin:0; display:flex; justify-content:space-between; align-items:center; font-size:1rem; color:var(--text); }
+.faq-answer{ max-height:0; overflow:hidden; transition:max-height .35s ease, opacity .2s; opacity:0; color:var(--muted); margin-top:6px; }
+.faq-item.open .faq-answer{ max-height:400px; opacity:1; }
+
+/* Responsive */
+@media (max-width:980px){
+  .faq-container{ flex-direction:column; }
+  .faq-left{ width:100%; order:2; }
+  .faq-right{ order:1; }
+}
+@media (max-width:640px){
+  #term-input{ flex:1 1 100%; min-width:0; }
+  #search-button{ width:100%; max-width:420px; }
+  #search-form{ flex-direction:column; align-items:stretch; gap:10px; }
+  .dic_container{ padding:14px; }
+}
+
+/* Accessibility focus */
+:focus{ outline: 3px solid rgba(124,58,237,0.12); outline-offset: 2px; }
