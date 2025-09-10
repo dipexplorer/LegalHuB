@@ -18,6 +18,29 @@
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
   }
+  .google-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: #fff;
+    color: #444;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .google-btn img {
+    height: 20px;
+    margin-right: 10px;
+  }
+  .google-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+  }
   .input-group {
     position: relative;
   }
@@ -112,6 +135,10 @@
 
       <div class="row">
         <button type="submit" class="btn">Login</button>
+        <a href="/auth/google" class="google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+          Continue with Google
+        </a>
         <p class="small-text">
           <a href="/api/users/forgot-password" class="forgot-link" style="color: #8e00ff;">Forgot Password?</a>
         </p>
@@ -217,113 +244,13 @@
 
       <div class="row">
         <button type="submit" class="btn">Register</button>
+        <a href="/auth/google" class="google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+          Continue with Google
+        </a>
       </div>
 
       <p class="small-text">Already have an account? <span id="switch-to-login" style="cursor:pointer;color:#8e00ff;">Login</span></p>
     </form>
   </div>
 </div>
-
-<script>
-  (() => {
-    'use strict';
-
-    // Toggle between login/register views
-    const loginToggle = document.getElementById('login-toggle');
-    const registerToggle = document.getElementById('register-toggle');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const switchToRegister = document.getElementById('switch-to-register');
-    const switchToLogin = document.getElementById('switch-to-login');
-
-    const showLogin = () => {
-      loginToggle.classList.add('active');
-      registerToggle.classList.remove('active');
-      loginForm.classList.remove('hidden');
-      registerForm.classList.add('hidden');
-    };
-    const showRegister = () => {
-      registerToggle.classList.add('active');
-      loginToggle.classList.remove('active');
-      registerForm.classList.remove('hidden');
-      loginForm.classList.add('hidden');
-    };
-
-    if (loginToggle) loginToggle.addEventListener('click', showLogin);
-    if (registerToggle) registerToggle.addEventListener('click', showRegister);
-    if (switchToRegister) switchToRegister.addEventListener('click', showRegister);
-    if (switchToLogin) switchToLogin.addEventListener('click', showLogin);
-
-    const passwordInput = document.getElementById('register-password');
-    const confirmPasswordInput = document.getElementById('register-confirm-password');
-    const passwordFeedback = document.getElementById('password-feedback');
-
-    const getPasswordErrors = (password) => {
-      const errors = [];
-      if (password.length < 8) errors.push("at least 8 characters");
-      if (!/[a-z]/.test(password)) errors.push("a lowercase letter");
-      if (!/[A-Z]/.test(password)) errors.push("an uppercase letter");
-      if (!/[0-9]/.test(password)) errors.push("a number");
-      if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) errors.push("a special character");
-      return errors;
-    };
-
-    if (passwordInput && passwordFeedback) {
-      passwordInput.addEventListener('input', () => {
-        const password = passwordInput.value;
-        const errors = getPasswordErrors(password);
-
-        if (errors.length === 0) {
-          passwordFeedback.textContent = "Password looks good!";
-          passwordFeedback.className = "password-feedback valid";
-          passwordInput.setCustomValidity('');
-        } else {
-          passwordFeedback.textContent = "Include: " + errors.join(", ");
-          passwordFeedback.className = "password-feedback show";
-          passwordInput.setCustomValidity("Invalid password.");
-        }
-      });
-    }
-
-    if (confirmPasswordInput && passwordInput) {
-      confirmPasswordInput.addEventListener('input', () => {
-        confirmPasswordInput.setCustomValidity(
-          confirmPasswordInput.value !== passwordInput.value ? "Passwords do not match." : ''
-        );
-      });
-    }
-
-    const forms = document.querySelectorAll('.needs-validation');
-    forms.forEach((form) => {
-      form.addEventListener('submit', (event) => {
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      });
-    });
-
-    // Show/Hide lawyer fields based on role selection
-    const roleSelect = document.getElementById('register-role');
-    if (roleSelect) {
-      roleSelect.addEventListener('change', function () {
-        const lawyerFields = document.querySelector('.lawyer-profile-fields');
-        if (this.value === 'lawyer') {
-          lawyerFields.classList.remove('d-none');
-        } else {
-          lawyerFields.classList.add('d-none');
-        }
-      });
-    }
-  })();
-
-  function togglePassword(inputId, toggleBtn) {
-    const input = document.getElementById(inputId);
-    const icon = toggleBtn.querySelector('i');
-    const isPassword = input.type === 'password';
-    input.type = isPassword ? 'text' : 'password';
-    icon.classList.toggle('fa-eye', !isPassword);
-    icon.classList.toggle('fa-eye-slash', isPassword);
-  }
-</script>
