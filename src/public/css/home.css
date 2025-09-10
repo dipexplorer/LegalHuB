@@ -1,0 +1,601 @@
+/* ✅ FAQ Container */
+.faq-container {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+/* ✅ Left Section */
+.faq-left {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 30px;
+    width: 30%;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+.faq-left h2 {
+    font-size: 2rem;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.faq-left p {
+    font-size: 1rem;
+    color: #bdbdbd;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+.faq-left .contact-info {
+    margin-top: 15px;
+}
+.faq-left .contact-info span {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #bdbdbd;
+    gap: 10px;
+}
+.faq-left .contact-info i {
+    color: #9c27b0;
+    font-size: 1.4rem;
+}
+.faq-left .contact-info a {
+    color: #9c27b0;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.faq-left .contact-info a:hover {
+    color: #1e1d1f;
+}
+/* ✅ Right Section */
+.faq-right {
+    width: 65%;
+}
+.faq-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.faq-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.faq-item h3 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    color: #ffffff;
+    margin: 0;
+    align-items: center;
+}
+.faq-item h3 i {
+    font-size: 1.4rem;
+    color: #9c27b0;
+    transition: transform 0.3s ease;
+}
+.faq-item.open h3 i {
+    transform: rotate(180deg);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    padding-top: 5px;
+    font-size: 1rem;
+    color: #dbe3e9;
+    line-height: 1.6;
+    transition: max-height 0.5s ease;
+}
+.faq-item.open .faq-answer {
+    max-height: 300px;
+}
+.faq-answer p {
+    font-size: 1rem;
+    color: #bdbdbd;
+    line-height: 1.6;
+    margin-top: 10px;
+}
+/* ✅ Responsive Design */
+@media (max-width: 992px) {
+    .faq-container {
+        flex-direction: column;
+        padding: 30px;
+        gap: 20px;
+    }
+    .faq-left {
+        width: 100%;
+        padding: 20px;
+    }
+    .faq-right {
+        width: 100%;
+    }
+
+    .faq-item h3 {
+        font-size: 1.1rem;
+    }
+    .faq-answer p {
+        font-size: 0.95rem;
+    }
+}
+@media (max-width: 600px) {
+    .faq-left h2 {
+        font-size: 1.8rem;
+    }
+    .faq-item h3 {
+        font-size: 1rem;
+    }
+    .faq-answer p {
+        font-size: 0.9rem;
+    }
+}
+/* ✅ Container Styling */
+.dic_container {
+    max-width: 50vw;
+    margin: 40px auto;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    color: #e0e0e0;
+    transition: all 0.3s ease-in-out;
+}
+.dic_container:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+/* ✅ Title */
+.title {
+    font-size: 2.2rem;
+    color: #9c27b0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+/* ✅ Form Styling */
+#search-form {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+#search-form input {
+    flex: 1 1 60%;
+    min-width: 240px;
+    padding: 14px;
+    border: 2px solid #b39ddb;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #1e1d1f;
+    color: #e0e0e0;
+    outline: none;
+    transition:
+        border-color 0.3s ease,
+        background-color 0.3s ease;
+}
+@media (max-width: 768px) {
+    #search-form input {
+        min-width: unset;
+    }
+}
+#search-form input:focus {
+    border-color: #9c27b0;
+    background-color: #2b2a2d;
+}
+#search-form button {
+    background-color: #7b1fa2;
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#search-form button:hover {
+    background-color: #9c27b0;
+}
+/* ✅ Result Box */
+#result {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    color: #cfcfcf;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+.term-title {
+    font-size: 1.5rem;
+    color: #ce93d8;
+    margin-bottom: 10px;
+}
+#term-definition {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+/* ✅ Responsive */
+@media (max-width: 768px) {
+    .dic_container {
+        padding: 20px;
+    }
+    #search-form {
+        flex-direction: column;
+    }
+    #search-form input,
+    #search-form button {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 550px) {
+    .dic_container {
+        max-width: 80vw;
+    }
+    #search-form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        margin-block: auto;
+        flex-wrap: wrap;
+    }
+    #search-form input {
+        width: 300px;
+        max-width: 300px;
+    }
+    #search-form button {
+        width: 300px;
+        max-width: 300px;
+    }
+}
+@media screen and (max-width: 410px) {
+    .dic_container {
+        max-width: 100vw;
+    }
+    #search-form {
+        padding: 10px;
+    }
+    #search-form input {
+        width: 280px;
+        max-width: 280px;
+    }
+    #search-form button {
+        width: 280px;
+        max-width: 280px;
+    }
+}
+/* ==================== TOP-RATED LAWYERS SECTION ==================== */
+.lawyer-section {
+    padding: 70px 20px;
+    text-align: center;
+    max-width: 1200px;
+    margin: auto;
+    color: #f1f1f1;
+    background: rgba(30, 25, 40, 0.15); /* subtle dark background */
+    border-radius: 16px;
+}
+
+.lawyer-section h2 {
+    font-size: 2.6rem;
+    color: #e1a8ff;
+    margin-bottom: 10px;
+}
+
+.lawyer-section .subheading {
+    font-size: 1.1rem;
+    color: #d0d0d0;
+    margin-bottom: 50px;
+}
+
+/* Lawyer Grid */
+.lawyer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Lawyer Card */
+.lawyer-card {
+    background: linear-gradient(145deg, rgba(50, 35, 80, 0.25), rgba(70, 50, 100, 0.2));
+    color: #f0f0f0;
+    padding: 26px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+    cursor: default;
+}
+
+.lawyer-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(123, 31, 162, 0.45);
+}
+
+/* Header: photo + info */
+.lawyer-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.lawyer-photo {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #9c27b0;
+    box-shadow: 0 0 12px rgba(156, 39, 176, 0.6);
+    transition: box-shadow 0.3s ease;
+}
+
+.lawyer-photo:hover {
+    box-shadow: 0 0 18px rgba(156, 39, 176, 0.9);
+}
+
+.lawyer-info h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f1f1f1;
+}
+
+.lawyer-info p.specialization {
+    margin: 5px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #d1bee7;
+    font-style: italic;
+}
+
+/* Badges */
+.verified-badge {
+    display: inline-block;
+    background: #7c4dff;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-top: 6px;
+    box-shadow: 0 0 8px #7c4dffaa;
+}
+
+.small-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    color: #b0a7c3;
+    margin-top: 6px;
+}
+
+/* Card Details */
+.lawyer-card p {
+    margin: 6px 0;
+    font-size: 1rem;
+    color: #cfc3e9;
+    font-weight: 500;
+}
+
+.rating {
+    color: #ffd54f;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 4px #ffea00aa;
+}
+
+/* Actions */
+.lawyer-actions {
+    margin-top: 20px;
+}
+
+.contact-btn {
+    display: inline-block;
+    background: #9c27b0;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        background 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.4);
+}
+
+.contact-btn:hover {
+    background: #e1a8ff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.6);
+}
+
+.view-all-btn {
+    display: inline-block;
+    margin-top: 40px;
+    background: #9c27b0;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        background 0.3s ease,
+        transform 0.2s ease;
+}
+
+.view-all-btn:hover {
+    background: #e1a8ff;
+    color: #000;
+    transform: translateY(-2px);
+}
+
+/* ==================== QUICK LINKS SECTION ==================== */
+.quick-links {
+    padding: 60px 20px;
+    text-align: center;
+    background: rgba(50, 35, 80, 0.2);
+    border-radius: 16px;
+    margin-top: 50px;
+}
+
+.quick-links h2 {
+    font-size: 2rem;
+    color: #e1a8ff;
+    margin-bottom: 30px;
+}
+
+.quick-links .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+}
+
+.quick-links a {
+    background: #9c27b0;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition:
+        background 0.3s,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.25);
+}
+
+.quick-links a:hover {
+    background: #e1a8ff;
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.45);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 768px) {
+    .lawyer-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .lawyer-photo {
+        width: 90px;
+        height: 90px;
+    }
+    .contact-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .quick-links h2 {
+        font-size: 1.6rem;
+    }
+    .quick-links a {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .lawyer-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .lawyer-photo {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+/* === QUICK LINKS SECTION === */
+.quick-links {
+    padding: 60px 20px;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(156, 39, 176, 0.08), transparent);
+}
+
+.quick-links h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.quick-links .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+}
+
+.quick-links a {
+    background: var(--primary-dark);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition:
+        background 0.3s,
+        transform 0.25s ease;
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.25);
+}
+
+.quick-links a:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.45);
+}
+
+@media (max-width: 600px) {
+    .quick-links h2 {
+        font-size: 1.6rem;
+    }
+    .quick-links a {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .lawyer-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .lawyer-photo {
+        width: 90px;
+        height: 90px;
+    }
+    .lawyer-actions {
+        flex-direction: column;
+    }
+    .contact-btn {
+        width: 100%;
+    }
+}
+.view-all-btn {
+    margin-top: 20px !important;
+    padding: 12px 18px;
+}

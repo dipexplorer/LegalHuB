@@ -126,7 +126,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
 
         // after saving appointment
         await createNotification({
-            user: lawyerUser._id,
+            user: req.user._id,
             type: "appointment.created",
             title: "New Appointment",
             message: `${req.user.username} booked an appointment with you on ${appointment.date}`,

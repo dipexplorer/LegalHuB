@@ -1,693 +1,190 @@
 <% layout("layouts/boilerplate") %>
-    <style>
-        /* ✅ FAQ Container */
-        .faq-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 50px;
-            gap: 40px;
-        }
 
-        /* ✅ Left Section */
-        .faq-left {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 30px;
-            width: 30%;
-            border-radius: 12px;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
-        }
-
-        .faq-left h2 {
-            font-size: 2rem;
-            color: #ffffff;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .faq-left p {
-            font-size: 1rem;
-            color: #bdbdbd;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .faq-left .contact-info {
-            margin-top: 15px;
-        }
-
-        .faq-left .contact-info span {
-            display: flex;
-            align-items: center;
-            font-size: 1rem;
-            color: #bdbdbd;
-            gap: 10px;
-        }
-
-        .faq-left .contact-info i {
-            color: #9c27b0;
-            font-size: 1.4rem;
-        }
-
-        .faq-left .contact-info a {
-            color: #9c27b0;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .faq-left .contact-info a:hover {
-            color: #1e1d1f;
-        }
-
-        /* ✅ Right Section */
-        .faq-right {
-            width: 65%;
-        }
-
-        .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 18px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .faq-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .faq-item h3 {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.1rem;
-            color: #ffffff;
-            margin: 0;
-            align-items: center;
-        }
-
-        .faq-item h3 i {
-            font-size: 1.4rem;
-            color: #9c27b0;
-            transition: transform 0.3s ease;
-        }
-
-        .faq-item.open h3 i {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            padding-top: 5px;
-            font-size: 1rem;
-            color: #dbe3e9;
-            line-height: 1.6;
-            transition: max-height 0.5s ease;
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 300px;
-        }
-
-        .faq-answer p {
-            font-size: 1rem;
-            color: #bdbdbd;
-            line-height: 1.6;
-            margin-top: 10px;
-        }
-
-        /* ✅ Responsive Design */
-        @media (max-width: 992px) {
-            .faq-container {
-                flex-direction: column;
-                padding: 30px;
-                gap: 20px;
-            }
-
-            .faq-left {
-                width: 100%;
-                padding: 20px;
-            }
-
-            .faq-right {
-                width: 100%;
-            }
-
-            .faq-item h3 {
-                font-size: 1.1rem;
-            }
-
-            .faq-answer p {
-                font-size: 0.95rem;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .faq-left h2 {
-                font-size: 1.8rem;
-            }
-
-            .faq-item h3 {
-                font-size: 1rem;
-            }
-
-            .faq-answer p {
-                font-size: 0.9rem;
-            }
-        }
-        /* ✅ Container Styling */
-        .dic_container {
-            max-width: 50vw;
-            margin: 40px auto;
-            padding: 20px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-            border-radius: 12px;
-            color: #e0e0e0;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .dic_container:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-        }
-
-        /* ✅ Title */
-        .title {
-            font-size: 2.2rem;
-            color: #9c27b0;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        /* ✅ Form Styling */
-        #search-form {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        #search-form input {
-            flex: 1 1 60%;
-            min-width: 240px;
-            padding: 14px;
-            border: 2px solid #b39ddb;
-            border-radius: 6px;
-            font-size: 1rem;
-            background-color: #1e1d1f;
-            color: #e0e0e0;
-            outline: none;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            #search-form input {
-                min-width: unset;
-            }
-        }
-
-        #search-form input:focus {
-            border-color: #9c27b0;
-            background-color: #2b2a2d;
-        }
-
-        #search-form button {
-            background-color: #7b1fa2;
-            color: #fff;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #search-form button:hover {
-            background-color: #9c27b0;
-        }
-
-        /* ✅ Result Box */
-        #result {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            color: #cfcfcf;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .term-title {
-            font-size: 1.5rem;
-            color: #ce93d8;
-            margin-bottom: 10px;
-        }
-
-        #term-definition {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* ✅ Responsive */
-        @media (max-width: 768px) {
-            .dic_container {
-                padding: 20px;
-            }
-
-            #search-form {
-                flex-direction: column;
-            }
-
-            #search-form input,
-            #search-form button {
-                width: 100%;
-            }
-        }
-        @media screen and (max-width:550px) {
-            .dic_container {
-                max-width: 80vw;
-            }
-            #search-form{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 12px;
-                margin-top: 10px;
-                margin-bottom: 20px;
-                margin-block: auto;
-                flex-wrap: wrap;
-            }
-            #search-form input{
-                width: 300px;
-                max-width: 300px;
-            }
-            #search-form button{
-                width: 300px;
-                max-width: 300px;
-            }
-        }
-        @media screen and (max-width:410px) {
-            .dic_container {
-                max-width: 100vw;
-            }
-            #search-form{
-                padding: 10px;
-            }
-            #search-form input{
-                width: 280px;
-                max-width: 280px;
-            }
-            #search-form button{
-                width: 280px;
-                max-width: 280px;
-            }
-        }
-        /* ✅ Lawyer Section Styling */
-        .lawyer-section {
-            padding: 60px 20px;
-            background: transparent;
-            color: #e0e0e0;
-            text-align: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .lawyer-section h2 {
-            font-size: 2.4rem;
-            color: #9c27b0;
-            margin-bottom: 10px;
-        }
-
-        .lawyer-section .subheading {
-            font-size: 1.1rem;
-            color: #bdbdbd;
-            margin-bottom: 40px;
-        }
-
-        /* ✅ Grid Container */
-        .lawyer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            justify-content: center;
-            align-items: stretch;
-        }
-
-        /* ✅ Card Styling */
-        /* Lawyer Card Enhancements */
-        .lawyer-card {
-        background: linear-gradient(135deg, rgba(156,39,176,0.15), rgba(123,31,162,0.1));
-        padding: 24px 22px;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(123,31,162,0.25);
-        text-align: left;
-        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
-        max-width: 400px;
-        margin: 0 auto;
-        cursor: default;
-        }
-
-        .lawyer-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 12px 32px rgba(123,31,162,0.45);
-        }
-
-        .lawyer-header {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        margin-bottom: 20px;
-        }
-
-        .lawyer-photo {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #9c27b0;
-        box-shadow: 0 0 8px rgba(156,39,176,0.6);
-        transition: box-shadow 0.3s ease;
-        }
-
-        .lawyer-photo:hover {
-        box-shadow: 0 0 14px rgba(156,39,176,0.9);
-        }
-
-        .lawyer-info h3 {
-        margin: 0;
-        font-size: 1.4rem;
-        color: #e0e0e0;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-        }
-
-        .lawyer-info p.specialization {
-        margin: 6px 0 4px 0;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #d1bee7;
-        font-style: italic;
-        }
-
-        .verified-badge {
-        display: inline-block;
-        background: #7c4dff;
-        color: #fff;
-        font-weight: 600;
-        font-size: 0.8rem;
-        padding: 3px 10px;
-        border-radius: 9999px;
-        box-shadow: 0 0 8px #7c4dffaa;
-        margin-top: 4px;
-        user-select: none;
-        }
-
-        .small-badge {
-        display: inline-block;
-        background: rgba(255 255 255 / 0.1);
-        padding: 3px 10px;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        color: #b0a7c3;
-        user-select: none;
-        }
-
-        .lawyer-card p.experience,
-        .lawyer-card p.location,
-        .lawyer-card p.rating {
-        margin: 6px 0;
-        font-size: 1rem;
-        color: #c9c1e3;
-        font-weight: 500;
-        }
-
-        .rating {
-        color: #ffd54f;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        text-shadow: 0 0 5px #ffea00cc;
-        }
-
-        .lawyer-actions {
-        display: flex;
-        gap: 14px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        }
-
-        .contact-btn {
-        background-color: #9c27b0;
-        color: #fff;
-        padding: 12px 18px;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 1rem;
-        text-align: center;
-        flex: 1 1 auto;
-        text-decoration: none;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 4px 12px rgba(156,39,176,0.4);
-        }
-
-        .contact-btn:hover {
-        background-color: #7b1fa2;
-        box-shadow: 0 6px 16px rgba(123,31,162,0.7);
-        }
-
-        /* Responsive tweaks */
-        @media (max-width: 768px) {
-        .lawyer-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .lawyer-photo {
-            width: 90px;
-            height: 90px;
-        }
-
-        .lawyer-actions {
-            flex-direction: column;
-        }
-
-        .contact-btn {
-            width: 100%;
-        }
-    }
-    .view-all-btn{
-        margin-top: 20px !important;
-        padding: 12px 18px;
-    }
-
-
-    </style>
-
-    <body>
-
-        <section class="hero">
-            <h1>⚖️ Empower Yourself with Legal Knowledge</h1>
-            <p>We simplify complex laws and empower individuals with the right legal tools to protect their rights and
-                make informed decisions.</p>
-                <!-- <a href="/dictionary" class="cta-button">Get Started →</a> -->
-            <h2 class="title">📖 Legal Dictionary</h2>
-            <div class="dic_container">
-                <form id="search-form">
-                    <input type="text" id="term-input" placeholder="Enter a legal term..." required />
-                    <button type="submit">Search</button>
-                </form>
-                <div id="result" class="hidden">
-                    <h2 class="term-title">Result:</h2>
-                    <p id="term-definition">Searching...</p>
-                </div>
+<body>
+
+  <!-- Hero + Dictionary -->
+  <section class="hero">
+    <h1>⚖️ Empower Yourself with Legal Knowledge</h1>
+    <p class="lead">
+      We simplify complex laws and empower individuals with the right legal tools to protect their rights and
+      make informed decisions.
+    </p>
+    <h2 class="title">📖 Legal Dictionary</h2>
+    <div class="dic_container">
+      <form id="search-form">
+        <input type="text" id="term-input" placeholder="Enter a legal term..." required />
+        <button type="submit" id="search-button">Search</button>
+      </form>
+      <div id="result" class="hidden">
+        <h2 class="term-title">Result:</h2>
+        <p id="term-definition">Searching...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top-Rated Lawyers -->
+  <section class="lawyer-section">
+    <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
+    <p class="subheading">Connect with verified experts in your area</p>
+
+    <div class="lawyer-grid">
+      <% lawyers.forEach(lawyer => { %>
+        <article class="lawyer-card">
+          <div class="lawyer-header">
+            <img 
+              src="<%= lawyer.photo || '/pic/profile.jpg' %>" 
+              alt="<%= lawyer.name %>" 
+              class="lawyer-photo" 
+            />
+            <div class="lawyer-info">
+              <h3><%= lawyer.name %></h3>
+              <p class="specialization"><%= lawyer.lawyerProfile?.specialization || 'No specialization' %></p>
+              <% if (lawyer.lawyerProfile?.isVerified) { %>
+                <span class="verified-badge">✔ Verified</span>
+              <% } else { %>
+                <span class="small-badge">Unverified</span>
+              <% } %>
             </div>
-        </section>
+          </div>
+          <p class="experience">Experience: <%= lawyer.lawyerProfile?.experience || 'N/A' %> years</p>
+          <p class="location">State: <%= lawyer.lawyerProfile?.state || 'N/A' %></p>
+          <p class="rating">⭐ <%= lawyer.lawyerProfile?.rating ? lawyer.lawyerProfile.rating.toFixed(1) : '—' %> / 5.0</p>
+          <div class="lawyer-actions">
+            <a href="/lawyers/<%= lawyer._id %>" class="contact-btn">📩 Connect</a>
+          </div>
+        </article>
+      <% }) %>
+    </div>
 
-        <!-- TOP-RATED LAWYERS SECTION -->
-        <section class="lawyer-section">
-            <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
-            <p class="subheading">Connect with verified experts in your area</p>
+    <div class="lawyer-action">
+      <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
+    </div>
+  </section>
 
-           <div class="lawyer-grid">
-                <% lawyers.forEach(lawyer => { %>
-                    <article class="lawyer-card">
-                    <div class="lawyer-header">
-                        <img 
-                        src="<%= lawyer.photo || '/pic/profile.jpg' %>" 
-                        alt="<%= lawyer.name %>" 
-                        class="lawyer-photo" 
-                        />
-                        <div class="lawyer-info">
-                        <h3><%= lawyer.name %></h3>
-                        <p class="specialization"><%= lawyer.lawyerProfile?.specialization || 'No specialization' %></p>
-                        <% if (lawyer.lawyerProfile?.isVerified) { %>
-                            <span class="verified-badge">✔ Verified</span>
-                        <% } else { %>
-                            <span class="small-badge">Unverified</span>
-                        <% } %>
-                        <!-- <p class="license">License #: <%= lawyer.lawyerProfile?.licenseNumber || 'N/A' %></p> -->
-                        </div>
-                    </div>
-                    <p class="experience">Experience: <%= lawyer.lawyerProfile?.experience || 'N/A' %> years</p>
-                    <p class="location">State: <%= lawyer.lawyerProfile?.state || 'N/A' %></p>
-                    <p class="rating">⭐ <%= lawyer.lawyerProfile?.rating ? lawyer.lawyerProfile.rating.toFixed(1) : '—' %> / 5.0</p>
-                    <div class="lawyer-actions">
-                        <a href="/lawyers/<%= lawyer._id %>" class="contact-btn">📩 Connect </a>
-                    </div>
-                    </article>
-                <% }) %>
-            </div>
+  <!-- Quick Links -->
+  <section class="quick-links">
+    <h2>Simplifying Legal Jargon, One Step at a Time</h2>
+    <div class="buttons">
+      <a href="/dictionary">Dictionary</a>
+      <a href="/documents">Documents</a>
+      <a href="/articles">Articles and Guides</a>
+      <a href="/rights">Fundamental Rights</a>
+      <a href="/#faq">Q&A</a>
+      <a href="/lawyers">Connect with a Lawyer</a>
+      <a href="/account">User Profile</a>
+    </div>
+  </section>
 
+  <!-- FAQ Section -->
+  <div class="container faq-container" id="faq">
+    <div class="faq-left">
+      <h2>Frequently Asked Questions</h2>
+      <p>
+        Get answers to all your legal queries!
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" alt="🤔" width="28" height="28">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.gif" alt="✨" width="28" height="28">
+      </p>
+      <div class="contact-info">
+        <span><i class="fas fa-envelope"></i> Have more questions?</span>
+        <a href="mailto:support@legalhub.com">support@legalhub.com</a>
+      </div>
+    </div>
 
-            <div class="lawyer-action">
-                <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
-            </div>
-        </section>
-
-        <!-- QUICK LINKS SECTION -->
-        <section class="quick-links">
-            <h2>Simplifying Legal Jargon, One Step at a Time</h2>
-
-            <div class="buttons">
-                <a href="/dictionary">Dictionary</a>
-                <a href="/documents">Documents</a>
-                <a href="/articles">Articles and Guide</a>
-                <a href="/rights">Fundamental Rights</a>
-                <a href="/#FAQs">Q&A</a>
-                <a href="/lawyers">Connect with a lawyer</a>
-                <a href="/account">User Profile</a>
-            </div>
-        </section>
-
-        <!-- FAQ SECTION -->
-        <div class="faq-container container" id="faq">
-            <div class="faq-left">
-                <h2>Frequently Asked Questions</h2>
-                <p>Get answers to all your legal queries!
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" alt="🤔" width="28"
-                        height="28">
-                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.gif" alt="✨" width="28"
-                        height="28">
-                </p>
-                <div class="contact-info">
-                    <span><i class="fas fa-envelope"></i> Have more questions?</span>
-                    <a href="mailto:support@legalhub.com">support@legalhub.com</a>
-                </div>
-            </div>
-
-            <!-- RIGHT SIDE -->
-            <div class="faq-right" id="FAQs">
-                <!-- ✅ FAQ 1 -->
-                <div class="faq-item">
-                    <h3>What is LegalHub and how does it work? <i class="fas fa-chevron-down"></i></h3>
-                    <div class="faq-answer">
-                        <p>LegalHub is an online platform providing free access to legal resources, forms, and guides.
-                            You can explore state-specific legal forms and understand legal terms easily. 🏛️</p>
-                    </div>
-                </div>
-
-                <!-- ✅ FAQ 2 -->
-                <div class="faq-item">
-                    <h3>Can I download legal forms from LegalHub? <i class="fas fa-chevron-down"></i></h3>
-                    <div class="faq-answer">
-                        <p>Yes! LegalHub allows you to download state-specific legal forms directly from our database.
-                            You can also find instructions on how to fill them correctly. 📄</p>
-                    </div>
-                </div>
-
-                <!-- ✅ FAQ 3 -->
-                <div class="faq-item">
-                    <h3>How can I search for specific legal terms? <i class="fas fa-chevron-down"></i></h3>
-                    <div class="faq-answer">
-                        <p>You can use the smart search feature to look up legal terms. The integrated AI will provide
-                            detailed explanations and related resources. 🔍</p>
-                    </div>
-                </div>
-
-                <!-- ✅ FAQ 4 -->
-                <div class="faq-item">
-                    <h3>Is the information on LegalHub accurate and up-to-date? <i class="fas fa-chevron-down"></i></h3>
-                    <div class="faq-answer">
-                        <p>Yes. We source information from verified legal authorities and update it regularly to reflect
-                            the latest legal changes. ✅</p>
-                    </div>
-                </div>
-
-                <!-- ✅ FAQ 5 -->
-                <div class="faq-item">
-                    <h3>Is LegalHub free to use? <i class="fas fa-chevron-down"></i></h3>
-                    <div class="faq-answer">
-                        <p>Absolutely! LegalHub is completely free to use, and you can access all resources without
-                            signing up. 🎯</p>
-                    </div>
-                </div>
-            </div>
+    <div class="faq-right">
+      <div class="faq-item">
+        <h3>What is LegalHub and how does it work? <i class="fas fa-chevron-down"></i></h3>
+        <div class="faq-answer">
+          <p>LegalHub is an online platform providing free access to legal resources, forms, and guides. You can explore state-specific legal forms and understand legal terms easily. 🏛️</p>
         </div>
-    </body>
-    <script>
-        // FAQ Open/Close Functionality
-        document.querySelectorAll('.faq-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const faqAnswer = item.querySelector('.faq-answer');
+      </div>
 
-                item.classList.toggle('open');
+      <div class="faq-item">
+        <h3>Can I download legal forms from LegalHub? <i class="fas fa-chevron-down"></i></h3>
+        <div class="faq-answer">
+          <p>Yes! LegalHub allows you to download state-specific legal forms directly from our database. You can also find instructions on how to fill them correctly. 📄</p>
+        </div>
+      </div>
 
-                if (item.classList.contains('open')) {
-                    faqAnswer.style.maxHeight = faqAnswer.scrollHeight + "px";
-                    faqAnswer.style.opacity = 1;
-                } else {
-                    faqAnswer.style.maxHeight = 0;
-                    faqAnswer.style.opacity = 0;
-                }
+      <div class="faq-item">
+        <h3>How can I search for specific legal terms? <i class="fas fa-chevron-down"></i></h3>
+        <div class="faq-answer">
+          <p>You can use the smart search feature to look up legal terms. The integrated AI will provide detailed explanations and related resources. 🔍</p>
+        </div>
+      </div>
 
-                document.querySelectorAll('.faq-item').forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('open')) {
-                        otherItem.classList.remove('open');
-                        otherItem.querySelector('.faq-answer').style.maxHeight = 0;
-                        otherItem.querySelector('.faq-answer').style.opacity = 0;
-                    }
-                });
-            });
-        });
+      <div class="faq-item">
+        <h3>Is the information on LegalHub accurate and up-to-date? <i class="fas fa-chevron-down"></i></h3>
+        <div class="faq-answer">
+          <p>Yes. We source information from verified legal authorities and update it regularly to reflect the latest legal changes. ✅</p>
+        </div>
+      </div>
 
-    </script>
+      <div class="faq-item">
+        <h3>Is LegalHub free to use? <i class="fas fa-chevron-down"></i></h3>
+        <div class="faq-answer">
+          <p>Absolutely! LegalHub is completely free to use, and you can access all resources without signing up. 🎯</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <script>
-        const form = document.getElementById('search-form');
-        const input = document.getElementById('term-input');
-        const resultContainer = document.getElementById('result');
-        const definition = document.getElementById('term-definition');
+</body>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const term = input.value.trim();
-            if (!term) return;
+<!-- FAQ Script -->
+<script>
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const faqAnswer = item.querySelector('.faq-answer');
 
-            definition.innerText = '🔎 Searching...';
-            resultContainer.classList.remove('hidden');
+      item.classList.toggle('open');
 
-            try {
-                const res = await fetch(`api/dictionary/${term}`);
-                const data = await res.json();
+      if (item.classList.contains('open')) {
+        faqAnswer.style.maxHeight = faqAnswer.scrollHeight + "px";
+        faqAnswer.style.opacity = 1;
+      } else {
+        faqAnswer.style.maxHeight = 0;
+        faqAnswer.style.opacity = 0;
+      }
 
-                if (data.success) {
-                    definition.innerText = data.data.response;
-                } else {
-                    definition.innerText = `❌ Error: ${data.msg}`;
-                }
-            } catch (error) {
-                definition.innerText = '❌ Failed to fetch result. Try again!';
-                console.error('Error:', error);
-            }
-        });
-    </script>
+      document.querySelectorAll('.faq-item').forEach(otherItem => {
+        if (otherItem !== item && otherItem.classList.contains('open')) {
+          otherItem.classList.remove('open');
+          otherItem.querySelector('.faq-answer').style.maxHeight = 0;
+          otherItem.querySelector('.faq-answer').style.opacity = 0;
+        }
+      });
+    });
+  });
+</script>
+
+<!-- Dictionary Script -->
+<script>
+  const form = document.getElementById('search-form');
+  const input = document.getElementById('term-input');
+  const resultContainer = document.getElementById('result');
+  const definition = document.getElementById('term-definition');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const term = input.value.trim();
+    if (!term) return;
+
+    definition.innerText = '🔎 Searching...';
+    resultContainer.classList.remove('hidden');
+    resultContainer.classList.add('show');
+
+    try {
+      const res = await fetch(`/api/dictionary/${term}`);
+      const data = await res.json();
+
+      if (data.success) {
+        definition.innerHTML = data.data.response; // use innerHTML for formatted content
+      } else {
+        definition.innerHTML = `<span style="color:red;">❌ Error: ${data.msg}</span>`;
+      }
+    } catch (error) {
+      definition.innerText = '❌ Failed to fetch result. Try again!';
+      console.error('Error:', error);
+    }
+  });
+</script>

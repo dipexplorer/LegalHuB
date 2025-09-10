@@ -1,4 +1,11 @@
 /* 🌌 General Styling */
+:root {
+    --accent: #9c27b0;
+    --accent-dark: #6a1b9a;
+    --text: #f4f4f9;
+    --muted: #bdbdbd;
+}
+
 body {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     font-family: rakkas;
