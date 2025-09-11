@@ -19,41 +19,20 @@
       <!-- Hamburger for small screens (button for accessibility) -->
       <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
 
-      <!-- Notifications -->
-      <div class="notifications dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button">
-          <i class="fa fa-bell"></i>
-          <% if (notificationsCount && notificationsCount > 0) { %>
-            <span class="badge badge-danger"><%= notificationsCount %></span>
-          <% } %>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
-          <% if (notifications && notifications.length > 0) { %>
-            <% notifications.forEach(n => { %>
-              <a class="dropdown-item <%= n.status === 'unread' ? 'font-weight-bold' : '' %>" href="/api/notifications">
-                <%= n.title %> <br/>
-                <small><%= n.createdAt.toLocaleString() %></small>
-              </a>
-            <% }) %>
-          <% } else { %>
-            <span class="dropdown-item">No notifications</span>
-          <% } %>
-
-          <!-- <div class="dropdown-divider"></div> -->
-          <a class="dropdown-item text-center" href="/notifications">View all</a>
-        </div>
-      </div>
-
       <!-- Auth Links (Right side of navbar) -->
       <div class="auth-links">
-          <% if (currentUser) { %>
-            <div class="dropdown" id="profileDropdown">
-              <img src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>" 
-              alt="Profile" 
-              class="profile-avatar" 
-              id="avatarBtn" />
+        <% if (currentUser) { %>
+          <div class="dropdown" id="profileDropdown">
+            <img
+              src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>"
+              alt="Profile"
+              class="profile-avatar avatar-btn"
+              tabindex="0"
+              aria-haspopup="true"
+              aria-expanded="false"
+            />
 
-            <div class="dropdown-content" id="dropdownContent">
+            <div class="dropdown-content" id="dropdownContent" role="menu" aria-hidden="true">
               <div class="profile-info">
                 <img
                   src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>"
@@ -64,7 +43,7 @@
                   <span><%= currentUser.username %></span><br />
                   <span><%= currentUser.email %></span>
                 </div>
-                <button class="close-btn" id="closeBtn" aria-label="Close profile">&times;</button>
+                <button class="close-btn" id="closeProfileBtn" aria-label="Close profile">&times;</button>
               </div>
               <hr />
               <div class="dropdown-links">
@@ -72,10 +51,10 @@
                 <a href="/api/users/logout"><i class="fa-solid fa-right-from-bracket" style="padding-right: 8px;"></i>Logout</a>
               </div>
             </div>
-          <% } else { %>
-            <a href="/login">Login</a>
-          <% } %>
-      </div>
+          </div>
+        <% } else { %>
+          <a href="/login">Login</a>
+        <% } %>
       </div>
     </div>
   </nav>
@@ -83,146 +62,49 @@
 
 <script>
   (function () {
-    // --- Elements ---
     const hamburger = document.getElementById('hamburger');
     const navContainer = document.getElementById('nav-container');
-    const navLinks = navContainer ? navContainer.querySelectorAll('a') : [];
-    const avatarBtns = document.querySelectorAll('.avatar-btn'); // can be zero or more
     const profileDropdown = document.getElementById('profileDropdown');
-    const closeBtn = document.getElementById('closeBtn');
+    const avatarBtns = document.querySelectorAll('.avatar-btn');
+    const closeProfileBtn = document.getElementById('closeProfileBtn');
 
-    // utility
     const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+    function disableBodyScroll(flag) { document.body.style.overflow = flag ? 'hidden' : ''; }
 
-    // prevent body scroll when menu open
-    function setBodyScrolling(disable) {
-      if (disable) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-      }
+    function openNav(){
+      navContainer?.classList.add('active');
+      hamburger?.classList.add('open');
+      hamburger?.setAttribute('aria-expanded','true');
+      disableBodyScroll(true);
     }
-
-    // Toggle function for mobile nav
-    function toggleNav(open) {
-      if (!navContainer || !hamburger) return;
-      const willOpen = typeof open === 'boolean' ? open : !navContainer.classList.contains('active');
-      if (willOpen) {
-        navContainer.classList.add('active');
-        hamburger.classList.add('open');
-        hamburger.setAttribute('aria-expanded', 'true');
-        setBodyScrolling(true);
-      } else {
-        navContainer.classList.remove('active');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        setBodyScrolling(false);
-      }
+    function closeNav(){
+      navContainer?.classList.remove('active');
+      hamburger?.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded','false');
+      disableBodyScroll(false);
     }
+    function toggleNav(){ navContainer?.classList.contains('active') ? closeNav() : openNav(); }
 
-    // Close nav reliably
-    function closeNav() {
-      toggleNav(false);
-    }
+    hamburger?.addEventListener('click', (e) => { e.stopPropagation(); toggleNav(); });
 
-    // --- Hamburger click ---
-    if (hamburger) {
-      hamburger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        toggleNav();
-      });
-    }
-
-    // --- Close when a nav link is clicked (mobile) ---
-    if (navLinks && navLinks.length) {
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          // only auto-close on mobile to avoid surprising desktop behavior
-          if (isMobile()) closeNav();
-        });
-      });
-    }
-
-    // --- Avatar/Profile toggle (desktop) ---
-    if (avatarBtns && avatarBtns.length) {
-      avatarBtns.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          if (!profileDropdown) return;
-          profileDropdown.classList.toggle('show');
-        });
-      });
-    }
-
-    // close profile dropdown button
-    if (closeBtn) {
-      closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        profileDropdown?.classList.remove('show');
-      });
-    }
-
-    // --- Click outside closes nav & dropdown ---
-    document.addEventListener('click', function (e) {
-      // nav
-      if (navContainer && hamburger && navContainer.classList.contains('active')) {
-        if (!navContainer.contains(e.target) && !hamburger.contains(e.target)) {
-          closeNav();
-        }
-      }
-
-      // profile dropdown
-      if (profileDropdown && profileDropdown.classList.contains('show')) {
-        if (!profileDropdown.contains(e.target)) {
-          profileDropdown.classList.remove('show');
-        }
-      }
+    navContainer?.querySelectorAll('a')?.forEach(a => {
+      a.addEventListener('click', () => { if (isMobile()) closeNav(); });
     });
 
-    // --- ESC closes panels ---
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' || e.key === 'Esc') {
-        closeNav();
-        profileDropdown?.classList.remove('show');
-      }
+    avatarBtns?.forEach(btn => {
+      btn.addEventListener('click', (e) => { e.stopPropagation(); profileDropdown?.classList.toggle('show'); });
+      btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }});
     });
 
-    // --- Resize: ensure mobile menu reset when switching to desktop ---
-    window.addEventListener('resize', function () {
-      if (!isMobile()) {
-        // ensure nav is closed on larger screens
-        closeNav();
-      }
+    closeProfileBtn?.addEventListener('click', (e) => { e.stopPropagation(); profileDropdown?.classList.remove('show'); });
+
+    document.addEventListener('click', (e) => {
+      if (navContainer?.classList.contains('active') && !navContainer.contains(e.target) && !hamburger.contains(e.target)) closeNav();
+      if (profileDropdown?.classList.contains('show') && !profileDropdown.contains(e.target)) profileDropdown.classList.remove('show');
     });
 
-    // Accessibility: if menu visible on load and screen is desktop, hide it
-    if (!isMobile()) {
-      closeNav();
-    }
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape' || e.key === 'Esc') { closeNav(); profileDropdown?.classList.remove('show'); }});
+    window.addEventListener('resize', () => { if (!isMobile()) closeNav(); });
+    if (!isMobile()) closeNav();
   })();
-</script>
-
-<script>
-  const notificationsDropdown = document.querySelector('.notifications');
-  const notificationsToggle = document.getElementById('notificationsDropdown');
-
-  notificationsToggle?.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    notificationsDropdown.classList.toggle('show');
-  });
-
-  // Close when clicking outside
-  window.addEventListener('click', (e) => {
-    if (notificationsDropdown.classList.contains('show') && !notificationsDropdown.contains(e.target)) {
-      notificationsDropdown.classList.remove('show');
-    }
-  });
-
-  // Close on ESC
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      notificationsDropdown.classList.remove('show');
-    }
-  });
 </script>
