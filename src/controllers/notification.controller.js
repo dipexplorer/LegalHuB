@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 const getUserNotifications = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, status } = req.query;
 
-    console.log(query.user);
+    const query = { user: req.user._id };
+
     if (status) query.status = status; // e.g., unread only
 
     const notifications = await Notification.find(query)

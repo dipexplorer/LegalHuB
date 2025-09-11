@@ -31,6 +31,7 @@ const LocalStrategy = require("passport-local");
 
 // Import User model (Fix for passport authentication)
 const User = require("./models/user.model.js");
+const Notification = require("./models/notification.model.js");
 
 // Import Utility Functions
 const apiError = require("./utils/apiError.js");
@@ -182,6 +183,27 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currentUser = req.user || null;
+    next();
+});
+
+// Middleware to attach notifications to all responses
+app.use(async (req, res, next) => {
+    if (req.user) {
+        const notifications = await Notification.find({ user: req.user._id })
+            .sort({ createdAt: -1 })
+            .limit(5);
+
+        const unreadCount = await Notification.countDocuments({
+            user: req.user._id,
+            status: "unread",
+        });
+
+        res.locals.notifications = notifications;
+        res.locals.notificationsCount = unreadCount;
+    } else {
+        res.locals.notifications = [];
+        res.locals.notificationsCount = 0;
+    }
     next();
 });
 
