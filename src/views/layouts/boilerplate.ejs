@@ -94,25 +94,7 @@
     <!-- Custom JS -->
     <script src="/js/login.js"></script>
 
-    <!-- Navbar Toggle Script -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var toggle = document.getElementById("navbarToggle");
-        var links = document.getElementById("navbarLinks");
-
-        if (toggle && links) {
-          toggle.onclick = function () {
-            links.classList.toggle("active");
-          };
-
-          document.addEventListener("click", function (event) {
-            if (!links.contains(event.target) && !toggle.contains(event.target)) {
-              links.classList.remove("active");
-            }
-          });
-        }
-      });
-    </script>
+    <!-- (No navbar toggle script here — navbar.ejs contains the correct consolidated script) -->
 
     <!-- Chatbase Script -->
     <script>
