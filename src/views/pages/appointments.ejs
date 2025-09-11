@@ -166,6 +166,7 @@
               <% if (appointment.appointmentCard) { %>
                 <button
                   class="action-btn"
+                  type="button"
                   aria-label="View appointment card"
                   title="View appointment card"
                   onclick="window.location.href='/api/appointment/<%= appointment._id %>/card/view'">View</button>
@@ -293,6 +294,7 @@
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ appointmentId, status }),
+        credentials: 'include' // 🔑 required
       });
       const data = await res.json();
       if (res.ok) {
@@ -312,6 +314,7 @@
     try {
       const res = await fetch(`/api/appointment/${appointmentId}`, {
         method: 'DELETE',
+        credentials: 'include' // 🔑 required
       });
       const data = await res.json();
       if (res.ok) {
@@ -325,4 +328,6 @@
       console.error(err);
     }
   }
+
+  
 </script>

@@ -19,6 +19,10 @@ const getUserNotifications = asyncHandler(async (req, res) => {
 
     const total = await Notification.countDocuments(query);
 
+    if (req.accepts("html")) {
+        //redirect to notifications page
+        return res.redirect("/notifications");
+    }
     res.status(200).json(new apiResponse(200, { notifications, total }, "Notifications fetched"));
 });
 
@@ -33,6 +37,10 @@ const markAsRead = asyncHandler(async (req, res) => {
 
     // short-circuit if already read
     if (notification.status === "read") {
+        if (req.accepts("html")) {
+            //redirect to notifications page
+            return res.redirect("/notifications");
+        }
         return res
             .status(200)
             .json({ success: true, message: "Already marked as read", data: notification });
@@ -42,6 +50,10 @@ const markAsRead = asyncHandler(async (req, res) => {
     notification.status = "read";
     await notification.save();
 
+    if (req.accepts("html")) {
+        //redirect to notifications page
+        return res.redirect("/notifications");
+    }
     res.status(200).json({
         success: true,
         message: "Notification marked as read",

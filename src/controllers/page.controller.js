@@ -6,6 +6,7 @@ const ApiError = require("../utils/apiError.js");
 const ApiResponse = require("../utils/apiResponse.js");
 const User = require("../models/user.model.js");
 const LawyerProfile = require("../models/lawyer.model.js");
+const Notification = require("../models/notification.model.js");
 
 const renderHome = asyncHandler(async (req, res) => {
     const lawyers = await User.find({ role: "lawyer" })
@@ -298,6 +299,24 @@ const getLawyers = asyncHandler(async (req, res) => {
     });
 });
 
+// Render notifications page
+const renderNotifications = asyncHandler(async (req, res) => {
+    const notifications = await Notification.find({ user: req.user._id })
+        .sort({ createdAt: -1 })
+        .limit(50);
+
+    res.render("pages/notifications", { notifications });
+});
+
+// Mark as read (from UI form)
+const markAsRead = asyncHandler(async (req, res) => {
+    await Notification.findOneAndUpdate(
+        { _id: req.params.id, user: req.user._id },
+        { status: "read" }
+    );
+    res.redirect("/notifications");
+});
+
 module.exports = {
     renderHome,
     renderDictionary,
@@ -309,4 +328,6 @@ module.exports = {
     renderAbout,
     renderLoginForm,
     getLawyers,
+    renderNotifications,
+    markAsRead,
 };

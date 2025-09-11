@@ -190,7 +190,7 @@ const getAppointments = asyncHandler(async (req, res) => {
         .sort({ date: 1, timeSlot: 1 });
 
     if (req.accepts("html")) {
-        return res.render("pages/appointments", { appointments });
+        return res.render("pages/appointments", { user, appointments });
     }
     return res
         .status(200)

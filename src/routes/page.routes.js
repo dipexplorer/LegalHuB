@@ -11,6 +11,8 @@ const {
     renderTermsAndConditions,
     renderLoginForm,
     getLawyers,
+    renderNotifications,
+    markAsRead,
 } = require("../controllers/page.controller.js");
 
 const { viewLawyer } = require("../controllers/lawyer.controller.js");
@@ -42,5 +44,7 @@ router.get("/account/update/lawyer", renderLawyerUpdateForm);
 router.get("/articles/publish", isLoggedIn, publishArticle);
 router.get("/articles/:id/edit", isLoggedIn, renderEditForm);
 router.get("/viewdowncount", renderDownCount);
+router.get("/notifications", renderNotifications);
+router.get("/notifications/:id/read", markAsRead);
 
 module.exports = router;
