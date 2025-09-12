@@ -2,18 +2,54 @@
 
 <body>
 
+  <!-- New Top Section (inspired by provided screenshot) -->
+  <section class="hero-top">
+    <div class="hero-top__inner">
+      <div class="hero-top__left">
+        <div class="hero-top__badge reveal hero-animate"><span class="icon">⚖️</span> LegalHub</div>
+        <h1 class="hero-top__title reveal hero-animate">Clarity. Counsel. Confidence.</h1>
+        <p class="hero-top__subtitle reveal hero-animate">LegalHub turns complex legal jargon into clear answers, connects you to verified lawyers, and provides templates and guides tailored for India.</p>
+
+        <div class="hero-top__cta">
+          <a href="/articles" class="cta-primary reveal cta-pulse"><span class="emoji">📚</span> Get Started →</a>
+          <a href="/lawyers" class="cta-secondary reveal"><span class="emoji">👤</span> Find a Lawyer</a>
+        </div>
+
+        <div class="hero-top__stats">
+          <div class="stat">
+            <div class="stat__value">250k+</div>
+            <div class="stat__label">terms & resources</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value">3.9k+</div>
+            <div class="stat__label">verified lawyers</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-top__right" aria-hidden="true">
+        <div class="mock-card animated-card reveal">
+          <div class="mock-card__badge">🔨</div>
+          <div class="mock-card__content"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Hero + Dictionary -->
   <section class="hero">
-    <h1>⚖️ Empower Yourself with Legal Knowledge</h1>
-    <p class="lead">
+    <h1 class="hero-title reveal">⚖️ Empower Yourself with Legal Knowledge</h1>
+    <p class="lead reveal">
       We simplify complex laws and empower individuals with the right legal tools to protect their rights and
-      make informed decisions.
+      make informed decisions in today's complex legal landscape.
     </p>
     <h2 class="title">📖 Legal Dictionary</h2>
-    <div class="dic_container">
-      <form id="search-form">
-        <input type="text" id="term-input" placeholder="Enter a legal term..." required />
-        <button type="submit" id="search-button">Search</button>
+    <div class="dic_container reveal">
+      <form id="search-form" class="search-form">
+        <input type="text" id="term-input" class="search-input" placeholder="Enter a legal term (e.g., 'habeas corpus', 'tort law')..." required />
+        <button type="submit" id="search-button" class="search-btn">
+          <span class="search-icon">🔎</span>
+          <span>Search</span>
+        </button>
       </form>
       <div id="result" class="hidden">
         <h2 class="term-title">Result:</h2>
