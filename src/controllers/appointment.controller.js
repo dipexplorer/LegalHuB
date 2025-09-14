@@ -124,15 +124,29 @@ const bookAppointment = asyncHandler(async (req, res) => {
         appointment.appointmentCard = { cardId, expiresAt, qrCode };
         await appointment.save();
 
+        // get io instance safely
+        const io = req.app.get("io");
+
         // after saving appointment
-        await createNotification({
-            user: req.user._id,
+        await createNotification(io, {
+            user: lawyerId, // 👈 notify the lawyer
             type: "appointment.created",
             title: "New Appointment",
             message: `${req.user.username} booked an appointment with you on ${appointment.date}`,
             relatedId: appointment._id,
             relatedModel: "Appointment",
             priority: "high",
+            channels: { inApp: true, email: true },
+        });
+
+        await createNotification(io, {
+            user: req.user._id, // 👈 notify the client
+            type: "appointment.created",
+            title: "Appointment Confirmed",
+            message: `You booked an appointment with ${lawyerUser.username} on ${appointment.date}`,
+            relatedId: appointment._id,
+            relatedModel: "Appointment",
+            priority: "normal",
             channels: { inApp: true, email: true },
         });
 

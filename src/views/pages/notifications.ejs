@@ -2,39 +2,49 @@
 
 <div class="container mt-4">
   <h2>Your Notifications</h2>
-  <div class="notification-wrapper">
+    <div class="notification-wrapper">
     <% if (notifications.length > 0) { %>
-      <% notifications.forEach(n => { %>
-        <div class="notification-card <%= n.status === 'unread' ? 'unread' : '' %>">
-          <div class="notification-icon">
-            <% if (n.type === 'appointment') { %>
-              <i class="fas fa-calendar-check"></i>
-            <% } else if (n.type === 'alert') { %>
-              <i class="fas fa-exclamation-circle"></i>
-            <% } else { %>
-              <i class="fas fa-bell"></i>
+        <% notifications.forEach(n => { %>
+        <% 
+            let link = "#"; 
+            if (n.type.startsWith("appointment") && n.relatedId) {
+            link = `/api/appointment/${n.relatedId}/card/view`;
+            }
+        %>
+
+        <a href="<%= link %>" class="notification-link">
+            <div class="notification-card <%= n.status === 'unread' ? 'unread' : '' %>">
+            <div class="notification-icon">
+                <% if (n.type.startsWith("appointment")) { %>
+                <i class="fas fa-calendar-check"></i>
+                <% } else if (n.type === "system.alert") { %>
+                <i class="fas fa-exclamation-circle"></i>
+                <% } else { %>
+                <i class="fas fa-bell"></i>
+                <% } %>
+            </div>
+            <div class="notification-content">
+                <strong><%= n.title %></strong>
+                <p><%= n.message %></p>
+                <small><i class="far fa-clock"></i> <%= n.createdAt.toLocaleString() %></small>
+            </div>
+
+            <% if (n.status === "unread") { %>
+                <form method="POST" action="/api/notifications/<%= n._id %>/read" class="mark-read-form">
+                <button class="btn btn-sm btn-outline-accent">Mark as Read</button>
+                </form>
             <% } %>
-          </div>
-          <div class="notification-content">
-            <strong><%= n.title %></strong>
-            <p><%= n.message %></p>
-            <small><i class="far fa-clock"></i> <%= n.createdAt.toLocaleString() %></small>
-          </div>
-          <% if (n.status === "unread") { %>
-            <form method="POST" action="/api/notifications/<%= n._id %>/read">
-              <button class="btn btn-sm btn-outline-accent">Mark as Read</button>
-            </form>
-          <% } %>
-        </div>
-      <% }) %>
+            </div>
+        </a>
+        <% }) %>
     <% } else { %>
-      <div class="notification-card empty">
+        <div class="notification-card empty">
         <div class="notification-content">
-          <strong>No notifications yet.</strong>
+            <strong>No notifications yet.</strong>
         </div>
-      </div>
+        </div>
     <% } %>
-  </div>
+    </div>
 </div>
 
 <style>

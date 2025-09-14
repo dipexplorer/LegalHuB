@@ -58,15 +58,10 @@ try {
 // helper: LAN IPs
 function getLanIPs() {
     const nets = os.networkInterfaces();
-    const results = [];
-    Object.keys(nets).forEach((name) => {
-        for (const net of nets[name]) {
-            if (net.family === "IPv4" && !net.internal) {
-                results.push(net.address);
-            }
-        }
-    });
-    return results;
+    return Object.values(nets)
+        .flat()
+        .filter((net) => net && net.family === "IPv4" && !net.internal)
+        .map((net) => net.address);
 }
 
 function maskDbUrl(url) {
