@@ -13,7 +13,7 @@ const Notification = require("../models/notification.model.js");
  * @param {Object} [options.channels] - Which channels to use (inApp/email/etc.)
  */
 
-async function createNotification(options) {
+async function createNotification(io, options) {
     const {
         user,
         type,
@@ -41,6 +41,10 @@ async function createNotification(options) {
     });
 
     await notification.save();
+
+    // 👉 Emit in real time
+    // const io = req.app.get("io");
+    io.to(user.toString()).emit("newNotification", notification);
 
     // 👉 Future: here we can also trigger email, push, etc.
     return notification;

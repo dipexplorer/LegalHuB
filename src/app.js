@@ -34,6 +34,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Import User model (Fix for passport authentication)
 const User = require("./models/user.model.js");
+const Notification = require("./models/notification.model.js");
 
 // Import Utility Functions
 const apiError = require("./utils/apiError.js");
@@ -54,40 +55,33 @@ if (IS_PROD) {
 }
 
 // Security headers
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            useDefaults: true,
-            directives: {
-                "default-src": ["'self'"],
-                "img-src": ["'self'", "data:", "https:"],
-                "script-src": [
-                    "'self'",
-                    "https://cdn.jsdelivr.net",
-                    "https://cdn.gtranslate.net",
-                    "https://www.chatbase.co", // 👈 allow Chatbase script
-                    "'unsafe-inline'",
-                ],
-                "style-src": [
-                    "'self'",
-                    "'unsafe-inline'",
-                    "https://cdnjs.cloudflare.com",
-                    "https://cdn.jsdelivr.net",
-                ],
-                "font-src": ["'self'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
-                "connect-src": [
-                    "'self'",
-                    "https://www.chatbase.co", // 👈 allow Chatbase API
-                    "wss://www.chatbase.co",
-                ],
-                "frame-src": [
-                    "'self'",
-                    "https://www.chatbase.co", // ✅ allows embedding their iframe
-                ],
-            },
+helmet({
+    contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+            "default-src": ["'self'"],
+            "img-src": ["'self'", "data:", "https:"],
+            "script-src": [
+                "'self'",
+                "'unsafe-inline'",
+                "https://cdn.jsdelivr.net",
+                "https://cdn.gtranslate.net",
+                "https://www.chatbase.co",
+            ],
+            "script-src-attr": ["'unsafe-inline'"], // ✅ allow onclick etc.
+            "script-src-elem": ["'self'", "'unsafe-inline'"], // ✅ allow inline <script>
+            "style-src": [
+                "'self'",
+                "'unsafe-inline'",
+                "https://cdnjs.cloudflare.com",
+                "https://cdn.jsdelivr.net",
+            ],
+            "font-src": ["'self'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
+            "connect-src": ["'self'", "https://www.chatbase.co", "wss://www.chatbase.co"],
+            "frame-src": ["'self'", "https://www.chatbase.co"],
         },
-    })
-);
+    },
+});
 
 // Prevent HTTP Parameter Pollution
 app.use(hpp());
@@ -230,6 +224,27 @@ app.use((req, res, next) => {
     next();
 });
 
+// Middleware to attach notifications to all responses
+app.use(async (req, res, next) => {
+    if (req.user) {
+        const notifications = await Notification.find({ user: req.user._id })
+            .sort({ createdAt: -1 })
+            .limit(5);
+
+        const unreadCount = await Notification.countDocuments({
+            user: req.user._id,
+            status: "unread",
+        });
+
+        res.locals.notifications = notifications;
+        res.locals.notificationsCount = unreadCount;
+    } else {
+        res.locals.notifications = [];
+        res.locals.notificationsCount = 0;
+    }
+    next();
+});
+
 // Import routes
 const healthCheckRouter = require("./routes/healthCheck_route.js");
 const dictionaryRoutes = require("./routes/dictionary.routes.js");
@@ -250,6 +265,7 @@ const notificationRoutes = require("./routes/notification.routes.js");
 app.use("/api", apiLimiter);
 
 // API and page routes
+app.use("/", pageRoutes);
 app.use("/api/healthcheck", healthCheckRouter);
 app.use("/api/dictionary", dictionaryRoutes);
 app.use("/api/rights", rightsRoutes);
@@ -257,7 +273,6 @@ app.use("/api/documents", documentsRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/lawyers", lawyerRoutes);
-app.use("/", pageRoutes);
 app.use("/api/appointment", appointmentRoutes);
 app.use("/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);

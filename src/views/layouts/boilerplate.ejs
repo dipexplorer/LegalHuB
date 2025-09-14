@@ -1,146 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LegalHuB</title>
-    <link rel="icon" href="/pic/logo1.png" type="image/png" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>LegalHuB</title>
+        <link rel="icon" href="/pic/logo1.png" type="image/png" />
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      crossorigin="anonymous"
-    />
+        <!-- Bootstrap CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            crossorigin="anonymous" />
 
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+        <!-- Font Awesome -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer" />
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Rakkas&display=swap"
-      rel="stylesheet"
-    />
+        <!-- Google Fonts -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Rakkas&display=swap"
+            rel="stylesheet" />
 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/login.css" />
-    <link rel="stylesheet" href="/css/review.css" />
+        <!-- Global CSS -->
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/login.css" />
+        <link rel="stylesheet" href="/css/review.css" />
 
-    <!-- Page-specific CSS (home page, dictionary, faq, lawyers, etc.) -->
-    <link rel="stylesheet" href="/css/home.css" />
-  </head>
+        <!-- Page-specific CSS (home page, dictionary, faq, lawyers, etc.) -->
+        <link rel="stylesheet" href="/css/home.css" />
+    </head>
 
-  <body>
-    <!-- Navbar -->
-    <%- include('../includes/navbar.ejs') %>
+    <body>
+        <!-- Navbar -->
+        <%- include('../includes/navbar.ejs') %>
 
-    <main>
-      <!-- Flash Messages -->
-      <%- include("../includes/flash.ejs") %>
+        <main>
+            <!-- Flash Messages -->
+            <%- include("../includes/flash.ejs") %>
 
-      <!-- Page Content -->
-      <%- body %>
-    </main>
+            <!-- Page Content -->
+            <%- body %>
+        </main>
 
-    <!-- Footer -->
-    <%- include('../includes/footer.ejs') %>
+        <!-- Footer -->
+        <%- include('../includes/footer.ejs') %>
 
-    <!-- Google Translate Widget -->
-    <div class="gtranslate_wrapper"></div>
+        <!-- Google Translate Widget -->
+        <div class="gtranslate_wrapper"></div>
 
-    <!-- Bootstrap Form Validation -->
-    <script>
-      (function () {
-        "use strict";
-        var forms = document.querySelectorAll(".needs-validation");
-        Array.prototype.slice.call(forms).forEach(function (form) {
-          form.addEventListener(
-            "submit",
-            function (event) {
-              if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              form.classList.add("was-validated");
-            },
-            false
-          );
-        });
-      })();
-    </script>
+        <!-- Bootstrap Form Validation -->
+        <script>
+            (function () {
+                "use strict";
+                var forms = document.querySelectorAll(".needs-validation");
+                Array.prototype.slice.call(forms).forEach(function (form) {
+                    form.addEventListener(
+                        "submit",
+                        function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add("was-validated");
+                        },
+                        false
+                    );
+                });
+            })();
+        </script>
 
-    <!-- Google Translate -->
-    <script>
-      window.gtranslateSettings = {
-        default_language: "en",
-        detect_browser_language: true,
-        wrapper_selector: ".gtranslate_wrapper",
-      };
-    </script>
-    <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+        <!-- Google Translate -->
+        <script>
+            window.gtranslateSettings = {
+                default_language: "en",
+                detect_browser_language: true,
+                wrapper_selector: ".gtranslate_wrapper",
+            };
+        </script>
+        <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
-    <!-- Bootstrap JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-      crossorigin="anonymous"
-    ></script>
+        <!-- Bootstrap JS -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+            crossorigin="anonymous"></script>
 
-    <!-- Custom JS -->
-    <script src="/js/login.js"></script>
+        <!-- Custom JS -->
+        <script src="/js/login.js"></script>
 
-    <!-- Navbar Toggle Script -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var toggle = document.getElementById("navbarToggle");
-        var links = document.getElementById("navbarLinks");
+        <!-- (No navbar toggle script here — navbar.ejs contains the correct consolidated script) -->
 
-        if (toggle && links) {
-          toggle.onclick = function () {
-            links.classList.toggle("active");
-          };
+        <!-- Chatbase Script -->
+        <script>
+            (function () {
+                if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+                    window.chatbase = (...args) => {
+                        if (!window.chatbase.q) window.chatbase.q = [];
+                        window.chatbase.q.push(args);
+                    };
+                    window.chatbase = new Proxy(window.chatbase, {
+                        get(target, prop) {
+                            if (prop === "q") return target.q;
+                            return (...args) => target(prop, ...args);
+                        },
+                    });
+                }
 
-          document.addEventListener("click", function (event) {
-            if (!links.contains(event.target) && !toggle.contains(event.target)) {
-              links.classList.remove("active");
-            }
-          });
-        }
-      });
-    </script>
+                const onLoad = function () {
+                    const script = document.createElement("script");
+                    script.src = "https://www.chatbase.co/embed.min.js";
+                    script.id = "vb1bB3pcTaS5bZJbzZhBe"; // Your chatbot ID
+                    script.domain = "www.chatbase.co";
+                    document.body.appendChild(script);
+                };
 
-    <!-- Chatbase Script -->
-    <script>
-      (function () {
-        if (!window.chatbase || window.chatbase("getState") !== "initialized") {
-          window.chatbase = (...args) => {
-            if (!window.chatbase.q) window.chatbase.q = [];
-            window.chatbase.q.push(args);
-          };
-          window.chatbase = new Proxy(window.chatbase, {
-            get(target, prop) {
-              if (prop === "q") return target.q;
-              return (...args) => target(prop, ...args);
-            },
-          });
-        }
+                if (document.readyState === "complete") onLoad();
+                else window.addEventListener("load", onLoad);
+            })();
+        </script>
 
-        const onLoad = function () {
-          const script = document.createElement("script");
-          script.src = "https://www.chatbase.co/embed.min.js";
-          script.id = "vb1bB3pcTaS5bZJbzZhBe"; // Your chatbot ID
-          script.domain = "www.chatbase.co";
-          document.body.appendChild(script);
-        };
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
 
-        if (document.readyState === "complete") onLoad();
-        else window.addEventListener("load", onLoad);
-      })();
-    </script>
-  </body>
+            <% if (currentUser) { %>socket.emit("registerUser", "<%= currentUser._id %>");
+            <% } %>
+
+            // Listen for new notifications
+            socket.on("newNotification", (data) => {
+                console.log("📩 New notification:", data);
+
+                // Update badge
+                const badge = document.querySelector("#notificationsDropdown .badge");
+                if (badge) {
+                    badge.textContent = parseInt(badge.textContent || 0) + 1;
+                    badge.style.display = "inline";
+                }
+
+                // Prepend to dropdown
+                const dropdown = document.querySelector("#notificationsDropdown + .dropdown-menu");
+                if (dropdown) {
+                const newItem = document.createElement("a");
+                newItem.classList.add("dropdown-item", "font-weight-bold");
+                newItem.href = "/notifications";
+                newItem.innerHTML = `${data.title}<br/><small class="text-muted">${new Date(data.createdAt).toLocaleString()}</small>`;
+                dropdown.insertBefore(newItem, dropdown.firstChild);
+                }
+            });
+        </script>
+    </body>
 </html>

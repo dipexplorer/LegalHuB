@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 const getUserNotifications = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, status } = req.query;
 
-    console.log(query.user);
+    const query = { user: req.user._id };
+
     if (status) query.status = status; // e.g., unread only
 
     const notifications = await Notification.find(query)
@@ -18,6 +19,10 @@ const getUserNotifications = asyncHandler(async (req, res) => {
 
     const total = await Notification.countDocuments(query);
 
+    if (req.accepts("html")) {
+        //redirect to notifications page
+        return res.redirect("/notifications");
+    }
     res.status(200).json(new apiResponse(200, { notifications, total }, "Notifications fetched"));
 });
 
@@ -32,6 +37,10 @@ const markAsRead = asyncHandler(async (req, res) => {
 
     // short-circuit if already read
     if (notification.status === "read") {
+        if (req.accepts("html")) {
+            //redirect to notifications page
+            return res.redirect("/notifications");
+        }
         return res
             .status(200)
             .json({ success: true, message: "Already marked as read", data: notification });
@@ -41,6 +50,10 @@ const markAsRead = asyncHandler(async (req, res) => {
     notification.status = "read";
     await notification.save();
 
+    if (req.accepts("html")) {
+        //redirect to notifications page
+        return res.redirect("/notifications");
+    }
     res.status(200).json({
         success: true,
         message: "Notification marked as read",

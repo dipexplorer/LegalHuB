@@ -98,6 +98,7 @@ nav {
 }
 .profile-info {
     display: flex;
+    padding: 10px;
     align-items: center;
     gap: 10px;
     cursor: pointer;
@@ -196,6 +197,110 @@ nav {
     z-index: 1000;
 }
 
+.navbar-right-section {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+.notifications .dropdown-menu {
+    display: none;
+}
+.notifications.show .dropdown-menu {
+    display: block;
+}
+.notifications {
+    position: relative;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.notifications .nav-link {
+    color: #f4f4f9;
+    font-size: 1.2rem;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.notifications .nav-link:hover {
+    color: #9c27b0; /* Light Purple accent */
+}
+
+/* Badge (notification count) */
+.notifications .badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    padding: 3px 6px;
+    font-size: 0.7rem;
+    border-radius: 50%;
+    background: #e040fb; /* Bright Purple */
+    color: #fff;
+}
+
+/* Dropdown menu styling */
+.notifications .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    min-width: 280px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #1a1a2e; /* match navbar dark blue */
+    border: 1px solid #6a1b9a; /* dark purple border */
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
+    display: none; /* hidden by default */
+    z-index: 1100;
+}
+
+/* Show when parent has .show */
+.notifications.show .dropdown-menu {
+    display: block;
+}
+
+/* Dropdown items */
+.notifications .dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    color: #f4f4f9;
+    text-decoration: none;
+    display: block;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+.notifications .dropdown-item:hover {
+    background-color: #2e2e4f; /* subtle hover */
+    color: #9c27b0; /* accent */
+}
+
+.notifications .dropdown-item.font-weight-bold {
+    font-weight: bold;
+}
+
+/* Divider */
+.notifications .dropdown-divider {
+    margin: 0.5rem 0;
+    border-top: 1px solid #333;
+}
+
+/* Footer link */
+.notifications .dropdown-item.text-center {
+    font-weight: bold;
+    color: #9c27b0;
+}
+
+.notifications .dropdown-item.text-center:hover {
+    background: #2e2e4f;
+    color: #e040fb;
+}
+
+.text-muted {
+}
 /* ✅ Hero Section */
 .hero {
     padding: 50px 20px;
@@ -443,10 +548,10 @@ nav {
     }
 
     .navbar-right-section {
-        display: flex;
-        align-items: center;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
-
     .nav-links li a {
         display: block;
         padding: 15px 0;

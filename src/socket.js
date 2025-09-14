@@ -5,7 +5,14 @@ module.exports = function (io) {
     io.on("connection", (socket) => {
         // console.log("User connected:", socket.id);
 
-        // Join a chat room
+        // --- 🔔 Notifications ---
+        socket.on("registerUser", (userId) => {
+            if (!userId) return;
+            socket.join(userId.toString());
+            console.log(`🔌 User ${userId} joined notifications room`);
+        });
+
+        // --- 💬 Chat events ---
         socket.on("joinRoom", (chatRoomId) => {
             socket.join(String(chatRoomId));
             // console.log(`Socket ${socket.id} joined room ${chatRoomId}`);
@@ -156,7 +163,7 @@ module.exports = function (io) {
         });
 
         socket.on("disconnect", () => {
-            // console.log("User disconnected:", socket.id);
+            console.log("User disconnected:", socket.id);
         });
     });
 };

@@ -18,7 +18,7 @@ const appointmentSchema = new Schema(
             required: true,
         },
         timeSlot: {
-            type: [String],
+            type: String,
             required: true,
         },
         status: {
