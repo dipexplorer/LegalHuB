@@ -3,6 +3,8 @@ const http = require("http");
 const os = require("os");
 const { Server } = require("socket.io");
 require("dotenv").config();
+const passport = require("./config/passport");
+
 
 // Try to require app module in a safe way that works for both:
 // 1) module.exports = app
@@ -43,6 +45,9 @@ const io = new Server(server, {
 
 // attach io to app (so other modules can access it)
 app.set("io", io);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // import socket logic (if it expects io)
 try {
