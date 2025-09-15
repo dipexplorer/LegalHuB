@@ -41,7 +41,9 @@
         var(--shadow),
         inset 0 0 20px var(--inset-glow);
     position: relative;
-    overflow: hidden;
+
+    /* changed from hidden -> visible so floating widgets (chatbot etc.) aren't clipped */
+    overflow: visible;
     will-change: transform;
 }
 
@@ -49,6 +51,8 @@
 .frm_container {
     position: relative;
     border-radius: var(--card-radius);
+    /* keep visual clipping inside container while outer card allows overflow for widgets */
+    overflow: hidden;
 }
 
 .frm_container::before {
@@ -350,6 +354,29 @@ a.form-link:hover { text-decoration: underline; color: var(--accent-start); }
     overflow: hidden;
     clip: rect(1px, 1px, 1px, 1px);
     white-space: nowrap;
+}
+
+/* -------------------------
+   Chatbot / widget safety helpers
+   - ensures common chat widgets appear above the card and are fixed to viewport
+   - harmless if selectors don't match
+   ------------------------- */
+.chatbot-widget,
+.chat-widget,
+#chatbot,
+#chat-widget,
+.crisp-client,
+#crisp-chatbox,
+.tawk-chat,
+#tawkchat-minified,
+.botpress-widget,
+.livechat_float_button,
+#intercom-container {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
 }
 
 /* End of login.css */
