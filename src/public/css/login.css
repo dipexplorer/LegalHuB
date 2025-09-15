@@ -1,116 +1,355 @@
+/* =========================================================================
+   login.css — improved, accessible, responsive login form styles
+   - Variables for easy theming
+   - Better focus states and keyboard accessibility
+   - Responsive layout tweaks and reduced-motion support
+   ========================================================================= */
+
+/* -------------------------
+   Theme variables
+   ------------------------- */
+:root{
+    --bg-1: #212121;
+    --bg-2: #1a1a1a;
+    --muted: #bdbdbd;
+    --muted-2: #9a9a9a;
+    --accent-start: #4e00ff;
+    --accent-end: #8e00ff;
+    --accent-glow: rgba(142, 0, 255, 0.24);
+    --card-radius: 25px;
+    --card-padding-y: 40px;
+    --card-padding-x: 35px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.7);
+    --inset-glow: rgba(255,255,255,0.06);
+    --input-bg: rgba(255,255,255,0.03);
+    --input-border: rgba(255,255,255,0.06);
+    --success-color: #28a745;
+    --error-color: #e03e2d;
+    --transition: 200ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* -------------------------
+   Form card wrapper
+   ------------------------- */
 .frm_box {
     margin-top: 1.2rem;
     margin-bottom: 2rem;
-    background: linear-gradient(145deg, #212121, #1a1a1a);
-    border-radius: 25px;
-    padding: 40px 35px;
+    background: linear-gradient(145deg, var(--bg-1), var(--bg-2));
+    border-radius: var(--card-radius);
+    padding: var(--card-padding-y) var(--card-padding-x);
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.7),
-        inset 0 0 20px rgba(255, 255, 255, 0.1);
+        var(--shadow),
+        inset 0 0 20px var(--inset-glow);
     position: relative;
     overflow: hidden;
+    will-change: transform;
 }
 
-/* Glow Border Effect */
-.frm_container:before {
+/* Glow Border Effect (subtle gradient) */
+.frm_container {
+    position: relative;
+    border-radius: var(--card-radius);
+}
+
+.frm_container::before {
     content: "";
     position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: 25px;
+    inset: -6px; /* top/right/bottom/left: -6px */
+    border-radius: calc(var(--card-radius) + 6px);
     z-index: -1;
+    background: linear-gradient(90deg, rgba(78,0,255,0.18), rgba(142,0,255,0.12), rgba(78,0,255,0.06));
     filter: blur(10px);
+    opacity: 0.9;
+    pointer-events: none;
 }
 
-/* Toggle Buttons */
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .frm_container::before {
+        transition: none;
+        filter: blur(6px);
+    }
+}
+
+/* -------------------------
+   Toggle Buttons (sign-in / sign-up)
+   ------------------------- */
 .toggle {
     display: flex;
     justify-content: center;
-    padding: 10px 0;
-    background: rgba(255, 255, 255, 0.05);
+    gap: 8px;
+    padding: 10px;
+    background: rgba(255,255,255,0.03);
     border-radius: 15px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
 .toggle button {
     flex: 1;
-    padding: 10px 20px;
+    min-width: 0;
+    padding: 10px 16px;
     border: none;
-    font-size: 16px;
-    font-weight: bold;
-    color: #bbb;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muted);
     background: transparent;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--transition);
     border-radius: 10px;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.toggle button.active {
-    background: linear-gradient(90deg, #4e00ff, #8e00ff);
+/* Visual focus for keyboard users */
+.toggle button:focus {
+    box-shadow: 0 0 0 3px rgba(142,0,255,0.12);
     color: #fff;
-    box-shadow: 0 0 10px rgba(78, 0, 255, 0.8);
 }
 
-/* Forms */
+/* Active/toggled state */
+.toggle button.active {
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    color: #fff;
+    box-shadow: 0 6px 18px var(--accent-glow), 0 0 8px rgba(78, 0, 255, 0.45) inset;
+    transform: translateY(-1px);
+}
+
+/* -------------------------
+   Form container & animation
+   ------------------------- */
 .form-container {
     padding: 0 10px;
-    animation: fadeIn 0.6s ease;
+    animation: fadeIn 420ms ease;
 }
 
-.form {
-    display: none;
-}
-
-.form.hidden {
-    display: none;
-}
-
-.form:not(.hidden) {
-    display: block;
-}
-
-/* Input Group */
-.input-group {
-    margin-bottom: 25px;
-    position: relative;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #aaa;
-    font-size: 14px;
-}
-
-/* Small Text */
-.small-text {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 14px;
-    color: #bbb;
-}
-
-.small-text span {
-    color: #8e00ff;
-    cursor: pointer;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-.small-text span:hover {
-    color: #4e00ff;
-}
-
-/* Animations */
+/* Fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(16px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .form-container { animation: none; }
+}
+
+/* Show/hide forms */
+.form {
+    display: none;
+}
+
+.form.hidden { display: none; }
+.form:not(.hidden) { display: block; }
+
+/* -------------------------
+   Input group & controls
+   ------------------------- */
+.input-group {
+    margin-bottom: 22px;
+    position: relative;
+}
+
+/* Label */
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted-2);
+    font-size: 13px;
+    letter-spacing: 0.2px;
+}
+
+/* Inputs / textareas */
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.2;
+    transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Input placeholder */
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: rgba(255,255,255,0.36);
+}
+
+/* Focus & hover states for inputs */
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: rgba(142,0,255,0.9);
+    box-shadow: 0 6px 20px rgba(142,0,255,0.06), 0 0 0 3px rgba(78,0,255,0.06);
+    transform: translateY(-1px);
+}
+
+/* Disabled state */
+.input-group input[disabled],
+.input-group textarea[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Small right-hand helper (e.g., show/hide password) */
+.input-group .helper {
+    position: absolute;
+    right: 10px;
+    top: 36px;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: var(--muted-2);
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background var(--transition), color var(--transition);
+}
+
+.input-group .helper:focus,
+.input-group .helper:hover {
+    background: rgba(255,255,255,0.02);
+    color: #fff;
+}
+
+/* -------------------------
+   Buttons (primary/secondary)
+   ------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    box-shadow: 0 10px 30px rgba(78,0,255,0.12);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active { transform: translateY(1px); }
+.btn:disabled,
+.btn[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Secondary button (ghost) */
+.btn.ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: none;
+}
+
+/* Full-width utility */
+.fullwidth { width: 100%; }
+
+/* -------------------------
+   Inline small text & links
+   ------------------------- */
+.small-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.small-text span {
+    color: var(--accent-end);
+    cursor: pointer;
+    font-weight: 700;
+    transition: color var(--transition);
+}
+
+.small-text span:hover { color: var(--accent-start); }
+
+/* Links */
+a.form-link {
+    color: var(--accent-end);
+    text-decoration: none;
+    font-weight: 700;
+}
+a.form-link:focus,
+a.form-link:hover { text-decoration: underline; color: var(--accent-start); }
+
+/* -------------------------
+   Field validation messages
+   ------------------------- */
+.msg {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+/* Error message */
+.msg.error {
+    color: var(--error-color);
+}
+
+/* Success message */
+.msg.success {
+    color: var(--success-color);
+}
+
+/* -------------------------
+   Small screens / responsiveness
+   ------------------------- */
+@media (max-width: 520px) {
+    .frm_box {
+        padding: 28px 18px;
+        border-radius: 18px;
+    }
+
+    .toggle { padding: 8px; gap: 6px; }
+    .toggle button { font-size: 14px; padding: 8px 10px; border-radius: 8px; }
+    .btn { padding: 10px 14px; border-radius: 10px; font-size: 14px; }
+}
+
+/* -------------------------
+   Utility classes for spacing and alignment
+   ------------------------- */
+.row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.row .col { flex: 1; min-width: 0; }
+
+/* Centering helper for demo pages */
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* -------------------------
+   Accessibility helpers
+   ------------------------- */
+.sr-only { /* screen reader only */
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}
+
+/* End of login.css */
