@@ -1,41 +1,49 @@
 <% layout("layouts/boilerplate") %>
 
 <body>
+    <div class="spotlight"></div>
 
-  <section class="hero-top">
-    <div class="hero-top__inner">
-      <div class="hero-top__left">
-        <div class="hero-top__badge reveal hero-animate"><span class="icon">⚖️</span> LegalHub</div>
-        <h1 class="hero-top__title reveal hero-animate">Clarity. Counsel. Confidence.</h1>
-        <p class="hero-top__subtitle reveal hero-animate">LegalHub turns complex legal jargon into clear answers, connects you to verified lawyers, and provides templates and guides tailored for India.</p>
+    <div class="hero-section">
+        <main class="hero">
+            <div class="hero-content">
+                <div class="tagline">
+                    <i class="fa-solid fa-scale-balanced"></i> LegalHub
+                </div>
+                <h1 class="hero-top__title reveal hero-animate">Clarity. Counsel. Confidence.</h1>
+                <p class="hero-top__subtitle reveal hero-animate">LegalHub turns complex legal jargon into clear answers, connects you to verified lawyers, and provides templates and guides tailored for India.</p>
+                <div class="action-buttons">
+                    <a href="/articles" class="btn btn-primary">📚 Get Started →</a>
+                    <a href="/lawyers" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i> Find a Lawyer</a>
+                </div>
+                <div class="hero-top__stats">
+                  <div class="stat">
+                    <div class="stat__value">250k+</div>
+                    <div class="stat__label">terms & resources</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat__value">3.9k+</div>
+                    <div class="stat__label">verified lawyers</div>
+                  </div>
+                </div>
+            </div>
 
-        <div class="hero-top__cta">
-          <a href="/articles" class="cta-primary reveal cta-pulse"><span class="emoji">📚</span> Get Started →</a>
-          <a href="/lawyers" class="cta-secondary reveal"><span class="emoji">👤</span> Find a Lawyer</a>
-        </div>
-
-        <div class="hero-top__stats">
-          <div class="stat">
-            <div class="stat__value">250k+</div>
-            <div class="stat__label">terms & resources</div>
-          </div>
-          <div class="stat">
-            <div class="stat__value">3.9k+</div>
-            <div class="stat__label">verified lawyers</div>
-          </div>
-        </div>
-      </div>
-      <div class="hero-top__right" aria-hidden="true">
-        <div class="mock-card animated-card reveal">
-          <div class="mock-card__badge">🔨</div>
-          <div class="mock-card__content"></div>
-        </div>
-      </div>
+            <div class="hero-visual">
+                <div class="visual-card">
+                    <div class="card-line-1"></div>
+                    <div class="card-line-2"></div>
+                    <div class="card-line-3"></div>
+                    <div class="card-circle-small"></div>
+                    <div class="card-bottom-bar"></div>
+                    <div class="gavel-button">
+                        <i class="fa-solid fa-gavel"></i>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </section>
 
   <!-- Hero + Dictionary -->
-  <section class="hero">
+  <section class="hero-dic">
     <h1 class="hero-title reveal">⚖️ Empower Yourself with Legal Knowledge</h1>
     <p class="lead reveal">
       We simplify complex laws and empower individuals with the right legal tools to protect their rights and
@@ -95,18 +103,66 @@
       <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
     </div>
   </section>
-
+  
   <!-- Quick Links -->
-  <section class="quick-links">
-    <h2>Simplifying Legal Jargon, One Step at a Time</h2>
-    <div class="buttons">
-      <a href="/dictionary">📖 Dictionary</a>
-      <a href="/documents">📄 Documents</a>
-      <a href="/articles">📰 Articles and Guides</a>
-      <a href="/rights">🏛️ Fundamental Rights</a>
-      <a href="/#faq">❓ Q&amp;A</a>
-      <a href="/lawyers">👩‍⚖️ Connect with a Lawyer</a>
-      <a href="/account">👤 User Profile</a>
+  <section class="legal-hub-section">
+    <div class="gradient-overlay"></div>
+    <div class="legal-hub-container">
+      <h2 class="legal-hub-title">Complete Legal Resource Hub</h2>
+      <p class="legal-hub-subtitle">
+        Everything you need for legal research, documentation, and professional connections
+      </p>
+
+      <div class="legal-hub-grid">
+        <a href="/dictionary" class="legal-hub-item blue">
+          <div class="item-bg"></div>
+          <div class="item-icon">📖</div>
+          <span class="item-label">Dictionary</span>
+          <span class="item-desc">10K+ Terms</span>
+        </a>
+
+        <a href="/documents" class="legal-hub-item green">
+          <div class="item-bg"></div>
+          <div class="item-icon">📄</div>
+          <span class="item-label">Documents</span>
+          <span class="item-desc">2.5K+ Forms</span>
+        </a>
+
+        <a href="/articles" class="legal-hub-item purple">
+          <div class="item-bg"></div>
+          <div class="item-icon">📘</div>
+          <span class="item-label">Articles</span>
+          <span class="item-desc">Expert Guides</span>
+        </a>
+
+        <a href="/rights" class="legal-hub-item red">
+          <div class="item-bg"></div>
+          <div class="item-icon">🛡️</div>
+          <span class="item-label">Rights</span>
+          <span class="item-desc">Know Your Rights</span>
+        </a>
+
+        <a href="/#FAQs" class="legal-hub-item yellow">
+          <div class="item-bg"></div>
+          <div class="item-icon">❓</div>
+          <span class="item-label">Q&amp;A</span>
+          <span class="item-desc">Get Answers</span>
+        </a>
+
+        <a href="/lawyers" class="legal-hub-item indigo">
+          <div class="item-bg"></div>
+          <div class="item-icon">👥</div>
+          <span class="item-label">Lawyers</span>
+          <span class="item-desc">500+ Verified</span>
+        </a>
+
+        <a href="/account" class="legal-hub-item gray">
+          <div class="item-bg"></div>
+          <div class="item-icon">👤</div>
+          <span class="item-label">Profile</span>
+          <span class="item-desc">Your Account</span>
+        </a>
+      </div>
     </div>
   </section>
 
