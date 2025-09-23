@@ -13,6 +13,7 @@ const {
     getLawyers,
     renderNotifications,
     markAsRead,
+    renderSettings,
 } = require("../controllers/page.controller.js");
 
 const { viewLawyer } = require("../controllers/lawyer.controller.js");
@@ -46,5 +47,6 @@ router.get("/articles/:id/edit", isLoggedIn, renderEditForm);
 router.get("/viewdowncount", renderDownCount);
 router.get("/notifications", renderNotifications);
 router.get("/notifications/:id/read", markAsRead);
+router.get("/settings", renderSettings);
 
 module.exports = router;

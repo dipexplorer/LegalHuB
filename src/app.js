@@ -278,6 +278,7 @@ app.use("/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/push", require("./routes/push.routes.js"));
 
 // Smart Search
 app.get("/api/search", smartSearch);

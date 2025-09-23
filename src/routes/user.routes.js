@@ -16,6 +16,7 @@ const {
     resetPassword,
     updateLawyerProfile,
     applyForLawyer,
+    toggleUserStatus,
 } = require("../controllers/user.controller.js");
 const { isLoggedIn, saveRedirectUrl } = require("../middlewares/auth.middleware.js");
 
@@ -73,6 +74,7 @@ router.get("/forgot-password", (req, res) => {
     res.render("pages/forgot-password");
 });
 
+ feature-googleAuth
 // 🔹 Google OAuth Routes
 router.get(
     "/auth/google",
@@ -91,5 +93,9 @@ router.get(
     }
 );
 
+
+// toggle user status
+router.route("/toggle-active").post(toggleUserStatus);
+ main
 
 module.exports = router;

@@ -264,7 +264,7 @@
         <div class="card-alt" style="margin-top:1rem">
           <h5>Appointment with <%= user.role === 'lawyer' ? appt.client.username : appt.lawyer.username %></h5>
           <p>Date: <%= new Date(appt.date).toLocaleDateString() %></p>
-          <p>Time: <%= appt.timeSlot.join(", ") %></p>
+          <p>Time: <%= appt.timeSlot%></p>
           <p>Card ID: <%= appt.appointmentCard?.cardId %></p>
 
           <% if (appt.appointmentCard) { %>

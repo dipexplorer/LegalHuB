@@ -42,6 +42,9 @@
         <a href="#"><i class="fab fa-facebook"></i></a>
         <a href="#"><i class="fab fa-twitter"></i></a>
       </div>
+      <% if (currentUser) { %>
+        <button id="notifyBtn" class="btn btn-outline-accent" style="margin-top: 20px; margin-left: -15px;">Send Notification (all)</button>
+      <% } %>
     </div>
   </div>
 
@@ -49,3 +52,93 @@
     <p>© 2025 LegalHub. All rights reserved.</p>
   </div>
 </footer>
+
+<!-- Push Notification -->
+<script>
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+
+  let swRegistration = null;
+
+  async function init() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      console.warn('Push not supported');
+      return;
+    }
+    swRegistration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    console.log('SW registered:', swRegistration);
+
+    // update UI based on subscription state
+    const sub = await swRegistration.pushManager.getSubscription();
+    
+    if (sub) {
+      // Always tell the backend which user this subscription belongs to
+      await fetch('/api/push/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sub),
+      });
+    }
+    
+    updateUI(!!sub);
+  }
+
+  function updateUI(isSubscribed) {
+    document.getElementById('subscribeBtn').textContent = isSubscribed ? 'Unsubscribe' : 'Subscribe';
+  }
+
+  document.getElementById('subscribeBtn').addEventListener('click', async () => {
+    const sub = await swRegistration.pushManager.getSubscription();
+    if (sub) { // already subscribed -> unsubscribe
+      await sub.unsubscribe();
+      await fetch('/api/push/unsubscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endpoint: sub.endpoint })
+      });
+      updateUI(false);
+      alert('Unsubscribed');
+      return;
+    }
+
+    // start subscribe flow
+    const resp = await fetch('/api/push/vapidPublicKey');
+    if (!resp.ok) return alert('Failed to get public key');
+    const { publicKey } = await resp.json();
+
+    const applicationServerKey = urlBase64ToUint8Array(publicKey);
+    const newSub = await swRegistration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
+
+    const saveResp = await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newSub),
+    });
+    if (!saveResp.ok) {
+      console.error(await saveResp.text());
+      alert('Failed to register subscription on server');
+      return;
+    }
+    updateUI(true);
+    alert('Subscribed!');
+  });
+
+  document.getElementById('notifyBtn').addEventListener('click', async () => {
+    const r = await fetch('/api/push/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payload: { title: 'Hello', body: 'This is a test notification', url: '/' } }),
+    });
+    const data = await r.json();
+    console.log('send result', data);
+    alert('Send attempt complete; check console & server logs');
+  });
+
+  init().catch(console.error);
+</script>

@@ -69,6 +69,7 @@
         "sanitize-html": "^2.17.0",
         "shortid": "^2.2.17",
         "socket.io": "^4.8.1",
+        "web-push": "^3.6.7",
         "xss-clean": "^0.1.4"
     },
     "jest": {

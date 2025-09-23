@@ -89,6 +89,7 @@
 
         <!-- Custom JS -->
         <script src="/js/login.js"></script>
+        <script src="/js/home-animations.js"></script>
 
         <!-- (No navbar toggle script here — navbar.ejs contains the correct consolidated script) -->
 
@@ -119,36 +120,6 @@
                 if (document.readyState === "complete") onLoad();
                 else window.addEventListener("load", onLoad);
             })();
-        </script>
-
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            const socket = io();
-
-            <% if (currentUser) { %>socket.emit("registerUser", "<%= currentUser._id %>");
-            <% } %>
-
-            // Listen for new notifications
-            socket.on("newNotification", (data) => {
-                console.log("📩 New notification:", data);
-
-                // Update badge
-                const badge = document.querySelector("#notificationsDropdown .badge");
-                if (badge) {
-                    badge.textContent = parseInt(badge.textContent || 0) + 1;
-                    badge.style.display = "inline";
-                }
-
-                // Prepend to dropdown
-                const dropdown = document.querySelector("#notificationsDropdown + .dropdown-menu");
-                if (dropdown) {
-                const newItem = document.createElement("a");
-                newItem.classList.add("dropdown-item", "font-weight-bold");
-                newItem.href = "/notifications";
-                newItem.innerHTML = `${data.title}<br/><small class="text-muted">${new Date(data.createdAt).toLocaleString()}</small>`;
-                dropdown.insertBefore(newItem, dropdown.firstChild);
-                }
-            });
         </script>
     </body>
 </html>

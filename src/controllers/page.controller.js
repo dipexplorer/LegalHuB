@@ -317,6 +317,11 @@ const markAsRead = asyncHandler(async (req, res) => {
     res.redirect("/notifications");
 });
 
+const renderSettings = asyncHandler(async (req, res) => {
+    const user = req.user;
+    res.render("pages/settings", { user });
+});
+
 module.exports = {
     renderHome,
     renderDictionary,
@@ -330,4 +335,5 @@ module.exports = {
     getLawyers,
     renderNotifications,
     markAsRead,
+    renderSettings,
 };

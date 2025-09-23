@@ -1,39 +1,727 @@
-/* ✅ FAQ Container */
+/* ---------- Root Theme ---------- */
+:root {
+    --bg-main: rgba(2, 6, 23, 0.85); /* slate-950/85 */
+    --bg-card: rgba(30, 41, 59, 0.85); /* slate-800/85 */
+    --bg-card-hover: rgba(51, 65, 85, 0.9); /* slate-700/90 */
+    --text-primary: #ffffff;
+    --text-secondary: #e5e7eb;
+    --text-muted: #9ca3af;
+    --accent: #a855f7; /* purple for hover border/shadow */
+    --radius: 1.2rem;
+    --transition: 0.4s ease;
+    --shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    --shadow-hover: 0 12px 30px rgba(168, 85, 247, 0.4);
+    --bg-dark: #0a090f;
+    --primary-purple: #9b5ae0;
+    --primary-pink: #e950b4;
+    --text-light: #f5f5fa;
+    --text-muted: #a8a6b3;
+    --card-bg: rgba(22, 21, 30, 0.5);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --gradient-primary: linear-gradient(90deg, var(--primary-purple), var(--primary-pink));
+    --shadow-light: 0 4px 15px rgba(233, 80, 180, 0.25);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Manrope", sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.spotlight {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(155, 90, 224, 0.15) 0%, transparent 60%);
+    z-index: -1;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: all 100ms ease-out;
+}
+
+.hero-section {
+    padding: 6rem 2rem;
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.tagline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-purple);
+    margin-bottom: 1.2rem;
+    padding: 0.4rem 1rem;
+    background-color: var(--card-bg);
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+}
+
+.tagline .fa-scale-balanced {
+    color: var(--primary-pink);
+}
+
+.hero-top__title {
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    color: transparent;
+    line-height: 1.1;
+    margin: 6px 0 12px;
+    font-weight: 800;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+    background: linear-gradient(90deg, #ff2d88 0%, #ff4fd2 35%, #b36bff 70%, #8b46ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.hero-top__subtitle {
+    font-size: clamp(1rem, 1vw + 0.5rem, 1.1rem);
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 550px;
+    margin-bottom: 2.5rem;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1.8rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background-size: 200% 100%;
+}
+
+.btn-primary {
+    background-image: linear-gradient(
+        90deg,
+        var(--primary-purple) 0%,
+        var(--primary-pink) 50%,
+        var(--primary-purple) 100%
+    );
+    color: white;
+    box-shadow: var(--shadow-light);
+}
+
+.btn-primary:hover {
+    background-position: 100% 0;
+    transform: translateY(-3px);
+}
+
+.btn-secondary {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-purple);
+    transform: translateY(-3px);
+}
+
+.hero-top__stats {
+    display: flex;
+    gap: 1rem;
+    max-width: 400px;
+}
+
+.stat {
+    flex: 1;
+    background-color: var(--card-bg);
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+.stat:hover {
+    transform: translateY(-5px);
+}
+.stat__value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.stat__label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: capitalize;
+    margin-top: 0.2rem;
+}
+
+.hero-visual {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+}
+
+.visual-card {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    background: var(--card-bg);
+    border-radius: 25px;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(15px);
+    box-shadow: var(--shadow-medium);
+    padding: 3rem;
+    overflow: hidden;
+    transform: rotateY(-10deg) rotateX(5deg);
+    transition: transform 0.4s ease-out;
+}
+.visual-card:hover {
+    transform: rotateY(-5deg) rotateX(2deg) scale(1.02);
+}
+
+.card-line-1,
+.card-line-2,
+.card-line-3,
+.card-circle-small,
+.card-bottom-bar,
+.gavel-button {
+    position: absolute;
+}
+.card-line-1 {
+    width: 70%;
+    height: 12px;
+    top: 50px;
+    left: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+}
+.card-line-2 {
+    width: 50%;
+    height: 10px;
+    top: 85px;
+    left: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+}
+.card-line-3 {
+    width: 30%;
+    height: 8px;
+    top: 120px;
+    left: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+}
+.card-circle-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: 50px;
+    right: 50px;
+    background: linear-gradient(45deg, #4c3685, #2e2649);
+    border: 1px solid var(--border-color);
+}
+.card-bottom-bar {
+    bottom: 30px;
+    left: 50px;
+    width: calc(100% - 100px);
+    height: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+}
+.card-bottom-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 5px;
+}
+.gavel-button {
+    top: 120px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #3b3064, #5a4b8f);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.8rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+.gavel-button:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* ==========================================================================
+   5. Dictionary Section
+   ========================================================================== */
+.hero-dic {
+    text-align: center;
+    max-width: 1200px;
+    margin: auto;
+    padding: 4rem 2rem;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1.2rem;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #ff2d88, #ff4fd2, #b36bff, #8b46ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    animation: fadeInDown 0.9s ease both;
+}
+.lead {
+    font-size: 1.2rem;
+    color: #d4ccf7;
+    max-width: 720px;
+    margin: 0 auto 2.5rem auto;
+    line-height: 1.75;
+    font-weight: 400;
+    opacity: 0.95;
+    text-align: center;
+    letter-spacing: 0.3px;
+    animation: fadeInUp 1s ease both;
+}
+
+/* Simple animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title {
+    font-size: 1.6rem;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: fadeInUp 1.2s ease both;
+}
+
+/* Decorative underline for "📖 Legal Dictionary" */
+.title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #ff2d88, #b36bff, #8b46ff);
+}
+
+.dic_container {
+    max-width: 800px;
+    margin: auto;
+    padding: 0.75rem;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Space between input and button */
+}
+
+#term-input {
+    flex-grow: 1;
+    min-width: 100px;
+    padding: 1rem 1.4rem;
+    border: 1px solid rgba(202, 163, 255, 0.35);
+    border-radius: 999px; /* Fully rounded input */
+    font-size: 1rem;
+    background: rgba(28, 26, 34, 0.85);
+    color: #f1eaff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+#term-input:focus {
+    border-color: #b36bff;
+    background-color: #1c1a22;
+}
+
+#search-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: linear-gradient(90deg, #ff2d88 0%, #ff4fd2 40%, #b36bff 80%, #8b46ff 100%);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 999px; /* Fully rounded button */
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+#search-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(179, 107, 255, 0.4);
+}
+
+#result {
+    margin-top: 2rem;
+    text-align: left;
+    background: rgba(9, 9, 18, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 14px;
+}
+.term-title {
+    font-size: 1.4rem;
+    color: #d9a3ff;
+    margin-bottom: 0.75rem;
+}
+#term-definition {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #f1eaff;
+}
+.hidden {
+    display: none;
+}
+
+/* ==========================================================================
+   6. Top-Rated Lawyers Section
+   ========================================================================== */
+.lawyer-section {
+    text-align: center;
+    padding: 5rem 2rem;
+}
+
+.lawyer-section h2 {
+    font-size: 3rem;
+    color: #9c1791;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.lawyer-section .subheading {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 4rem;
+}
+
+/* Grid Layout */
+.lawyer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ===================== Lawyer Card ===================== */
+.lawyer-card {
+    position: relative;
+    text-align: left;
+    padding: 2rem 1.5rem;
+    border-radius: 25px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(179, 136, 255, 0.2);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.lawyer-card::before {
+    content: "";
+    position: absolute;
+    top: -60%;
+    left: -60%;
+    width: 220%;
+    height: 220%;
+    background: linear-gradient(45deg, #ff6ec7, #9c27b0, #7c4dff, #ff8cf5);
+    opacity: 0.08;
+    transform: rotate(30deg);
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.lawyer-card:hover::before {
+    opacity: 0.15;
+    transform: rotate(45deg) scale(1.05);
+}
+
+.lawyer-card:hover {
+    transform: translateY(-10px) scale(1);
+    box-shadow:
+        0 20px 45px rgba(123, 31, 162, 0.6),
+        0 0 25px rgba(255, 140, 245, 0.4);
+    border-color: #ff8cf5;
+}
+
+/* ===================== Header & Profile ===================== */
+.lawyer-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.lawyer-photo {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ff6ec7;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.lawyer-card:hover .lawyer-photo {
+    transform: scale(1.15);
+    box-shadow: 0 0 25px rgba(255, 140, 245, 0.8);
+}
+
+.lawyer-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.lawyer-info .specialization {
+    font-size: 1rem;
+    color: #e0c4ff;
+    font-style: italic;
+}
+
+/* ===================== Badges ===================== */
+.verified-badge,
+.small-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.verified-badge {
+    background: linear-gradient(135deg, #7c4dff, #ff6ec7);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(255, 140, 245, 0.5);
+}
+
+.small-badge {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ccc;
+}
+
+/* ===================== Text Info ===================== */
+.lawyer-card p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #ddd;
+    line-height: 1.5;
+}
+
+.lawyer-card .rating {
+    color: #ffd54f;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+/* ===================== Actions ===================== */
+.lawyer-actions {
+    margin-top: 1.5rem;
+}
+
+.contact-btn {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, #ff6ec7, #b388ff);
+    color: #fff;
+    padding: 0.8rem 1.3rem;
+    border-radius: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 140, 245, 0.4);
+}
+
+.contact-btn:hover {
+    background: linear-gradient(135deg, #ff8cf5, #e1a8ff);
+    color: #000;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 25px rgba(255, 140, 245, 0.6);
+}
+
+/* ===================== View All Button ===================== */
+.lawyer-action {
+    margin-top: 3rem;
+}
+
+.view-all-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6ec7, #b388ff);
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 25px rgba(255, 140, 245, 0.5);
+}
+
+.view-all-btn:hover {
+    background: linear-gradient(135deg, #ff8cf5, #e1a8ff);
+    color: #000;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 30px rgba(255, 140, 245, 0.6);
+}
+
+/* ==========================================================================
+   7. Quick Links & FAQ Sections
+   ========================================================================== */
+.quick-links {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+.quick-links h2 {
+    font-size: 2rem;
+    color: #e1a8ff;
+    margin-bottom: 2rem;
+}
+.quick-links .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: auto;
+}
+.quick-links a {
+    background: #9c27b0;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+.quick-links a:hover {
+    background: #e1a8ff;
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.45);
+}
+
 .faq-container {
     display: flex;
-    padding: 20px;
-    gap: 20px;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: auto;
 }
-/* ✅ Left Section */
 .faq-left {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 30px;
-    width: 30%;
+    flex-basis: 35%;
+    flex-shrink: 0;
+    padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-color);
 }
 .faq-left h2 {
     font-size: 2rem;
-    color: #ffffff;
-    font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 .faq-left p {
-    font-size: 1rem;
     color: #bdbdbd;
-    margin-bottom: 20px;
     line-height: 1.6;
-}
-.faq-left .contact-info {
-    margin-top: 15px;
+    margin-bottom: 1.5rem;
 }
 .faq-left .contact-info span {
     display: flex;
     align-items: center;
-    font-size: 1rem;
+    gap: 0.75rem;
     color: #bdbdbd;
-    gap: 10px;
 }
 .faq-left .contact-info i {
     color: #9c27b0;
@@ -46,37 +734,27 @@
     transition: color 0.3s ease;
 }
 .faq-left .contact-info a:hover {
-    color: #1e1d1f;
+    color: var(--primary-pink);
 }
-/* ✅ Right Section */
 .faq-right {
-    width: 65%;
+    flex-basis: 65%;
 }
 .faq-item {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 18px;
+    margin-bottom: 1rem;
     border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-    cursor: pointer;
-}
-.faq-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--border-color);
 }
 .faq-item h3 {
     display: flex;
     justify-content: space-between;
-    font-size: 1.1rem;
-    color: #ffffff;
-    margin: 0;
     align-items: center;
+    font-size: 1.1rem;
+    padding: 1.25rem;
+    margin: 0;
+    cursor: pointer;
 }
 .faq-item h3 i {
-    font-size: 1.4rem;
     color: #9c27b0;
     transition: transform 0.3s ease;
 }
@@ -86,516 +764,290 @@
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    padding-top: 5px;
-    font-size: 1rem;
-    color: #dbe3e9;
+    opacity: 0;
+    transition: all 0.4s ease-out;
+}
+.faq-answer p {
+    padding: 0 1.25rem 1.25rem;
+    color: #bdbdbd;
     line-height: 1.6;
-    transition: max-height 0.5s ease;
 }
 .faq-item.open .faq-answer {
     max-height: 300px;
+    opacity: 1;
 }
-.faq-answer p {
-    font-size: 1rem;
-    color: #bdbdbd;
-    line-height: 1.6;
-    margin-top: 10px;
+
+/* ==========================================================================
+   8. Animation Helpers & Responsive Design
+   ========================================================================== */
+.reveal {
+    opacity: 1;
+    transform: translateY(18px);
+    transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out;
+    will-change: opacity, transform;
 }
-/* ✅ Responsive Design */
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+.hero-animate {
+    opacity: 0;
+    transform: translateY(8px) scale(0.997);
+    transition:
+        transform 0.6s cubic-bezier(0.2, 0.9, 0.2, 1),
+        opacity 0.6s ease;
+}
+.hero-animate.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-content {
+        order: 2;
+    }
+    .hero-visual {
+        order: 1;
+        margin-bottom: 2rem;
+    }
+    .hero-top__subtitle {
+        margin: 0 auto 2.5rem auto;
+    }
+    .action-buttons,
+    .hero-top__stats {
+        justify-content: center;
+    }
+}
+
 @media (max-width: 992px) {
     .faq-container {
         flex-direction: column;
-        padding: 30px;
-        gap: 20px;
     }
-    .faq-left {
-        width: 100%;
-        padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .hero,
+    .faq-container,
+    section {
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
-    .faq-right {
-        width: 100%;
+    .visual-card {
+        transform: none !important;
+        padding: 2rem;
+        height: 300px;
+    }
+    .gavel-button {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+        width: 80px;
+        height: 80px;
+        font-size: 2.2rem;
+    }
+    .card-line-1,
+    .card-line-2,
+    .card-line-3 {
+        left: 2rem;
+    }
+    .card-circle-small {
+        right: 2rem;
+    }
+    .card-bottom-bar {
+        left: 2rem;
+        width: calc(100% - 4rem);
     }
 
-    .faq-item h3 {
-        font-size: 1.1rem;
+    .dic_container {
+        border-radius: 20px;
     }
-    .faq-answer p {
-        font-size: 0.95rem;
+    #search-form {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.5rem;
+    }
+    #term-input {
+        border-radius: 12px;
+        border-right: 1px solid rgba(202, 163, 255, 0.35);
+    }
+    #search-button {
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .lawyer-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
-@media (max-width: 600px) {
-    .faq-left h2 {
-        font-size: 1.8rem;
+
+@media (max-width: 480px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
     }
-    .faq-item h3 {
-        font-size: 1rem;
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
     }
-    .faq-answer p {
-        font-size: 0.9rem;
+    .quick-links .buttons {
+        gap: 0.75rem;
+    }
+    .quick-links a {
+        width: 100%;
     }
 }
-/* ✅ Container Styling */
-.dic_container {
-    max-width: 50vw;
-    margin: 40px auto;
-    padding: 20px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-    border-radius: 12px;
-    color: #e0e0e0;
-    transition: all 0.3s ease-in-out;
+
+/* ---------- Section ---------- */
+.legal-hub-section {
+    position: relative;
+    z-index: 10;
+    padding: 4rem 1.5rem;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
 }
-.dic_container:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+.gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, rgba(88, 28, 135, 0.1), transparent);
+    pointer-events: none;
 }
-/* ✅ Title */
-.title {
-    font-size: 2.2rem;
-    color: #9c27b0;
-    margin-bottom: 20px;
+
+.legal-hub-container {
+    position: relative;
+    z-index: 1;
+    max-width: 75rem;
+    margin: 0 auto;
     text-align: center;
 }
-/* ✅ Form Styling */
-#search-form {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+
+/* ---------- Title ---------- */
+.legal-hub-title {
+    color: var(--text-primary);
+    font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
 }
-#search-form input {
-    flex: 1 1 60%;
-    min-width: 240px;
-    padding: 14px;
-    border: 2px solid #b39ddb;
-    border-radius: 6px;
-    font-size: 1rem;
-    background-color: #1e1d1f;
-    color: #e0e0e0;
-    outline: none;
-    transition:
-        border-color 0.3s ease,
-        background-color 0.3s ease;
-}
-@media (max-width: 768px) {
-    #search-form input {
-        min-width: unset;
-    }
-}
-#search-form input:focus {
-    border-color: #9c27b0;
-    background-color: #2b2a2d;
-}
-#search-form button {
-    background-color: #7b1fa2;
-    color: #fff;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-#search-form button:hover {
-    background-color: #9c27b0;
-}
-/* ✅ Result Box */
-#result {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 10px;
-    color: #cfcfcf;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-}
-.term-title {
-    font-size: 1.5rem;
-    color: #ce93d8;
-    margin-bottom: 10px;
-}
-#term-definition {
+
+.legal-hub-subtitle {
+    color: var(--text-secondary);
     font-size: 1.1rem;
+    margin-bottom: 3rem;
+    max-width: 40rem;
+    margin-inline: auto;
     line-height: 1.6;
 }
-.hidden {
-    display: none;
-}
 
-.show {
-    display: block;
-}
-/* ✅ Responsive */
-@media (max-width: 768px) {
-    .dic_container {
-        padding: 20px;
-    }
-    #search-form {
-        flex-direction: column;
-    }
-    #search-form input,
-    #search-form button {
-        width: 100%;
-    }
-}
-@media screen and (max-width: 550px) {
-    .dic_container {
-        max-width: 80vw;
-    }
-    #search-form {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        margin-top: 10px;
-        margin-bottom: 20px;
-        margin-block: auto;
-        flex-wrap: wrap;
-    }
-    #search-form input {
-        width: 300px;
-        max-width: 300px;
-    }
-    #search-form button {
-        width: 300px;
-        max-width: 300px;
-    }
-}
-@media screen and (max-width: 410px) {
-    .dic_container {
-        max-width: 100vw;
-    }
-    #search-form {
-        padding: 10px;
-    }
-    #search-form input {
-        width: 280px;
-        max-width: 280px;
-    }
-    #search-form button {
-        width: 280px;
-        max-width: 280px;
-    }
-}
-/* ==================== TOP-RATED LAWYERS SECTION ==================== */
-.lawyer-section {
-    padding: 70px 20px;
-    text-align: center;
-    max-width: 1200px;
-    margin: auto;
-    color: #f1f1f1;
-    background: rgba(30, 25, 40, 0.15); /* subtle dark background */
-    border-radius: 16px;
-}
-
-.lawyer-section h2 {
-    font-size: 2.6rem;
-    color: #e1a8ff;
-    margin-bottom: 10px;
-}
-
-.lawyer-section .subheading {
-    font-size: 1.1rem;
-    color: #d0d0d0;
-    margin-bottom: 50px;
-}
-
-/* Lawyer Grid */
-.lawyer-grid {
+/* ---------- Grid ---------- */
+.legal-hub-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
 }
 
-/* Lawyer Card */
-.lawyer-card {
-    background: linear-gradient(145deg, rgba(50, 35, 80, 0.25), rgba(70, 50, 100, 0.2));
-    color: #f0f0f0;
-    padding: 26px;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+/* ---------- Item ---------- */
+.legal-hub-item {
+    position: relative;
+    display: block;
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    text-align: center;
+    overflow: hidden;
+    color: var(--text-primary);
+    text-decoration: none;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+    transition: all var(--transition);
+}
+
+.legal-hub-item:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent);
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: var(--shadow-hover);
+}
+
+/* ---------- Hover Gradient Overlay ---------- */
+.legal-hub-item .item-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    border-radius: var(--radius);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
     transition:
-        transform 0.35s ease,
-        box-shadow 0.35s ease;
-    cursor: default;
+        opacity var(--transition),
+        background-position 1.2s ease;
 }
 
-.lawyer-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(123, 31, 162, 0.45);
+.legal-hub-item:hover .item-bg {
+    opacity: 0.25;
+    background-position: 100% 50%;
 }
 
-/* Header: photo + info */
-.lawyer-header {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 18px;
+/* ---------- Color Themes ---------- */
+.legal-hub-item.blue .item-bg {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4, #14b8a6);
+}
+.legal-hub-item.green .item-bg {
+    background: linear-gradient(135deg, #22c55e, #10b981, #14b8a6);
+}
+.legal-hub-item.purple .item-bg {
+    background: linear-gradient(135deg, #a855f7, #8b5cf6, #6366f1);
+}
+.legal-hub-item.red .item-bg {
+    background: linear-gradient(135deg, #ef4444, #ec4899, #f43f5e);
+}
+.legal-hub-item.yellow .item-bg {
+    background: linear-gradient(135deg, #eab308, #f97316, #ef4444);
+}
+.legal-hub-item.indigo .item-bg {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+}
+.legal-hub-item.gray .item-bg {
+    background: linear-gradient(135deg, #6b7280, #64748b, #71717a);
 }
 
-.lawyer-photo {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #9c27b0;
-    box-shadow: 0 0 12px rgba(156, 39, 176, 0.6);
-    transition: box-shadow 0.3s ease;
+/* ---------- Content ---------- */
+.item-icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.6rem;
+    z-index: 1;
+    position: relative;
+    color: #c4b5fd;
+    transition: all var(--transition);
 }
 
-.lawyer-photo:hover {
-    box-shadow: 0 0 18px rgba(156, 39, 176, 0.9);
+.legal-hub-item:hover .item-icon {
+    color: var(--text-primary);
+    transform: scale(1.2) rotate(3deg);
 }
 
-.lawyer-info h3 {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #f1f1f1;
-}
-
-.lawyer-info p.specialization {
-    margin: 5px 0;
+.item-label {
+    display: block;
     font-size: 1rem;
-    font-weight: 500;
-    color: #d1bee7;
-    font-style: italic;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
 }
 
-/* Badges */
-.verified-badge {
-    display: inline-block;
-    background: #7c4dff;
-    color: #fff;
+.item-desc {
+    display: block;
     font-size: 0.8rem;
-    padding: 4px 12px;
-    border-radius: 999px;
-    margin-top: 6px;
-    box-shadow: 0 0 8px #7c4dffaa;
+    color: var(--text-muted);
+    transition: color var(--transition);
 }
 
-.small-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.15);
-    font-size: 0.75rem;
-    padding: 4px 12px;
-    border-radius: 999px;
-    color: #b0a7c3;
-    margin-top: 6px;
-}
-
-/* Card Details */
-.lawyer-card p {
-    margin: 6px 0;
-    font-size: 1rem;
-    color: #cfc3e9;
-    font-weight: 500;
-}
-
-.rating {
-    color: #ffd54f;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-shadow: 0 0 4px #ffea00aa;
-}
-
-/* Actions */
-.lawyer-actions {
-    margin-top: 20px;
-}
-
-.contact-btn {
-    display: inline-block;
-    background: #9c27b0;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-        background 0.3s ease,
-        transform 0.2s ease,
-        box-shadow 0.3s ease;
-    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.4);
-}
-
-.contact-btn:hover {
-    background: #e1a8ff;
-    color: #000;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.6);
-}
-
-.view-all-btn {
-    display: inline-block;
-    margin-top: 40px;
-    background: #9c27b0;
-    color: #fff;
-    padding: 14px 22px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-        background 0.3s ease,
-        transform 0.2s ease;
-}
-
-.view-all-btn:hover {
-    background: #e1a8ff;
-    color: #000;
-    transform: translateY(-2px);
-}
-
-/* ==================== QUICK LINKS SECTION ==================== */
-.quick-links {
-    padding: 60px 20px;
-    text-align: center;
-    background: rgba(50, 35, 80, 0.2);
-    border-radius: 16px;
-    margin-top: 50px;
-}
-
-.quick-links h2 {
-    font-size: 2rem;
-    color: #e1a8ff;
-    margin-bottom: 30px;
-}
-
-.quick-links .buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 18px;
-}
-
-.quick-links a {
-    background: #9c27b0;
-    color: #fff;
-    padding: 12px 22px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    transition:
-        background 0.3s,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.25);
-}
-
-.quick-links a:hover {
-    background: #e1a8ff;
-    color: #000;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.45);
-}
-
-/* ==================== RESPONSIVE DESIGN ==================== */
-@media (max-width: 768px) {
-    .lawyer-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .lawyer-photo {
-        width: 90px;
-        height: 90px;
-    }
-    .contact-btn {
-        width: 100%;
-        text-align: center;
-    }
-}
-
-@media (max-width: 600px) {
-    .quick-links h2 {
-        font-size: 1.6rem;
-    }
-    .quick-links a {
-        width: 100%;
-        text-align: center;
-    }
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .lawyer-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .lawyer-photo {
-        width: 90px;
-        height: 90px;
-    }
-}
-
-/* === QUICK LINKS SECTION === */
-.quick-links {
-    padding: 60px 20px;
-    text-align: center;
-    background: linear-gradient(to bottom, rgba(156, 39, 176, 0.08), transparent);
-}
-
-.quick-links h2 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-}
-
-.quick-links .buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 18px;
-}
-
-.quick-links a {
-    background: var(--primary-dark);
-    color: #fff;
-    padding: 12px 22px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    transition:
-        background 0.3s,
-        transform 0.25s ease;
-    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.25);
-}
-
-.quick-links a:hover {
-    background: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.45);
-}
-
-@media (max-width: 600px) {
-    .quick-links h2 {
-        font-size: 1.6rem;
-    }
-    .quick-links a {
-        width: 100%;
-        text-align: center;
-    }
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .lawyer-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .lawyer-photo {
-        width: 90px;
-        height: 90px;
-    }
-    .lawyer-actions {
-        flex-direction: column;
-    }
-    .contact-btn {
-        width: 100%;
-    }
-}
-.view-all-btn {
-    margin-top: 20px !important;
-    padding: 12px 18px;
+.legal-hub-item:hover .item-desc {
+    color: var(--text-secondary);
 }

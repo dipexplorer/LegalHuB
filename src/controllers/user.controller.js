@@ -409,6 +409,25 @@ const renderLawyerApplyForm = asyncHandler(async (req, res) => {
     res.render("users/applyforlawyer");
 });
 
+// Toggle active/inactive
+const toggleUserStatus = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+
+    if (!user) throw new apiError(404, "User not found");
+
+    user.isActive = !user.isActive;
+    await user.save();
+
+    if (req.accepts("html")) {
+        req.flash("success", "User status updated successfully");
+        return res.redirect("/settings");
+    }
+
+    res.status(200).json(new apiResponse(200, user, "Account status updated successfully"));
+});
+
 module.exports = {
     registerAccount,
     loginUser,
@@ -428,4 +447,5 @@ module.exports = {
     updateLawyerProfile,
     applyForLawyer,
     renderLawyerApplyForm,
+    toggleUserStatus,
 };

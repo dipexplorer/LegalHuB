@@ -7,8 +7,15 @@
 }
 
 body {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    font-family: rakkas;
+    background: linear-gradient(135deg, #0f1322, #121a2f);
+    font-family:
+        "Inter",
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Arial,
+        sans-serif;
     overflow-x: hidden;
     margin: 0;
 }
@@ -299,181 +306,6 @@ nav {
     color: #e040fb;
 }
 
-.text-muted {
-}
-/* ✅ Hero Section */
-.hero {
-    padding: 50px 20px;
-    background: url("/pic") center/cover no-repeat;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    color: #f4f4f9;
-    text-align: center;
-    animation: fadeInUp 1s ease;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    color: #e040fb;
-    margin-bottom: 20px;
-}
-
-.cta-button {
-    display: inline-block;
-    background: #8a179e;
-    color: #ffffff;
-    padding: 12px 32px;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 20px;
-    box-shadow: 0px 4px 12px rgba(224, 64, 251, 0.2);
-    transition:
-        background 0.3s ease,
-        transform 0.2s;
-    text-decoration: none;
-}
-
-.cta-button:hover {
-    background: #7a228a;
-    transform: translateY(-3px);
-}
-
-.hero p {
-    font-size: 1.2em;
-    line-height: 1.5;
-    margin-top: 10px;
-    color: #dbe3e9;
-}
-
-.hero .subtext {
-    font-size: 1em;
-    color: #bdbdbd;
-    margin-top: 10px;
-}
-
-/* ✅ Quick Links */
-.quick-links {
-    background: #16213e;
-    padding: 40px;
-}
-
-.buttons a {
-    background: #6a1b9a;
-    color: white;
-    padding: 14px 28px;
-    border-radius: 8px;
-    transition:
-        background 0.3s ease,
-        transform 0.2s;
-    box-shadow: 0px 4px 12px rgba(106, 27, 154, 0.2);
-}
-
-.buttons a:hover {
-    background: #e040fb;
-    transform: translateY(-4px);
-}
-
-.buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-}
-
-.buttons a {
-    background: #6a1b9a; /* Dark Purple */
-    color: white;
-    padding: 14px 28px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition:
-        background 0.3s ease,
-        transform 0.2s;
-    box-shadow: 0px 4px 12px rgba(106, 27, 154, 0.2);
-}
-
-.buttons a:hover {
-    background: #9c27b0; /* Light Purple */
-    transform: translateY(-3px);
-}
-
-/* ✅ Our Team */
-.our-team {
-    padding: 40px 20px;
-    background: #16213e;
-}
-
-.team-members {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.team-member {
-    background: #1a1a2e;
-    padding: 20px;
-    border-radius: 12px;
-    width: 180px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.team-member:hover {
-    transform: translateY(-5px);
-}
-
-.team-member img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 12px;
-}
-
-.team-member span {
-    font-size: 1em;
-    color: #f4f4f9;
-}
-
-/* ✅ About Section */
-.about {
-    padding: 40px;
-    margin: 20px auto;
-    max-width: 900px;
-    background: #1a1a2e;
-    border-radius: 12px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    line-height: 1.7;
-    font-size: 1.2em;
-    color: #f4f4f9;
-}
-
-/* ✅ Follow Us */
-.follow-us {
-    margin-top: 40px;
-}
-
-.follow-us a {
-    background: #6a1b9a;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    margin: 10px;
-    display: inline-block;
-    text-decoration: none;
-    font-weight: bold;
-    transition:
-        background 0.3s ease,
-        transform 0.2s;
-}
-
-.follow-us a:hover {
-    background: #9c27b0;
-    transform: translateY(-3px);
-}
-
 /* ✅ Animations */
 @keyframes fadeInUp {
     from {
@@ -575,12 +407,12 @@ nav {
         flex-direction: column;
     }
 
-    .hero h1 {
-        font-size: 2.2rem;
+    .hero-title {
+        font-size: 2.4rem;
     }
 
     .hero p {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 }
 

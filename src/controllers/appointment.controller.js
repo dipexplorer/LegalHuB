@@ -125,7 +125,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
         await appointment.save();
 
         // get io instance safely
-        const io = req.app.get("io");
+        const io = req.app.get("io"); // socket.io instance
 
         // after saving appointment
         await createNotification(io, {
@@ -137,6 +137,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
             relatedModel: "Appointment",
             priority: "high",
             channels: { inApp: true, email: true },
+            email: lawyerUser.email, // 👈 ADD THIS
         });
 
         await createNotification(io, {
@@ -146,8 +147,9 @@ const bookAppointment = asyncHandler(async (req, res) => {
             message: `You booked an appointment with ${lawyerUser.username} on ${appointment.date}`,
             relatedId: appointment._id,
             relatedModel: "Appointment",
-            priority: "normal",
+            priority: "high",
             channels: { inApp: true, email: true },
+            email: req.user.email, // 👈 ADD THIS
         });
 
         if (req.accepts("html")) {
