@@ -317,10 +317,13 @@ a.form-link:hover { text-decoration: underline; color: var(--accent-start); }
    Small screens / responsiveness
    ------------------------- */
 @media (max-width: 520px) {
-    .frm_box {
-        padding: 28px 18px;
-        border-radius: 18px;
-    }
+   .frm_box {
+    padding: 28px 18px;
+    border-radius: 18px;
+    width: 85%;  /* <-- Change this value */
+    margin-left: auto;
+    margin-right: auto;
+}
 
     .toggle { padding: 8px; gap: 6px; }
     .toggle button { font-size: 14px; padding: 8px 10px; border-radius: 8px; }
