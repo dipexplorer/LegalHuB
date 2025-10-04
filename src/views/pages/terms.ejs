@@ -34,6 +34,20 @@
             transition: color 0.3s ease;
         }
 
+        h2 {
+    display: flex; /* This is new */
+    align-items: center; /* This is new */
+    gap: 12px; /* This is new */
+    margin-top: 40px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffb86c; /* Changed to orange for more pop */
+        }
+h2 i {
+    color: #ff79c6; /* Pink color for the icon */
+    font-size: 1.5rem; /* Slightly smaller than the text */
+}
+
         h1:hover {
             color: #ff6ec7;
         }
@@ -56,12 +70,13 @@
         }
 
         /* ✅ Paragraphs */
-        p {
-            font-size: 1rem;
-            color: #dcdcdc;
-            margin-bottom: 16px;
-            line-height: 1.7;
-        }
+ p {
+    font-size: 1rem;
+    color: #dcdcdc;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    font-weight: 600; /* This makes the text extra thick and bold */
+}
 
         /* ✅ Strong Text */
         strong {
@@ -70,36 +85,42 @@
             font-weight: 600;
         }
 
-        /* ✅ Custom List Replacement */
-        .custom-item {
-            margin-bottom: 14px;
-            color: #e0e0e0;
-            font-size: 1rem;
-            padding: 12px 18px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.05);
-            position: relative;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
+        /* ✅ Custom List Item - UPGRADED STYLE */
+    .custom-item {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* A little more space */
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        color: #e0e0e0;
+        font-size: 1rem;
+        transition: all 0.3s ease; /* Smoother transition */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
 
-        .custom-item::before {
-            content: "✔️";
-            font-size: 20px;
-            color: #50fa7b;
-            /* Green Checkmark */
-            transition: color 0.3s ease;
-        }
+    /* New hover effect */
+    .custom-item:hover {
+        transform: translateY(-5px) scale(1.02); /* A more dynamic hover */
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(80, 250, 123, 0.5); /* Border lights up green */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
 
-        .custom-item:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
+    /* New CSS-drawn checkmark */
+   .custom-item::before {
+        content: ''; /* We will draw the checkmark ourselves */
+        flex-shrink: 0; /* Prevents checkmark from shrinking */
+        display: inline-block;
+        width: 8px;
+        height: 15px;
+        border: solid #50fa7b; /* Green color from the theme */
+        border-width: 0 3px 3px 0;
+        transform: rotate(45deg);
+        margin-left: 5px;
+    }
 
         /* ✅ CTA Button */
         .cta-button {
@@ -172,35 +193,57 @@
     </style>
 
     <!-- ✅ Terms and Conditions Content -->
-    <section class="terms-container">
-        <h1>📜 Terms & Conditions</h1>
-        <p class="last-updated">Last updated: <%= new Date().toDateString() %>
-        </p>
+   <section class="terms-container">
+    <h1>📜 Terms & Conditions</h1>
+    <p class="last-updated"><strong>Last updated:</strong> October 4, 2025</p>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>
-            By accessing or using our platform, you agree to comply with these terms and conditions.
-            If you disagree, please do not use our platform.
-        </p>
+    <h2><i class="fas fa-file-signature"></i> 1. Acceptance of Terms</h2>
+    <p>By accessing and using LegalHuB, you agree to be bound by these Terms and Conditions...</p>
 
-        <h2>2. User Responsibilities</h2>
-        <div class="custom-item">Provide accurate information during registration.</div>
-        <div class="custom-item">Maintain the confidentiality of your login credentials.</div>
-        <div class="custom-item">Avoid using the platform for any illegal activities.</div>
+    <h2><i class="fas fa-user-check"></i> 2. User Responsibilities</h2>
+<div class="custom-item">Provide accurate and truthful information during registration.</div>
+<div class="custom-item">Maintain the confidentiality of your login credentials.</div>
+<div class="custom-item">Avoid engaging in illegal, abusive, or unauthorized activities on the platform.</div>
+<div class="custom-item">Use the platform in compliance with all applicable laws.</div>
 
-        <h2>3. Intellectual Property</h2>
-        <p>
-            All content, trademarks, and branding on the platform are the property of <strong>LegalHuB</strong>.
-            Unauthorized use, reproduction, or modification is strictly prohibited.
-        </p>
+    <h2><i class="fas fa-copyright"></i> 3. Intellectual Property</h2>
+    <p>All content, trademarks, and branding on LegalHuB are the property of LegalHuB or its licensors...</p>
 
-        <h2>4. Termination</h2>
-        <p>
-            We reserve the right to terminate your account without prior notice if you violate these terms.
-        </p>
+    <h2><i class="fas fa-credit-card"></i> 4. Payment & Subscription Terms</h2>
+    <p>If LegalHuB offers premium features or subscriptions, payments are subject to the terms outlined during checkout...</p>
 
-        <h2>5. Contact Us</h2>
-        <p>
-            If you have any questions, contact us at:
-            <strong>📧 support@legalhub.com</strong>
-    </section>
+    <h2><i class="fas fa-ban"></i> 5. Termination & Suspension</h2>
+    <p>We reserve the right to suspend or terminate your account without prior notice if you violate these Terms...</p>
+
+    <h2><i class="fas fa-exclamation-triangle"></i> 6. Limitation of Liability</h2>
+    <p>LegalHuB is not liable for any direct, indirect, incidental, or consequential damages...</p>
+
+    <h2><i class="fas fa-shield-alt"></i> 7. Indemnification</h2>
+    <p>You agree to indemnify and hold LegalHuB harmless against any claims, liabilities, or expenses...</p>
+
+    <h2><i class="fas fa-gavel"></i> 8. Governing Law & Jurisdiction</h2>
+    <p>These Terms shall be governed by and interpreted in accordance with the laws of India...</p>
+
+    <h2><i class="fas fa-balance-scale"></i> 9. Dispute Resolution / Arbitration</h2>
+    <p>In case of disputes, both parties agree to attempt resolution through negotiation or mediation...</p>
+
+    <h2><i class="fas fa-edit"></i> 10. Modifications to Terms</h2>
+    <p>We may update these Terms from time to time. Continued use of the platform after updates constitutes acceptance...</p>
+
+    <h2><i class="fas fa-external-link-alt"></i> 11. Third-Party Services & Links</h2>
+    <p>LegalHuB may contain links to third-party websites. We are not responsible for the content, practices, or policies...</p>
+
+    <h2><i class="fas fa-puzzle-piece"></i> 12. Severability</h2>
+    <p>If any provision of these Terms is found invalid or unenforceable, the remaining provisions will continue in effect.</p>
+
+    <h2><i class="fas fa-file-alt"></i> 13. Entire Agreement</h2>
+    <p>These Terms & Conditions constitute the entire agreement between you and LegalHuB...</p>
+
+    <h2><i class="fas fa-envelope"></i> 14. Contact Us</h2>
+    <p>
+        If you have any questions or concerns, reach us at:<br><br>
+        📧 Email: <a href="mailto:support@legalhub.com" class="footer-link">support@legalhub.com</a><br>
+        📍 Address: LegalHuB, Developer Street, Mumbai, India<br>
+        ⏱ Response Time: Within 3–5 business days
+    </p>
+</section>
