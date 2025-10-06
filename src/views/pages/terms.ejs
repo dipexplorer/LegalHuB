@@ -24,27 +24,30 @@
             letter-spacing: 0.5px;
         }
 
-        h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #ff79c6;
-            padding-bottom: 12px;
-            transition: color 0.3s ease;
-        }
+       h2 {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adds space between icon and text */
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-top: 40px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+    color: #ff79c6; /* Orange color for the heading text */
+    letter-spacing: 0.5px; /* We kept this from the old style */
+    margin-bottom: 12px; /* We kept this from the old style */
+}
+
+h2 i {
+    color: #ff79c6; /* Pink color for the icon */
+    font-size: 1.6rem; /* A bit smaller than the text */
+}
 
         h1:hover {
             color: #ff6ec7;
         }
 
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.12);
-        }
+       
 
         /* ✅ Last Updated */
         .last-updated {
@@ -88,9 +91,9 @@
         }
 
         .custom-item::before {
-            content: "✔️";
+            content: "✓";
             font-size: 20px;
-            color: #50fa7b;
+            color: #50fa7b !important;
             /* Green Checkmark */
             transition: color 0.3s ease;
         }
@@ -172,35 +175,76 @@
     </style>
 
     <!-- ✅ Terms and Conditions Content -->
-    <section class="terms-container">
-        <h1>📜 Terms & Conditions</h1>
-        <p class="last-updated">Last updated: <%= new Date().toDateString() %>
-        </p>
+   <section class="terms-container">
+    <h1>📜 Terms & Conditions</h1>
+    <p class="effective-date"><strong>Effective Date:</strong> October 6, 2025</p>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>
-            By accessing or using our platform, you agree to comply with these terms and conditions.
-            If you disagree, please do not use our platform.
-        </p>
+    <h2><i class="fas fa-file-signature"></i> 1. Acceptance of Terms</h2>
+    <p>These Legal Terms ("Terms") constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you" or "User"), and LegalHub ("Company," "LegalHub," "we," "us," or "our"), concerning your access to and use of the <a href="https://legalhub-zwk9.onrender.com" target="_blank" rel="noopener noreferrer" class="footer-link">https://legalhub-zwk9.onrender.com</a> website, the LegalHub mobile application, and any other related media form or channel (collectively, the "Services").</p>
+    <p>By accessing or using the Services, you acknowledge that you have read, understood, and agree to be bound by all of these Terms. If you do not agree with all of these Terms, you are expressly prohibited from using the Services and must discontinue use immediately.</p>
 
-        <h2>2. User Responsibilities</h2>
-        <div class="custom-item">Provide accurate information during registration.</div>
-        <div class="custom-item">Maintain the confidentiality of your login credentials.</div>
-        <div class="custom-item">Avoid using the platform for any illegal activities.</div>
+    <h2><i class="fas fa-exclamation-circle"></i> 2. IMPORTANT DISCLAIMER: No Legal Advice</h2>
+    <p>LegalHub is not a law firm and does not provide legal advice. The Services, including all text, graphics, document templates, and other materials available through the platform (the "Content"), are for informational purposes only. No attorney-client relationship is created or implied through your use of the Services. The Content is not a substitute for professional legal advice from a qualified attorney licensed in your jurisdiction. You must not rely on the Content as legal advice for any purpose, and you are solely responsible for any consequences of such reliance.</p>
 
-        <h2>3. Intellectual Property</h2>
-        <p>
-            All content, trademarks, and branding on the platform are the property of <strong>LegalHuB</strong>.
-            Unauthorized use, reproduction, or modification is strictly prohibited.
-        </p>
+    <h2><i class="fas fa-user-plus"></i> 3. User Registration and Account Security</h2>
+    <p>To access certain features of the Services, a User must register for an account. The User agrees and warrants that they shall:</p>
+    <div class="custom-item">Provide true, accurate, current, and complete information as prompted by the registration form.</div>
+    <div class="custom-item">Maintain and promptly update their registration data to keep it accurate and complete.</div>
+    <div class="custom-item">Maintain the confidentiality of their password and account credentials. The User is fully responsible for all activities that occur under their account.</div>
+    <p>LegalHub reserves the right to suspend or terminate any account if information provided is found to be untrue, inaccurate, or incomplete.</p>
 
-        <h2>4. Termination</h2>
-        <p>
-            We reserve the right to terminate your account without prior notice if you violate these terms.
-        </p>
+    <h2><i class="fas fa-user-shield"></i> 4. User Obligations and Prohibited Conduct</h2>
+    <p>The User's access to the Services is subject to their compliance with these Terms and all applicable laws. The User is prohibited from and shall not:</p>
+    <div class="custom-item">Systematically retrieve data or Content from the Services to create or compile, directly or indirectly, a collection, database, or directory without express written permission from LegalHub.</div>
+    <div class="custom-item">Use the Services for any illegal, fraudulent, or unauthorized purpose.</div>
+    <div class="custom-item">Upload, transmit, or distribute any computer viruses, worms, or any software intended to damage or alter a computer system or data.</div>
+    <div class="custom-item">Interfere with, disrupt, or create an undue burden on servers or networks connected to the Services.</div>
+    <div class="custom-item">Attempt to decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a part of the Services.</div>
+    <div class="custom-item">Use any information obtained from the Services in order to harass, abuse, or harm another person.</div>
+    <div class="custom-item">Circumvent, disable, or otherwise interfere with security-related features of the Services that prevent or restrict the use or copying of any Content.</div>
 
-        <h2>5. Contact Us</h2>
-        <p>
-            If you have any questions, contact us at:
-            <strong>📧 support@legalhub.com</strong>
-    </section>
+    <h2><i class="fas fa-copyright"></i> 5. Intellectual Property Rights</h2>
+    <p>All Content and the trademarks, service marks, and logos contained therein (the "Marks") are owned by or licensed to LegalHub and are subject to copyright and other intellectual property rights under Indian and foreign laws. The Content and Marks are provided "AS IS" for your information and personal, non-commercial use only.</p>
+
+    <h2><i class="fas fa-credit-card"></i> 6. Payment, Subscriptions, and Cancellation</h2>
+    <p><strong>Billing and Auto-Renewal:</strong> Certain Services require payment on a subscription basis. You will be billed in advance on a recurring basis ("Billing Cycle"). Your subscription shall automatically renew at the end of each Billing Cycle unless canceled by you. You authorize us to charge your payment method for such renewals.</p>
+    <p><strong>Fee Changes:</strong> LegalHub reserves the right to modify subscription fees at any time. Any fee change will become effective at the end of the then-current Billing Cycle, and we will provide you with reasonable prior notice.</p>
+    <p><strong>Cancellation Process:</strong> Users may cancel their subscription at any time. To cancel, you must navigate to the 'Subscription' or 'Billing' section of your account dashboard and follow the provided instructions to terminate your subscription. The cancellation will take effect at the end of the current Billing Cycle, and you will retain access to the paid features until that date.</p>
+    <p><strong>Refund Policy:</strong> All payments are final and non-refundable, except as required by law.</p>
+
+    <h2><i class="fas fa-ban"></i> 7. Termination and Suspension</h2>
+    <p><strong>Termination for Cause:</strong> LegalHub reserves the right to suspend or terminate a User's account and access to the Services for any breach of these Terms. Severe breaches, including but not limited to illegal activities or actions that threaten the security of the Services or other users, may result in immediate termination without prior notice.</p>
+    <p><strong>User Rights and Notice Period:</strong> For non-severe breaches, LegalHub will make a reasonable effort to provide the User with written notice of the violation and a 14-day period to cure the breach. If the breach is not cured within this period, LegalHub may proceed with termination.</p>
+    <p><strong>Appeal Process:</strong> If your account is terminated, you may appeal the decision by contacting our support team via email at <a href="mailto:support@legalhub.com" class="footer-link">support@legalhub.com</a>. LegalHub will review the appeal and respond, though we are not obligated to reinstate any account. The decision following an appeal is final.</p>
+    <p><strong>Effect of Termination:</strong> Upon termination, your right to use the Services will cease immediately.</p>
+
+    <h2><i class="fas fa-eye-slash"></i> 8. Disclaimer of Warranties and Service Availability</h2>
+    <p>THE SERVICES ARE PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS. LEGALHUB MAKES NO WARRANTIES, EXPRESS OR IMPLIED, REGARDING THE SERVICES, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. LEGALHUB DOES NOT GUARANTEE THAT THE SERVICES WILL BE AVAILABLE AT ALL TIMES, BE UNINTERRUPTED, OR BE ERROR-FREE. ALL LIABILITY FOR THE ACCURACY, COMPLETENESS, OR RELIABILITY OF THE CONTENT RESTS WITH THE USER.</p>
+
+    <h2><i class="fas fa-exclamation-triangle"></i> 9. Limitation of Liability</h2>
+    <p>TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT SHALL LEGALHUB OR ITS DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, OR PUNITIVE DAMAGES, INCLUDING LOST PROFIT OR LOST DATA, ARISING FROM YOUR USE OF THE SERVICES OR YOUR RELIANCE ON ANY CONTENT PROVIDED THEREIN.</p>
+
+    <h2><i class="fas fa-shield-alt"></i> 10. Indemnification</h2>
+    <p>The User agrees to defend, indemnify, and hold harmless LegalHub and its affiliates from and against any loss, damage, liability, claim, or demand, including reasonable attorneys’ fees, made by any third party due to or arising out of your breach of these Terms or your violation of any law or the rights of a third party.</p>
+
+    <h2><i class="fas fa-gavel"></i> 11. Governing Law and Dispute Resolution</h2>
+    <p>These Terms shall be governed by the laws of India. The parties agree that any dispute shall first be addressed through informal negotiations. If unresolved, the dispute shall be resolved by binding arbitration in Mumbai, India.</p>
+
+    <h2><i class="fas fa-edit"></i> 12. Modifications to Terms</h2>
+    <p>LegalHub reserves the right to modify these Terms at any time. We will notify users of material changes by updating the "Effective Date" and, where feasible, by sending a notification to your registered email address. Your continued use of the Services after such changes constitutes your acceptance of the new Terms.</p>
+
+    <h2><i class="fas fa-external-link-alt"></i> 13. Third-Party Links</h2>
+    <p>The Services may contain links to third-party websites that are not owned or controlled by LegalHub. LegalHub assumes no responsibility for the content or practices of any third-party websites.</p>
+    
+    <h2><i class="fas fa-puzzle-piece"></i> 14. General Provisions</h2>
+    <p><strong>Entire Agreement:</strong> These Terms, together with our Privacy Policy, constitute the entire agreement between you and LegalHub regarding the Services.</p>
+    <p><strong>Severability:</strong> If any provision of these Terms is deemed invalid, the remaining provisions will continue in full force and effect.</p>
+    <p><strong>Data Protection:</strong> Our handling of your personal data is described in our Privacy Policy, available at <a href="https://legalhub-zwk9.onrender.com/privacy" target="_blank" rel="noopener noreferrer" class="footer-link">https://legalhub-zwk9.onrender.com/privacy</a>.</p>
+
+    <h2><i class="fas fa-envelope-open-text"></i> 15. Contact Information</h2>
+    <p>
+        For any questions, complaints, or claims with respect to the Services, please contact us. We aim to respond to all inquiries within 3-5 business days.<br><br>
+        <strong>Email:</strong> <a href="mailto:support@legalhub.com" class="footer-link">support@legalhub.com</a><br>
+        <strong>Phone:</strong> (+91)-98765-43210<br>
+    </p>
+</section>
