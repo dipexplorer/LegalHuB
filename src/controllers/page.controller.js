@@ -7,17 +7,68 @@ const ApiResponse = require("../utils/apiResponse.js");
 const User = require("../models/user.model.js");
 const LawyerProfile = require("../models/lawyer.model.js");
 const Notification = require("../models/notification.model.js");
+const axios = require("axios");
+
+// ---------- GitHub Helpers ----------
+async function fetchContributors(owner, repo) {
+    const url = `https://api.github.com/repos/${owner}/${repo}/contributors`;
+    const headers = {};
+    if (process.env.GITHUB_TOKEN) {
+        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    }
+    const { data } = await axios.get(url, { headers, params: { per_page: 100 } });
+    return data;
+}
+
+async function fetchRepoStats(owner, repo) {
+    const base = `https://api.github.com/repos/${owner}/${repo}`;
+    const headers = {};
+    if (process.env.GITHUB_TOKEN) {
+        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    }
+    const [repoRes, prsRes, issuesRes] = await Promise.all([
+        axios.get(base, { headers }),
+        axios.get(`${base}/pulls`, { headers, params: { state: "closed", per_page: 1 } }),
+        axios.get(`${base}/issues`, { headers, params: { state: "open", per_page: 1 } }),
+    ]);
+
+    return {
+        stars: repoRes.data.stargazers_count,
+        forks: repoRes.data.forks_count,
+        watchers: repoRes.data.watchers_count,
+        openIssues: repoRes.data.open_issues_count,
+        defaultBranch: repoRes.data.default_branch,
+        // lightweight counts; detailed counts would need pagination
+        // expose links for users to explore
+        repoHtmlUrl: repoRes.data.html_url,
+        pullsUrl: `${repoRes.data.html_url}/pulls`,
+        issuesUrl: `${repoRes.data.html_url}/issues`,
+    };
+}
 
 const renderHome = asyncHandler(async (req, res) => {
-    const lawyers = await User.find({ role: "lawyer" })
+    const lawyersPromise = User.find({ role: "lawyer" })
         .populate({
             path: "lawyerProfile",
             model: LawyerProfile,
             select: "specialization experience city state fees isVerified",
         })
-        .limit(3); // ✅ Show only 3 lawyers
+        .limit(3);
 
-    res.render("pages/index", { lawyers });
+    const owner = process.env.REPO_OWNER || "dipexplorer";
+    const repo = process.env.REPO_NAME || "LegalHuB";
+
+    let contributorsTop = [];
+    try {
+        const all = await fetchContributors(owner, repo);
+        contributorsTop = (all || []).slice(0, 12);
+    } catch (_) {
+        contributorsTop = [];
+    }
+
+    const lawyers = await lawyersPromise;
+
+    res.render("pages/index", { lawyers, contributorsTop });
 });
 
 const renderDictionary = (req, res) => {
@@ -322,6 +373,32 @@ const renderSettings = asyncHandler(async (req, res) => {
     res.render("pages/settings", { user });
 });
 
+// ---------- Contributors Page ----------
+const renderContributors = asyncHandler(async (req, res) => {
+    const owner = process.env.REPO_OWNER || "dipexplorer";
+    const repo = process.env.REPO_NAME || "LegalHuB";
+
+    let contributors = [];
+    let repoStats = null;
+    try {
+        [contributors, repoStats] = await Promise.all([
+            fetchContributors(owner, repo),
+            fetchRepoStats(owner, repo),
+        ]);
+    } catch (err) {
+        // fail-soft; still render page
+        contributors = [];
+        repoStats = null;
+    }
+
+    res.render("pages/contributors", {
+        owner,
+        repo,
+        contributors,
+        repoStats,
+    });
+});
+
 module.exports = {
     renderHome,
     renderDictionary,
@@ -336,4 +413,5 @@ module.exports = {
     renderNotifications,
     markAsRead,
     renderSettings,
+    renderContributors,
 };

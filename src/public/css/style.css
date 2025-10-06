@@ -749,6 +749,155 @@ nav {
     border-top: 1px solid #444;
 }
 
+/* ===== Contributors (Home teaser + Page) ===== */
+.contributors-teaser {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.contributors-slider {
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.contributors-slider:hover .slider-track {
+    animation-play-state: paused; /* Pause on hover */
+}
+
+.contributors-slider .slider-track {
+    display: flex;
+    gap: 12px;
+    animation: scroll-left 60s linear infinite;
+    width: max-content;
+}
+
+.contrib-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid #2b2b4a;
+    border-radius: 999px;
+    background: #1a1a2e;
+    text-decoration: none;
+    color: #e0e0e0;
+}
+
+.contrib-pill img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.contributors-hero {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.contributors-container {
+    padding-bottom: 40px;
+}
+
+.contributors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.contrib-card {
+    background: #1a1a2e;
+    border: 1px solid #2b2b4a;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.contrib-card:hover {
+    background: #2b2b4a;
+    border-color: #9c27b0;
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3); /* subtle glow */
+}
+
+.contrib-card img {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2b2b4a;
+    transition: transform 0.3s ease;
+}
+
+.contrib-card:hover img {
+    transform: scale(1.1); /* image zoom */
+}
+
+.contrib-name {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.contrib-link {
+    color: #9c27b0;
+    text-decoration: none;
+}
+
+.repo-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.repo-stats .btn {
+    padding: 8px 12px;
+    border: 1px solid #2b2b4a;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 0 4px;
+    display: inline-block;
+    color: #e0e0e0;
+}
+
+.repo-stats .btn:hover {
+    border-color: #9c27b0;
+    color: #fff;
+}
+
+.repo-stats .stats {
+    display: flex;
+    gap: 12px;
+    color: #bdbdbd;
+}
+
+.contributors-empty {
+    text-align: center;
+    color: #bdbdbd;
+}
+
+/* Responsive and bold coursolin section */
+#coursolin {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    padding: 20px 0;
+    font-weight: 700;
+    color: #9c27b0;
+}
+
 /* ✅ Responsive Fixes */
 @media (max-width: 768px) {
     .footer-container .container {

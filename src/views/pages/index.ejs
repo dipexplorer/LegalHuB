@@ -166,6 +166,31 @@
     </div>
   </section>
 
+  <!-- Contributors Teaser -->
+  <section class="contributors-teaser">
+    <h2>🙏 Thanks to Our Contributors</h2>
+    <p class="subheading">Community members building LegalHuB together</p>
+    <div class="contributors-slider">
+      <div class="slider-track">
+        <% (contributorsTop || []).forEach(c => { %>
+          <a class="contrib-pill" href="<%= c.html_url %>" target="_blank" rel="noopener">
+            <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
+            <span>@<%= c.login %></span>
+          </a>
+        <% }) %>
+        <% (contributorsTop || []).forEach(c => { %>
+          <a class="contrib-pill" href="<%= c.html_url %>" target="_blank" rel="noopener">
+            <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
+            <span>@<%= c.login %></span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+    <div class="lawyer-action">
+      <a href="/contributors" class="view-all-btn">View All Contributors →</a>
+    </div>
+  </section>
+
   <!-- FAQ Section -->
   <div class="container faq-container" id="faq">
     <div class="faq-left">
