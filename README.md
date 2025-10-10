@@ -61,7 +61,7 @@
 
 ### 🏠 Homepage
 
-![Homepage](https://github.com/user-attachments/assets/c7b71c5a-f2f5-4e13-b62c-d73e386b9ef5)
+![Homepage](https://github.com/user-attachments/assets/bee8d073-0d3f-4050-906b-49fdcee5b551)
 
 ---
 

@@ -21,29 +21,31 @@
       <div class="hamburger" id="hamburger">&#9776;</div>
 
       <!-- Notifications -->
-      <div class="notifications dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button">
-          <i class="fa fa-bell"></i>
-          <% if (notificationsCount && notificationsCount > 0) { %>
-            <span class="badge badge-danger"><%= notificationsCount %></span>
-          <% } %>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
-          <% if (notifications && notifications.length > 0) { %>
-            <% notifications.forEach(n => { %>
-              <a class="dropdown-item <%= n.status === 'unread' ? 'font-weight-bold' : '' %>" href="/notifications">
-                <%= n.title %> <br/>
-                <small><%= n.createdAt.toLocaleString() %></small>
-              </a>
-            <% }) %>
-          <% } else { %>
-            <span class="dropdown-item">No notifications</span>
-          <% } %>
+      <% if (currentUser) { %>
+        <div class="notifications dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button">
+            <i class="fa fa-bell"></i>
+            <% if (notificationsCount && notificationsCount > 0) { %>
+              <span class="badge badge-danger"><%= notificationsCount %></span>
+            <% } %>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
+            <% if (notifications && notifications.length > 0) { %>
+              <% notifications.forEach(n => { %>
+                <a class="dropdown-item <%= n.status === 'unread' ? 'font-weight-bold' : '' %>" href="/notifications">
+                  <%= n.title %> <br/>
+                  <small><%= n.createdAt.toLocaleString() %></small>
+                </a>
+              <% }) %>
+            <% } else { %>
+              <span class="dropdown-item">No notifications</span>
+            <% } %>
 
-          <!-- <div class="dropdown-divider"></div> -->
-          <a class="dropdown-item text-center" href="/notifications">View all</a>
+            <!-- <div class="dropdown-divider"></div> -->
+            <a class="dropdown-item text-center" href="/notifications">View all</a>
+          </div>
         </div>
-      </div>
+      <% } %>
 
       <!-- Auth Links (Right side of navbar) -->
       <div class="auth-links">

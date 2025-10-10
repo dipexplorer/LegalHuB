@@ -1,5 +1,4 @@
 <% layout("/layouts/boilerplate") -%>
-
 <style>
 feature-googleAuth
   .btn {
@@ -226,7 +225,7 @@ feature-googleAuth
                         <button
                             type="button"
                             class="password-toggle-btn"
-                            onclick="togglePassword('login-password', this)"
+                            onclick=`${togglePassword('login-password', this)}`
                             aria-label="Toggle password visibility">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -364,7 +363,7 @@ feature-googleAuth
                         <button
                             type="button"
                             class="password-toggle-btn"
-                            onclick="togglePassword('register-password', this)"
+                            onclick=`${togglePassword('register-password', this)}`
                             aria-label="Toggle password visibility">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -389,7 +388,7 @@ feature-googleAuth
                         <button
                             type="button"
                             class="password-toggle-btn"
-                            onclick="togglePassword('register-confirm-password', this)"
+                            onclick=`${togglePassword('register-confirm-password', this)}`
                             aria-label="Toggle password visibility">
                             <i class="fas fa-eye"></i>
                         </button>

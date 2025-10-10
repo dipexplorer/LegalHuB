@@ -14,6 +14,7 @@ const {
     renderNotifications,
     markAsRead,
     renderSettings,
+    renderContributors,
 } = require("../controllers/page.controller.js");
 
 const { viewLawyer } = require("../controllers/lawyer.controller.js");
@@ -48,5 +49,6 @@ router.get("/viewdowncount", renderDownCount);
 router.get("/notifications", renderNotifications);
 router.get("/notifications/:id/read", markAsRead);
 router.get("/settings", renderSettings);
+router.get("/contributors", isLoggedIn, renderContributors);
 
 module.exports = router;

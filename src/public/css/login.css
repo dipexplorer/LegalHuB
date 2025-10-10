@@ -8,7 +8,7 @@
 /* -------------------------
    Theme variables
    ------------------------- */
-:root{
+:root {
     --bg-1: #212121;
     --bg-2: #1a1a1a;
     --muted: #bdbdbd;
@@ -19,13 +19,13 @@
     --card-radius: 25px;
     --card-padding-y: 40px;
     --card-padding-x: 35px;
-    --shadow: 0 10px 30px rgba(0,0,0,0.7);
-    --inset-glow: rgba(255,255,255,0.06);
-    --input-bg: rgba(255,255,255,0.03);
-    --input-border: rgba(255,255,255,0.06);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    --inset-glow: rgba(255, 255, 255, 0.06);
+    --input-bg: rgba(255, 255, 255, 0.03);
+    --input-border: rgba(255, 255, 255, 0.06);
     --success-color: #28a745;
     --error-color: #e03e2d;
-    --transition: 200ms cubic-bezier(.2,.9,.3,1);
+    --transition: 200ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 /* -------------------------
@@ -61,7 +61,12 @@
     inset: -6px; /* top/right/bottom/left: -6px */
     border-radius: calc(var(--card-radius) + 6px);
     z-index: -1;
-    background: linear-gradient(90deg, rgba(78,0,255,0.18), rgba(142,0,255,0.12), rgba(78,0,255,0.06));
+    background: linear-gradient(
+        90deg,
+        rgba(78, 0, 255, 0.18),
+        rgba(142, 0, 255, 0.12),
+        rgba(78, 0, 255, 0.06)
+    );
     filter: blur(10px);
     opacity: 0.9;
     pointer-events: none;
@@ -83,7 +88,7 @@
     justify-content: center;
     gap: 8px;
     padding: 10px;
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 15px;
     margin-bottom: 20px;
     align-items: center;
@@ -107,7 +112,7 @@
 
 /* Visual focus for keyboard users */
 .toggle button:focus {
-    box-shadow: 0 0 0 3px rgba(142,0,255,0.12);
+    box-shadow: 0 0 0 3px rgba(142, 0, 255, 0.12);
     color: #fff;
 }
 
@@ -115,7 +120,9 @@
 .toggle button.active {
     background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
     color: #fff;
-    box-shadow: 0 6px 18px var(--accent-glow), 0 0 8px rgba(78, 0, 255, 0.45) inset;
+    box-shadow:
+        0 6px 18px var(--accent-glow),
+        0 0 8px rgba(78, 0, 255, 0.45) inset;
     transform: translateY(-1px);
 }
 
@@ -140,7 +147,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .form-container { animation: none; }
+    .form-container {
+        animation: none;
+    }
 }
 
 /* Show/hide forms */
@@ -148,8 +157,12 @@
     display: none;
 }
 
-.form.hidden { display: none; }
-.form:not(.hidden) { display: block; }
+.form.hidden {
+    display: none;
+}
+.form:not(.hidden) {
+    display: block;
+}
 
 /* -------------------------
    Input group & controls
@@ -182,7 +195,10 @@
     color: #fff;
     font-size: 15px;
     line-height: 1.2;
-    transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
+    transition:
+        box-shadow var(--transition),
+        border-color var(--transition),
+        transform var(--transition);
     outline: none;
     box-sizing: border-box;
 }
@@ -190,15 +206,17 @@
 /* Input placeholder */
 .input-group input::placeholder,
 .input-group textarea::placeholder {
-    color: rgba(255,255,255,0.36);
+    color: rgba(255, 255, 255, 0.36);
 }
 
 /* Focus & hover states for inputs */
 .input-group input:focus,
 .input-group textarea:focus,
 .input-group select:focus {
-    border-color: rgba(142,0,255,0.9);
-    box-shadow: 0 6px 20px rgba(142,0,255,0.06), 0 0 0 3px rgba(78,0,255,0.06);
+    border-color: rgba(142, 0, 255, 0.9);
+    box-shadow:
+        0 6px 20px rgba(142, 0, 255, 0.06),
+        0 0 0 3px rgba(78, 0, 255, 0.06);
     transform: translateY(-1px);
 }
 
@@ -221,50 +239,16 @@
     user-select: none;
     padding: 6px 8px;
     border-radius: 8px;
-    transition: background var(--transition), color var(--transition);
+    transition:
+        background var(--transition),
+        color var(--transition);
 }
 
 .input-group .helper:focus,
 .input-group .helper:hover {
-    background: rgba(255,255,255,0.02);
+    background: rgba(255, 255, 255, 0.02);
     color: #fff;
 }
-
-/* -------------------------
-   Buttons (primary/secondary)
-   ------------------------- */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 11px 18px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-    text-decoration: none;
-    color: #fff;
-    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-    box-shadow: 0 10px 30px rgba(78,0,255,0.12);
-    -webkit-tap-highlight-color: transparent;
-}
-
-.btn:active { transform: translateY(1px); }
-.btn:disabled,
-.btn[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-/* Secondary button (ghost) */
-.btn.ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: none;
-}
-
-/* Full-width utility */
-.fullwidth { width: 100%; }
 
 /* -------------------------
    Inline small text & links
@@ -283,7 +267,9 @@
     transition: color var(--transition);
 }
 
-.small-text span:hover { color: var(--accent-start); }
+.small-text span:hover {
+    color: var(--accent-start);
+}
 
 /* Links */
 a.form-link {
@@ -292,7 +278,10 @@ a.form-link {
     font-weight: 700;
 }
 a.form-link:focus,
-a.form-link:hover { text-decoration: underline; color: var(--accent-start); }
+a.form-link:hover {
+    text-decoration: underline;
+    color: var(--accent-start);
+}
 
 /* -------------------------
    Field validation messages
@@ -320,23 +309,26 @@ a.form-link:hover { text-decoration: underline; color: var(--accent-start); }
     .frm_box {
         padding: 28px 18px;
         border-radius: 18px;
+        width: 85%; /* <-- Change this value */
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .toggle { padding: 8px; gap: 6px; }
-    .toggle button { font-size: 14px; padding: 8px 10px; border-radius: 8px; }
-    .btn { padding: 10px 14px; border-radius: 10px; font-size: 14px; }
+    .toggle {
+        padding: 8px;
+        gap: 6px;
+    }
+    .toggle button {
+        font-size: 14px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+    .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
 }
-
-/* -------------------------
-   Utility classes for spacing and alignment
-   ------------------------- */
-.row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.row .col { flex: 1; min-width: 0; }
 
 /* Centering helper for demo pages */
 .centered {
@@ -348,9 +340,11 @@ a.form-link:hover { text-decoration: underline; color: var(--accent-start); }
 /* -------------------------
    Accessibility helpers
    ------------------------- */
-.sr-only { /* screen reader only */
+.sr-only {
+    /* screen reader only */
     position: absolute !important;
-    height: 1px; width: 1px;
+    height: 1px;
+    width: 1px;
     overflow: hidden;
     clip: rect(1px, 1px, 1px, 1px);
     white-space: nowrap;

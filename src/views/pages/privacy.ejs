@@ -1,209 +1,140 @@
 <% layout("layouts/boilerplate") %>
 
-    <style>
-        /* ✅ Privacy Container */
-        .privacy-container {
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 40px;
-            background-color: rgba(20, 20, 30, 0.9);
-            border-radius: 16px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            line-height: 1.8;
-            animation: fadeInUp 0.6s ease;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-        }
+<style>
 
-        /* ✅ Headings */
-        h1,
-        h2 {
-            color: #ff79c6;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
+    /* ✅ Main Container */
+    .privacy-container {
+        max-width: 850px;
+        margin: 50px auto;
+        padding: 40px;
+        background-color: rgba(20, 20, 30, 0.9);
+        border-radius: 16px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        line-height: 1.8;
+        color: #dcdcdc;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        animation: fadeInUp 0.6s ease;
+    }
 
-        h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #ff79c6;
-            padding-bottom: 12px;
-            transition: color 0.3s ease;
-        }
+    /* ✅ Headings */
+    .privacy-container h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #ff79c6;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #ff79c6;
+    }
+    .privacy-container h2 {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-top: 40px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ff79c6;
+    }
+    .privacy-container h2 i {
+        font-size: 1.6rem;
+    }
 
-        h1:hover {
-            color: #ff6ec7;
-        }
+    /* ✅ Other text styles */
+    .privacy-container p, .privacy-container li {
+        margin-bottom: 16px;
+        padding-left: 5px; /* Align text with headings */
+    }
+    .privacy-container strong { color: #ffb86c; }
+    .privacy-container a { color: #ff79c6; text-decoration: none; }
+    .privacy-container a:hover { text-decoration: underline; }
+    .effective-date {
+        text-align: center;
+        font-style: italic;
+        color: #b2bec3;
+        margin-bottom: 40px;
+    }
+    .privacy-container ul {
+        list-style-position: inside;
+        padding-left: 10px;
+    }
 
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.12);
-        }
+    /* ✅ Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 
-        /* ✅ Paragraphs */
-        p {
-            font-size: 1rem;
-            color: #dcdcdc;
-            margin-bottom: 16px;
-            line-height: 1.7;
-        }
+<div class="privacy-container">
+    <h1><i class="fas fa-user-secret"></i>  Privacy Policy</h1>
+    <p class="effective-date"><strong>Effective Date:</strong> October 8, 2025</p>
 
-        /* ✅ Strong Text */
-        strong {
-            color: #ffb86c;
-            font-weight: 600;
-        }
+    <h2><i class="fas fa-info-circle"></i> 1. INTRODUCTION</h2>
+    <p>This Privacy Notice for LegalHuB ("we," "us," or "our") describes how and why we might collect, store, use, and/or share ("process") your personal information when you use our Services. Reading this Privacy Notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, you must discontinue use of our Services immediately.</p>
+    
+    <h2><i class="fas fa-database"></i> 2. INFORMATION WE COLLECT</h2>
+    <p><strong>Personal Data You Disclose to Us:</strong> We collect personal information that you voluntarily provide to us when you register on the Services, express an interest in obtaining information about us, or when you participate in activities on the Services. This information includes, but is not limited to: <strong>Names, Email Addresses, Usernames, and Passwords.</strong> All personal information that you provide must be true, complete, and accurate, and you must notify us of any changes to such personal information. We do not process sensitive personal information.</p>
+    <p><strong>Technical Data (Information Automatically Collected):</strong> When you visit, use, or navigate the Services, we automatically collect certain information. This information does not reveal your specific identity but may include device and usage information such as your <strong>IP address, browser and device characteristics, operating system, language preferences, referring URLs, device name, country, location, and detailed information about how and when you use our Services.</strong> This information is primarily needed to maintain the security and operation of our Services, and for our internal analytics and reporting purposes.</p>
 
-        /* ✅ Replacement for List Styling */
-        .info-item {
-            margin-bottom: 14px;
-            color: #e0e0e0;
-            font-size: 1rem;
-            padding: 12px 18px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.05);
-            position: relative;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
+    <h2><i class="fas fa-cogs"></i> 3. HOW WE USE YOUR INFORMATION</h2>
+    <p>Your information shall be processed for specific, explicit, and legitimate purposes, including:</p>
+    <ul>
+        <li><strong>Service Delivery & Personalization:</strong> To facilitate account creation, manage user accounts, personalize your experience, and provide the core functionalities of the platform.</li>
+        <li><strong>Legal Compliance:</strong> To comply with our legal obligations, resolve disputes, enforce our agreements, and respond to valid legal requests.</li>
+        <li><strong>Communication:</strong> To send you administrative information, such as updates to our policies, security alerts, and other account-related messages.</li>
+        <li><strong>Improvement and Analytics:</strong> To identify usage trends, determine the effectiveness of features, and evaluate and improve our Services, products, and overall user experience.</li>
+    </ul>
 
-        .info-item::before {
-            content: "✔️";
-            font-size: 20px;
-            color: #50fa7b;
-            transition: color 0.3s ease;
-        }
+    <h2><i class="fas fa-share-alt"></i> 4. DATA SHARING & DISCLOSURE</h2>
+    <p>LegalHuB shall not sell your personal data. We may disclose your information in specific situations and to specific categories of third parties to facilitate the operation of the Services:</p>
+    <ul>
+        <li><strong>Website Hosting Service Providers:</strong> To host our platform and its data.</li>
+        <li><strong>Data Analytics Services:</strong> To help us understand usage trends and user behavior.</li>
+        <li><strong>Payment Processors:</strong> To securely process payments for any subscription services.</li>
+        <li><strong>Business Transfers:</strong> We may share or transfer your information in connection with any merger, sale of company assets, financing, or acquisition of our business.</li>
+    </ul>
 
-        .info-item:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
+    <h2><i class="fas fa-history"></i> 5. DATA RETENTION</h2>
+    <p>LegalHuB shall retain your personal information only for as long as it is necessary for the purposes set out in this Privacy Notice, which is typically as long as you maintain an account with us. When your account is terminated, or when we no longer have an ongoing legitimate business need to process your information, your data will be deleted or anonymized in accordance with applicable laws, unless a longer retention period is required for legal reasons (such as for tax or accounting purposes).</p>
 
-        /* ✅ CTA Button */
-        .cta-button {
-            display: inline-block;
-            margin-top: 24px;
-            padding: 14px 28px;
-            background-color: #ff79c6;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 6px 16px rgba(255, 121, 198, 0.4);
-        }
+    <h2><i class="fas fa-shield-alt"></i> 6. SECURITY MEASURES</h2>
+    <p>We have implemented appropriate, industry-standard technical and organizational security measures designed to protect the security of any personal information we process. This includes using <strong>encryption</strong> for data in transit (SSL/TLS) and at rest, secure server configurations, access controls, and other safeguards to protect your data from unauthorized access, alteration, disclosure, or destruction.</p>
 
-        .cta-button:hover {
-            background-color: #ff6ec7;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 24px rgba(255, 121, 198, 0.6);
-        }
+    <h2><i class="fas fa-user-check"></i> 7. YOUR PRIVACY RIGHTS</h2>
+    <p>Depending on your location, you have certain rights regarding the personal information we hold about you. These rights include:</p>
+    <ul>
+        <li><strong>Right of Access:</strong> You may request a copy of the personal information we collect from you.</li>
+        <li><strong>Right to Correction (Rectification):</strong> You may request that we correct any inaccurate or incomplete data.</li>
+        <li><strong>Right to Deletion (Erasure):</strong> You may request that we delete your personal information, subject to certain legal exceptions.</li>
+        <li><strong>Right to Opt-Out:</strong> You have the right to withdraw your consent and opt out of certain data processing activities.</li>
+    </ul>
+    <p>You can exercise these rights at any time by contacting us using the information provided in the "Contact Us" section. We will consider and act upon any request in accordance with applicable data protection laws.</p>
 
-        /* ✅ Footer Styling */
-        .footer {
-            margin-top: 40px;
-            padding: 24px;
-            background-color: rgba(20, 20, 30, 0.9);
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
+    <h2><i class="fas fa-cookie-bite"></i> 8. COOKIES & TRACKING TECHNOLOGIES</h2>
+    <p>The Services use cookies, web beacons, and other similar tracking technologies to function, maintain your session, and gather analytics data. These are small data files that help the site work and allow us to understand user behavior. For more detailed information on the specific technologies we use, the data they collect, how third parties use them on our site, and how you can control them, <strong>please reference our separate Cookie Policy.</strong> This Cookie Policy is an integral part of this Privacy Policy and is incorporated by reference herein.</p>
+    
+    <h2><i class="fas fa-ban"></i> 9. CONTROLS FOR DO-NOT-TRACK FEATURES</h2>
+    <p>Most web browsers and some mobile operating systems include a Do-Not-Track ("DNT") feature. At this stage, no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals.</p>
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: #ff79c6;
-            font-size: 1rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: #ff6ec7;
-            transform: translateY(-2px);
-        }
-
-        .footer-text {
-            color: #bbb;
-            font-size: 0.9rem;
-            margin-top: 12px;
-        }
-
-        /* ✅ Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @media screen and (max-width:500px) {
-            h1{
-                font-size: 30px;
-            }
-            h2{
-                font-size: 18px;
-            }
-        }
-    </style>
-
-    <section class="privacy-container">
-        <h1>🔒 Privacy Policy</h1>
-        <p class="last-updated">Last updated: <%= new Date().toDateString() %>
-        </p>
-
-        <h2>1. Information We Collect</h2>
-        <p>
-            We collect personal information such as your <strong>name, email address, and contact details</strong>.
-            Additionally, we gather anonymous usage data to analyze platform performance and improve our services.
-        </p>
-
-        <h2>2. How We Use Your Information</h2>
-        <div class="info-item">Provide and improve our services.</div>
-        <div class="info-item">Customize your experience on the platform.</div>
-        <div class="info-item">Ensure security and compliance with legal requirements.</div>
-
-        <h2>3. Data Sharing and Security</h2>
-        <p>
-            We do not sell your personal data. However, we may share limited data with trusted third-party service
-            providers to enhance platform performance and improve user experience. Your data is protected using
-            <strong>end-to-end encryption</strong> and industry-standard security measures.
-        </p>
-
-        <h2>4. Your Rights</h2>
-        <div class="info-item">Access, update, or delete your personal data at any time.</div>
-        <div class="info-item">Opt-out of promotional communications.</div>
-        <div class="info-item">Request a copy of the data we hold about you.</div>
-
-        <h2>5. Third-Party Services</h2>
-        <p>
-            We may use third-party services (e.g., Google Analytics) to monitor and analyze platform traffic.
-            These services have their own privacy policies that govern the use of data.
-        </p>
-
-        <h2>6. Contact Us</h2>
-        <p>
-            If you have any questions or concerns regarding this privacy policy, contact us at:
-            <strong>📧 support@legalhub.com</strong>
-        </p>
-    </section>
+    <h2><i class="fas fa-child"></i> 10. CHILDREN’S PRIVACY</h2>
+    <p>The Services are not intended for or directed to individuals under the age of 18 (or the applicable age of majority in their jurisdiction). LegalHuB does not knowingly collect, solicit, or market to children. If we become aware that we have collected personal data from a child without verification of parental consent, we will take immediate steps to remove that information from our servers.</p>
+    
+    <h2><i class="fas fa-globe-americas"></i> 11. INTERNATIONAL USERS & LEGAL COMPLIANCE (GDPR/CCPA)</h2>
+    <p>Our servers are located in India. If you access the Services from another region (such as the European Economic Area (EEA), the UK, or California), please be aware that your information will be transferred to, stored, and processed in India. We will take all necessary measures to protect your information in accordance with this policy and applicable laws, such as the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA), where applicable, to ensure your data is treated securely.</p>
+    
+    <h2><i class="fas fa-sync-alt"></i> 12. UPDATES TO THIS NOTICE</h2>
+    <p>We may update this Privacy Notice from time to time. The updated version will be indicated by an updated "Revised" date. We encourage you to review this Privacy Notice frequently to be informed of how we are protecting your information.</p>
+    
+    <h2><i class="fas fa-envelope-open-text"></i> 13. CONTACT US</h2>
+    <p>
+        Should you have any questions, comments, or requests regarding this policy or your data, you must contact our designated privacy contact.<br><br>
+        <strong>Support Email:</strong> <a href="mailto:support@legalhub.com">support@legalhub.com</a><br>
+        <strong>Mailing Address:</strong> LegalHuB, Mumbai, India<br>
+        <strong>Expected Response Time:</strong> We aim to respond to all inquiries within 3-5 business days.
+    </p>
+</div>

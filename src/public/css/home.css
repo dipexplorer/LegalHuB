@@ -123,16 +123,10 @@ body {
 .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.7rem;
-    padding: 0.9rem 1.8rem;
-    border: 1px solid transparent;
+    gap: 0.6rem;
+    padding: 0.9rem 0.8rem;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    background-size: 200% 100%;
 }
 
 .btn-primary {

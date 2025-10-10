@@ -748,6 +748,244 @@ nav {
     color: #b0b0b0;
     border-top: 1px solid #444;
 }
+/* ===== Contributors Teaser Slider ===== */
+.contributors-teaser {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.contributors-slider {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  padding: 0 48px; /* wider padding for breathing room */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px; /* increased height for larger cards */
+  margin: 0 auto;
+
+}
+
+.slider-track {
+  display: flex;
+  gap: 24px; /* more spacing between cards */
+  transition: transform 0.5s ease;
+  will-change: transform;
+  justify-content: center;
+  align-items: center;
+    padding: 20px 0;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+
+}
+
+.contrib-pill {
+  width: 160px;              /* Slightly larger fixed width */
+  height: 200px;             /* Fixed height for consistency */
+  background: #1a1a2e;
+  border: 1px solid #2b2b4a;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* Vertically center content */
+  text-decoration: none;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  flex: 0 0 auto;            /* Prevent flex resizing */
+  cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.contrib-pill img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #2b2b4a;
+  transition: transform 0.3s ease;
+  margin-bottom: 12px;
+
+}
+.contrib-pill:hover {
+    background: #2b2b4a;
+    border-color: #9c27b0;
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+
+}
+.contrib-pill:hover img {
+  transform: scale(1.1);
+  z-index: 4;
+}
+
+.contrib-pill.middle {
+  transform: scale(1.1);
+  box-shadow: 0 0 24px rgba(156, 39, 176, 0.6);
+  border-color: #9c27b0;
+  z-index: 2;
+
+}
+
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2b2b4a;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  z-index: 3;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+
+}
+
+.slider-arrow:hover {
+  background: #9c27b0;
+}
+
+.slider-arrow.left {
+  left: 24px;
+}
+
+.slider-arrow.right {
+  right: 24px;
+}
+
+.slider-fog {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  pointer-events: none;
+
+}
+
+.left-fog {
+  left: 0;
+  background: linear-gradient(to right, #1a1a2e 0%, transparent 100%);
+}
+
+.right-fog {
+  right: 0;
+  background: linear-gradient(to left, #1a1a2e 0%, transparent 100%);
+}
+
+/* ===== Contributors Page ===== */
+
+.contributors-hero {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.contributors-container {
+    padding-bottom: 40px;
+}
+
+.contributors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.contrib-card {
+    background: #1a1a2e;
+    border: 1px solid #2b2b4a;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.contrib-card:hover {
+    background: #2b2b4a;
+    border-color: #9c27b0;
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3); /* subtle glow */
+}
+
+.contrib-card img {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2b2b4a;
+    transition: transform 0.3s ease;
+}
+
+.contrib-card:hover img {
+    transform: scale(1.1); /* image zoom */
+}
+
+.contrib-name {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.contrib-link {
+    color: #9c27b0;
+    text-decoration: none;
+}
+
+.repo-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.repo-stats .btn {
+    padding: 8px 12px;
+    border: 1px solid #2b2b4a;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 0 4px;
+    display: inline-block;
+    color: #e0e0e0;
+}
+
+.repo-stats .btn:hover {
+    border-color: #9c27b0;
+    color: #fff;
+}
+
+.repo-stats .stats {
+    display: flex;
+    gap: 12px;
+    color: #bdbdbd;
+}
+
+.contributors-empty {
+    text-align: center;
+    color: #bdbdbd;
+}
+
+/* Responsive and bold coursolin section */
+#coursolin {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    padding: 20px 0;
+    font-weight: 700;
+    color: #9c27b0;
+}
 
 /* ✅ Responsive Fixes */
 @media (max-width: 768px) {
