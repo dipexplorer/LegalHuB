@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - LegalHuB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ✅ Root Variables */
+        :root {
+            --primary-color: #6C5CE7;
+            --accent-color: #00D9FF;
+            --bg-dark: #0B0E1D;
+            --bg-section: #161B2E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A4B8;
+            --border-color: rgba(108, 92, 231, 0.2);
+        }
+
+        /* ✅ Reset & Body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* ✅ Hero Section */
+        .privacy-hero {
+            background: linear-gradient(135deg, #1a1f3a 0%, #0B0E1D 100%);
+            padding: 100px 20px 60px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .privacy-hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .privacy-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .privacy-hero .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* ✅ Main Container */
+        .privacy-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        /* ✅ Question Block */
+        .question-block {
+            background: var(--bg-section);
+            border-radius: 12px;
+            padding: 35px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .question-block:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .question-block:hover::before {
+            opacity: 1;
+        }
+
+        .question-block h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .question-block p,
+        .question-block li {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .question-block strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .question-block a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .question-block a:hover {
+            color: var(--accent-color);
+        }
+
+        /* ✅ Lists */
+        .question-block ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 15px 0;
+        }
+
+        .question-block li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .question-block li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        /* ✅ Special Blocks */
+        .highlight-section {
+            background: rgba(108, 92, 231, 0.08);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-info p {
+            margin: 8px 0;
+        }
+
+        /* ✅ Full Width Sections */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* ✅ Effective Date */
+        .effective-date {
+            background: var(--bg-section);
+            border-radius: 12px;
+            padding: 25px 35px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        .effective-date strong {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .effective-date span {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ✅ Responsive */
+        @media (max-width: 968px) {
+            .privacy-container {
+                grid-template-columns: 1fr;
+            }
+
+            .privacy-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .question-block {
+                padding: 25px;
+            }
+        }
+
+        /* ✅ Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-block {
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .question-block:nth-child(1) { animation-delay: 0.05s; }
+        .question-block:nth-child(2) { animation-delay: 0.1s; }
+        .question-block:nth-child(3) { animation-delay: 0.15s; }
+        .question-block:nth-child(4) { animation-delay: 0.2s; }
+        .question-block:nth-child(5) { animation-delay: 0.25s; }
+        .question-block:nth-child(6) { animation-delay: 0.3s; }
+        .question-block:nth-child(7) { animation-delay: 0.35s; }
+        .question-block:nth-child(8) { animation-delay: 0.4s; }
+        .question-block:nth-child(9) { animation-delay: 0.45s; }
+        .question-block:nth-child(10) { animation-delay: 0.5s; }
+        .question-block:nth-child(11) { animation-delay: 0.55s; }
+        .question-block:nth-child(12) { animation-delay: 0.6s; }
+        .question-block:nth-child(13) { animation-delay: 0.65s; }
+        .question-block:nth-child(14) { animation-delay: 0.7s; }
+        .question-block:nth-child(15) { animation-delay: 0.75s; }
+        .question-block:nth-child(16) { animation-delay: 0.8s; }
+        .question-block:nth-child(17) { animation-delay: 0.85s; }
+        .question-block:nth-child(18) { animation-delay: 0.9s; }
+        .question-block:nth-child(19) { animation-delay: 0.95s; }
+        .question-block:nth-child(20) { animation-delay: 1s; }
+        .question-block:nth-child(21) { animation-delay: 1.05s; }
+
+        /* ✅ Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            z-index: 1000;
+            transition: width 0.1s ease;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Hero Section -->
+<div class="privacy-hero">
+    <div class="privacy-hero-content">
+        <div class="subtitle">OUR PERSONAL STATEMENT, COOKIES, THIRD-PARTIES</div>
+        <h1>PRIVACY POLICY</h1>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="privacy-container">
+
+    <!-- Effective Date -->
+    <div class="effective-date">
+        <strong>Effective Date:</strong> <span>October 8, 2025</span>
+    </div>
+
+    <!-- Introduction -->
+    <div class="question-block full-width">
+        <h2><i class="fas fa-info-circle"></i> Introduction</h2>
+        <p>This Privacy Notice for LegalHuB ("we," "us," or "our") describes how and why we might collect, store, use, and/or share ("process") your personal information when you use our Services. Reading this Privacy Notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, you must discontinue use of our Services immediately.</p>
+    </div>
+
+    <!-- Information We Collect -->
+    <div class="question-block">
+        <h2><i class="fas fa-database"></i> Information We Collect</h2>
+        <div class="highlight-section">
+            <p><strong>Personal Data You Disclose to Us:</strong></p>
+            <p>We collect personal information that you voluntarily provide to us when you register on the Services, express an interest in obtaining information about us, or when you participate in activities on the Services.</p>
+        </div>
+        <p>This information includes, but is not limited to: <strong>Names, Email Addresses, Usernames, and Passwords.</strong> All personal information that you provide must be true, complete, and accurate, and you must notify us of any changes to such personal information. We do not process sensitive personal information.</p>
+        
+        <div class="highlight-section">
+            <p><strong>Technical Data (Information Automatically Collected):</strong></p>
+            <p>When you visit, use, or navigate the Services, we automatically collect certain information including your <strong>IP address, browser and device characteristics, operating system, language preferences, referring URLs, device name, country, location, and detailed information about how and when you use our Services.</strong></p>
+        </div>
+    </div>
+
+    <!-- How We Use Information -->
+    <div class="question-block">
+        <h2><i class="fas fa-cogs"></i> How We Use Your Information</h2>
+        <p>Your information shall be processed for specific, explicit, and legitimate purposes, including:</p>
+        <ul>
+            <li><strong>Service Delivery & Personalization:</strong> To facilitate account creation, manage user accounts, personalize your experience, and provide the core functionalities of the platform.</li>
+            <li><strong>Legal Compliance:</strong> To comply with our legal obligations, resolve disputes, enforce our agreements, and respond to valid legal requests.</li>
+            <li><strong>Communication:</strong> To send you administrative information, such as updates to our policies, security alerts, and other account-related messages.</li>
+            <li><strong>Improvement and Analytics:</strong> To identify usage trends, determine the effectiveness of features, and evaluate and improve our Services.</li>
+        </ul>
+    </div>
+
+    <!-- Data Sharing -->
+    <div class="question-block">
+        <h2><i class="fas fa-share-alt"></i> Data Sharing & Disclosure</h2>
+        <p>LegalHuB shall not sell your personal data. We may disclose your information in specific situations:</p>
+        <ul>
+            <li><strong>Website Hosting Service Providers:</strong> To host our platform and its data.</li>
+            <li><strong>Data Analytics Services:</strong> To help us understand usage trends and user behavior.</li>
+            <li><strong>Payment Processors:</strong> To securely process payments for any subscription services.</li>
+            <li><strong>Business Transfers:</strong> We may share or transfer your information in connection with any merger, sale of company assets, financing, or acquisition of our business.</li>
+        </ul>
+    </div>
+
+    <!-- Data Retention -->
+    <div class="question-block">
+        <h2><i class="fas fa-history"></i> Data Retention</h2>
+        <p>LegalHuB shall retain your personal information only for as long as it is necessary for the purposes set out in this Privacy Notice, which is typically as long as you maintain an account with us. When your account is terminated, or when we no longer have an ongoing legitimate business need to process your information, your data will be deleted or anonymized in accordance with applicable laws.</p>
+    </div>
+
+    <!-- Security Measures -->
+    <div class="question-block">
+        <h2><i class="fas fa-shield-alt"></i> Security Measures</h2>
+        <p>We have implemented appropriate, industry-standard technical and organizational security measures designed to protect the security of any personal information we process. This includes using <strong>encryption</strong> for data in transit (SSL/TLS) and at rest, secure server configurations, access controls, and other safeguards to protect your data from unauthorized access, alteration, disclosure, or destruction.</p>
+    </div>
+
+    <!-- Your Privacy Rights -->
+    <div class="question-block">
+        <h2><i class="fas fa-user-check"></i> Your Privacy Rights</h2>
+        <p>Depending on your location, you have certain rights regarding the personal information we hold about you:</p>
+        <ul>
+            <li><strong>Right of Access:</strong> You may request a copy of the personal information we collect from you.</li>
+            <li><strong>Right to Correction:</strong> You may request that we correct any inaccurate or incomplete data.</li>
+            <li><strong>Right to Deletion:</strong> You may request that we delete your personal information, subject to certain legal exceptions.</li>
+            <li><strong>Right to Opt-Out:</strong> You have the right to withdraw your consent and opt out of certain data processing activities.</li>
+        </ul>
+    </div>
+
+    <!-- Cookies & Tracking -->
+    <div class="question-block">
+        <h2><i class="fas fa-cookie-bite"></i> Cookies & Tracking Technologies</h2>
+        <p>The Services use cookies, web beacons, and other similar tracking technologies to function, maintain your session, and gather analytics data. These are small data files that help the site work and allow us to understand user behavior. For more detailed information, <strong>please reference our separate Cookie Policy.</strong></p>
+    </div>
+
+    <!-- Do-Not-Track -->
+    <div class="question-block">
+        <h2><i class="fas fa-ban"></i> Controls for Do-Not-Track Features</h2>
+        <p>Most web browsers and some mobile operating systems include a Do-Not-Track ("DNT") feature. At this stage, no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals.</p>
+    </div>
+
+    <!-- Children's Privacy -->
+    <div class="question-block">
+        <h2><i class="fas fa-child"></i> Children's Privacy</h2>
+        <p>The Services are not intended for or directed to individuals under the age of 18 (or the applicable age of majority in their jurisdiction). LegalHuB does not knowingly collect, solicit, or market to children. If we become aware that we have collected personal data from a child without verification of parental consent, we will take immediate steps to remove that information from our servers.</p>
+    </div>
+
+    <!-- International Users -->
+    <div class="question-block">
+        <h2><i class="fas fa-globe-americas"></i> International Users & Legal Compliance</h2>
+        <p>Our servers are located in India. If you access the Services from another region (such as the European Economic Area (EEA), the UK, or California), please be aware that your information will be transferred to, stored, and processed in India. We will take all necessary measures to protect your information in accordance with this policy and applicable laws, such as the GDPR and CCPA.</p>
+    </div>
+
+    <!-- Updates to Notice -->
+    <div class="question-block">
+        <h2><i class="fas fa-sync-alt"></i> Updates to This Notice</h2>
+        <p>We may update this Privacy Notice from time to time. The updated version will be indicated by an updated "Revised" date. We encourage you to review this Privacy Notice frequently to be informed of how we are protecting your information.</p>
+    </div>
+
+    <!-- Contact Us -->
+    <div class="question-block full-width">
+        <h2><i class="fas fa-envelope-open-text"></i> Contact Us</h2>
+        <p>Should you have any questions, comments, or requests regarding this policy or your data, you must contact our designated privacy contact.</p>
+        <div class="contact-info">
+            <p><strong>Support Email:</strong> <a href="mailto:support@legalhub.com">support@legalhub.com</a></p>
+            <p><strong>Mailing Address:</strong> LegalHuB, Mumbai, India</p>
+            <p><strong>Expected Response Time:</strong> We aim to respond to all inquiries within 3-5 business days.</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Scroll Progress Bar
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = (scrollTop / scrollHeight) * 100;
+        document.getElementById('progressBar').style.width = scrollPercent + '%';
+    });
+</script>
+
+</body>
+</html>
