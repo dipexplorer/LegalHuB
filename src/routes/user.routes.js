@@ -25,6 +25,8 @@ const router = express.Router();
 // Register
 router.route("/register").post(registerAccount);
 
+const { trackLoginActivity } = require("../controllers/security.controller.js");
+
 // Login
 router.post(
     "/login",
@@ -33,6 +35,7 @@ router.post(
         failureRedirect: "/login",
         failureFlash: true,
     }),
+    trackLoginActivity,
     loginUser
 );
 

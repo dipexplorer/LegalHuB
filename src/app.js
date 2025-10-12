@@ -302,6 +302,7 @@ const chatRoutes = require("./routes/chat.routes.js");
 const reviewRoutes = require("./routes/review.routes.js");
 const adminRoutes = require("./routes/admin.routes.js");
 const notificationRoutes = require("./routes/notification.routes.js");
+const securityRoutes = require("./routes/security.routes.js");
 
 // Rate-limiter applied to /api (keeps it at top)
 app.use("/api", apiLimiter);
@@ -321,6 +322,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/push", require("./routes/push.routes.js"));
+app.use("/account/security", securityRoutes);
 
 // Smart Search
 app.get("/api/search", smartSearch);
