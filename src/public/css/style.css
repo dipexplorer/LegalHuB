@@ -775,43 +775,84 @@ nav {
 /* language */
 .gt-selected {
     background-color: #16213e !important;
-    padding: 0 !important;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5) !important;
+    padding: 3px 8px !important;
+    border-radius: 9999px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden !important;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3) !important;
+    font-size: 0.8rem !important;
+    line-height: 1 !important;
     /* border: 1px solid #929292; */
 }
 .gt-current-lang {
-    background-color: #16213e !important;
-    padding: 0 !important;
-    padding: 5px 10px !important;
+    background-color: transparent !important;
+    border-radius: 9999px !important;
     display: flex;
-    float: left;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
+    gap: 5px;
 }
+
 .gt-current-lang img {
-    height: 1rem !important;
+    height: 0.9rem !important;
+    width: auto !important;
+    border-radius: 9999px !important;
 }
-.gt-current-lang .gt-lang-code {
-    color: #fff;
-    font-size: 1rem !important;
-    margin-right: 0.5rem;
+
+.gt-lang-code {
+    font-size: 0.8rem !important;
+    margin: 0 !important;
+    color: white !important;
+    line-height: 1 !important;
 }
-.gt-current-lang .gt_float_switcher-arrow {
-    color: #fff !important;
+.gt_float_switcher-arrow {
+    font-size: 0.6rem !important;
+    margin-left: 2px;
+    color: white !important;
+}
+
+.gt_float_switcher {
+    background: transparent !important;
+    border-radius: 9999px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    right: auto !important;
+    position: fixed !important;
+    z-index: 9999 !important;
 }
 .gt_options {
-    width: auto !important;
-    background-color: #a2a2a2af;
-    box-shadow: 0 5px 10px #000000bc;
+    background-color: rgba(255, 255, 255, 0.9) !important; /* Slight transparency */
+    color: #333 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid #ccc !important;
+    border-radius: 8px !important;
+    backdrop-filter: blur(3px); /* Optional: subtle blur behind dropdown */
 }
 .gt_options a {
-    font-size: 0.8rem !important;
-    color: #2e2e2e !important;
+    color: #333 !important;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+    text-decoration: none !important;
+    transition: background-color 0.2s ease;
+}
+.gt_options a:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    color: #000 !important;
 }
 .gt_options a img {
     height: 1rem !important;
+    width: auto !important;
+    border-radius: 0 !important; /* <- remove the circular style */
 }
+
 .dark-mode {
     /* .gt-current-lang, .gt_float_switcher-arrow, .gt_options a{
         color: #000000 !important;
