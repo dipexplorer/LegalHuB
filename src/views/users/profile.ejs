@@ -144,8 +144,78 @@
   border-bottom: 1px solid rgba(255,255,255,0.05);
   margin-bottom: 1rem;
 }
-.tab { padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; color: var(--muted); }
-.tab.active { color: #fff; border-bottom: 2px solid var(--accent); }
+.tab { 
+  padding: 0.5rem 1rem; 
+  cursor: pointer; 
+  font-weight: 500; 
+  color: var(--muted); 
+  transition: all 0.2s ease;
+}
+.tab:hover {
+  color: #fff;
+}
+.tab.active { 
+  color: #fff; 
+  border-bottom: 2px solid var(--accent); 
+}
+
+/* Tab content styling */
+.tab-content {
+  margin-top: 1rem;
+}
+
+/* Enhanced link styling in tab content */
+.tab-content .small-badge {
+  display: inline-block;
+  margin: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: rgba(124, 58, 237, 0.2);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tab-content .small-badge:hover {
+  background: rgba(124, 58, 237, 0.3);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  border-color: rgba(124, 58, 237, 0.5);
+}
+
+/* Make all links in tab content visible */
+.tab-content a {
+  color: #fff !important;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  background: rgba(124, 58, 237, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(124, 58, 237, 0.6);
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.tab-content a:hover {
+  background: rgba(124, 58, 237, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+  text-decoration: none;
+  color: #fff !important;
+}
+
+/* Override any potential conflicting styles */
+.tab-content .card-alt a.small-badge {
+  color: #fff !important;
+  background: rgba(124, 58, 237, 0.4);
+  border: 1px solid rgba(124, 58, 237, 0.6);
+}
 
 @media(max-width: 900px) { .profile-header { grid-template-columns: 1fr; text-align: center; } }
 @media(max-width: 600px) { .info-list { grid-template-columns: 1fr; } }
@@ -164,142 +234,139 @@
 .delete-modal .cancel-btn:hover { background-color: #e0e0e0; }
 .delete-modal .delete-btn { background-color: #dc3545; color: #fff; border-radius: 8px; padding: 0.45rem 1rem; font-weight: 500; transition: all 0.2s; }
 .delete-modal .delete-btn:hover { background-color: #c82333; transform: scale(1.03); }
+
 </style>
 
 <div class="profile-root">
-  <!-- Profile Header -->
-  <div class="profile-header">
-    <div class="card-alt" style="text-align:center">
-      <img id="avatarImg" class="avatar" 
-     src="<%= user.profilePicture ? user.profilePicture : '/pic/profile.jpg' %>" 
-     alt="Avatar">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="card-alt" style="text-align:center">
+        <img id="avatarImg" class="avatar" 
+      src="<%= user.profilePicture ? user.profilePicture : '/pic/profile.jpg' %>" 
+      alt="Avatar">
 
-      <h3 style="margin:0.5rem 0"><%= user.username %></h3>
+        <h3 style="margin:0.5rem 0"><%= user.username %></h3>
 
-      <div>
-        <% if (user.role === 'lawyer') { %>
-          <% if (user.lawyerProfile?.isVerified) { %>
-            <span class="verified-badge">✔ Verified</span>
+        <div>
+          <% if (user.role === 'lawyer') { %>
+            <% if (user.lawyerProfile?.isVerified) { %>
+              <span class="verified-badge">✔ Verified</span>
+            <% } else { %>
+              <span class="small-badge">Unverified</span>
+            <% } %>
+            <span class="small-badge"><%= user.lawyerProfile?.specialization || 'No specialization' %></span>
           <% } else { %>
-            <span class="small-badge">Unverified</span>
+            <span class="small-badge">General User</span>
           <% } %>
-          <span class="small-badge"><%= user.lawyerProfile?.specialization || 'No specialization' %></span>
-        <% } else { %>
-          <span class="small-badge">General User</span>
-        <% } %>
-      </div>
+        </div>
 
-      <div class="profile-actions">
-        <a class="btn btn-outline-secondary" href="/account/update">Edit Profile</a>
+        <div class="profile-actions">
+          <a class="btn btn-outline-secondary" href="/account/update">Edit Profile</a>
 
-        <% if (user.role === 'lawyer') { %>
-          <a class="btn btn-outline-primary" href="/account/update/lawyer">Edit Lawyer</a>
-        <% } else { %>
-          <a class="btn btn-outline-primary" href="/account/applyforlawyer">Apply for Lawyer</a>
-        <% } %>
+          <% if (user.role === 'lawyer') { %>
+            <a class="btn btn-outline-primary" href="/account/update/lawyer">Edit Lawyer</a>
+          <% } else { %>
+            <a class="btn btn-outline-primary" href="/account/applyforlawyer">Apply for Lawyer</a>
+          <% } %>
 
-        <!-- Profile picture upload -->
-        <form id="avatarForm" action="/api/users/profile-picture" method="POST" enctype="multipart/form-data" style="display:none;">
-          <input type="file" id="avatarInput" name="profilePicture" accept="image/*">
-        </form>
-        <label for="avatarInput" class="btn btn-outline-ghost" style="color: #848181;">Change Avatar</label>
+          <!-- Profile picture upload -->
+          <form id="avatarForm" action="/api/users/profile-picture" method="POST" enctype="multipart/form-data" style="display:none;">
+            <input type="file" id="avatarInput" name="profilePicture" accept="image/*">
+          </form>
+          <label for="avatarInput" class="btn btn-outline-ghost" style="color: #848181;">Change Avatar</label>
 
-        <!-- Delete profile picture -->
-        <button class="btn btn-outline-ghost danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-      </div>
+          <!-- Delete profile picture -->
+          <button class="btn btn-outline-ghost danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>
 
-      <!-- Delete Modal -->
-      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-          <div class="modal-content delete-modal">
-            <form action="/api/users/profile-picture?_method=DELETE" method="POST">
-              <div class="modal-header">
-                <h5 class="modal-title">Delete Profile Picture</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to <span class="highlight">delete</span> your profile picture and reset to default?
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="delete-btn">Delete</button>
-              </div>
-            </form>
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content delete-modal">
+              <form action="/api/users/profile-picture?_method=DELETE" method="POST">
+                <div class="modal-header">
+                  <h5 class="modal-title">Delete Profile Picture</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to <span class="highlight">delete</span> your profile picture and reset to default?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="delete-btn">Delete</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div style="margin-top:1rem">
-        <label style="font-size:0.85rem;color:var(--muted)">Profile completeness</label>
-        <div class="progress">
-          <div id="profileProgress" class="progress-bar" style="width:0%"></div>
-        </div>
-        <span id="progressText" class="muted" style="font-size:0.95rem;display:block;text-align:right;margin-top:2px;"></span>
-      </div>
-
-
-      <small class="muted">Member since <%= new Date(user.createdAt).toLocaleDateString() %></small>
-    </div>
-
-    <!-- Right Column -->
-    <div class="card-alt">
-      <p class="muted">Email: <strong style="color:#fff"><%= user.email %></strong></p>
-
-      <% if (user.role === 'lawyer') { %>
-        <h2 style="margin:0"><%= user.lawyerProfile?.bio || 'No bio provided.' %></h2>
-
-        <div class="stats-grid">
-          <div class="stat"><div class="label">Experience</div><div class="num"><%= user.lawyerProfile?.experience ? user.lawyerProfile.experience + ' yrs' : '—' %></div></div>
-          <div class="stat"><div class="label">Fees</div><div class="num">₹<%= user.lawyerProfile?.fees || '—' %></div></div>
-          <div class="stat"><div class="label">Languages</div><div class="num"><%= user.lawyerProfile?.languagesSpoken?.join(', ') || '—' %></div></div>
+        <div style="margin-top:1rem">
+          <label style="font-size:0.85rem;color:var(--muted)">Profile completeness</label>
+          <div class="progress">
+            <div id="profileProgress" class="progress-bar" style="width:0%"></div>
+          </div>
+          <span id="progressText" class="muted" style="font-size:0.95rem;display:block;text-align:right;margin-top:2px;"></span>
         </div>
 
-        <dl class="info-list" style="margin-top:1rem">
-          <dt>License number</dt><dd><%= user.lawyerProfile?.licenseNumber || 'Not provided' %></dd>
-          <dt>Location</dt><dd><%= user.lawyerProfile?.city || '' %><%= user.lawyerProfile?.city && user.lawyerProfile?.state ? ', ' : '' %><%= user.lawyerProfile?.state || 'Not provided' %></dd>
-          <dt>Availability</dt><dd><%= user.lawyerProfile?.availableSlots?.join('; ') || 'Not set' %></dd>
-        </dl>
-      <% } else { %>
-        <h2 style="margin:0">Welcome to LegalHuB</h2>
-        <p class="muted">You can manage your chats and appointments here.</p>
-      <% } %>
-    </div>
-  </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <div class="tab active" data-tab="chats">Chats</div>
-    <div class="tab" data-tab="bookings"><%= user.role === 'lawyer' ? 'Client Appointments' : 'My Appointments' %></div>
-    <div class="tab" data-tab="settings">Settings</div>
-  </div>
+        <small class="muted">Member since <%= new Date(user.createdAt).toLocaleDateString() %></small>
+      </div>
 
-  <!-- Tab Content -->
-  <div id="tab-chats" class="tab-content">
-    <div class="card-alt">
-      <h4>Chats</h4>
-      <a class="small-badge" href="/chat">Open Chat Inbox</a>
-    </div>
-  </div>
+      <!-- Right Column -->
+      <div class="card-alt">
+        <p class="muted">Email: <strong style="color:#fff"><%= user.email %></strong></p>
 
-  <div id="tab-bookings" class="tab-content" style="display:none">
-    <div class="card-alt">
-      <h4><%= user.role === 'lawyer' ? 'Client Appointments' : 'My Appointments' %></h4>
-      <a class="small-badge" href="/api/appointment/bookings">View All</a>
-    </div>
-  </div>
+        <% if (user.role === 'lawyer') { %>
+          <h2 style="margin:0"><%= user.lawyerProfile?.bio || 'No bio provided.' %></h2>
 
-  <div id="tab-settings" class="tab-content" style="display:none">
-    <div class="card-alt">
-      <h4>Account Settings</h4>
-      <a class="small-badge" href="/account/security">Security</a>
-      <a class="small-badge" href="/notifications">Notifications</a>
-      <a class="small-badge" href="/api/users/forgot-password">Change Password</a>
-      <a class="small-badge" href="/settings">Settings</a>
+          <div class="stats-grid">
+            <div class="stat"><div class="label">Experience</div><div class="num"><%= user.lawyerProfile?.experience ? user.lawyerProfile.experience + ' yrs' : '—' %></div></div>
+            <div class="stat"><div class="label">Fees</div><div class="num">₹<%= user.lawyerProfile?.fees || '—' %></div></div>
+            <div class="stat"><div class="label">Languages</div><div class="num"><%= user.lawyerProfile?.languagesSpoken?.join(', ') || '—' %></div></div>
+          </div>
+
+          <dl class="info-list" style="margin-top:1rem">
+            <dt>License number</dt><dd><%= user.lawyerProfile?.licenseNumber || 'Not provided' %></dd>
+            <dt>Location</dt><dd><%= user.lawyerProfile?.city || '' %><%= user.lawyerProfile?.city && user.lawyerProfile?.state ? ', ' : '' %><%= user.lawyerProfile?.state || 'Not provided' %></dd>
+            <dt>Availability</dt><dd><%= user.lawyerProfile?.availableSlots?.join('; ') || 'Not set' %></dd>
+          </dl>
+        <% } else { %>
+          <h2 style="margin:0">Welcome to LegalHuB</h2>
+          <p class="muted">You can manage your chats and appointments here.</p>
+        <% } %>
+      </div>
     </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" data-tab="chats">Chats</div>
+        <div class="tab" data-tab="bookings"><%= user.role === 'lawyer' ? 'Client Appointments' : 'My Appointments' %></div>
+        <div class="tab" data-tab="settings">Settings</div>
+      </div>
+
+    <!-- Tab Content -->
+    <div id="tab-chats" class="tab-content">
+      <div class="card-alt">
+        <a class="small-badge" href="/chat">Open Chat Inbox</a>
+      </div>
     </div>
+
+    <div id="tab-bookings" class="tab-content" style="display:none">
+      <div class="card-alt">
+        <a class="small-badge" href="/api/appointment/bookings">View All</a>
+      </div>
     </div>
-  </div>
+
+    <div id="tab-settings" class="tab-content" style="display:none">
+      <div class="card-alt">
+        <a class="small-badge" href="/account/security">Security</a>
+        <a class="small-badge" href="/notifications">Notifications</a>
+        <a class="small-badge" href="/api/users/forgot-password">Change Password</a>
+        <a class="small-badge" href="/settings">Settings</a>
+      </div>
+    </div>
 </div>
+
 
 <script>
 document.querySelectorAll('.tab').forEach(tab => {
@@ -326,7 +393,7 @@ avatarInput.addEventListener('change', e => {
   let percent = 0;
 
 <% if (user.role === 'lawyer') { %>
-  <% 
+<% 
       const lawyerFields = [
         user.username,
         user.email,
@@ -339,10 +406,10 @@ avatarInput.addEventListener('change', e => {
       const lawyerScore = lawyerFields.filter(Boolean).length;
       const lawyerTotal = lawyerFields.length;
       const lawyerPercent = Math.round((lawyerScore / lawyerTotal) * 100);
-    %>
+  %>
   percent = <%= lawyerPercent %>;
-  <% } else { %>
-  <% 
+<% } else { %>
+<% 
       const userFields = [
         user.username,
         user.email,
@@ -351,9 +418,9 @@ avatarInput.addEventListener('change', e => {
       const userScore = userFields.filter(Boolean).length;
       const userTotal = userFields.length;
       const userPercent = Math.round((userScore / userTotal) * 100);
-    %>
+  %>
   percent = <%= userPercent %>;
-  <% } %>
+<% } %>
 
   document.getElementById('profileProgress').style.width = percent + '%';
 })();
