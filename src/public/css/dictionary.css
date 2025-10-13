@@ -1,0 +1,476 @@
+/* src/public/css/dictionary.css 
+   Updated LegalHuB Dictionary styles (minimal edits: increased readability + keyword highlight)
+   - kept layout & structure same as your original
+   - small, deliberate changes only (see .definition-content, .card__section-body, .term-highlight)
+*/
+
+/* -------------------------
+   Design system variables
+   ------------------------- */
+:root{
+  --background: #0B0D16;            /* dark page bg */
+  --foreground: #F7F7FA;            /* primary text on dark */
+  --card: #FFFFFF;                  /* card background */
+  --card-foreground: #1D2129;       /* card text color */
+  --primary: #7C3AED;               /* purple primary */
+  --primary-2: #A855F7;             /* purple accent */
+  --border: #2C2F3A;                /* subtle panel border */
+  --accent: #A855F7;
+  --muted: #9CA3AF;
+  --glass: rgba(255,255,255,0.03);
+  --radius-lg: 20px;
+  --radius-sm: 10px;
+  --shadow-card: 0 8px 32px rgba(124,58,237,0.12);
+  --shadow-soft: 0 6px 20px rgba(2,6,23,0.32);
+  --max-w: 1100px;
+  --highlight: #fff4b3;
+  --note-bg: #fff8e6;
+  --toast-z: 2200;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Backwards compatibility: keep .legal-dictionary container scoping */
+.legal-dictionary{
+  background:
+    radial-gradient(900px 400px at 10% 10%, rgba(124,58,237,0.06), transparent 6%),
+    radial-gradient(700px 300px at 90% 90%, rgba(168,85,247,0.03), transparent 6%),
+    var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-bottom: 60px;
+}
+
+/* -------------------------
+   Layout container
+   ------------------------- */
+.legal-dictionary__container{
+  max-width: var(--max-w);
+  margin: 34px auto;
+  padding: 28px 22px 84px;
+}
+
+/* -------------------------
+   Header / Hero
+   ------------------------- */
+.legal-dictionary__header{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.hero__inner { text-align:left; }
+.legal-dictionary__title{
+  font-size:36px;
+  margin:0;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  color:var(--foreground);
+}
+.legal-dictionary__accent{ color:var(--primary); }
+.legal-dictionary__subtitle{
+  margin-top:6px;
+  color: rgba(247,247,250,0.78);
+  font-size:14px;
+}
+
+/* -------------------------
+   Global Save button (top-right)
+   ------------------------- */
+.card__action-btn--save{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:10px 14px;
+  border-radius:12px;
+  color:var(--primary-foreground, #fff);
+  background: linear-gradient(90deg,var(--primary),var(--primary-2));
+  border:0;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow: var(--shadow-card);
+  transition: transform .12s ease, opacity .12s ease;
+}
+.card__action-btn--save[disabled]{ opacity:0.6; cursor:not-allowed; filter:grayscale(.15); }
+
+/* -------------------------
+   Search card
+   ------------------------- */
+.ld-search-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: var(--shadow-soft);
+}
+.legal-dictionary__search{ display:flex; gap:12px; align-items:center; margin:0; }
+.ld-search__input-wrap{ position:relative; flex:1; max-width:820px; }
+.ld-search__input{
+  width:100%;
+  padding:14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.58);
+  color: var(--foreground);
+  font-size:16px;
+  outline:none;
+}
+.ld-search__input::placeholder{ color: rgba(247,247,250,0.45); }
+.ld-search__input:focus{
+  box-shadow: 0 12px 40px rgba(124,58,237,0.10);
+  border: 1px solid rgba(124,58,237,0.22);
+  transform: translateY(-1px);
+}
+
+/* primary search button */
+.ld-btn--primary{
+  background: linear-gradient(90deg,var(--primary),var(--primary-2));
+  color: var(--primary-foreground);
+  padding:12px 18px;
+  border-radius:12px;
+  font-weight:700;
+  border:0;
+  cursor:pointer;
+  box-shadow: var(--shadow-card);
+}
+.ld-btn--primary:active{ transform: translateY(2px) scale(.998); }
+
+/* tip text */
+.legal-dictionary__tip{ color: var(--muted); margin-top:10px; font-size:13px; }
+
+/* spinner */
+.ld-search__spinner{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%) rotate(0deg);
+  width:18px; height:18px;
+  border-radius:50%;
+  display:none;
+  background: conic-gradient(var(--primary), var(--primary-2));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 2px));
+  animation: spin 1s linear infinite;
+}
+@keyframes spin{ to{ transform:translateY(-50%) rotate(360deg); } }
+.ld-search__spinner.ld-spinner--active{ display:inline-block; }
+
+/* recent chips */
+.ld-recent{ margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+.ld-recent__chip{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: var(--foreground);
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.03);
+  cursor:pointer;
+  font-size:13px;
+}
+.ld-recent__chip:hover{ transform: translateY(-4px); box-shadow: 0 10px 30px rgba(11,11,24,0.12); }
+
+/* -------------------------
+   Result cards & layout
+   ------------------------- */
+.legal-dictionary__result{ margin-top:26px; display:flex; flex-direction:column; gap:18px; align-items:center; }
+
+/* card */
+.ld-card{
+  width:100%;
+  background: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(20,20,24,0.06);
+  transition: transform .14s cubic-bezier(.2,.9,.3,1), box-shadow .14s ease;
+}
+.ld-card:hover{ transform: translateY(-6px); box-shadow: 0 28px 80px rgba(124,58,237,0.12); }
+.card__header{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+
+.card__term-title{ margin:0; font-size:22px; font-weight:700; color:var(--card-foreground); }
+.card__badge-list{ display:flex; gap:8px; margin-top:8px; }
+
+/* badge */
+.card__badge{ background:#eef2ff; color:#4338CA; padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px; border:1px solid #dbe6ff; }
+.card__badge--source{ background: linear-gradient(90deg,var(--primary),var(--primary-2)); color: #fff; border:0; box-shadow: 0 8px 24px rgba(124,58,237,0.12); }
+
+/* -------------------------
+   Icon buttons (copy/save)
+   ------------------------- */
+.icon-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px; height:40px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg,#fff,#fbfbff);
+  border:1px solid rgba(11,11,24,0.06);
+  box-shadow: 0 6px 18px rgba(11,11,24,0.06);
+  cursor:pointer;
+  transition: transform .09s ease, box-shadow .12s ease, opacity .12s ease;
+  padding:6px;
+  color: #111827;
+}
+.icon-btn svg{ width:18px; height:18px; display:block; color:inherit; }
+.icon-btn:hover{ transform: translateY(-3px); box-shadow: 0 14px 40px rgba(11,11,24,0.08); }
+.icon-btn[disabled]{ opacity:0.56; cursor:not-allowed; }
+
+/* variants */
+.icon-btn--copy{ background: linear-gradient(180deg,#f7f6ff,#fff); }
+.icon-btn--save{ background: linear-gradient(90deg,var(--primary),var(--primary-2)); color:#fff; border:0; box-shadow: 0 12px 40px rgba(124,58,237,0.14); }
+
+/* small share variant (keeps look consistent) */
+.icon-btn--share{ background: linear-gradient(180deg,#fff,#fbfbff); border:1px solid rgba(11,11,24,0.06); }
+
+/* actions group */
+.card__actions{ display:flex; gap:10px; align-items:center; }
+
+/* card action small */
+.card__action{
+  background:transparent;
+  border:1px dashed rgba(11,22,40,0.06);
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+  color:var(--card-foreground);
+}
+.card__action:hover{ background:#f7f5ff; transform: translateY(-2px); }
+
+/* -------------------------
+   Sections
+   ------------------------- */
+/* SMALL: increased font-size + line-height for readability (only intentional change) */
+.card__section{ margin-top:18px; padding-top:14px; border-top:1px solid rgba(11,22,40,0.04); }
+.card__section-title{ font-size:18px; font-weight:700; margin:0 0 12px 0; color:var(--card-foreground); display:flex; justify-content:space-between; align-items:center; }
+.card__section-body{ color:#374151; font-size:17px; line-height:1.95; } /* increased for readability */
+
+.definition-content{ font-size:17px; line-height:2; } /* increased readability for definition specifically */
+
+/* highlight mark */
+.card__section-body mark.highlight{ background: var(--highlight); padding:0 4px; border-radius:4px; font-weight:700; color:inherit; }
+
+/* keyword inline highlight (stronger purple highlight) */
+.term-highlight{
+  background: rgba(124,58,237,0.16);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight:700;
+  display:inline-block;
+  line-height:1;
+}
+
+/* ordered list styling */
+.card__ordered-list{ list-style:none; counter-reset:ld-counter; margin:0; padding:0; }
+.card__ordered-list li{ counter-increment: ld-counter; display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; }
+.card__ordered-list li::before{
+  content: counter(ld-counter);
+  width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:50%; background: linear-gradient(180deg,var(--primary),var(--primary-2)); color:#fff; font-weight:700; flex:0 0 28px;
+}
+
+/* example block */
+.card__example{ background: linear-gradient(180deg,#f7f6ff,#fbfbff); padding:12px; border-radius:10px; margin-bottom:12px; color:var(--card-foreground); }
+
+/* collapsible details (uses <details>) */
+.card__collapsible details{ margin-top:12px; }
+.card__collapsible details summary{
+  list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px; border-radius:10px; cursor:pointer; background:#fafbff; border:1px solid #eef2ff;
+}
+.card__collapsible details summary .chev{ transition: transform .18s ease; display:inline-block; transform-origin:center; }
+.card__collapsible details[open] summary .chev{ transform: rotate(180deg); }
+
+/* notes */
+.card__notes .notes__box{ background: var(--note-bg); padding:12px; border-left:4px solid #FBBF24; border-radius:8px; color:var(--card-foreground); }
+
+/* related chips */
+.card__related{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.related-chip{
+  background: linear-gradient(180deg,#f4f7ff,#fff);
+  padding:8px 12px; border-radius:999px; cursor:pointer; border:1px solid rgba(11,22,40,0.04);
+  font-weight:700; color:var(--card-foreground);
+}
+
+/* raw JSON block */
+.raw-json{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+  font-size:13px; color:var(--card-foreground); background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e6eefb; overflow:auto; white-space:pre-wrap; word-break:break-word; margin-top:12px;
+}
+.raw-json.hidden{ display:none !important; }
+
+/* error box */
+.error, .ld-card .error{ background: #fff5f5; color:#7f1d1d; padding:12px; border-radius:8px; border:1px solid #fee2e2; }
+
+/* muted */
+.muted-note{ color: var(--muted); font-size:14px; }
+
+/* -------------------------
+   Toast
+   ------------------------- */
+/* -------------------------
+   Toast (position above chat widget)
+   ------------------------- */
+.ld-toast, #lh-toast {
+  position: fixed;
+  right: 22px;
+  bottom: 110px; /* raised above typical chat toggle */
+  background: linear-gradient(90deg,var(--primary),var(--primary-2));
+  color: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(124,58,237,0.18);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .24s cubic-bezier(.2,.9,.3,1), opacity .22s ease;
+  z-index: 999999; /* ensure it sits above chat toggle and other widgets */
+  font-weight:700;
+  pointer-events: auto;
+  max-width: 320px;
+  word-break: break-word;
+}
+
+/* visible state */
+.ld-toast.visible, #lh-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* responsive: on very small screens bring it in from the sides */
+@media (max-width: 520px) {
+  .ld-toast, #lh-toast {
+    left: 12px;
+    right: 12px;
+    bottom: 88px;
+    max-width: none;
+  }
+}
+
+/* -------------------------
+   Skeleton shimmer
+   ------------------------- */
+.skeleton{
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02), rgba(255,255,255,0.04));
+  border-radius: 8px;
+  min-height: 12px;
+  animation: skeleton-shimmer 1.2s linear infinite;
+}
+@keyframes skeleton-shimmer{ 0% { background-position: -200px 0 } 100% { background-position: 200px 0 } }
+
+/* -------------------------
+   Accessibility focus
+   ------------------------- */
+:focus{ outline:none; }
+.ld-recent__chip:focus, .related-chip:focus, .card__action-btn--save:focus, .card__action:focus, .ld-btn:focus, .icon-btn:focus{
+  outline: 3px solid rgba(124,58,237,0.14);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* -------------------------
+   Responsive
+   ------------------------- */
+@media (max-width: 900px){
+  .legal-dictionary__container{ padding:20px; }
+  .legal-dictionary__title{ font-size:30px; }
+  .ld-search__input{ font-size:15px; padding:12px 14px; }
+  .card__term-title{ font-size:20px; }
+  .card__actions{ flex-wrap:wrap; gap:8px; }
+}
+
+@media (max-width: 520px){
+  .legal-dictionary__container{ padding:14px; }
+  .legal-dictionary__header{ flex-direction:column; align-items:flex-start; gap:10px; }
+  .card__actions{ width:100%; justify-content:flex-end; }
+  .ld-search__input{ font-size:14px; padding:10px 12px; }
+  .ld-recent__chip{ padding:6px 9px; font-size:13px; }
+}
+/* -------------------------
+   Share dialog (centered modal)
+   ------------------------- */
+.share-dialog {
+  border: 0;
+  padding: 0;
+  border-radius: 12px;
+  max-width: 480px;
+  width: calc(100% - 40px);
+  background: var(--card);
+  color: var(--card-foreground);
+  box-shadow: 0 30px 80px rgba(2,6,23,0.6);
+  font-family: inherit;
+}
+
+/* dark translucent backdrop when dialog open (modern browsers) */
+.share-dialog::backdrop {
+  background: rgba(2,6,23,0.6);
+  backdrop-filter: blur(2px);
+}
+
+/* inner content */
+.share-dialog__content {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* header (title + close) */
+.share-dialog__header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.share-dialog__title {
+  font-size:18px;
+  margin:0;
+  font-weight:700;
+  color:var(--card-foreground);
+}
+.share-dialog__close {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  font-size: 18px;
+}
+.share-dialog__close:hover { color: var(--card-foreground); background: var(--glass); }
+
+/* link input */
+.share-link {
+  width:100%;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid rgba(11,22,40,0.06);
+  background: transparent;
+  color: var(--card-foreground);
+  font-size:14px;
+}
+
+/* action row */
+.share-buttons { display:flex; gap:8px; justify-content:flex-end; align-items:center; flex-wrap:wrap; }
+.share-btn {
+  padding:8px 12px;
+  border-radius:8px;
+  border:0;
+  cursor:pointer;
+  font-weight:700;
+  background: linear-gradient(90deg,var(--primary),var(--primary-2));
+  color: #fff;
+}
+.share-btn.js-copy-share { background: transparent; color: var(--card-foreground); border: 1px solid rgba(11,22,40,0.06); }
+.share-btn:hover { transform: translateY(-2px); }
+
+/* small responsive adjustments */
+@media (max-width: 520px) {
+  .share-dialog { width: calc(100% - 20px); }
+  .share-dialog__title { font-size:16px; }
+  .share-link { font-size:13px; padding:9px; }
+}
+
+/* utility */
+.hidden{ display:none !important; }

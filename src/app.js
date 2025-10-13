@@ -1,3 +1,4 @@
+// src/app.js
 if (process.env.NODE_ENV != "production") {
     require("dotenv").config(); // Load environment variables
 }
@@ -173,26 +174,41 @@ passport.deserializeUser(User.deserializeUser());
 
 // Global locals
 app.use((req, res, next) => {
+    // Guarantee req.user exists (avoid undefined in templates)
+    req.user = req.user || null;
+
+    // Flash messages
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user || null;
+
+    // Backwards-compatible: keep currentUser while also exposing `user`
+    res.locals.currentUser = req.user;
+    res.locals.user = req.user; // <-- minimal, important: templates expect `user`
+
     next();
 });
 
 // Middleware to attach notifications to all responses
 app.use(async (req, res, next) => {
     if (req.user) {
-        const notifications = await Notification.find({ user: req.user._id })
-            .sort({ createdAt: -1 })
-            .limit(5);
+        try {
+            const notifications = await Notification.find({ user: req.user._id })
+                .sort({ createdAt: -1 })
+                .limit(5);
 
-        const unreadCount = await Notification.countDocuments({
-            user: req.user._id,
-            status: "unread",
-        });
+            const unreadCount = await Notification.countDocuments({
+                user: req.user._id,
+                status: "unread",
+            });
 
-        res.locals.notifications = notifications;
-        res.locals.notificationsCount = unreadCount;
+            res.locals.notifications = notifications;
+            res.locals.notificationsCount = unreadCount;
+        } catch (err) {
+            // non-fatal: if DB query fails, expose empty arrays and log the error
+            console.warn("Warning: failed to load notifications:", err);
+            res.locals.notifications = [];
+            res.locals.notificationsCount = 0;
+        }
     } else {
         res.locals.notifications = [];
         res.locals.notificationsCount = 0;
@@ -222,6 +238,10 @@ app.use("/api", apiLimiter);
 // API and page routes
 app.use("/", pageRoutes);
 app.use("/api/healthcheck", healthCheckRouter);
+
+// *** Minimal required addition: mount dictionary routes at /dictionary so the client-side POST /dictionary/search works
+app.use("/dictionary", dictionaryRoutes);
+
 app.use("/api/dictionary", dictionaryRoutes);
 app.use("/api/rights", rightsRoutes);
 app.use("/api/documents", documentsRoutes);

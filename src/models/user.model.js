@@ -44,6 +44,12 @@ const userSchema = new Schema(
         },
         resetToken: String,
         resetTokenExpires: Date,
+
+        // NEW: saved terms for dictionary
+        savedTerms: {
+            type: [String],
+            default: [],
+        },
     },
     {
         timestamps: true,
