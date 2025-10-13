@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { webPush, enabled, publicKey } = require("../config/push");
 const Subscription = require("../models/subscription.model");
+const { isLoggedIn } = require("../middlewares/auth.middleware.js");
 
 router.get("/vapidPublicKey", (req, res) => {
     if (!enabled || !process.env.VAPID_PUBLIC_KEY)
@@ -11,7 +12,7 @@ router.get("/vapidPublicKey", (req, res) => {
 });
 
 // Subscribe to push notifications - requires authentication
-router.post("/subscribe", async (req, res) => {
+router.post("/subscribe", isLoggedIn, async (req, res) => {
     try {
         const subscription = req.body;
         if (!subscription || !subscription.endpoint) {
@@ -35,7 +36,7 @@ router.post("/subscribe", async (req, res) => {
 });
 
 // Unsubscribe from push notifications
-router.post("/unsubscribe", async (req, res) => {
+router.post("/unsubscribe", isLoggedIn, async (req, res) => {
     try {
         const { endpoint } = req.body;
         if (!endpoint) return res.status(400).json({ error: "Endpoint is required" });
@@ -52,7 +53,7 @@ router.post("/unsubscribe", async (req, res) => {
 });
 
 // Send: accept { payload, userId } or no userId to send to all subscriptions
-router.post("/send", async (req, res) => {
+router.post("/send", isLoggedIn, async (req, res) => {
     if (!enabled) return res.status(500).json({ error: "Push not enabled on server" });
 
     const payload = JSON.stringify(

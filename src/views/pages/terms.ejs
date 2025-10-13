@@ -1,250 +1,736 @@
-<% layout("layouts/boilerplate") %>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - LegalHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ✅ Terms Container */
-        .terms-container {
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 40px;
-            background-color: rgba(20, 20, 30, 0.9);
-            border-radius: 16px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            line-height: 1.8;
-            animation: fadeInUp 0.6s ease;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* ✅ Headings */
-        h1,
-        h2 {
-            color: #ff79c6;
-            /* Pink Theme */
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-       h2 {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Adds space between icon and text */
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-top: 40px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.12);
-    color: #ff79c6; /* Orange color for the heading text */
-    letter-spacing: 0.5px; /* We kept this from the old style */
-    margin-bottom: 12px; /* We kept this from the old style */
-}
-
-h2 i {
-    color: #ff79c6; /* Pink color for the icon */
-    font-size: 1.6rem; /* A bit smaller than the text */
-}
-
-        h1:hover {
-            color: #ff6ec7;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-       
-
-        /* ✅ Last Updated */
-        .last-updated {
+        /* Header Section */
+        .header {
             text-align: center;
-            font-size: 1rem;
-            color: #b2bec3;
-            margin-bottom: 32px;
-            font-style: italic;
+            padding: 60px 20px 40px;
+            animation: fadeInDown 0.8s ease;
         }
 
-        /* ✅ Paragraphs */
-        p {
-            font-size: 1rem;
-            color: #dcdcdc;
-            margin-bottom: 16px;
-            line-height: 1.7;
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* ✅ Strong Text */
-        strong {
-            color: #ffb86c;
-            /* Orange */
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-top: 10px;
+        }
+
+        .last-updated {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navigation Sidebar */
+        .nav-sidebar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 20, 30, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 250px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 100;
+            animation: slideInLeft 0.8s ease;
+        }
+
+        .nav-sidebar h3 {
+            color: #667eea;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 10px 12px;
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-left-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 300px;
+            margin-right: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(102, 126, 234, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .section-card:hover .section-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .section-title {
+            flex: 1;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .section-toggle {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .section-toggle i {
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .section-card.collapsed .section-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+        }
+
+        .section-card.collapsed .section-content {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .section-content p {
+            color: #d0d0d0;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .section-content strong {
+            color: #f093fb;
             font-weight: 600;
         }
 
-        /* ✅ Custom List Replacement */
+        .section-content a {
+            color: #667eea;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .section-content a:hover {
+            border-bottom-color: #667eea;
+        }
+
+        /* Custom Items */
         .custom-item {
-            margin-bottom: 14px;
-            color: #e0e0e0;
-            font-size: 1rem;
-            padding: 12px 18px;
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 3px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 12px;
             border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.05);
+            color: #d0d0d0;
+            font-size: 1rem;
+            line-height: 1.6;
+            transition: all 0.3s ease;
             position: relative;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
+            overflow: hidden;
         }
 
         .custom-item::before {
-            content: "✓";
-            font-size: 20px;
-            color: #50fa7b !important;
-            /* Green Checkmark */
-            transition: color 0.3s ease;
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
         }
 
         .custom-item:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
         }
 
-        /* ✅ CTA Button */
-        .cta-button {
-            display: inline-block;
-            margin-top: 24px;
-            padding: 14px 28px;
-            background-color: #ff79c6;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 6px 16px rgba(255, 121, 198, 0.4);
+        .custom-item:hover::before {
+            width: 100%;
+            opacity: 0.05;
         }
 
-        .cta-button:hover {
-            background-color: #ff6ec7;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 24px rgba(255, 121, 198, 0.6);
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 179, 71, 0.1) 100%);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
         }
 
-        /* ✅ Footer Styling */
-        .footer {
-            margin-top: 40px;
-            padding: 24px;
-            background-color: rgba(20, 20, 30, 0.9);
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .footer-links {
+        .highlight-box h3 {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
             display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .highlight-box p {
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        .contact-item i {
+            width: 40px;
+            height: 40px;
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
+            color: #667eea;
         }
 
-        .footer-link {
-            color: #ff79c6;
-            font-size: 1rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: #ff6ec7;
-            transform: translateY(-2px);
-        }
-
-        .footer-text {
-            color: #bbb;
-            font-size: 0.9rem;
-            margin-top: 12px;
-        }
-
-        /* ✅ Animations */
-        @keyframes fadeInUp {
+        /* Animations */
+        @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(-30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-sidebar {
+                position: static;
+                transform: none;
+                max-width: 100%;
+                margin-bottom: 30px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 40px 15px 30px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section-card {
+                padding: 25px 20px;
+            }
+
+            .section-title h2 {
+                font-size: 1.4rem;
+            }
+
+            .section-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
     </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Terms of Service</h1>
+            <p class="subtitle">Please read these terms carefully before using our services</p>
+            <span class="last-updated">Last Updated: October 6, 2025</span>
+        </div>
 
-    <!-- ✅ Terms and Conditions Content -->
-   <section class="terms-container">
-    <h1>📜 Terms & Conditions</h1>
-    <p class="effective-date"><strong>Effective Date:</strong> October 6, 2025</p>
+        <!-- Navigation Sidebar -->
+        <div class="nav-sidebar">
+            <h3>Quick Navigation</h3>
+            <a href="#acceptance" class="nav-link active">Acceptance of Terms</a>
+            <a href="#disclaimer" class="nav-link">Legal Disclaimer</a>
+            <a href="#registration" class="nav-link">User Registration</a>
+            <a href="#obligations" class="nav-link">User Obligations</a>
+            <a href="#intellectual" class="nav-link">Intellectual Property</a>
+            <a href="#payment" class="nav-link">Payment & Subscriptions</a>
+            <a href="#termination" class="nav-link">Termination</a>
+            <a href="#warranties" class="nav-link">Warranties</a>
+            <a href="#liability" class="nav-link">Limitation of Liability</a>
+            <a href="#contact" class="nav-link">Contact Us</a>
+        </div>
 
-    <h2><i class="fas fa-file-signature"></i> 1. Acceptance of Terms</h2>
-    <p>These Legal Terms ("Terms") constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you" or "User"), and LegalHub ("Company," "LegalHub," "we," "us," or "our"), concerning your access to and use of the <a href="https://legalhub-zwk9.onrender.com" target="_blank" rel="noopener noreferrer" class="footer-link">https://legalhub-zwk9.onrender.com</a> website, the LegalHub mobile application, and any other related media form or channel (collectively, the "Services").</p>
-    <p>By accessing or using the Services, you acknowledge that you have read, understood, and agree to be bound by all of these Terms. If you do not agree with all of these Terms, you are expressly prohibited from using the Services and must discontinue use immediately.</p>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Section 1 -->
+            <div class="section-card" id="acceptance">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>1. Acceptance of Terms</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>These Legal Terms ("Terms") constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you" or "User"), and LegalHub ("Company," "LegalHub," "we," "us," or "our"), concerning your access to and use of the <a href="https://legalhub-zwk9.onrender.com" target="_blank">https://legalhub-zwk9.onrender.com</a> website, the LegalHub mobile application, and any other related media form or channel (collectively, the "Services").</p>
+                    <p>By accessing or using the Services, you acknowledge that you have read, understood, and agree to be bound by all of these Terms. If you do not agree with all of these Terms, you are expressly prohibited from using the Services and must discontinue use immediately.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-exclamation-circle"></i> 2. IMPORTANT DISCLAIMER: No Legal Advice</h2>
-    <p>LegalHub is not a law firm and does not provide legal advice. The Services, including all text, graphics, document templates, and other materials available through the platform (the "Content"), are for informational purposes only. No attorney-client relationship is created or implied through your use of the Services. The Content is not a substitute for professional legal advice from a qualified attorney licensed in your jurisdiction. You must not rely on the Content as legal advice for any purpose, and you are solely responsible for any consequences of such reliance.</p>
+            <!-- Section 2 -->
+            <div class="section-card" id="disclaimer">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>2. IMPORTANT DISCLAIMER: No Legal Advice</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="highlight-box">
+                        <h3><i class="fas fa-exclamation-circle"></i> Critical Notice</h3>
+                        <p>LegalHub is not a law firm and does not provide legal advice. No attorney-client relationship is created through your use of the Services.</p>
+                    </div>
+                    <p>The Services, including all text, graphics, document templates, and other materials available through the platform (the "Content"), are for informational purposes only. The Content is not a substitute for professional legal advice from a qualified attorney licensed in your jurisdiction. You must not rely on the Content as legal advice for any purpose, and you are solely responsible for any consequences of such reliance.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-user-plus"></i> 3. User Registration and Account Security</h2>
-    <p>To access certain features of the Services, a User must register for an account. The User agrees and warrants that they shall:</p>
-    <div class="custom-item">Provide true, accurate, current, and complete information as prompted by the registration form.</div>
-    <div class="custom-item">Maintain and promptly update their registration data to keep it accurate and complete.</div>
-    <div class="custom-item">Maintain the confidentiality of their password and account credentials. The User is fully responsible for all activities that occur under their account.</div>
-    <p>LegalHub reserves the right to suspend or terminate any account if information provided is found to be untrue, inaccurate, or incomplete.</p>
+            <!-- Section 3 -->
+            <div class="section-card" id="registration">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>3. User Registration and Account Security</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>To access certain features of the Services, a User must register for an account. The User agrees and warrants that they shall:</p>
+                    <div class="custom-item">Provide true, accurate, current, and complete information as prompted by the registration form.</div>
+                    <div class="custom-item">Maintain and promptly update their registration data to keep it accurate and complete.</div>
+                    <div class="custom-item">Maintain the confidentiality of their password and account credentials. The User is fully responsible for all activities that occur under their account.</div>
+                    <p style="margin-top: 20px;">LegalHub reserves the right to suspend or terminate any account if information provided is found to be untrue, inaccurate, or incomplete.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-user-shield"></i> 4. User Obligations and Prohibited Conduct</h2>
-    <p>The User's access to the Services is subject to their compliance with these Terms and all applicable laws. The User is prohibited from and shall not:</p>
-    <div class="custom-item">Systematically retrieve data or Content from the Services to create or compile, directly or indirectly, a collection, database, or directory without express written permission from LegalHub.</div>
-    <div class="custom-item">Use the Services for any illegal, fraudulent, or unauthorized purpose.</div>
-    <div class="custom-item">Upload, transmit, or distribute any computer viruses, worms, or any software intended to damage or alter a computer system or data.</div>
-    <div class="custom-item">Interfere with, disrupt, or create an undue burden on servers or networks connected to the Services.</div>
-    <div class="custom-item">Attempt to decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a part of the Services.</div>
-    <div class="custom-item">Use any information obtained from the Services in order to harass, abuse, or harm another person.</div>
-    <div class="custom-item">Circumvent, disable, or otherwise interfere with security-related features of the Services that prevent or restrict the use or copying of any Content.</div>
+            <!-- Section 4 -->
+            <div class="section-card" id="obligations">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>4. User Obligations and Prohibited Conduct</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>The User's access to the Services is subject to their compliance with these Terms and all applicable laws. The User is prohibited from and shall not:</p>
+                    <div class="custom-item">Systematically retrieve data or Content from the Services to create or compile, directly or indirectly, a collection, database, or directory without express written permission from LegalHub.</div>
+                    <div class="custom-item">Use the Services for any illegal, fraudulent, or unauthorized purpose.</div>
+                    <div class="custom-item">Upload, transmit, or distribute any computer viruses, worms, or any software intended to damage or alter a computer system or data.</div>
+                    <div class="custom-item">Interfere with, disrupt, or create an undue burden on servers or networks connected to the Services.</div>
+                    <div class="custom-item">Attempt to decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any way making up a part of the Services.</div>
+                    <div class="custom-item">Use any information obtained from the Services in order to harass, abuse, or harm another person.</div>
+                    <div class="custom-item">Circumvent, disable, or otherwise interfere with security-related features of the Services that prevent or restrict the use or copying of any Content.</div>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-copyright"></i> 5. Intellectual Property Rights</h2>
-    <p>All Content and the trademarks, service marks, and logos contained therein (the "Marks") are owned by or licensed to LegalHub and are subject to copyright and other intellectual property rights under Indian and foreign laws. The Content and Marks are provided "AS IS" for your information and personal, non-commercial use only.</p>
+            <!-- Section 5 -->
+            <div class="section-card" id="intellectual">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-copyright"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>5. Intellectual Property Rights</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>All Content and the trademarks, service marks, and logos contained therein (the "Marks") are owned by or licensed to LegalHub and are subject to copyright and other intellectual property rights under Indian and foreign laws. The Content and Marks are provided "AS IS" for your information and personal, non-commercial use only.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-credit-card"></i> 6. Payment, Subscriptions, and Cancellation</h2>
-    <p><strong>Billing and Auto-Renewal:</strong> Certain Services require payment on a subscription basis. You will be billed in advance on a recurring basis ("Billing Cycle"). Your subscription shall automatically renew at the end of each Billing Cycle unless canceled by you. You authorize us to charge your payment method for such renewals.</p>
-    <p><strong>Fee Changes:</strong> LegalHub reserves the right to modify subscription fees at any time. Any fee change will become effective at the end of the then-current Billing Cycle, and we will provide you with reasonable prior notice.</p>
-    <p><strong>Cancellation Process:</strong> Users may cancel their subscription at any time. To cancel, you must navigate to the 'Subscription' or 'Billing' section of your account dashboard and follow the provided instructions to terminate your subscription. The cancellation will take effect at the end of the current Billing Cycle, and you will retain access to the paid features until that date.</p>
-    <p><strong>Refund Policy:</strong> All payments are final and non-refundable, except as required by law.</p>
+            <!-- Section 6 -->
+            <div class="section-card" id="payment">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>6. Payment, Subscriptions, and Cancellation</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p><strong>Billing and Auto-Renewal:</strong> Certain Services require payment on a subscription basis. You will be billed in advance on a recurring basis ("Billing Cycle"). Your subscription shall automatically renew at the end of each Billing Cycle unless canceled by you. You authorize us to charge your payment method for such renewals.</p>
+                    <p><strong>Fee Changes:</strong> LegalHub reserves the right to modify subscription fees at any time. Any fee change will become effective at the end of the then-current Billing Cycle, and we will provide you with reasonable prior notice.</p>
+                    <p><strong>Cancellation Process:</strong> Users may cancel their subscription at any time. To cancel, you must navigate to the 'Subscription' or 'Billing' section of your account dashboard and follow the provided instructions to terminate your subscription. The cancellation will take effect at the end of the current Billing Cycle, and you will retain access to the paid features until that date.</p>
+                    <p><strong>Refund Policy:</strong> All payments are final and non-refundable, except as required by law.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-ban"></i> 7. Termination and Suspension</h2>
-    <p><strong>Termination for Cause:</strong> LegalHub reserves the right to suspend or terminate a User's account and access to the Services for any breach of these Terms. Severe breaches, including but not limited to illegal activities or actions that threaten the security of the Services or other users, may result in immediate termination without prior notice.</p>
-    <p><strong>User Rights and Notice Period:</strong> For non-severe breaches, LegalHub will make a reasonable effort to provide the User with written notice of the violation and a 14-day period to cure the breach. If the breach is not cured within this period, LegalHub may proceed with termination.</p>
-    <p><strong>Appeal Process:</strong> If your account is terminated, you may appeal the decision by contacting our support team via email at <a href="mailto:support@legalhub.com" class="footer-link">support@legalhub.com</a>. LegalHub will review the appeal and respond, though we are not obligated to reinstate any account. The decision following an appeal is final.</p>
-    <p><strong>Effect of Termination:</strong> Upon termination, your right to use the Services will cease immediately.</p>
+            <!-- Section 7 -->
+            <div class="section-card" id="termination">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>7. Termination and Suspension</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p><strong>Termination for Cause:</strong> LegalHub reserves the right to suspend or terminate a User's account and access to the Services for any breach of these Terms. Severe breaches, including but not limited to illegal activities or actions that threaten the security of the Services or other users, may result in immediate termination without prior notice.</p>
+                    <p><strong>User Rights and Notice Period:</strong> For non-severe breaches, LegalHub will make a reasonable effort to provide the User with written notice of the violation and a 14-day period to cure the breach. If the breach is not cured within this period, LegalHub may proceed with termination.</p>
+                    <p><strong>Appeal Process:</strong> If your account is terminated, you may appeal the decision by contacting our support team via email at <a href="mailto:support@legalhub.com">support@legalhub.com</a>. LegalHub will review the appeal and respond, though we are not obligated to reinstate any account. The decision following an appeal is final.</p>
+                    <p><strong>Effect of Termination:</strong> Upon termination, your right to use the Services will cease immediately.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-eye-slash"></i> 8. Disclaimer of Warranties and Service Availability</h2>
-    <p>THE SERVICES ARE PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS. LEGALHUB MAKES NO WARRANTIES, EXPRESS OR IMPLIED, REGARDING THE SERVICES, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. LEGALHUB DOES NOT GUARANTEE THAT THE SERVICES WILL BE AVAILABLE AT ALL TIMES, BE UNINTERRUPTED, OR BE ERROR-FREE. ALL LIABILITY FOR THE ACCURACY, COMPLETENESS, OR RELIABILITY OF THE CONTENT RESTS WITH THE USER.</p>
+            <!-- Section 8 -->
+            <div class="section-card" id="warranties">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-eye-slash"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>8. Disclaimer of Warranties and Service Availability</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>THE SERVICES ARE PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS. LEGALHUB MAKES NO WARRANTIES, EXPRESS OR IMPLIED, REGARDING THE SERVICES, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. LEGALHUB DOES NOT GUARANTEE THAT THE SERVICES WILL BE AVAILABLE AT ALL TIMES, BE UNINTERRUPTED, OR BE ERROR-FREE. ALL LIABILITY FOR THE ACCURACY, COMPLETENESS, OR RELIABILITY OF THE CONTENT RESTS WITH THE USER.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-exclamation-triangle"></i> 9. Limitation of Liability</h2>
-    <p>TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT SHALL LEGALHUB OR ITS DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, OR PUNITIVE DAMAGES, INCLUDING LOST PROFIT OR LOST DATA, ARISING FROM YOUR USE OF THE SERVICES OR YOUR RELIANCE ON ANY CONTENT PROVIDED THEREIN.</p>
+            <!-- Section 9 -->
+            <div class="section-card" id="liability">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>9. Limitation of Liability</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT SHALL LEGALHUB OR ITS DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, OR PUNITIVE DAMAGES, INCLUDING LOST PROFIT OR LOST DATA, ARISING FROM YOUR USE OF THE SERVICES OR YOUR RELIANCE ON ANY CONTENT PROVIDED THEREIN.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-shield-alt"></i> 10. Indemnification</h2>
-    <p>The User agrees to defend, indemnify, and hold harmless LegalHub and its affiliates from and against any loss, damage, liability, claim, or demand, including reasonable attorneys’ fees, made by any third party due to or arising out of your breach of these Terms or your violation of any law or the rights of a third party.</p>
+            <!-- Section 10 -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>10. Indemnification</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>The User agrees to defend, indemnify, and hold harmless LegalHub and its affiliates from and against any loss, damage, liability, claim, or demand, including reasonable attorneys' fees, made by any third party due to or arising out of your breach of these Terms or your violation of any law or the rights of a third party.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-gavel"></i> 11. Governing Law and Dispute Resolution</h2>
-    <p>These Terms shall be governed by the laws of India. The parties agree that any dispute shall first be addressed through informal negotiations. If unresolved, the dispute shall be resolved by binding arbitration in Mumbai, India.</p>
+            <!-- Section 11 -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>11. Governing Law and Dispute Resolution</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>These Terms shall be governed by the laws of India. The parties agree that any dispute shall first be addressed through informal negotiations. If unresolved, the dispute shall be resolved by binding arbitration in Mumbai, India.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-edit"></i> 12. Modifications to Terms</h2>
-    <p>LegalHub reserves the right to modify these Terms at any time. We will notify users of material changes by updating the "Effective Date" and, where feasible, by sending a notification to your registered email address. Your continued use of the Services after such changes constitutes your acceptance of the new Terms.</p>
+            <!-- Section 12 -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>12. Modifications to Terms</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>LegalHub reserves the right to modify these Terms at any time. We will notify users of material changes by updating the "Effective Date" and, where feasible, by sending a notification to your registered email address. Your continued use of the Services after such changes constitutes your acceptance of the new Terms.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-external-link-alt"></i> 13. Third-Party Links</h2>
-    <p>The Services may contain links to third-party websites that are not owned or controlled by LegalHub. LegalHub assumes no responsibility for the content or practices of any third-party websites.</p>
-    
-    <h2><i class="fas fa-puzzle-piece"></i> 14. General Provisions</h2>
-    <p><strong>Entire Agreement:</strong> These Terms, together with our Privacy Policy, constitute the entire agreement between you and LegalHub regarding the Services.</p>
-    <p><strong>Severability:</strong> If any provision of these Terms is deemed invalid, the remaining provisions will continue in full force and effect.</p>
-    <p><strong>Data Protection:</strong> Our handling of your personal data is described in our Privacy Policy, available at <a href="https://legalhub-zwk9.onrender.com/privacy" target="_blank" rel="noopener noreferrer" class="footer-link">https://legalhub-zwk9.onrender.com/privacy</a>.</p>
+            <!-- Section 13 -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>13. Third-Party Links</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>The Services may contain links to third-party websites that are not owned or controlled by LegalHub. LegalHub assumes no responsibility for the content or practices of any third-party websites.</p>
+                </div>
+            </div>
 
-    <h2><i class="fas fa-envelope-open-text"></i> 15. Contact Information</h2>
-    <p>
-        For any questions, complaints, or claims with respect to the Services, please contact us. We aim to respond to all inquiries within 3-5 business days.<br><br>
-        <strong>Email:</strong> <a href="mailto:support@legalhub.com" class="footer-link">support@legalhub.com</a><br>
-        <strong>Phone:</strong> (+91)-98765-43210<br>
-    </p>
-</section>
+            <!-- Section 14 -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>14. General Provisions</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p><strong>Entire Agreement:</strong> These Terms, together with our Privacy Policy, constitute the entire agreement between you and LegalHub regarding the Services.</p>
+                    <p><strong>Severability:</strong> If any provision of these Terms is deemed invalid, the remaining provisions will continue in full force and effect.</p>
+                    <p><strong>Data Protection:</strong> Our handling of your personal data is described in our Privacy Policy, available at <a href="https://legalhub-zwk9.onrender.com/privacy" target="_blank">https://legalhub-zwk9.onrender.com/privacy</a>.</p>
+                </div>
+            </div>
+
+            <!-- Section 15 - Contact -->
+            <div class="section-card" id="contact">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>15. Contact Information</h2>
+                    </div>
+                    <div class="section-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>If you have any questions about these Terms, please contact us at:</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <strong>Email: <a href="mailto:support@legalhub.com">support@legalhub.com</a></strong>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <strong>Phone: +91-9876543210</strong>
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

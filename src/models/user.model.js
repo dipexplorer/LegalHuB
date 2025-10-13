@@ -42,6 +42,11 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        googleId: {
+            type: String, // Google unique user ID
+            unique: true,
+            sparse: true, // Allows either local or Google login
+        },
         resetToken: String,
         resetTokenExpires: Date,
 

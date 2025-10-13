@@ -467,38 +467,44 @@ body {
     color: #9c1791;
     margin-bottom: 0.5rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .lawyer-section .subheading {
     font-size: 1.2rem;
     color: #ccc;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
 }
 
 /* Grid Layout */
 .lawyer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2.5rem;
     max-width: 1200px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 /* ===================== Lawyer Card ===================== */
 .lawyer-card {
-    position: relative;
-    text-align: left;
-    padding: 2rem 1.5rem;
-    border-radius: 25px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-    backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
     box-shadow:
         0 10px 25px rgba(0, 0, 0, 0.5),
         0 0 15px rgba(179, 136, 255, 0.2);
+    backdrop-filter: blur(15px);
+    padding: 2rem 1.5rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 350px;
+    position: relative;
     overflow: hidden;
-    transition: all 0.4s ease;
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 .lawyer-card::before {
@@ -521,7 +527,7 @@ body {
 }
 
 .lawyer-card:hover {
-    transform: translateY(-10px) scale(1);
+    transform: translateY(-10px);
     box-shadow:
         0 20px 45px rgba(123, 31, 162, 0.6),
         0 0 25px rgba(255, 140, 245, 0.4);
@@ -552,78 +558,145 @@ body {
     box-shadow: 0 0 25px rgba(255, 140, 245, 0.8);
 }
 
+.lawyer-info {
+    flex: 1;
+    padding-top: 0.8rem;
+}
+
 .lawyer-info h3 {
     font-size: 1.5rem;
-    margin-bottom: 0.25rem;
+    margin: 0 0 0.2rem;
     color: #fff;
     font-weight: 700;
 }
 
-.lawyer-info .specialization {
+.specialization {
     font-size: 1rem;
+    font-weight: 700;
     color: #e0c4ff;
-    font-style: italic;
 }
 
 /* ===================== Badges ===================== */
+
 .verified-badge,
 .small-badge {
-    display: inline-block;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    display: inline-flex;
     font-size: 0.75rem;
-    padding: 0.3rem 0.9rem;
-    border-radius: 999px;
-    margin-top: 0.5rem;
-    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-top: 0.3rem;
+    font-weight: 600;
+    line-height: 1;
     transition: all 0.3s ease;
+    gap: 4px;
 }
 
 .verified-badge {
-    background: linear-gradient(135deg, #7c4dff, #ff6ec7);
-    color: #fff;
-    box-shadow: 0 2px 10px rgba(255, 140, 245, 0.5);
+    background: rgba(76, 175, 80, 0.2);
+    color: #a5d6a7;
+    border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .small-badge {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ccc;
+    background: rgba(255, 152, 0, 0.2);
+    color: #ffcc02;
+    border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 /* ===================== Text Info ===================== */
 .lawyer-card p {
     margin: 0.5rem 0;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #ddd;
     line-height: 1.5;
 }
 
-.lawyer-card .rating {
-    color: #ffd54f;
-    font-weight: 700;
-    margin-top: 0.5rem;
+.rating {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0;
+}
+
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.star {
+    font-size: 1.25rem;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.star.filled {
+    color: #ffd700;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
+}
+
+.star.empty {
+    color: #666;
+    opacity: 0.4;
+}
+
+.rating-value {
+    font-size: 1rem;
+    color: #ffd700;
+    margin-left: 8px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
+    font-weight: 600;
+}
+
+.lawyer-details {
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .lawyer-details {
+        margin-bottom: 1.5rem;
+        padding-top: 1rem;
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .lawyer-actions {
+        padding-top: 1rem;
+    }
 }
 
 /* ===================== Actions ===================== */
-.lawyer-actions {
-    margin-top: 1.5rem;
-}
 
 .contact-btn {
-    display: block;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(135deg, #ff6ec7, #b388ff);
     color: #fff;
-    padding: 0.8rem 1.3rem;
-    border-radius: 15px;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
     font-weight: 600;
+    font-size: 0.9rem;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     box-shadow: 0 4px 15px rgba(255, 140, 245, 0.4);
 }
 
 .contact-btn:hover {
     background: linear-gradient(135deg, #ff8cf5, #e1a8ff);
     color: #000;
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(-2px) scale(1.05);
     box-shadow: 0 6px 25px rgba(255, 140, 245, 0.6);
 }
 
@@ -637,7 +710,7 @@ body {
     background: linear-gradient(135deg, #ff6ec7, #b388ff);
     color: #fff;
     padding: 1rem 2rem;
-    border-radius: 20px;
+    border-radius: 30px;
     font-weight: 700;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -650,7 +723,6 @@ body {
     transform: translateY(-3px) scale(1.03);
     box-shadow: 0 8px 30px rgba(255, 140, 245, 0.6);
 }
-
 /* ==========================================================================
    7. Quick Links & FAQ Sections
    ========================================================================== */

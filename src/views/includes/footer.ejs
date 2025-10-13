@@ -44,7 +44,7 @@
         <a href="#"><i class="fab fa-twitter"></i></a>
       </div>
       <% if (currentUser) { %>
-        <button id="notifyBtn" class="btn btn-outline-accent" style="margin-top: 20px; margin-left: -15px;">Send Notification (all)</button>
+        <button id="notifyBtn" class="btn btn-outline-accent" style="margin-top: 20px; color: azure; margin-left: -15px;">Send Notification (all)</button>
       <% } %>
     </div>
   </div>
@@ -87,58 +87,60 @@
       });
     }
     
-    updateUI(!!sub);
+    console.log('Push notification subscription state:', !!sub);
   }
 
-  function updateUI(isSubscribed) {
-    document.getElementById('subscribeBtn').textContent = isSubscribed ? 'Unsubscribe' : 'Subscribe';
-  }
+  // Note: subscribeBtn functionality has been moved to notifications.js
+  // This avoids conflicts with the notification button
 
-  document.getElementById('subscribeBtn').addEventListener('click', async () => {
-    const sub = await swRegistration.pushManager.getSubscription();
-    if (sub) { // already subscribed -> unsubscribe
-      await sub.unsubscribe();
-      await fetch('/api/push/unsubscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ endpoint: sub.endpoint })
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    const notifyBtn = document.getElementById('notifyBtn');
+    if (notifyBtn) {
+      console.log('Notification button found, adding event listener');
+      notifyBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        console.log('Notification button clicked');
+
+        try {
+          const r = await fetch('/api/push/send', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ 
+              payload: { 
+                title: 'LegalHub Notification', 
+                body: 'This is a test notification from LegalHub', 
+                url: '/' 
+              } 
+            }),
+          });
+
+          if (!r.ok) {
+            throw new Error(`Server responded with status: ${r.status}`);
+          }
+
+          const data = await r.json();
+          console.log('Send result', data);
+
+          // Show appropriate feedback based on results
+          if (data.results && data.results.length > 0) {
+            const successCount = data.results.filter(r => r.status === 'ok').length;
+            alert(`Notification sent to ${successCount} subscriber(s)`);
+          } else {
+            alert('No subscribers found');
+          }
+        } catch (error) {
+          console.error('Error sending notification:', error);
+          alert('Failed to send notification: ' + error.message);
+        }
       });
-      updateUI(false);
-      alert('Unsubscribed');
-      return;
+    } else {
+      console.log('Notification button not found');
     }
-
-    // start subscribe flow
-    const resp = await fetch('/api/push/vapidPublicKey');
-    if (!resp.ok) return alert('Failed to get public key');
-    const { publicKey } = await resp.json();
-
-    const applicationServerKey = urlBase64ToUint8Array(publicKey);
-    const newSub = await swRegistration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
-
-    const saveResp = await fetch('/api/push/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newSub),
-    });
-    if (!saveResp.ok) {
-      console.error(await saveResp.text());
-      alert('Failed to register subscription on server');
-      return;
-    }
-    updateUI(true);
-    alert('Subscribed!');
-  });
-
-  document.getElementById('notifyBtn').addEventListener('click', async () => {
-    const r = await fetch('/api/push/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: { title: 'Hello', body: 'This is a test notification', url: '/' } }),
-    });
-    const data = await r.json();
-    console.log('send result', data);
-    alert('Send attempt complete; check console & server logs');
   });
 
   init().catch(console.error);
