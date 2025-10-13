@@ -190,31 +190,35 @@ app.use((req, res, next) => {
 
 // Middleware to attach notifications to all responses
 app.use(async (req, res, next) => {
-    if (req.user) {
-        try {
-            const notifications = await Notification.find({ user: req.user._id })
-                .sort({ createdAt: -1 })
-                .limit(5);
+    // Skip notifications for non-HTML requests or when no user is present
+    if (!req.user || !req.accepts || !req.accepts("html")) {
+        res.locals.notifications = [];
+        res.locals.notificationsCount = 0;
+        return next();
+    }
 
-            const unreadCount = await Notification.countDocuments({
-                user: req.user._id,
-                status: "unread",
-            });
+    try {
+        const notifications = await Notification.find({ user: req.user._id })
+            .sort({ createdAt: -1 })
+            .limit(5);
 
-            res.locals.notifications = notifications;
-            res.locals.notificationsCount = unreadCount;
-        } catch (err) {
-            // non-fatal: if DB query fails, expose empty arrays and log the error
-            console.warn("Warning: failed to load notifications:", err);
-            res.locals.notifications = [];
-            res.locals.notificationsCount = 0;
-        }
-    } else {
+        const unreadCount = await Notification.countDocuments({
+            user: req.user._id,
+            status: "unread",
+        });
+
+        res.locals.notifications = notifications;
+        res.locals.notificationsCount = unreadCount;
+    } catch (err) {
+        // non-fatal: if DB query fails, expose empty arrays and log the error
+        console.warn("Warning: failed to load notifications:", err);
         res.locals.notifications = [];
         res.locals.notificationsCount = 0;
     }
+
     next();
 });
+
 
 // Import routes
 const healthCheckRouter = require("./routes/healthCheck_route.js");
