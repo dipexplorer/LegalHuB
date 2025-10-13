@@ -1,0 +1,36 @@
+/* Go to Top Button */
+#goTopBtn {
+  position: fixed;
+  bottom: 100px !important; /* Lift above Chatbase */
+  right: 25px !important;
+  z-index: 9999 !important;
+  display: none;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 14px 16px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#goTopBtn.show {
+  display: block !important;
+}
+
+#goTopBtn:hover {
+  transform: translateY(-4px);
+}
+
+/* Override Chatbase floating button position */
+iframe[src*="chatbase.co"],
+div[id*="chatbase"],
+div[class*="chatbase"],
+div[style*="chatbase.co"] {
+  bottom: 20px !important; /* keep it lower */
+  right: 25px !important;
+  z-index: 998 !important;
+  position: fixed !important;
+}
