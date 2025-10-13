@@ -6,7 +6,6 @@ const User = require("../models/user.model");
 passport.use(User.createStrategy());
 
 // Google OAuth Strategy
-console.log('Client ID:', process.env.GOOGLE_CLIENT_ID);
 passport.use(
     new GoogleStrategy(
         {
