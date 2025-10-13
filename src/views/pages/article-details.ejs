@@ -195,6 +195,53 @@
         transform: scale(1.03);
     }
 
+    /* === Minimal share dialog styles (kept local to this file) === */
+    .share-dialog[hidden] { display:none; }
+    .share-dialog { position: fixed; inset: 0; z-index: 1200; font-family: inherit; }
+    .share-dialog-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+    .share-dialog-panel {
+      position: relative;
+      max-width: 420px;
+      margin: 6vh auto;
+      background: #111;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+      outline: none;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .share-options { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+    .share-option {
+      display:inline-block;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: transparent;
+      text-align:center;
+      cursor:pointer;
+      text-decoration:none;
+      color: var(--text);
+      font-size:0.95rem;
+    }
+    .share-option:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+
+    /* small toast used by share script */
+    .quick-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all .22s ease;
+      z-index: 1400;
+    }
+    .quick-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
     @media (max-width: 768px) {
         .article_container {
             padding: 24px 16px;
@@ -231,6 +278,11 @@
                 <button class="btn btn-secondary">✏️ Edit</button>
             </a>
         <% } %>
+
+        <!-- Minimal Share button (added) -->
+        <button id="shareBtn" class="btn btn-secondary" aria-haspopup="dialog" aria-controls="shareDialog" style="margin-left:6px;">
+            🔗 Share
+        </button>
     </div>
 
     <!-- ✅ Table of Contents -->
@@ -305,8 +357,29 @@
     <% } %>
 </section>
 
+<!-- Accessible share dialog (hidden by default) -->
+<div id="shareDialog" class="share-dialog" role="dialog" aria-modal="true" aria-labelledby="shareDialogTitle" hidden>
+  <div class="share-dialog-backdrop" data-dismiss="backdrop"></div>
+
+  <div class="share-dialog-panel" role="document" tabindex="-1" aria-label="Share dialog">
+    <header style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 id="shareDialogTitle" style="margin:0; font-size:1.1rem;">Share this article</h2>
+      <button id="shareCloseBtn" class="close" aria-label="Close share dialog" style="background:transparent; border:none; color:var(--text); font-size:1.4rem;">&times;</button>
+    </header>
+
+    <div class="share-options" style="margin-top:12px;">
+      <button class="share-option" data-action="native" type="button">Share (device)</button>
+      <a id="whatsappShare" class="share-option" target="_blank" rel="noopener noreferrer" href="#">Share on WhatsApp</a>
+      <button id="copyLinkBtn" class="share-option" type="button">Copy link</button>
+    </div>
+  </div>
+</div>
+
 <!-- ✅ Back to top -->
 <button onclick="scrollToTop()" id="backToTop" class="back-to-top">⬆️</button>
+
+<!-- include external share script (keeps JS separate) -->
+<script src="/js/article-share.js" defer></script>
 
 <script>
     // Show/hide back to top button

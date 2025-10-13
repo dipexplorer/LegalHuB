@@ -881,3 +881,49 @@ nav {
         color: #fff !important;
     }
 }
+
+/* === Article share dialog styles === */
+.share-dialog[hidden]{ display:none; }
+.share-dialog { position: fixed; inset: 0; z-index: 1200; font-family: inherit; }
+.share-dialog-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+.share-dialog-panel {
+  position: relative;
+  max-width: 420px;
+  margin: 6vh auto;
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  outline: none;
+}
+.share-options { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.share-option {
+  display:inline-block;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #e2e2e2;
+  background: #fff;
+  text-align:center;
+  cursor:pointer;
+  text-decoration:none;
+  color: inherit;
+  font-size:0.95rem;
+}
+.share-option:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+
+/* small toast used by share script */
+.quick-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) translateY(12px);
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: all .22s ease;
+  z-index: 1400;
+}
+.quick-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
