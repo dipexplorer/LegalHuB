@@ -45,9 +45,6 @@ const io = new Server(server, {
 // attach io to app (so other modules can access it)
 app.set("io", io);
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 // import socket logic (if it expects io)
 try {
     require("./socket")(io);
