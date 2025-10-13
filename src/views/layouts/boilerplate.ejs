@@ -23,12 +23,17 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Rakkas&display=swap"
             rel="stylesheet" />
+        <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
 
         <!-- Global CSS -->
         <link rel="stylesheet" href="/css/style.css" />
         <link rel="stylesheet" href="/css/login.css" />
         <link rel="stylesheet" href="/css/review.css" />
         <link rel="stylesheet" href="/css/contributor.css" />
+        <link rel="stylesheet" href="/css/go-top.css"/>
 
         <!-- Page-specific CSS (home page, dictionary, faq, lawyers, etc.) -->
         <link rel="stylesheet" href="/css/home.css" />
@@ -122,5 +127,50 @@
                 else window.addEventListener("load", onLoad);
             })();
         </script>
+        <button id="goTopBtn" title="Go to Top">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const goTopBtn = document.getElementById("goTopBtn");
+
+    // Show/hide "Go to Top" button
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        goTopBtn.classList.add("show");
+      } else {
+        goTopBtn.classList.remove("show");
+      }
+    });
+
+    // Smooth scroll to top
+    goTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Adjust Chatbase button position
+    const repositionChatbase = () => {
+      const chatBtn = document.getElementById("chatbase-bubble-button");
+      if (chatBtn) {
+        chatBtn.style.bottom = "20px"; // Keep chat bubble lower
+        chatBtn.style.right = "25px";
+        chatBtn.style.zIndex = "2147483640";
+
+        // Move GoToTop button above Chatbase
+        goTopBtn.style.bottom = "90px";
+        goTopBtn.style.right = "25px";
+        goTopBtn.style.zIndex = "2147483645";
+      }
+    };
+
+    // Run when page loads and re-check if Chatbase appears later
+    repositionChatbase();
+    const observer = new MutationObserver(repositionChatbase);
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
+
+        
+
     </body>
 </html>
