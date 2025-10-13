@@ -1,3 +1,4 @@
+// src/app.js
 if (process.env.NODE_ENV != "production") {
     require("dotenv").config(); // Load environment variables
 }
@@ -180,20 +181,30 @@ passport.deserializeUser(User.deserializeUser());
 
 // Global locals
 app.use((req, res, next) => {
+    // Guarantee req.user exists (avoid undefined in templates)
+    req.user = req.user || null;
+
+    // Flash messages
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user || null;
+
+    // Backwards-compatible: keep currentUser while also exposing `user`
+    res.locals.currentUser = req.user;
+    res.locals.user = req.user; // <-- minimal, important: templates expect `user`
+
     next();
 });
 
 // Middleware to attach notifications to all responses
 app.use(async (req, res, next) => {
-    if (!req.user || !req.accepts("html")) {
+    // Skip notifications for non-HTML requests or when no user is present
+    if (!req.user || !req.accepts || !req.accepts("html")) {
         res.locals.notifications = [];
         res.locals.notificationsCount = 0;
         return next();
     }
     try {
+        // rest of your code...
         const notifications = await Notification.find({ user: req.user._id })
             .sort({ createdAt: -1 })
             .limit(5);
@@ -204,10 +215,13 @@ app.use(async (req, res, next) => {
         res.locals.notifications = notifications;
         res.locals.notificationsCount = unreadCount;
     } catch (err) {
-        console.warn("Notifications middleware error:", err);
+// non-fatal: if DB query fails, expose empty arrays and log the error
+console.warn("Warning: failed to load notifications:", err);
+
         res.locals.notifications = [];
         res.locals.notificationsCount = 0;
     }
+
     next();
 });
 
@@ -223,33 +237,22 @@ passport.use(
                 let user = await User.findOne({ googleId: profile.id });
 
                 if (!user) {
-                    // Check if a user with this email already exists (registered with local auth)
                     const existingUser = await User.findOne({ email: profile.emails[0].value });
-
                     if (existingUser) {
-                        // Link the Google account to this user
                         existingUser.googleId = profile.id;
-
                         if (!existingUser.profilePicture) {
-                            existingUser.profilePicture = profile.photos[0]?.value || undefined; // undefined will trigger default
+                            existingUser.profilePicture = profile.photos[0]?.value || undefined;
                         }
-
                         if (!existingUser.name) existingUser.name = profile.displayName;
-
-                        // Only set username if missing; otherwise leave as-is
-                        if (!existingUser.username) {
-                            existingUser.username = undefined; // will use schema default if any
-                        }
-
+                        if (!existingUser.username) existingUser.username = undefined;
                         await existingUser.save();
                         return done(null, existingUser);
                     } else {
-                        // Create a new user with Google credentials
                         user = await User.create({
                             googleId: profile.id,
                             email: profile.emails?.[0]?.value,
                             name: profile.displayName || undefined,
-                            username: undefined, // leave undefined to use default
+                            username: undefined,
                             profilePicture: profile.photos[0]?.value || undefined,
                         });
                         return done(null, user);
@@ -257,7 +260,6 @@ passport.use(
                 }
                 return done(null, user);
             } catch (err) {
-                // Handle duplicate key error with a user-friendly message
                 if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
                     return done(
                         new Error(
@@ -272,7 +274,6 @@ passport.use(
     )
 );
 
-// ------------------------- Google OAuth Routes -------------------------
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 app.get(
@@ -282,13 +283,11 @@ app.get(
         failureFlash: true,
     }),
     (req, res) => {
-        // Successful login
         req.flash("success", "Successfully logged in with Google!");
         res.redirect("/");
     }
 );
 
-// Add error handling for Google OAuth
 app.use("/auth/google/callback", (err, req, res, next) => {
     if (err) {
         req.flash("error", err.message || "Authentication failed. Please try again.");
@@ -320,6 +319,10 @@ app.use("/api", apiLimiter);
 // API and page routes
 app.use("/", pageRoutes);
 app.use("/api/healthcheck", healthCheckRouter);
+
+// *** Minimal required addition: mount dictionary routes at /dictionary so the client-side POST /dictionary/search works
+app.use("/dictionary", dictionaryRoutes);
+
 app.use("/api/dictionary", dictionaryRoutes);
 app.use("/api/rights", rightsRoutes);
 app.use("/api/documents", documentsRoutes);
