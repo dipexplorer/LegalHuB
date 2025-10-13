@@ -1,3 +1,4 @@
+// src/app.js
 if (process.env.NODE_ENV != "production") {
     require("dotenv").config(); // Load environment variables
 }
@@ -27,7 +28,7 @@ const xssClean = require("xss-clean");
 
 // Passport Configuration
 const passport = require("passport");
-const LocalStrategy = require("passport-local");
+// const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Import User model (Fix for passport authentication)
@@ -53,33 +54,52 @@ if (IS_PROD) {
 }
 
 // Security headers
-helmet({
-    contentSecurityPolicy: {
-        useDefaults: true,
-        directives: {
-            "default-src": ["'self'"],
-            "img-src": ["'self'", "data:", "https:"],
-            "script-src": [
-                "'self'",
-                "'unsafe-inline'",
-                "https://cdn.jsdelivr.net",
-                "https://cdn.gtranslate.net",
-                "https://www.chatbase.co",
-            ],
-            "script-src-attr": ["'unsafe-inline'"], // ✅ allow onclick etc.
-            "script-src-elem": ["'self'", "'unsafe-inline'"], // ✅ allow inline <script>
-            "style-src": [
-                "'self'",
-                "'unsafe-inline'",
-                "https://cdnjs.cloudflare.com",
-                "https://cdn.jsdelivr.net",
-            ],
-            "font-src": ["'self'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
-            "connect-src": ["'self'", "https://www.chatbase.co", "wss://www.chatbase.co"],
-            "frame-src": ["'self'", "https://www.chatbase.co"],
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            useDefaults: true,
+            directives: {
+                "default-src": ["'self'"],
+                "img-src": ["'self'", "data:", "https:"],
+                "script-src": [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "https://cdn.jsdelivr.net",
+                    "https://cdn.gtranslate.net",
+                    "https://www.chatbase.co",
+                ],
+                "script-src-attr": ["'unsafe-inline'"], // ✅ allow onclick etc.
+                "script-src-elem": [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "https://cdn.jsdelivr.net",
+                    "https://cdn.gtranslate.net",
+                    "https://www.chatbase.co",
+                ], // ✅ allow inline <script>
+                "style-src": [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "https://cdnjs.cloudflare.com",
+                    "https://cdn.jsdelivr.net",
+                    "https://fonts.googleapis.com",
+                ],
+                "font-src": [
+                    "'self'",
+                    "https://cdnjs.cloudflare.com",
+                    "https://cdn.jsdelivr.net",
+                    "https://fonts.gstatic.com",
+                ],
+                "connect-src": [
+                    "'self'",
+                    "https://www.chatbase.co",
+                    "wss://www.chatbase.co",
+                    "https://cdn.jsdelivr.net",
+                ],
+                "frame-src": ["'self'", "https://www.chatbase.co"],
+            },
         },
-    },
-});
+    })
+);
 
 // Prevent HTTP Parameter Pollution
 app.use(hpp());
@@ -97,19 +117,6 @@ app.use(compression());
 if (!IS_TEST) {
     app.use(morgan(IS_PROD ? "combined" : "dev"));
 }
-// // CORS (strict origin check)
-// app.use(
-//     cors({
-//         origin: (origin, callback) => {
-//             // allow tools like curl/postman (no origin)
-//             if (!origin) return callback(null, true);
-//             if (origin === CORS_ORIGIN) return callback(null, true);
-//             return callback(new Error("CORS not allowed from this origin"), false);
-//         },
-//         credentials: true,
-//         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-//     })
-// );
 
 // CORS Configuration
 app.use(
@@ -143,7 +150,7 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: IS_PROD, // set true in production (requires https)
@@ -174,30 +181,47 @@ passport.deserializeUser(User.deserializeUser());
 
 // Global locals
 app.use((req, res, next) => {
+    // Guarantee req.user exists (avoid undefined in templates)
+    req.user = req.user || null;
+
+    // Flash messages
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user || null;
+
+    // Backwards-compatible: keep currentUser while also exposing `user`
+    res.locals.currentUser = req.user;
+    res.locals.user = req.user; // <-- minimal, important: templates expect `user`
+
     next();
 });
 
 // Middleware to attach notifications to all responses
 app.use(async (req, res, next) => {
-    if (req.user) {
+    // Skip notifications for non-HTML requests or when no user is present
+    if (!req.user || !req.accepts || !req.accepts("html")) {
+        res.locals.notifications = [];
+        res.locals.notificationsCount = 0;
+        return next();
+    }
+    try {
+        // rest of your code...
         const notifications = await Notification.find({ user: req.user._id })
             .sort({ createdAt: -1 })
             .limit(5);
-
         const unreadCount = await Notification.countDocuments({
             user: req.user._id,
             status: "unread",
         });
-
         res.locals.notifications = notifications;
         res.locals.notificationsCount = unreadCount;
-    } else {
+    } catch (err) {
+        // non-fatal: if DB query fails, expose empty arrays and log the error
+        console.warn("Warning: failed to load notifications:", err);
+
         res.locals.notifications = [];
         res.locals.notificationsCount = 0;
     }
+
     next();
 });
 
@@ -213,33 +237,22 @@ passport.use(
                 let user = await User.findOne({ googleId: profile.id });
 
                 if (!user) {
-                    // Check if a user with this email already exists (registered with local auth)
                     const existingUser = await User.findOne({ email: profile.emails[0].value });
-
                     if (existingUser) {
-                        // Link the Google account to this user
                         existingUser.googleId = profile.id;
-
                         if (!existingUser.profilePicture) {
-                            existingUser.profilePicture = profile.photos[0]?.value || undefined; // undefined will trigger default
+                            existingUser.profilePicture = profile.photos[0]?.value || undefined;
                         }
-
                         if (!existingUser.name) existingUser.name = profile.displayName;
-
-                        // Only set username if missing; otherwise leave as-is
-                        if (!existingUser.username) {
-                            existingUser.username = undefined; // will use schema default if any
-                        }
-
+                        if (!existingUser.username) existingUser.username = undefined;
                         await existingUser.save();
                         return done(null, existingUser);
                     } else {
-                        // Create a new user with Google credentials
                         user = await User.create({
                             googleId: profile.id,
-                            email: profile.emails[0].value,
+                            email: profile.emails?.[0]?.value,
                             name: profile.displayName || undefined,
-                            username: undefined, // leave undefined to use default
+                            username: undefined,
                             profilePicture: profile.photos[0]?.value || undefined,
                         });
                         return done(null, user);
@@ -247,7 +260,6 @@ passport.use(
                 }
                 return done(null, user);
             } catch (err) {
-                // Handle duplicate key error with a user-friendly message
                 if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
                     return done(
                         new Error(
@@ -265,6 +277,7 @@ passport.use(
 // ------------------------- Google OAuth Routes -------------------------
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
+// Add error handling for Google OAuth
 app.get(
     "/auth/google/callback",
     passport.authenticate("google", {
@@ -272,7 +285,6 @@ app.get(
         failureFlash: true,
     }),
     (req, res) => {
-        // Successful login
         req.flash("success", "Successfully logged in with Google!");
         res.redirect("/");
     }
@@ -309,6 +321,10 @@ app.use("/api", apiLimiter);
 // API and page routes
 app.use("/", pageRoutes);
 app.use("/api/healthcheck", healthCheckRouter);
+
+// *** Minimal required addition: mount dictionary routes at /dictionary so the client-side POST /dictionary/search works
+app.use("/dictionary", dictionaryRoutes);
+
 app.use("/api/dictionary", dictionaryRoutes);
 app.use("/api/rights", rightsRoutes);
 app.use("/api/documents", documentsRoutes);
@@ -366,97 +382,4 @@ app.use((err, req, res, next) => {
         .json(new apiResponse(statusCode, null, err.message || "Internal Server Error"));
 });
 
-// ------------------------- DB connect + graceful shutdown -------------------------
-let serverInstance = null;
-
-// Simple connect function using mongoose - throws on failure
-async function connectDBAndStart(appPort) {
-    const uri = process.env.DB_URL;
-    if (!uri) {
-        throw new Error("MONGODB connection URI is not defined in environment (DB_URL)");
-    }
-
-    try {
-        // mongoose.connect will throw if it cannot connect
-        await mongoose.connect(uri, { serverSelectionTimeoutMS: 10000 });
-        console.log("✅ MongoDB connected");
-
-        // expose dbClose for graceful shutdown
-        global.dbClose = async () => {
-            try {
-                await mongoose.disconnect();
-                console.log("✅ MongoDB disconnected");
-            } catch (err) {
-                console.warn("⚠️ Error while disconnecting MongoDB:", err);
-            }
-        };
-
-        // start server after DB connected
-        serverInstance = app.listen(appPort, () => {
-            console.log(`🚀 Server running at http://localhost:${appPort} [${NODE_ENV}]`);
-        });
-    } catch (err) {
-        console.error("❌ MongoDB connection error:", err);
-        // rethrow to be handled by caller
-        throw err;
-    }
-}
-
-// graceful shutdown
-let shuttingDown = false;
-async function gracefulShutdown(signal) {
-    if (shuttingDown) return;
-    shuttingDown = true;
-    console.log(`\n🛑 Received ${signal}. Shutting down gracefully...`);
-
-    // close HTTP server if running
-    if (serverInstance && serverInstance.listening) {
-        await new Promise((resolve) => serverInstance.close(resolve));
-        console.log("✅ HTTP server closed");
-    }
-
-    // close DB if available
-    try {
-        if (typeof global.dbClose === "function") {
-            await global.dbClose();
-        }
-    } catch (err) {
-        console.warn("⚠️ Error closing DB:", err);
-    }
-
-    console.log("✅ Graceful shutdown complete.");
-    // ensure exit
-    process.exit(0);
-}
-
-// handle signals
-process.on("SIGINT", () => gracefulShutdown("SIGINT"));
-process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-process.on("uncaughtException", (err) => {
-    console.error("❌ Uncaught exception:", err);
-    gracefulShutdown("uncaughtException");
-});
-process.on("unhandledRejection", (reason) => {
-    console.error("❌ Unhandled Rejection:", reason);
-    gracefulShutdown("unhandledRejection");
-});
-
-// convenience start function used by server runner
-async function startServer(port = process.env.PORT || 3000) {
-    try {
-        await connectDBAndStart(port);
-    } catch (err) {
-        console.error("Failed to start server:", err);
-        // run graceful shutdown to use the same cleanup path
-        await gracefulShutdown("startupFailure");
-    }
-}
-
-// if this file is run directly, start the server.
-// If required as module (tests), exports `app` and `startServer()`
-if (require.main === module) {
-    startServer(process.env.PORT || 3000);
-}
-
 module.exports = app;
-module.exports.startServer = startServer; // still export startServer separately
