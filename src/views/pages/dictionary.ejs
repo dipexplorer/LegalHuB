@@ -1,149 +1,113 @@
 <% layout("layouts/boilerplate") %>
-    <style>
-        /* ✅ General Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
 
-        /* ✅ Container Styling */
-        .dic_container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #ffffff;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+<!-- src/views/pages/dictionary.ejs -->
+<link rel="stylesheet" href="/css/dictionary.css">
 
-        /* ✅ Title */
-        .title {
-            font-size: 2.2rem;
-            color: #7b1fa2;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+<section class="legal-dictionary" id="legal-dictionary-root" data-user="<%= user ? 'true' : 'false' %>">
+  <div class="legal-dictionary__container">
 
-        /* ✅ Form Styling */
-        #search-form {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    <!-- Header -->
+    <header class="legal-dictionary__header" role="banner" aria-labelledby="ld-title">
+      <div class="hero__inner">
+        <h1 id="ld-title" class="legal-dictionary__title">
+          Legal<span class="legal-dictionary__accent">HuB</span> Dictionary
+        </h1>
+        <p class="legal-dictionary__subtitle">Professional legal definitions, simplified.</p>
+      </div>
 
-        #search-form input {
-            width: 70%;
-            padding: 12px;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
+      <!-- Global Save (top-right) -->
+      <div class="legal-dictionary__header-actions" aria-hidden="false">
+        <button id="ld-save-global" class="card__action-btn--save" aria-label="Save current term (login required)" <%= user ? "" : "disabled" %>>
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M6 2h10a1 1 0 0 1 1 1v18l-6-3-6 3V3a1 1 0 0 1 1-1z"/>
+          </svg>
+          <span class="ld-save-label">Save</span>
+        </button>
+      </div>
+    </header>
 
-        #search-form input:focus {
-            border-color: #7b1fa2;
-        }
-
-        #search-form button {
-            background-color: #7b1fa2;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #search-form button:hover {
-            background-color: #9c27b0;
-        }
-
-        /* ✅ Result Styling */
-        #result {
-            background: #fafafa;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 6px;
-            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .term-title {
-            font-size: 1.5rem;
-            color: #7b1fa2;
-            margin-bottom: 10px;
-        }
-
-        #term-definition {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        /* ✅ Responsive Design */
-        @media (max-width: 768px) {
-            .dic_container {
-                padding: 15px;
-            }
-
-            #search-form {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            #search-form input,
-            #search-form button {
-                width: 100%;
-            }
-        }
-    </style>
-    <section class="dictionary">
-        <div class="dic_container">
-            <h1 class="title">📖 Legal Dictionary</h1>
-            <form id="search-form">
-                <input type="text" id="term-input" placeholder="Enter a legal term..." required />
-                <button type="submit">Search</button>
-            </form>
-            <div id="result" class="hidden">
-                <h2 class="term-title">Result:</h2>
-                <p id="term-definition">Searching...</p>
-            </div>
+    <!-- Search card -->
+    <div class="ld-search-card" role="region" aria-label="Search legal terms">
+      <form id="ld-search-form" class="legal-dictionary__search" role="search" aria-label="Search form" action="/dictionary/search" method="post">
+        <div class="ld-search__input-wrap">
+          <input id="ld-term-input"
+                 class="ld-search__input"
+                 name="term"
+                 type="search"
+                 placeholder="e.g., Habeas Corpus, Estoppel"
+                 aria-label="Search term"
+                 autocomplete="off"
+                 required />
+          <span id="ld-search-spinner" class="ld-search__spinner" aria-hidden="true"></span>
         </div>
-    </section>
 
-    <script>
-        const form = document.getElementById('search-form');
-        const input = document.getElementById('term-input');
-        const resultContainer = document.getElementById('result');
-        const definition = document.getElementById('term-definition');
+        <button id="ld-search-btn" class="ld-btn ld-btn--primary" type="submit" aria-label="Search">
+          Search
+        </button>
+      </form>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const term = input.value.trim();
-            if (!term) return;
+      <p class="legal-dictionary__tip">💡 Tip: Be specific for the best results (add jurisdiction like "— India").</p>
 
-            definition.innerText = '🔎 Searching...';
-            resultContainer.classList.remove('hidden');
+      <!-- Recent searches -->
+      <div id="ld-recent" class="ld-recent" aria-live="polite" aria-atomic="true"></div>
+    </div>
 
-            try {
-                const res = await fetch(`api/dictionary/${term}`);
-                const data = await res.json();
+    <!-- Meta + Source badge (hidden until result) -->
+    <div id="ld-meta" class="ld-meta hidden" aria-hidden="true" style="margin-top:10px;">
+      <span id="ld-source-badge" class="card__badge card__badge--source" aria-hidden="true"></span>
+    </div>
 
-                if (data.success) {
-                    definition.innerText = data.data.response;
-                } else {
-                    definition.innerText = `❌ Error: ${data.msg}`;
-                }
-            } catch (error) {
-                definition.innerText = '❌ Failed to fetch result. Try again!';
-                console.error('Error:', error);
-            }
-        });
-    </script>
+    <!-- Skeleton loader (hidden by default) -->
+    <div id="ld-skeleton" class="hidden" aria-hidden="true" style="margin-top:20px;">
+      <div class="ld-card" role="status" aria-live="polite" aria-busy="true">
+        <div class="skeleton" style="height:24px;width:45%;margin-bottom:12px;border-radius:8px"></div>
+        <div class="skeleton" style="height:12px;width:100%;margin-bottom:8px;border-radius:6px"></div>
+        <div class="skeleton" style="height:12px;width:92%;margin-bottom:8px;border-radius:6px"></div>
+        <div class="skeleton" style="height:12px;width:60%;margin-top:12px;border-radius:6px"></div>
+      </div>
+    </div>
+
+    <!-- Results container -->
+    <main id="ld-result" class="legal-dictionary__result" aria-live="polite" aria-busy="false" style="margin-top:26px;">
+      <!-- Initial welcome state -->
+      <div class="ld-card" id="ld-welcome" role="status" aria-live="polite">
+        <div class="card__header">
+          <div>
+            <h2 class="card__term-title">Welcome to LegalHuB</h2>
+            <div class="card__badge-list" aria-hidden="true">
+              <span class="card__badge">Definitions</span>
+              <span class="card__badge">Examples</span>
+              <span class="card__badge">Guides</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card__section card__section--definition">
+          <h3 class="card__section-title">Get started</h3>
+          <div class="card__section-body">
+            <p class="muted-note">
+              Search for a legal term to get started. Use clear phrases like <em>Divorce — India</em> or <em>Habeas Corpus</em>.
+              Results will appear below as structured cards (Definition, Key Aspects, Examples, Steps).
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Related terms aside -->
+    <aside id="ld-related" class="ld-related hidden" aria-label="Related terms" style="margin-top:18px;">
+      <h3 class="card__section-title" style="margin:0 0 8px 0;">Related terms</h3>
+      <div id="ld-related-list" class="card__related" role="list"></div>
+    </aside>
+
+  </div>
+</section>
+
+<noscript>
+  <div style="max-width:900px;margin:18px auto;padding:12px;background:#fff3bf;border-left:4px solid #f59e0b;border-radius:8px;color:#111;">
+    <strong>JavaScript required:</strong> This page needs JavaScript enabled to search and display AI-generated definitions. The search form will fallback to server POST when JavaScript is disabled.
+  </div>
+</noscript>
+
+<!-- Main script (deferred) -->
+<script src="/js/dictionary.js" defer></script>
