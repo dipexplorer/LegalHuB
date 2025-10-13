@@ -70,11 +70,11 @@ app.use(
                 ],
                 "script-src-attr": ["'unsafe-inline'"], // ✅ allow onclick etc.
                 "script-src-elem": [
-                    "'self'", 
-                    "'unsafe-inline'", 
+                    "'self'",
+                    "'unsafe-inline'",
                     "https://cdn.jsdelivr.net",
                     "https://cdn.gtranslate.net",
-                    "https://www.chatbase.co"
+                    "https://www.chatbase.co",
                 ], // ✅ allow inline <script>
                 "style-src": [
                     "'self'",
@@ -84,16 +84,16 @@ app.use(
                     "https://fonts.googleapis.com",
                 ],
                 "font-src": [
-                    "'self'", 
-                    "https://cdnjs.cloudflare.com", 
+                    "'self'",
+                    "https://cdnjs.cloudflare.com",
                     "https://cdn.jsdelivr.net",
-                    "https://fonts.gstatic.com"
+                    "https://fonts.gstatic.com",
                 ],
                 "connect-src": [
-                    "'self'", 
-                    "https://www.chatbase.co", 
+                    "'self'",
+                    "https://www.chatbase.co",
                     "wss://www.chatbase.co",
-                    "https://cdn.jsdelivr.net"
+                    "https://cdn.jsdelivr.net",
                 ],
                 "frame-src": ["'self'", "https://www.chatbase.co"],
             },
@@ -215,8 +215,8 @@ app.use(async (req, res, next) => {
         res.locals.notifications = notifications;
         res.locals.notificationsCount = unreadCount;
     } catch (err) {
-// non-fatal: if DB query fails, expose empty arrays and log the error
-console.warn("Warning: failed to load notifications:", err);
+        // non-fatal: if DB query fails, expose empty arrays and log the error
+        console.warn("Warning: failed to load notifications:", err);
 
         res.locals.notifications = [];
         res.locals.notificationsCount = 0;
@@ -274,8 +274,10 @@ passport.use(
     )
 );
 
+// ------------------------- Google OAuth Routes -------------------------
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
+// Add error handling for Google OAuth
 app.get(
     "/auth/google/callback",
     passport.authenticate("google", {
@@ -288,6 +290,7 @@ app.get(
     }
 );
 
+// Add error handling for Google OAuth
 app.use("/auth/google/callback", (err, req, res, next) => {
     if (err) {
         req.flash("error", err.message || "Authentication failed. Please try again.");
