@@ -222,24 +222,63 @@
             let currentIndex = 0;
             const visibleCards = 7;
 
-            function renderSlider() {
+            // Fetch GitHub user bio (with fallback)
+            async function fetchUserBio(login) {
+                try {
+                    const response = await fetch(`https://api.github.com/users/${login}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data.bio || 'Open source contributor';
+                    }
+                } catch (error) {
+                    console.log('Bio fetch error:', error);
+                }
+                return 'Open source contributor';
+            }
+
+            async function renderSlider() {
               track.innerHTML = '';
               const total = contributors.length;
 
               for (let i = 0; i < visibleCards; i++) {
                 const realIndex = (currentIndex + i) % total;
                 const c = contributors[realIndex];
+                
+                // Determine if this is the top contributor (@dipexplorer)
+                const isTopContributor = c.login.toLowerCase() === 'dipexplorer';
+                const isMid = i === Math.floor(visibleCards / 2);
 
-                const card = document.createElement('a');
-                card.className = 'contrib-pill' + (i === Math.floor(visibleCards / 2) ? ' middle' : '');
-                card.href = c.html_url;
-                card.target = '_blank';
-                card.rel = 'noopener';
+                // Fetch bio for back face
+                const bio = await fetchUserBio(c.login);
+
+                // Create 3D flip card container
+                const card = document.createElement('div');
+                card.className = 'contrib-pill' + 
+                    (isMid ? ' middle' : '') + 
+                    (isTopContributor ? ' top-contributor' : '');
+
                 card.innerHTML = `
-                  <img src="${c.avatar_url}" alt="${c.login}" />
-                  <span>@${c.login}</span>
-                  <div style="margin-top:6px; font-size: 0.9rem; color:#666;">🧩 ${c.contributions} contributions</div>
+                  <!-- Front Face -->
+                  <div class="contrib-pill-front">
+                    <img src="${c.avatar_url}" alt="${c.login}" />
+                    <div class="username">@${c.login}</div>
+                    <div class="contributions">🧩 ${c.contributions} contributions</div>
+                  </div>
+                  
+                  <!-- Back Face -->
+                  <div class="contrib-pill-back">
+                    <img src="${c.avatar_url}" alt="${c.login}" />
+                    <div class="bio">${bio}</div>
+                    <a href="${c.html_url}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="visit-profile-btn"
+                       onclick="event.stopPropagation()">
+                      Visit Profile →
+                    </a>
+                  </div>
                 `;
+                
                 track.appendChild(card);
               }
             }
@@ -256,7 +295,7 @@
 
             leftBtn.addEventListener('click', scrollLeft);
             rightBtn.addEventListener('click', scrollRight);
-            setInterval(scrollRight, 3000);
+            setInterval(scrollRight, 4000); // Slower for better UX
             window.addEventListener('load', renderSlider);
         </script>
     </section>
