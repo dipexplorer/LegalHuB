@@ -30,6 +30,7 @@
         "supertest": "^7.1.4"
     },
     "dependencies": {
+        "@google/genai": "^1.24.0",
         "axios": "^1.12.2",
         "bcrypt": "^6.0.0",
         "cloudinary": "^1.30.0",

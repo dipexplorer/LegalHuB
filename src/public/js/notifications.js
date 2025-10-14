@@ -1,4 +1,6 @@
 // public/js/notifications.js
+
+// --- Push helpers (existing) ---
 async function getVapidPublicKey() {
     const res = await fetch("/api/push/vapidPublicKey");
     if (!res.ok) throw new Error("Failed to fetch VAPID public key");
@@ -54,4 +56,49 @@ async function subscribeToPush(authToken) {
     console.log("🎉 Subscribed to push notifications successfully");
 }
 
+// expose for other modules
 window.subscribeToPush = subscribeToPush;
+
+
+// --- Toast utility (NEW) ---
+// Reusable site toast that other scripts can call: window.showToast(msg, durationMs)
+(function () {
+    // Avoid redefining if already present
+    if (window.showToast && typeof window.showToast === 'function') return;
+
+    window.showToast = function showToast(message = '', duration = 2800) {
+        try {
+            // Reuse existing toast container if present
+            let toast = document.querySelector('.quick-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.className = 'quick-toast';
+                // Small accessibility: role and aria-live
+                toast.setAttribute('role', 'status');
+                toast.setAttribute('aria-live', 'polite');
+                document.body.appendChild(toast);
+            }
+
+            // If another toast is visible, replace its text and reset timer
+            toast.textContent = message;
+
+            // Force reflow then show
+            toast.classList.add('visible');
+
+            // Clear any previous hide timer
+            if (toast._hideTimer) clearTimeout(toast._hideTimer);
+
+            toast._hideTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+                // remove element after transition to keep DOM clean
+                toast._removeTimer = setTimeout(() => {
+                    try { toast.remove(); } catch (e) { /* ignore */ }
+                }, 300);
+            }, duration);
+        } catch (err) {
+            // Fallback to alert if DOM operations fail
+            console.warn('showToast fallback:', err);
+            try { alert(message); } catch (e) { /* noop */ }
+        }
+    };
+})();
