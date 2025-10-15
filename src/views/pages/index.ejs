@@ -67,7 +67,7 @@
                 </button>
             </form>
             <div id="result" class="hidden">
-                <h2 class="term-title">Result:</h2>
+                <h2 class="term-title" id="resultElement">Result :</h2>
                 <p id="term-definition">Searching...</p>
             </div>
         </div>
@@ -378,6 +378,7 @@
 <script>
     const form = document.getElementById("search-form");
     const input = document.getElementById("term-input");
+    const resultElement = document.getElementById("resultElement");
     const resultContainer = document.getElementById("result");
     const definition = document.getElementById("term-definition");
 
@@ -386,6 +387,7 @@
         const term = input.value.trim();
         if (!term) return;
 
+        resultElement.innerHTML = `Result : <strong>${term}</strong>`;
         definition.innerText = "🔎 Searching...";
         resultContainer.classList.remove("hidden");
         resultContainer.classList.add("show");
@@ -393,9 +395,12 @@
         try {
             const res = await fetch(`/api/dictionary/${term}`);
             const data = await res.json();
-
             if (data.success) {
-                definition.innerHTML = data.data.response; // use innerHTML for formatted content
+                if (!data.data || !data.data.structured.definition) {
+                    definition.innerText = `❌ No definition found for "${term}". Please try another term.`;
+                    return;
+                }
+                definition.innerHTML = data.data.structured.definition; // use innerHTML for formatted content
             } else {
                 definition.innerHTML = `<span style="color:red;">❌ Error: ${data.msg}</span>`;
             }
