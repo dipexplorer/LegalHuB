@@ -375,24 +375,8 @@
   </div>
 </div>
 
-<!-- ✅ Back to top -->
-<button onclick="scrollToTop()" id="backToTop" class="back-to-top">⬆️</button>
-
 <!-- include external share script (keeps JS separate) -->
 <script src="/js/article-share.js" defer></script>
 
 <script>
-    // Show/hide back to top button
-    window.addEventListener("scroll", () => {
-        const btn = document.getElementById("backToTop");
-        if (window.scrollY > 300) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
-        }
-    });
-
-    function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
 </script>

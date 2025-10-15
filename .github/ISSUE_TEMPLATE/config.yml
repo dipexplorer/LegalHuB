@@ -1,6 +1,1 @@
-blank_issues_enabled: false
-
-contact_links:
-    - name: 🧵 Questions & Support
-      url: https://github.com/dipexplorer/LegalHuB/discussions
-      about: Please use GitHub Discussions for general questions, ideas, or help.
+blank_issues_enabled: true

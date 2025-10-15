@@ -409,6 +409,20 @@ This project is licensed under the [MIT License](LICENSE).
 Pull requests are welcome! For significant changes, please open an issue first to discuss your proposed modifications.
 
 ---
+## Contributor
+
+A heartfelt thank you to all the contributors who have dedicated their time and effort to make this project a success.  
+Your contributions—whether it’s code, design, testing, or documentation—are truly appreciated! 🚀
+
+#### Thanks to all the wonderful contributors 💖
+
+<a href="https://github.com/dipexplorer/LegalHuB/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dipexplorer/LegalHuB" />
+</a>
+
+#### See full list of contribution from contributor [Contributor Graph](https://github.com/dipexplorer/LegalHuB/graphs/contributors)
+
+---
 
 ## 📬 Contact
 
