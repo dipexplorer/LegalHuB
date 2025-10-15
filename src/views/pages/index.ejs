@@ -391,7 +391,7 @@
         definition.innerText = "🔎 Searching...";
         resultContainer.classList.remove("hidden");
         resultContainer.classList.add("show");
-
+        
         try {
             const res = await fetch(`/api/dictionary/${term}`);
             const data = await res.json();
