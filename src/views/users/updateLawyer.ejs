@@ -77,6 +77,12 @@
     transform: none;
 }
 
+.update-lawyer-form-close-btn{
+    border-radius: 10px;
+    width: 30px;
+    padding: 5px 10px;
+}
+
 .input-group input {
     width: 100% !important;
     padding: 15px 20px;
@@ -92,10 +98,11 @@
 </style>
 
 <div class="profile-update-container">
-    <h2>Update Lawyer Profile</h2>
-
-    <form method="POST" action="/api/users/update-lawyer?_method=PUT" class="needs-validation" novalidate>
-        <!-- Row: Specialization + License Number -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Update Lawyer Profile</h2>
+        <button type="button" class="btn btn-danger update-lawyer-form-close-btn">X</button>
+    </div>
+    <form method="POST" id="updateForm" action="/api/users/update-lawyer?_method=PUT" class="needs-validation" novalidate>
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="specialization" class="form-label">Specialization</label>
@@ -268,4 +275,10 @@
         });
     });
 })();
+
+    
+document.querySelector('.update-lawyer-form-close-btn').addEventListener('click', () => {
+    window.history.back();
+});
+
 </script>
