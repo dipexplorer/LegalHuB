@@ -77,6 +77,11 @@
     transform: none;
 }
 
+.update-lawyer-form-btn:hover{
+    transform:matrix( 1.05, 0, 0, 1.05, 0, 0);
+    box-shadow: 0 4px 12px rgba(217, 54, 62, 0.4);
+}
+
 .input-group input {
     width: 100% !important;
     padding: 15px 20px;
@@ -92,10 +97,8 @@
 </style>
 
 <div class="profile-update-container">
-    <h2>Update Lawyer Profile</h2>
-
-    <form method="POST" action="/api/users/update-lawyer?_method=PUT" class="needs-validation" novalidate>
-        <!-- Row: Specialization + License Number -->
+        <h2>Update Lawyer Profile</h2>
+    <form method="POST" id="updateForm" action="/api/users/update-lawyer?_method=PUT" class="needs-validation" novalidate>
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="specialization" class="form-label">Specialization</label>
@@ -205,7 +208,9 @@
             <div class="invalid-feedback">Please write your bio.</div>
         </div>
 
-        <button type="submit" class="btn btn-outline-primary mt-4">Update Profile</button>
+        <button type="submit" class="btn btn-success mt-4 update-lawyer-form-btn">Update Profile</button>
+        <button type="button" id="update-lawyer-form-close-btn" class="btn btn-danger mt-4 update-lawyer-form-btn">Close</button>
+
     </form>
 </div>
 
@@ -268,4 +273,10 @@
         });
     });
 })();
+
+    
+document.getElementById('update-lawyer-form-close-btn').addEventListener('click', () => {
+    window.history.back();
+});
+
 </script>
