@@ -294,36 +294,68 @@ We welcome contributions to help improve **LegalHuB**! 🚀 Whether you're fixin
 
 ```plaintext
 LegalHuB/
-├── init/                   # Seed scripts for rights & documents
-│   ├── documents.data.js
-│   ├── index.documents.js
-│   ├── index.rights.js
-│   └── rights.data.js
+├── .github/                             # GitHub configuration files and workflows
+│   ├── ISSUE_TEMPLATE/                  # Templates for issue creation
+│   ├── workflows/                       # GitHub Actions workflows (CI/CD automation)
+│   ├── labeler.yml                      # Automatically assign labels to PRs/issues
+│   └── PULL_REQUEST_TEMPLATE.md         # Standard pull request template
 │
-├── src/                    # Main application source
-│   ├── controllers/        # Business logic for each route
-│   ├── db/                 # MongoDB database connection
-│   ├── middlewares/        # Auth, error, upload middleware
-│   ├── models/             # Mongoose schemas
-│   ├── public/             # Static files (CSS, JS, images)
-│   ├── routes/             # Express.js route definitions
-│   ├── uploads/            # Uploaded files (PDFs etc.)
-│   ├── utils/              # Helpers: error handling, responses, Cloudinary
-│   ├── views/              # EJS templates (includes, layouts, pages)
-│   ├── app.js              # Express app config
-│   ├── constants.js        # Global constants
-│   ├── index.js            # Server entry point
-│   └── readme.md           # Dev-specific readme
+├── __tests__/                           # Automated test files for all major modules
+│   ├── appointment.test.js              # Unit tests for appointment module
+│   ├── article.test.js                  # Tests for article-related APIs
+│   ├── chat.test.js                     # Tests for chat functionality
+│   ├── dictionary.test.js               # Tests for dictionary search endpoints
+│   ├── document.test.js                 # Tests for document handling
+│   ├── healthCheck.test.js              # Tests for server health check route
+│   ├── lawyer.test.js                   # Tests for lawyer routes and models
+│   ├── review.test.js                   # Tests for review system
+│   ├── rights.test.js                   # Tests for legal rights endpoints
+│   ├── search.test.js                   # Tests for search module
+│   └── user.test.js                     # Tests for user authentication and profiles
 │
-├── .env.sample             # Example environment config
-├── .gitignore              # Git ignored files
-├── .prettierrc             # Prettier config
-├── .prettierignore
-├── CODE_OF_CONDUCT.md
-├── LICENSE
-├── package.json
-├── package-lock.json
-└── README.md               # Project overview and setup
+├── init/                                # Initialization scripts
+│   ├── documents.data.js                # Seed data for legal documents
+│   ├── index.documents.js               # Document initialization logic
+│   ├── index.rights.js                  # Rights initialization logic
+│   └── rights.data.js                   # Seed data for legal rights
+│
+├── src/                                 # Main source code directory
+│   ├── config/                          # Environment and configuration files
+│   ├── controllers/                     # Business logic and route handlers
+│   ├── db/                              # Database connection and setup
+│   ├── middlewares/                     # Express middlewares (auth, validation, logging)
+│   ├── models/                          # Mongoose / Sequelize models for data structure
+│   ├── public/                          # Public assets (images, static files)
+│   ├── routes/                          # API routes definitions
+│   ├── services/                        # Service layer for business logic and API calls
+│   ├── utils/                           # Utility/helper functions
+│   ├── validators/                      # Request validation schemas
+│   └── views/                           # View templates (if using server-side rendering)
+│
+├── test/                                # Global test setup and utility functions
+│   ├── globalSetup.js                   # Jest global setup
+│   ├── globalTeardown.js                # Jest global teardown
+│   ├── jest.setup.js                    # Jest environment configuration
+│   └── testHelpers.js                   # Common helper functions for tests
+│
+├── app.js                               # Express app configuration and middleware setup
+├── constants.js                         # Global constants used throughout the project
+├── index.js                             # Main entry point — starts the server
+├── setUpAdmin.js                        # Script to initialize admin users
+├── socket.js                            # Socket.io configuration for real-time communication
+│
+├── .env.sample                          # Example environment variable configuration
+├── .eslintignore                        # Files and folders ignored by ESLint
+├── .eslintrc.js                         # ESLint configuration for code linting
+├── .gitignore                           # Files ignored by Git
+├── .prettierignore                      # Files ignored by Prettier
+├── .prettierrc                          # Prettier configuration for code formatting
+│
+├── CODE_OF_CONDUCT.md                   # Contributor behavior guidelines
+├── CONTRIBUTING.md                      # Instructions for contributing to the project
+├── LEARN.md                             # Learning resources or setup guide for contributors
+├── LICENSE                              # Open-source license for the project
+└── readme.md                            # Main project documentation
 ```
 
 ---
