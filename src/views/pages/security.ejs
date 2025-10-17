@@ -1,0 +1,341 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container security-page">
+    <h1><i class="fas fa-shield-alt"></i> Account Security</h1>
+
+    <!-- Password Management -->
+    <section class="security-section">
+        <h2><i class="fas fa-key"></i> Password Management</h2>
+        <div class="card">
+            <form action="/account/security/change-password" method="POST" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
+                    <div class="invalid-feedback">Please enter your current password</div>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                    <div class="password-strength-meter"></div>
+                    <div class="invalid-feedback">Please enter a new password</div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                    <div class="invalid-feedback">Passwords do not match</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Recent Login Activity -->
+    <section class="security-section">
+        <h2><i class="fas fa-history"></i> Recent Login Activity</h2>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Device</th>
+                            <th>Browser</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% recentActivity.forEach(activity => { %>
+                            <tr class="<%= activity.status === 'suspicious' ? 'table-warning' : '' %>">
+                                <td><%= activity.createdAt.toLocaleString() %></td>
+                                <td><i class="fas fa-<%= activity.device.toLowerCase().includes('mobile') ? 'mobile-alt' : 'desktop' %>"></i> <%= activity.device %></td>
+                                <td><%= activity.browser %></td>
+                                <td><i class="fas fa-map-marker-alt"></i> <%= activity.location %></td>
+                                <td>
+                                    <% if (activity.status === 'success') { %>
+                                        <span class="badge badge-success">Success</span>
+                                    <% } else if (activity.status === 'suspicious') { %>
+                                        <span class="badge badge-warning">Suspicious</span>
+                                    <% } else { %>
+                                        <span class="badge badge-danger">Failed</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Account Recovery -->
+    <section class="security-section">
+        <h2><i class="fas fa-life-ring"></i> Account Recovery</h2>
+        <div class="card">
+            <form action="/account/security/settings" method="POST" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="recoveryEmail">Recovery Email</label>
+                    <input type="email" id="recoveryEmail" name="recoveryEmail" class="form-control" 
+                           value="<%= securitySettings.recoveryEmail || '' %>" required>
+                    <div class="invalid-feedback">Please enter a valid email address</div>
+                </div>
+                <div class="form-group">
+                    <label for="recoveryPhone">Recovery Phone</label>
+                    <input type="tel" id="recoveryPhone" name="recoveryPhone" class="form-control" 
+                           value="<%= securitySettings.recoveryPhone || '' %>" required>
+                    <div class="invalid-feedback">Please enter a valid phone number</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Recovery Info</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Active Sessions -->
+    <section class="security-section">
+        <h2><i class="fas fa-desktop"></i> Active Sessions</h2>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Device</th>
+                            <th>Last Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% activeSessions.forEach(session => { %>
+                            <tr>
+                                <td>
+                                    <% if(session.current) { %>
+                                        <span class="badge badge-primary">Current Session</span>
+                                    <% } else { %>
+                                        <span>Other Device</span>
+                                    <% } %>
+                                </td>
+                                <td><%= session.lastActive.toLocaleString() %></td>
+                                <td>
+                                    <% if(!session.current) { %>
+                                        <form action="/account/security/logout-session/<%= session.id %>" method="POST" style="display: inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm">Terminate</button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <form action="/account/security/logout-others" method="POST">
+                    <button type="submit" class="btn btn-warning">Log Out All Other Sessions</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Notifications -->
+    <section class="security-section">
+        <h2><i class="fas fa-bell"></i> Security Notifications</h2>
+        <div class="card">
+            <form action="/account/security/settings" method="POST">
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="newLoginAlert" 
+                               name="notifications[newLogin]" 
+                               <%= securitySettings.notifications.newLogin ? 'checked' : '' %>>
+                        <label class="custom-control-label" for="newLoginAlert">New Device Login Alerts</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="passwordChangeAlert" 
+                               name="notifications[passwordChange]" 
+                               <%= securitySettings.notifications.passwordChange ? 'checked' : '' %>>
+                        <label class="custom-control-label" for="passwordChangeAlert">Password Change Alerts</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="twoFactorAlert" 
+                               name="notifications[twoFactorChange]" 
+                               <%= securitySettings.notifications.twoFactorChange ? 'checked' : '' %>>
+                        <label class="custom-control-label" for="twoFactorAlert">Two-Factor Authentication Alerts</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Notification Settings</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<!-- Password Strength Meter and Form Validation Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password strength meter
+    const newPasswordInput = document.getElementById('newPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const strengthMeter = document.querySelector('.password-strength-meter');
+
+    if (newPasswordInput && strengthMeter) {
+        newPasswordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            let feedback = [];
+
+            // Length check
+            if (password.length >= 8) strength++;
+            else feedback.push("8+ characters");
+
+            // Uppercase check
+            if (/[A-Z]/.test(password)) strength++;
+            else feedback.push("uppercase");
+
+            // Lowercase check
+            if (/[a-z]/.test(password)) strength++;
+            else feedback.push("lowercase");
+
+            // Number check
+            if (/[0-9]/.test(password)) strength++;
+            else feedback.push("number");
+
+            // Special character check
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            else feedback.push("special character");
+
+            // Update strength meter
+            let strengthText = '';
+            let strengthClass = '';
+            
+            switch(strength) {
+                case 0:
+                case 1:
+                    strengthText = 'Weak';
+                    strengthClass = 'weak';
+                    break;
+                case 2:
+                case 3:
+                    strengthText = 'Medium';
+                    strengthClass = 'medium';
+                    break;
+                case 4:
+                    strengthText = 'Strong';
+                    strengthClass = 'strong';
+                    break;
+                case 5:
+                    strengthText = 'Very Strong';
+                    strengthClass = 'very-strong';
+                    break;
+            }
+
+            strengthMeter.className = 'password-strength-meter ' + strengthClass;
+            strengthMeter.innerHTML = `
+                <div class="strength-text">${strengthText}</div>
+                ${feedback.length ? `<div class="feedback">Add: ${feedback.join(', ')}</div>` : ''}
+            `;
+        });
+    }
+
+    // Confirm password validation
+    if (newPasswordInput && confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', function() {
+            if (this.value !== newPasswordInput.value) {
+                this.setCustomValidity('Passwords do not match');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+
+    // Form validation
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+});
+</script>
+
+<style>
+.security-page {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.security-section {
+    margin-bottom: 2rem;
+}
+
+.security-section h2 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.password-strength-meter {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.password-strength-meter.weak { background-color: #ffebee; }
+.password-strength-meter.medium { background-color: #fff3e0; }
+.password-strength-meter.strong { background-color: #e8f5e9; }
+.password-strength-meter.very-strong { background-color: #e8f5e9; }
+
+.strength-text {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.feedback {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.table-responsive {
+    margin: 1rem 0;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    border-radius: 4px;
+}
+
+.custom-switch {
+    padding-left: 2.25rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn {
+    margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .security-page {
+        padding: 0;
+    }
+    
+    .card {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        margin: 0.5rem 0;
+    }
+}
+</style>

@@ -77,6 +77,14 @@
     transform: none;
 }
 
+@media (max-width: 480px){
+    .btn {
+        width: 100%;
+        max-width: none !important;
+        justify-content: center;
+    }
+}
+
 .input-group input {
     width: 100% !important;
     padding: 15px 20px;
@@ -205,7 +213,10 @@
             <div class="invalid-feedback">Please write your bio.</div>
         </div>
 
-        <button type="submit" class="btn btn-outline-primary mt-4">Update Profile</button>
+       <div class="mt-4 gap-3 d-flex justify-content-end">
+         <button type="submit" id="update-lawyer-form-close-btn" class="btn btn-danger ">Close</button>
+        <button type="submit" class="btn btn-success ">Update Profile</button>
+       </div>
     </form>
 </div>
 
@@ -268,4 +279,8 @@
         });
     });
 })();
+
+document.getElementById('update-lawyer-form-close-btn').addEventListener('click', () => {
+    window.history.back();
+});
 </script>
