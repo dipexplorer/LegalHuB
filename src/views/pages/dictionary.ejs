@@ -72,6 +72,58 @@
             box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
         }
 
+        /* 🔧 Share popover (dark themed, anchored) */
+        .share-wrap { position: relative; display: inline-block; }
+        .share-btn {
+            background: transparent;
+            border: none;
+            color: #7b1fa2;
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 6px 8px;
+        }
+
+        .share-popover {
+            position: absolute;
+            min-width: 260px;
+            right: 0;
+            top: 36px; /* slightly below the icon */
+            background: #0f1724; /* dark theme */
+            color: #e6e6ea;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.04);
+            z-index: 1200;
+            display: none;
+            font-family: inherit;
+        }
+
+        .share-popover.show { display: block; }
+
+        .share-popover .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .share-popover .header h4 { margin: 0; font-size: 0.98rem; color: #fff; }
+        .share-popover .header .close { background: transparent; border: none; color: #c7c7d0; cursor: pointer; font-size: 1rem; }
+
+        .share-popover .term { font-weight: 700; color: var(--primary, #7b1fa2); margin-top: 6px; margin-bottom: 8px; }
+
+        .share-popover .url-row { display:flex; gap:8px; align-items:center; }
+        .share-popover input.share-url {
+            flex:1; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); color: #e6e6ea; padding:8px 10px; border-radius:6px; font-size:0.9rem;
+        }
+
+        .share-popover .copy-btn {
+            background: var(--primary, #7b1fa2); color: white; border: none; padding: 8px 10px; border-radius:6px; cursor:pointer; font-size:0.9rem;
+        }
+
+        .share-popover .copy-btn.copied { background: #22c55e; }
+
         .hidden {
             display: none;
         }
@@ -112,7 +164,25 @@
                 <button type="submit">Search</button>
             </form>
             <div id="result" class="hidden">
-                <h2 class="term-title">Result:</h2>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                    <h2 class="term-title">Result:</h2>
+                    <div class="share-wrap" id="shareWrap" style="margin-left:auto;">
+                        <button class="share-btn" id="openShare" aria-haspopup="true" aria-expanded="false" aria-label="Share result">🔗 Share</button>
+
+                        <div class="share-popover" id="sharePopover" role="dialog" aria-modal="false" aria-label="Share result popover">
+                            <div class="header">
+                                <h4>Share Legal Definition</h4>
+                                <button class="close" id="closeShare" aria-label="Close">✕</button>
+                            </div>
+                            <div class="term">Term: <span id="shareTerm" style="font-weight:700;color:var(--primary,#7b1fa2)"></span></div>
+                            <div class="url-row">
+                                <input type="text" readonly class="share-url" id="shareUrl" aria-label="Shareable URL" />
+                                <button class="copy-btn" id="copyShareBtn">Copy Link</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <p id="term-definition">Searching...</p>
             </div>
         </div>
@@ -146,4 +216,77 @@
                 console.error('Error:', error);
             }
         });
+
+        // --- Share popover logic ---
+        const openShare = document.getElementById('openShare');
+        const sharePopover = document.getElementById('sharePopover');
+        const closeShare = document.getElementById('closeShare');
+        const shareUrlInput = document.getElementById('shareUrl');
+        const shareTermSpan = document.getElementById('shareTerm');
+        const copyShareBtn = document.getElementById('copyShareBtn');
+        const shareWrap = document.getElementById('shareWrap');
+
+        function updateShareContent(term) {
+            const url = `${window.location.origin}/dictionary?term=${encodeURIComponent(term)}`;
+            shareUrlInput.value = url;
+            shareTermSpan.textContent = term;
+        }
+
+        function togglePopover(show) {
+            if (show) {
+                sharePopover.classList.add('show');
+                openShare.setAttribute('aria-expanded', 'true');
+                // ensure popover doesn't go off-screen on the right
+                const rect = sharePopover.getBoundingClientRect();
+                if (rect.right > window.innerWidth) {
+                    sharePopover.style.left = 'auto';
+                    sharePopover.style.right = '0';
+                }
+            } else {
+                sharePopover.classList.remove('show');
+                openShare.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        openShare?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const term = input.value.trim() || document.getElementById('term-definition')?.dataset?.term || input.value.trim();
+            if (!term) return;
+            updateShareContent(term);
+            togglePopover(!sharePopover.classList.contains('show'));
+        });
+
+        closeShare?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePopover(false);
+        });
+
+        // click outside closes
+        document.addEventListener('click', (e) => {
+            if (!shareWrap.contains(e.target)) togglePopover(false);
+        });
+
+        // Escape key closes
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') togglePopover(false);
+        });
+
+        // copy to clipboard with feedback
+        copyShareBtn?.addEventListener('click', async function () {
+            const originalText = this.textContent;
+            try {
+                await navigator.clipboard.writeText(shareUrlInput.value);
+                this.textContent = 'Copied!';
+                this.classList.add('copied');
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+                this.textContent = 'Failed';
+                setTimeout(() => (this.textContent = originalText), 2000);
+            }
+        });
+
     </script>
