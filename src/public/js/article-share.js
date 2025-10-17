@@ -1,4 +1,4 @@
-// src/public/js/article-share.js
+﻿// src/public/js/article-share.js - Improved popover share functionality
 (() => {
   const ready = (fn) => {
     if (document.readyState === 'loading') {
@@ -10,14 +10,13 @@
 
   ready(() => {
     const shareBtn = document.getElementById('shareBtn');
-    const dialog = document.getElementById('shareDialog');
+    const popover = document.getElementById('sharePopover');
     const closeBtn = document.getElementById('shareCloseBtn');
     const copyBtn = document.getElementById('copyLinkBtn');
     const whatsapp = document.getElementById('whatsappShare');
-    const nativeBtn = document.querySelector('[data-action="native"]');
-    const articleContainer = document.querySelector('.article_container');
+    const nativeShareBtn = document.getElementById('nativeShareBtn');
 
-    if (!shareBtn || !dialog) return;
+    if (!shareBtn || !popover) return;
 
     const pageUrl = window.location.href;
     const title =
@@ -25,105 +24,120 @@
       (document.querySelector('h1') && document.querySelector('h1').innerText) ||
       '';
 
-    // Safe set WhatsApp href
+    // Check if Web Share API is available and show native share button
+    if (navigator.share && nativeShareBtn) {
+      nativeShareBtn.style.display = 'flex';
+    }
+
+    // Set WhatsApp href
     if (whatsapp) {
       whatsapp.href = `https://wa.me/?text=${encodeURIComponent(title + ' ' + pageUrl)}`;
     }
 
-    let lastFocused = null;
+    let isOpen = false;
 
-    function openDialog() {
-      lastFocused = document.activeElement;
-      dialog.removeAttribute('hidden');
-      // mark background as hidden for assistive tech
-      if (articleContainer) articleContainer.setAttribute('aria-hidden', 'true');
+    // Position popover relative to Share button
+    function positionPopover() {
+      const btnRect = shareBtn.getBoundingClientRect();
+      const panel = popover.querySelector('.share-popover-panel');
+      
+      if (!panel) return;
 
-      const panel = dialog.querySelector('.share-dialog-panel');
-      const focusable = getFocusable(panel);
-      if (focusable.length) focusable[0].focus();
-      else if (panel) panel.focus();
+      // Position below the button with a small gap
+      const gap = 8;
+      const top = btnRect.bottom + gap;
+      const left = btnRect.left;
 
-      document.body.style.overflow = 'hidden';
-      document.addEventListener('focus', enforceFocus, true);
-    }
+      popover.style.position = 'fixed';
+      popover.style.top = `${top}px`;
+      popover.style.left = `${left}px`;
 
-    function closeDialog() {
-      dialog.setAttribute('hidden', '');
-      if (articleContainer) articleContainer.removeAttribute('aria-hidden');
-      document.body.style.overflow = '';
-      document.removeEventListener('focus', enforceFocus, true);
-      if (lastFocused && typeof lastFocused.focus === 'function') {
-        try { lastFocused.focus({ preventScroll: true }); } catch { lastFocused.focus(); }
+      // Ensure popover doesn't go off-screen
+      const popoverRect = panel.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+
+      if (popoverRect.right > viewportWidth - 16) {
+        // Adjust to align with right edge of button
+        popover.style.left = 'auto';
+        popover.style.right = `${viewportWidth - btnRect.right}px`;
       }
     }
 
-    // Keep focus inside dialog (simple trap)
-    function enforceFocus(e) {
-      if (!dialog.hasAttribute('hidden') && !dialog.contains(e.target)) {
-        e.stopPropagation();
-        const panel = dialog.querySelector('.share-dialog-panel');
-        const focusable = getFocusable(panel);
-        if (focusable.length) focusable[0].focus();
-        else if (panel) panel.focus();
+    function openPopover() {
+      isOpen = true;
+      popover.removeAttribute('hidden');
+      shareBtn.setAttribute('aria-expanded', 'true');
+      positionPopover();
+
+      // Focus first interactive element
+      setTimeout(() => {
+        const firstFocusable = popover.querySelector('button, a');
+        if (firstFocusable) firstFocusable.focus();
+      }, 100);
+
+      // Add click-outside listener
+      setTimeout(() => {
+        document.addEventListener('click', handleClickOutside);
+      }, 0);
+    }
+
+    function closePopover() {
+      if (!isOpen) return;
+      isOpen = false;
+      popover.setAttribute('hidden', '');
+      shareBtn.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', handleClickOutside);
+      shareBtn.focus();
+    }
+
+    function handleClickOutside(e) {
+      if (!popover.contains(e.target) && !shareBtn.contains(e.target)) {
+        closePopover();
       }
     }
 
-    // Get focusable elements inside container
-    function getFocusable(container) {
-      if (!container) return [];
-      return Array.from(
-        container.querySelectorAll(
-          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-        )
-      ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
-    }
-
-    // Events
+    // Toggle popover on Share button click
     shareBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      openDialog();
-    });
-
-    if (closeBtn) closeBtn.addEventListener('click', closeDialog);
-
-    // Backdrop click closes
-    dialog.addEventListener('click', (e) => {
-      if (e.target && e.target.classList.contains('share-dialog-backdrop')) {
-        closeDialog();
+      e.stopPropagation();
+      if (isOpen) {
+        closePopover();
+      } else {
+        openPopover();
       }
     });
 
-    // Escape to close + handle Tab cycling
-    dialog.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeDialog();
-      } else if (e.key === 'Tab') {
-        // manual tab trapping
-        const panel = dialog.querySelector('.share-dialog-panel');
-        const focusable = getFocusable(panel);
-        if (focusable.length === 0) {
-          e.preventDefault();
-          return;
-        }
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
+    // Close button
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closePopover();
+      });
+    }
+
+    // Escape key to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        closePopover();
       }
     });
 
-    // Copy link
+    // Reposition on window resize
+    window.addEventListener('resize', () => {
+      if (isOpen) {
+        positionPopover();
+      }
+    });
+
+    // Copy link functionality
     if (copyBtn) {
-      copyBtn.addEventListener('click', async () => {
+      copyBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
         try {
           if (navigator.clipboard && navigator.clipboard.writeText) {
             await navigator.clipboard.writeText(pageUrl);
-            showToast('Link copied to clipboard');
+            showCopyFeedback(copyBtn);
+            showToast('✓ Link copied to clipboard');
           } else {
             fallbackCopyPrompt(pageUrl);
           }
@@ -133,46 +147,121 @@
       });
     }
 
-    // Native Share API
-    if (nativeBtn) {
-      nativeBtn.addEventListener('click', async () => {
-        if (navigator.share) {
-          try {
-            await navigator.share({ title, url: pageUrl });
-            closeDialog();
-          } catch (err) {
-            // user cancelled or error
-            showToast('Share was cancelled or failed');
+    // Native share functionality (Web Share API)
+    if (nativeShareBtn) {
+      nativeShareBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          await navigator.share({
+            title: title,
+            text: `Check out this article: ${title}`,
+            url: pageUrl
+          });
+          showToast('✓ Shared successfully');
+          closePopover();
+        } catch (err) {
+          // User cancelled or share failed
+          if (err.name !== 'AbortError') {
+            console.error('Share failed:', err);
+            showToast('❌ Share failed');
           }
-        } else {
-          showToast('Native share not supported on this device');
         }
       });
     }
 
-    // Minimal toast (self-contained)
-    function showToast(msg) {
-      const t = document.createElement('div');
-      t.className = 'quick-toast';
-      t.textContent = msg;
-      document.body.appendChild(t);
-      requestAnimationFrame(() => t.classList.add('visible'));
+    // Visual feedback for copy button
+    function showCopyFeedback(button) {
+      const originalText = button.innerHTML;
+      button.innerHTML = `
+        <svg class="share-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Copied!
+      `;
+      button.style.borderColor = '#10b981';
+      button.style.color = '#10b981';
+
       setTimeout(() => {
-        t.classList.remove('visible');
-        setTimeout(() => t.remove(), 300);
-      }, 2800);
+        button.innerHTML = originalText;
+        button.style.borderColor = '';
+        button.style.color = '';
+      }, 2000);
     }
 
+    // Fallback copy method
     function fallbackCopyPrompt(text) {
-      // Prompt fallback
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
       try {
-        const result = window.prompt('Copy this link', text);
-        if (result !== null) {
-          showToast('Link copied (manual)');
-        }
-      } catch {
-        showToast('Unable to copy link');
+        document.execCommand('copy');
+        showToast(' Link copied to clipboard');
+      } catch (err) {
+        prompt('Copy this link:', text);
       }
+      document.body.removeChild(textarea);
+    }
+
+    // Toast notification
+    function showToast(message) {
+      const existingToast = document.querySelector('.quick-toast');
+      if (existingToast) existingToast.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'quick-toast';
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.85);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        z-index: 9999;
+        animation: toastSlideUp 0.3s ease-out;
+      `;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'toastSlideDown 0.3s ease-in forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // Add animation styles
+    if (!document.getElementById('toast-animations')) {
+      const style = document.createElement('style');
+      style.id = 'toast-animations';
+      style.textContent = `
+        @keyframes toastSlideUp {
+          from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+        @keyframes toastSlideDown {
+          from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(12px);
+          }
+        }
+      `;
+      document.head.appendChild(style);
     }
   });
 })();

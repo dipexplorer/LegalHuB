@@ -882,34 +882,164 @@ nav {
     }
 }
 
-/* === Article share dialog styles === */
-.share-dialog[hidden]{ display:none; }
-.share-dialog { position: fixed; inset: 0; z-index: 1200; font-family: inherit; }
-.share-dialog-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
-.share-dialog-panel {
+/* === Article share popover styles === */
+.share-popover[hidden] { display: none; }
+.share-popover {
+  position: absolute;
+  z-index: 1200;
+  font-family: inherit;
+}
+
+.share-popover-panel {
   position: relative;
-  max-width: 420px;
-  margin: 6vh auto;
-  background: #fff;
+  min-width: 260px;
+  background: var(--card-background, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
   padding: 16px;
-  border-radius: 10px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  outline: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.08);
+  animation: popoverSlideIn 0.2s ease-out;
 }
-.share-options { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+
+@keyframes popoverSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.share-popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.share-popover-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text, #1f2937);
+}
+
+.share-popover-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #6b7280);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.share-popover-close:hover {
+  background: var(--glass, rgba(0, 0, 0, 0.05));
+  color: var(--text, #1f2937);
+}
+
+.share-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .share-option {
-  display:inline-block;
-  padding:10px 12px;
-  border-radius:8px;
-  border:1px solid #e2e2e2;
-  background: #fff;
-  text-align:center;
-  cursor:pointer;
-  text-decoration:none;
-  color: inherit;
-  font-size:0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e5e7eb);
+  background: var(--card-background, #ffffff);
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text, #1f2937);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
-.share-option:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+
+.share-option:hover {
+  background: var(--glass, rgba(0, 0, 0, 0.03));
+  border-color: var(--primary, #4f46e5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.share-option:active {
+  transform: translateY(0);
+}
+
+.share-icon {
+  flex-shrink: 0;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .share-popover-panel {
+    background: var(--card-background, #1f2937);
+    border-color: var(--border, #374151);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .share-popover-header {
+    border-bottom-color: var(--border, #374151);
+  }
+
+  .share-popover-title {
+    color: var(--text, #f9fafb);
+  }
+
+  .share-popover-close {
+    color: var(--text-muted, #9ca3af);
+  }
+
+  .share-popover-close:hover {
+    background: var(--glass, rgba(255, 255, 255, 0.1));
+    color: var(--text, #f9fafb);
+  }
+
+  .share-option {
+    background: var(--card-background, #1f2937);
+    border-color: var(--border, #374151);
+    color: var(--text, #f9fafb);
+  }
+
+  .share-option:hover {
+    background: var(--glass, rgba(255, 255, 255, 0.05));
+    border-color: var(--primary, #6366f1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .share-popover-panel {
+    min-width: 240px;
+  }
+
+  .share-popover-title {
+    font-size: 0.9rem;
+  }
+
+  .share-option {
+    font-size: 0.85rem;
+    padding: 9px 10px;
+  }
+}
 
 /* small toast used by share script */
 .quick-toast {
