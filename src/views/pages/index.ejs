@@ -67,7 +67,7 @@
                 </button>
             </form>
             <div id="result" class="hidden">
-                <h2 id="responseResult" class="term-title">Result :</h2>
+                <h2 class="term-title">Result:</h2>
                 <p id="term-definition">Searching...</p>
             </div>
         </div>
@@ -378,7 +378,6 @@
 <script>
     const form = document.getElementById("search-form");
     const input = document.getElementById("term-input");
-    const responseResult = document.getElementById("responseResult");
     const resultContainer = document.getElementById("result");
     const definition = document.getElementById("term-definition");
 
@@ -386,7 +385,7 @@
         e.preventDefault();
         const term = input.value.trim();
         if (!term) return;
-        responseResult.innerText = `Result for "${term}":`;
+
         definition.innerText = "🔎 Searching...";
         resultContainer.classList.remove("hidden");
         resultContainer.classList.add("show");
@@ -394,13 +393,11 @@
         try {
             const res = await fetch(`/api/dictionary/${term}`);
             const data = await res.json();
+
             if (data.success) {
-                const def = data.data.structured.definition;
-                definition.innerHTML = def || "❌ Term not found";
-                return;
+                definition.innerHTML = data.data.response; // use innerHTML for formatted content
             } else {
-                definition.innerHTML = `<span style="color:red;">❌ Error: ${data.message ||
-                    "Definition not found"}</span>`;
+                definition.innerHTML = `<span style="color:red;">❌ Error: ${data.msg}</span>`;
             }
         } catch (error) {
             definition.innerText = "❌ Failed to fetch result. Try again!";
