@@ -6,24 +6,27 @@
     <div class="hero-section">
         <main class="hero">
             <div class="hero-content">
-                <div class="tagline">
-                    <i class="fa-solid fa-scale-balanced"></i> LegalHub
-                </div>
+                <div class="tagline"><i class="fa-solid fa-scale-balanced"></i> LegalHub</div>
                 <h1 class="hero-top__title reveal hero-animate">Clarity. Counsel. Confidence.</h1>
-                <p class="hero-top__subtitle reveal hero-animate">LegalHub turns complex legal jargon into clear answers, connects you to verified lawyers, and provides templates and guides tailored for India.</p>
+                <p class="hero-top__subtitle reveal hero-animate">
+                    LegalHub turns complex legal jargon into clear answers, connects you to verified
+                    lawyers, and provides templates and guides tailored for India.
+                </p>
                 <div class="action-buttons">
                     <a href="/articles" class="btn btn-primary">📚 Get Started →</a>
-                    <a href="/lawyers" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i> Find a Lawyer</a>
+                    <a href="/lawyers" class="btn btn-secondary"
+                        ><i class="fa-solid fa-magnifying-glass"></i> Find a Lawyer</a
+                    >
                 </div>
                 <div class="hero-top__stats">
-                  <div class="stat">
-                    <div class="stat__value">250k+</div>
-                    <div class="stat__label">terms & resources</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat__value">3.9k+</div>
-                    <div class="stat__label">verified lawyers</div>
-                  </div>
+                    <div class="stat">
+                        <div class="stat__value">250k+</div>
+                        <div class="stat__label">terms & resources</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat__value">3.9k+</div>
+                        <div class="stat__label">verified lawyers</div>
+                    </div>
                 </div>
             </div>
 
@@ -42,309 +45,363 @@
         </main>
     </div>
 
-  <!-- Hero + Dictionary -->
-  <section class="hero-dic">
-    <h1 class="hero-title reveal">⚖️ Empower Yourself with Legal Knowledge</h1>
-    <p class="lead reveal">
-      We simplify complex laws and empower individuals with the right legal tools to protect their rights and
-      make informed decisions in today's complex legal landscape.
-    </p>
-    <h2 class="title">📖 Legal Dictionary</h2>
-    <div class="dic_container reveal">
-      <form id="search-form" class="search-form">
-        <input type="text" id="term-input" class="search-input" placeholder="Enter a legal term (e.g., 'habeas corpus', 'tort law')..." required />
-        <button type="submit" id="search-button" class="search-btn">
-          <span class="search-icon">🔎</span>
-          <span>Search</span>
-        </button>
-      </form>
-      <div id="result" class="hidden">
-        <h2 class="term-title">Result:</h2>
-        <p id="term-definition">Searching...</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Top-Rated Lawyers -->
-  <section class="lawyer-section">
-    <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
-    <p class="subheading">Connect with verified experts in your area</p>
-
-    <div class="lawyer-grid">
-      <% lawyers.forEach(lawyer => { %>
-        <article class="lawyer-card">
-          <div class="lawyer-header">
-            <img 
-              src="<%= lawyer.photo || '/pic/profile.jpg' %>" 
-              alt="<%= lawyer.name %>" 
-              class="lawyer-photo" 
-            />
-            <div class="lawyer-info">
-              <h3><%= lawyer.name %></h3>
-              <p class="specialization"><%= lawyer.lawyerProfile?.specialization || 'No specialization' %></p>
-              <% if (lawyer.lawyerProfile?.isVerified) { %>
-                <span class="verified-badge">✔ Verified</span>
-              <% } else { %>
-                <span class="small-badge">Unverified</span>
-              <% } %>
+    <!-- Hero + Dictionary -->
+    <section class="hero-dic">
+        <h1 class="hero-title reveal">⚖️ Empower Yourself with Legal Knowledge</h1>
+        <p class="lead reveal">
+            We simplify complex laws and empower individuals with the right legal tools to protect
+            their rights and make informed decisions in today's complex legal landscape.
+        </p>
+        <h2 class="title">📖 Legal Dictionary</h2>
+        <div class="dic_container reveal">
+            <form id="search-form" class="search-form">
+                <input
+                    type="text"
+                    id="term-input"
+                    class="search-input"
+                    placeholder="Enter a legal term (e.g., 'habeas corpus', 'tort law')..."
+                    required />
+                <button type="submit" id="search-button" class="search-btn">
+                    <span class="search-icon">🔎</span>
+                    <span>Search</span>
+                </button>
+            </form>
+            <div id="result" class="hidden">
+                <h2 class="term-title">Result:</h2>
+                <p id="term-definition">Searching...</p>
             </div>
-          </div>
-          <p class="experience">Experience: <%= lawyer.lawyerProfile?.experience || 'N/A' %> years</p>
-          <p class="location">State: <%= lawyer.lawyerProfile?.state || 'N/A' %></p>
-          <p class="rating">⭐ <%= lawyer.lawyerProfile?.rating ? lawyer.lawyerProfile.rating.toFixed(1) : '—' %> / 5.0</p>
-          <div class="lawyer-actions">
-            <a href="/lawyers/<%= lawyer._id %>" class="contact-btn">📩 Connect</a>
-          </div>
-        </article>
-      <% }) %>
-    </div>
-
-    <div class="lawyer-action">
-      <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
-    </div>
-  </section>
-  
-  <!-- Quick Links -->
-  <section class="legal-hub-section">
-    <div class="gradient-overlay"></div>
-    <div class="legal-hub-container">
-      <h2 class="legal-hub-title">Complete Legal Resource Hub</h2>
-      <p class="legal-hub-subtitle">
-        Everything you need for legal research, documentation, and professional connections
-      </p>
-
-      <div class="legal-hub-grid">
-        <a href="/dictionary" class="legal-hub-item blue">
-          <div class="item-bg"></div>
-          <div class="item-icon">📖</div>
-          <span class="item-label">Dictionary</span>
-          <span class="item-desc">10K+ Terms</span>
-        </a>
-
-        <a href="/documents" class="legal-hub-item green">
-          <div class="item-bg"></div>
-          <div class="item-icon">📄</div>
-          <span class="item-label">Documents</span>
-          <span class="item-desc">2.5K+ Forms</span>
-        </a>
-
-        <a href="/articles" class="legal-hub-item purple">
-          <div class="item-bg"></div>
-          <div class="item-icon">📘</div>
-          <span class="item-label">Articles</span>
-          <span class="item-desc">Expert Guides</span>
-        </a>
-
-        <a href="/rights" class="legal-hub-item red">
-          <div class="item-bg"></div>
-          <div class="item-icon">🛡️</div>
-          <span class="item-label">Rights</span>
-          <span class="item-desc">Know Your Rights</span>
-        </a>
-
-        <a href="/#FAQs" class="legal-hub-item yellow">
-          <div class="item-bg"></div>
-          <div class="item-icon">❓</div>
-          <span class="item-label">Q&amp;A</span>
-          <span class="item-desc">Get Answers</span>
-        </a>
-
-        <a href="/lawyers" class="legal-hub-item indigo">
-          <div class="item-bg"></div>
-          <div class="item-icon">👥</div>
-          <span class="item-label">Lawyers</span>
-          <span class="item-desc">500+ Verified</span>
-        </a>
-
-        <a href="/account" class="legal-hub-item gray">
-          <div class="item-bg"></div>
-          <div class="item-icon">👤</div>
-          <span class="item-label">Profile</span>
-          <span class="item-desc">Your Account</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contributors Teaser -->
-<section class="contributors-teaser">
-  <h2>🙏 Thanks to Our Contributors</h2>
-  <p class="subheading">Community members building LegalHuB together</p>
-
-  <div class="contributors-slider">
-    <div class="slider-fog left-fog"></div>
-    <button class="slider-arrow left">&#8592;</button>
-
-    <div class="slider-track" id="sliderTrack"></div>
-
-    <button class="slider-arrow right">&#8594;</button>
-    <div class="slider-fog right-fog"></div>
-  </div>
-
-  <div class="lawyer-action">
-    <a href="/contributors" class="view-all-btn">View All Contributors →</a>
-  </div>
-  <script type="application/json" id="contributorsData">
-  <%= JSON.stringify(contributorsTop || []) %>
-</script>
-  <script>
-    const contributors = <%- JSON.stringify(contributorsTop || []) %>;
-    const track = document.getElementById('sliderTrack');
-    const leftBtn = document.querySelector('.slider-arrow.left');
-    const rightBtn = document.querySelector('.slider-arrow.right');
-
-    let currentIndex = 0;
-    const visibleCards = 7;
-
-    function renderSlider() {
-      track.innerHTML = '';
-      const total = contributors.length;
-
-      for (let i = 0; i < visibleCards; i++) {
-        const realIndex = (currentIndex + i) % total;
-        const c = contributors[realIndex];
-
-        const card = document.createElement('a');
-        card.className = 'contrib-pill' + (i === Math.floor(visibleCards / 2) ? ' middle' : '');
-        card.href = c.html_url;
-        card.target = '_blank';
-        card.rel = 'noopener';
-        card.innerHTML = `
-          <img src="${c.avatar_url}" alt="${c.login}" />
-          <span>@${c.login}</span>
-          <div style="margin-top:6px; font-size: 0.9rem; color:#666;">🧩 ${c.contributions} contributions</div>
-        `;
-        track.appendChild(card);
-      }
-    }
-
-    function scrollRight() {
-      currentIndex = (currentIndex + 1) % contributors.length;
-      renderSlider();
-    }
-
-    function scrollLeft() {
-      currentIndex = (currentIndex - 1 + contributors.length) % contributors.length;
-      renderSlider();
-    }
-
-    leftBtn.addEventListener('click', scrollLeft);
-    rightBtn.addEventListener('click', scrollRight);
-    setInterval(scrollRight, 3000);
-    window.addEventListener('load', renderSlider);
-  </script>
-</section>
-
-  <!-- FAQ Section -->
-  <div class="container faq-container" id="faq">
-    <div class="faq-left">
-      <h2>Frequently Asked Questions</h2>
-      <p>
-        Get answers to all your legal queries!
-        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" alt="🤔" width="28" height="28">
-        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.gif" alt="✨" width="28" height="28">
-      </p>
-      <div class="contact-info">
-        <span><i class="fas fa-envelope"></i> Have more questions?</span>
-        <a href="mailto:support@legalhub.com">support@legalhub.com</a>
-      </div>
-    </div>
-
-    <div class="faq-right">
-      <div class="faq-item">
-        <h3>What is LegalHub and how does it work? <i class="fas fa-chevron-down"></i></h3>
-        <div class="faq-answer">
-          <p>LegalHub is an online platform providing free access to legal resources, forms, and guides. You can explore state-specific legal forms and understand legal terms easily. 🏛️</p>
         </div>
-      </div>
+    </section>
 
-      <div class="faq-item">
-        <h3>Can I download legal forms from LegalHub? <i class="fas fa-chevron-down"></i></h3>
-        <div class="faq-answer">
-          <p>Yes! LegalHub allows you to download state-specific legal forms directly from our database. You can also find instructions on how to fill them correctly. 📄</p>
+    <!-- Top-Rated-Lawyers -->
+    <section class="lawyer-section">
+        <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
+        <p class="subheading">Connect with verified experts in your area</p>
+        <div class="lawyer-grid">
+            <% lawyers.forEach(lawyer => { %>
+            <article class="lawyer-card">
+                <!-- Verified Badge -->
+                <% if (lawyer.lawyerProfile?.isVerified) { %>
+                <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                <% } else { %>
+                <span class="small-badge"
+                    ><i class="fas fa-exclamation-triangle"></i>Unverified</span
+                >
+                <% } %>
+                <div class="lawyer-header">
+                    <img
+                        src="<%= lawyer.photo || '/pic/profile.jpg' %>"
+                        alt="Photo of <%= lawyer.name %>"
+                        class="lawyer-photo" />
+                    <div class="lawyer-info">
+                        <h3><%= lawyer.name %></h3>
+                        <p class="specialization">
+                            <%= lawyer.lawyerProfile?.specialization || 'No specialization' %>
+                        </p>
+                        <div class="rating">
+                            <% const actualRating = lawyer.lawyerProfile?.rating; const rating =
+                            (typeof actualRating === 'number' && actualRating > 0) ?
+                            Math.floor(actualRating) : 5; %>
+                            <div class="rating-stars">
+                                <% for (let i = 1; i <= 5; i++) { %>
+                                <span class="star <%= i <= rating ? 'filled' : 'empty' %>">★</span>
+                                <% } %>
+                                <div class="rating-value"><%= rating %> / 5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lawyer-details">
+                    <p>
+                        <strong>Experience:</strong> <%= lawyer.lawyerProfile?.experience || 'N/A'
+                        %> years
+                    </p>
+                    <p><strong>State:</strong> <%= lawyer.lawyerProfile?.state || 'N/A' %></p>
+                </div>
+                <div class="lawyer-actions">
+                    <a href="/lawyers/<%= lawyer._id %>" class="contact-btn">📩 Connect</a>
+                </div>
+            </article>
+            <% }) %>
         </div>
-      </div>
 
-      <div class="faq-item">
-        <h3>How can I search for specific legal terms? <i class="fas fa-chevron-down"></i></h3>
-        <div class="faq-answer">
-          <p>You can use the smart search feature to look up legal terms. The integrated AI will provide detailed explanations and related resources. 🔍</p>
+        <div class="lawyer-action">
+            <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
         </div>
-      </div>
+    </section>
 
-      <div class="faq-item">
-        <h3>Is the information on LegalHub accurate and up-to-date? <i class="fas fa-chevron-down"></i></h3>
-        <div class="faq-answer">
-          <p>Yes. We source information from verified legal authorities and update it regularly to reflect the latest legal changes. ✅</p>
-        </div>
-      </div>
+    <!-- Quick Links -->
+    <section class="legal-hub-section">
+        <div class="gradient-overlay"></div>
+        <div class="legal-hub-container">
+            <h2 class="legal-hub-title">Complete Legal Resource Hub</h2>
+            <p class="legal-hub-subtitle">
+                Everything you need for legal research, documentation, and professional connections
+            </p>
 
-      <div class="faq-item">
-        <h3>Is LegalHub free to use? <i class="fas fa-chevron-down"></i></h3>
-        <div class="faq-answer">
-          <p>Absolutely! LegalHub is completely free to use, and you can access all resources without signing up. 🎯</p>
+            <div class="legal-hub-grid">
+                <a href="/dictionary" class="legal-hub-item blue">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">📖</div>
+                    <span class="item-label">Dictionary</span>
+                    <span class="item-desc">10K+ Terms</span>
+                </a>
+
+                <a href="/documents" class="legal-hub-item green">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">📄</div>
+                    <span class="item-label">Documents</span>
+                    <span class="item-desc">2.5K+ Forms</span>
+                </a>
+
+                <a href="/articles" class="legal-hub-item purple">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">📘</div>
+                    <span class="item-label">Articles</span>
+                    <span class="item-desc">Expert Guides</span>
+                </a>
+
+                <a href="/rights" class="legal-hub-item red">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">🛡️</div>
+                    <span class="item-label">Rights</span>
+                    <span class="item-desc">Know Your Rights</span>
+                </a>
+
+                <a href="/#FAQs" class="legal-hub-item yellow">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">❓</div>
+                    <span class="item-label">Q&amp;A</span>
+                    <span class="item-desc">Get Answers</span>
+                </a>
+
+                <a href="/lawyers" class="legal-hub-item indigo">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">👥</div>
+                    <span class="item-label">Lawyers</span>
+                    <span class="item-desc">500+ Verified</span>
+                </a>
+
+                <a href="/account" class="legal-hub-item gray">
+                    <div class="item-bg"></div>
+                    <div class="item-icon">👤</div>
+                    <span class="item-label">Profile</span>
+                    <span class="item-desc">Your Account</span>
+                </a>
+            </div>
         </div>
-      </div>
+    </section>
+
+    <!-- Contributors Teaser -->
+    <section class="contributors-teaser">
+        <h2>🙏 Thanks to Our Contributors</h2>
+        <p class="subheading">Community members building LegalHuB together</p>
+
+        <div class="contributors-slider">
+            <div class="slider-fog left-fog"></div>
+            <button class="slider-arrow left">&#8592;</button>
+
+            <div class="slider-track" id="sliderTrack"></div>
+
+            <button class="slider-arrow right">&#8594;</button>
+            <div class="slider-fog right-fog"></div>
+        </div>
+
+        <div class="lawyer-action">
+            <a href="/contributors" class="view-all-btn">View All Contributors →</a>
+        </div>
+        <script type="application/json" id="contributorsData">
+            <%= JSON.stringify(contributorsTop || []) %>
+        </script>
+        <script>
+            const contributors = <%- JSON.stringify(contributorsTop || []) %>;
+            const track = document.getElementById('sliderTrack');
+            const leftBtn = document.querySelector('.slider-arrow.left');
+            const rightBtn = document.querySelector('.slider-arrow.right');
+
+            let currentIndex = 0;
+            const visibleCards = 7;
+
+            function renderSlider() {
+              track.innerHTML = '';
+              const total = contributors.length;
+
+              for (let i = 0; i < visibleCards; i++) {
+                const realIndex = (currentIndex + i) % total;
+                const c = contributors[realIndex];
+
+                const card = document.createElement('a');
+                card.className = 'contrib-pill' + (i === Math.floor(visibleCards / 2) ? ' middle' : '');
+                card.href = c.html_url;
+                card.target = '_blank';
+                card.rel = 'noopener';
+                card.innerHTML = `
+                  <img src="${c.avatar_url}" alt="${c.login}" />
+                  <span>@${c.login}</span>
+                  <div style="margin-top:6px; font-size: 0.9rem; color:#666;">🧩 ${c.contributions} contributions</div>
+                `;
+                track.appendChild(card);
+              }
+            }
+
+            function scrollRight() {
+              currentIndex = (currentIndex + 1) % contributors.length;
+              renderSlider();
+            }
+
+            function scrollLeft() {
+              currentIndex = (currentIndex - 1 + contributors.length) % contributors.length;
+              renderSlider();
+            }
+
+            leftBtn.addEventListener('click', scrollLeft);
+            rightBtn.addEventListener('click', scrollRight);
+            setInterval(scrollRight, 3000);
+            window.addEventListener('load', renderSlider);
+        </script>
+    </section>
+
+    <!-- FAQ Section -->
+    <div class="container faq-container" id="faq">
+        <div class="faq-left">
+            <h2>Frequently Asked Questions</h2>
+            <p>
+                Get answers to all your legal queries!
+                <img
+                    src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif"
+                    alt="🤔"
+                    width="28"
+                    height="28" />
+                <img
+                    src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.gif"
+                    alt="✨"
+                    width="28"
+                    height="28" />
+            </p>
+            <div class="contact-info">
+                <span><i class="fas fa-envelope"></i> Have more questions?</span>
+                <a href="mailto:support@legalhub.com">support@legalhub.com</a>
+            </div>
+        </div>
+
+        <div class="faq-right">
+            <div class="faq-item">
+                <h3>What is LegalHub and how does it work? <i class="fas fa-chevron-down"></i></h3>
+                <div class="faq-answer">
+                    <p>
+                        LegalHub is an online platform providing free access to legal resources,
+                        forms, and guides. You can explore state-specific legal forms and understand
+                        legal terms easily. 🏛️
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>
+                    Can I download legal forms from LegalHub? <i class="fas fa-chevron-down"></i>
+                </h3>
+                <div class="faq-answer">
+                    <p>
+                        Yes! LegalHub allows you to download state-specific legal forms directly
+                        from our database. You can also find instructions on how to fill them
+                        correctly. 📄
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>
+                    How can I search for specific legal terms? <i class="fas fa-chevron-down"></i>
+                </h3>
+                <div class="faq-answer">
+                    <p>
+                        You can use the smart search feature to look up legal terms. The integrated
+                        AI will provide detailed explanations and related resources. 🔍
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>
+                    Is the information on LegalHub accurate and up-to-date?
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+                <div class="faq-answer">
+                    <p>
+                        Yes. We source information from verified legal authorities and update it
+                        regularly to reflect the latest legal changes. ✅
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is LegalHub free to use? <i class="fas fa-chevron-down"></i></h3>
+                <div class="faq-answer">
+                    <p>
+                        Absolutely! LegalHub is completely free to use, and you can access all
+                        resources without signing up. 🎯
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-
 </body>
 
 <!-- FAQ Script -->
 <script>
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const faqAnswer = item.querySelector('.faq-answer');
+    document.querySelectorAll(".faq-item").forEach((item) => {
+        item.addEventListener("click", () => {
+            const faqAnswer = item.querySelector(".faq-answer");
 
-      item.classList.toggle('open');
+            item.classList.toggle("open");
 
-      if (item.classList.contains('open')) {
-        faqAnswer.style.maxHeight = faqAnswer.scrollHeight + "px";
-        faqAnswer.style.opacity = 1;
-      } else {
-        faqAnswer.style.maxHeight = 0;
-        faqAnswer.style.opacity = 0;
-      }
+            if (item.classList.contains("open")) {
+                faqAnswer.style.maxHeight = faqAnswer.scrollHeight + "px";
+                faqAnswer.style.opacity = 1;
+            } else {
+                faqAnswer.style.maxHeight = 0;
+                faqAnswer.style.opacity = 0;
+            }
 
-      document.querySelectorAll('.faq-item').forEach(otherItem => {
-        if (otherItem !== item && otherItem.classList.contains('open')) {
-          otherItem.classList.remove('open');
-          otherItem.querySelector('.faq-answer').style.maxHeight = 0;
-          otherItem.querySelector('.faq-answer').style.opacity = 0;
-        }
-      });
+            document.querySelectorAll(".faq-item").forEach((otherItem) => {
+                if (otherItem !== item && otherItem.classList.contains("open")) {
+                    otherItem.classList.remove("open");
+                    otherItem.querySelector(".faq-answer").style.maxHeight = 0;
+                    otherItem.querySelector(".faq-answer").style.opacity = 0;
+                }
+            });
+        });
     });
-  });
 </script>
 
 <!-- Dictionary Script -->
 <script>
-  const form = document.getElementById('search-form');
-  const input = document.getElementById('term-input');
-  const resultContainer = document.getElementById('result');
-  const definition = document.getElementById('term-definition');
+    const form = document.getElementById("search-form");
+    const input = document.getElementById("term-input");
+    const resultContainer = document.getElementById("result");
+    const definition = document.getElementById("term-definition");
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const term = input.value.trim();
-    if (!term) return;
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const term = input.value.trim();
+        if (!term) return;
 
-    definition.innerText = '🔎 Searching...';
-    resultContainer.classList.remove('hidden');
-    resultContainer.classList.add('show');
+        definition.innerText = "🔎 Searching...";
+        resultContainer.classList.remove("hidden");
+        resultContainer.classList.add("show");
 
-    try {
-      const res = await fetch(`/api/dictionary/${term}`);
-      const data = await res.json();
+        try {
+            const res = await fetch(`/api/dictionary/${term}`);
+            const data = await res.json();
 
-      if (data.success) {
-        definition.innerHTML = data.data.response; // use innerHTML for formatted content
-      } else {
-        definition.innerHTML = `<span style="color:red;">❌ Error: ${data.msg}</span>`;
-      }
-    } catch (error) {
-      definition.innerText = '❌ Failed to fetch result. Try again!';
-      console.error('Error:', error);
-    }
-  });
+            if (data.success) {
+                definition.innerHTML = data.data.response; // use innerHTML for formatted content
+            } else {
+                definition.innerHTML = `<span style="color:red;">❌ Error: ${data.msg}</span>`;
+            }
+        } catch (error) {
+            definition.innerText = "❌ Failed to fetch result. Try again!";
+            console.error("Error:", error);
+        }
+    });
 </script>

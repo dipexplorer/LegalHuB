@@ -17,6 +17,29 @@
         transform: translateY(-3px);
         box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
     }
+    .google-btn {
+        width: 100%;
+        margin-top: 10px;
+        background: #fff;
+        color: #444;
+        font-weight: bold;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .google-btn img {
+        height: 20px;
+        margin-right: 10px;
+    }
+    .google-btn:hover {
+        background: #f5f5f5;
+        transform: translateY(-2px);
+    }
     .input-group {
         position: relative;
     }
@@ -132,10 +155,12 @@
 
             <div class="row">
                 <button type="submit" class="btn">Login</button>
+                <a href="/auth/google" class="google-btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+                    Continue with Google
+                </a>
                 <p class="small-text">
-                    <a href="/api/users/forgot-password" class="forgot-link" style="color: #8e00ff"
-                        >Forgot Password?</a
-                    >
+                    <a href="/api/users/forgot-password" class="forgot-link" style="color: #8e00ff">Forgot Password?</a>
                 </p>
             </div>
 
@@ -294,6 +319,10 @@
 
             <div class="row">
                 <button type="submit" class="btn">Register</button>
+                <a href="/auth/google" class="google-btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+                    Continue with Google
+                </a>
             </div>
 
             <p class="small-text">

@@ -42,8 +42,19 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        googleId: {
+            type: String, // Google unique user ID
+            unique: true,
+            sparse: true, // Allows either local or Google login
+        },
         resetToken: String,
         resetTokenExpires: Date,
+
+        // NEW: saved terms for dictionary
+        savedTerms: {
+            type: [String],
+            default: [],
+        },
     },
     {
         timestamps: true,

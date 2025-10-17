@@ -29,20 +29,20 @@ const registerAccount = asyncHandler(async (req, res) => {
     // Validate role from backend whitelist
     const allowedRoles = ["user", "lawyer"];
     if (!allowedRoles.includes(role)) {
-        const errorMsg = "Invalid role";
+        const errorMsg = "Invalid account type. Please select either User or Lawyer.";
         if (req.accepts("html")) {
             req.flash("error", errorMsg);
-            return res.redirect("/login");
+            return res.redirect("/register");
         }
         throw new apiError(400, errorMsg);
     }
 
     // 1️⃣ Required fields check
     if (!username || !email || !password || !confirmPassword) {
-        const errorMsg = "All fields are required";
+        const errorMsg = "Please fill in all the required fields to create your account.";
         if (req.accepts("html")) {
             req.flash("error", errorMsg);
-            return res.redirect("/login");
+            return res.redirect("/register");
         }
         throw new apiError(400, errorMsg);
     }
@@ -59,10 +59,10 @@ const registerAccount = asyncHandler(async (req, res) => {
 
     // 3️⃣ Password match check
     if (password !== confirmPassword) {
-        const errorMsg = "Passwords do not match";
+        const errorMsg = "The passwords you entered don't match. Please try again.";
         if (req.accepts("html")) {
             req.flash("error", errorMsg);
-            return res.redirect("/login");
+            return res.redirect("/register");
         }
         throw new apiError(400, errorMsg);
     }
@@ -70,16 +70,35 @@ const registerAccount = asyncHandler(async (req, res) => {
     // Unique username/email
     const existing = await User.findOne({ $or: [{ email }, { username }] });
     if (existing) {
-        const msg = "User with given email or username already exists";
+        let msg = "";
+        if (existing.email === email) {
+            msg =
+                "This email is already registered. Please use a different email or try logging in.";
+        } else {
+            msg = "This username is already taken. Please choose a different one.";
+        }
+
         if (req.accepts("html")) {
             req.flash("error", msg);
-            return res.redirect("/login");
+            return res.redirect("/register");
         }
         throw new apiError(400, msg);
     }
 
     // 5️⃣ Create user
     try {
+        // Additional check for existing email
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            const errorMsg =
+                "This email is already registered. Please use a different email or try logging in.";
+            if (req.accepts("html")) {
+                req.flash("error", errorMsg);
+                return res.redirect("/register");
+            }
+            throw new apiError(400, errorMsg);
+        }
+
         const newUser = new User({ username, email, role: role || "user" });
         // Uses passport-local-mongoose's register helper with hashing
         const registeredUser = await User.register(newUser, password);
@@ -88,10 +107,10 @@ const registerAccount = asyncHandler(async (req, res) => {
         if (registeredUser.role === "lawyer") {
             if (!lawyerProfile?.specialization || !lawyerProfile?.licenseNumber) {
                 const msg =
-                    "Specialization and license number are required for lawyer registration";
+                    "To register as a lawyer, please provide both your specialization and license number.";
                 if (req.accepts("html")) {
                     req.flash("error", msg);
-                    return res.redirect("/login");
+                    return res.redirect("/register");
                 }
                 throw new apiError(400, msg);
             }
@@ -109,7 +128,8 @@ const registerAccount = asyncHandler(async (req, res) => {
         // 7️⃣ Login user after registration
         req.login(registeredUser, (err) => {
             if (err) {
-                const errorMsg = "Login failed after registration";
+                const errorMsg =
+                    "Your account was created successfully, but we couldn't log you in automatically. Please try logging in manually.";
                 if (req.accepts("html")) {
                     req.flash("error", errorMsg);
                     return res.redirect("/login");
@@ -126,9 +146,33 @@ const registerAccount = asyncHandler(async (req, res) => {
                 .json(new apiResponse(201, registeredUser, "User registered successfully"));
         });
     } catch (err) {
+        // Handle duplicate key errors with user-friendly messages
+        if (err.code === 11000) {
+            const field = Object.keys(err.keyValue)[0];
+            let errorMsg = "";
+
+            // User-friendly messages based on the field
+            if (field === "email") {
+                errorMsg =
+                    "This email is already registered. Please use a different email or try logging in.";
+            } else if (field === "username") {
+                errorMsg = "This username is already taken. Please choose a different one.";
+            } else {
+                errorMsg =
+                    "An account with this information already exists. Please try logging in.";
+            }
+
+            if (req.accepts("html")) {
+                req.flash("error", errorMsg);
+                return res.redirect("/register");
+            }
+            throw new apiError(400, errorMsg);
+        }
+
+        // Handle other errors
         if (req.accepts("html")) {
             req.flash("error", err.message);
-            return res.redirect("/login");
+            return res.redirect("/register");
         }
         throw new apiError(500, err.message);
     }
@@ -608,6 +652,39 @@ const toggleUserStatus = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200, user, "Account status updated successfully"));
 });
 
+/* ------------------- GOOGLE AUTH ------------------- */
+// Redirect to Google login
+const googleAuth = passport.authenticate("google", {
+    scope: ["profile", "email"],
+});
+
+// Google OAuth callback
+const googleCallback = (req, res, next) => {
+    passport.authenticate(
+        "google",
+        { failureRedirect: "/login", failureFlash: true },
+        async (err, user) => {
+            if (err) {
+                req.flash("error", "Google authentication failed");
+                return res.redirect("/login");
+            }
+            if (!user) {
+                req.flash("error", "No user found");
+                return res.redirect("/login");
+            }
+
+            req.login(user, (loginErr) => {
+                if (loginErr) {
+                    req.flash("error", "Login failed after Google authentication");
+                    return res.redirect("/login");
+                }
+                req.flash("success", "Logged in with Google!");
+                return res.redirect("/");
+            });
+        }
+    )(req, res, next);
+};
+
 module.exports = {
     registerAccount,
     loginUser,
@@ -626,4 +703,6 @@ module.exports = {
     applyForLawyer,
     renderLawyerApplyForm,
     toggleUserStatus,
+    googleAuth,
+    googleCallback,
 };
