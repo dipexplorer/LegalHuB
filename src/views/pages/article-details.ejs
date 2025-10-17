@@ -11,6 +11,30 @@
         --max-width: 850px;
     }
 
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        font-size: 1rem;
+        padding: 8px 16px;
+        margin-bottom: 24px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--text);
+        transform: translateX(-4px);
+    }
+
+    .back-link i {
+        font-size: 0.9em;
+    }
+
     .article_container {
         max-width: var(--max-width);
         margin: 50px auto;
@@ -217,6 +241,12 @@
 </style>
 
 <section class="article_container">
+    <!-- ✅ Back Button -->
+    <a href="javascript:history.back()" class="back-link" aria-label="Go back to previous page">
+        <i class="fas fa-arrow-left"></i>
+        Back
+    </a>
+
     <!-- ✅ Title -->
     <h1><%= article.title %></h1>
 
@@ -322,4 +352,14 @@
     function scrollToTop() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    // Handle back button
+    document.querySelector('.back-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = '/articles';
+        }
+    });
 </script>
