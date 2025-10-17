@@ -48,6 +48,8 @@
         "express-mongo-sanitize": "^2.2.0",
         "express-rate-limit": "^8.1.0",
         "express-session": "^1.18.2",
+        "express-useragent": "^1.0.15",
+        "geoip-lite": "^1.4.10",
         "helmet": "^8.1.0",
         "hpp": "^0.2.3",
         "json2csv": "^6.0.0-alpha.2",
@@ -84,5 +86,16 @@
         "testTimeout": 60000,
         "maxWorkers": 1,
         "forceExit": true
-    }
+    },
+    "directories": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Vivekk4824/LegalHuB.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Vivekk4824/LegalHuB/issues"
+    },
+    "homepage": "https://github.com/Vivekk4824/LegalHuB#readme"
 }
