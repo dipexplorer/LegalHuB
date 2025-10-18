@@ -1,6 +1,7 @@
 // src/config/email.js
 require("dotenv").config(); // Only if not loaded globally in app.js
 const nodemailer = require("nodemailer");
+const { conditionalConsole } = require("../utils/logger");
 
 const host = process.env.SMTP_HOST || "smtp.gmail.com";
 const port = parseInt(process.env.SMTP_PORT || "587", 10);
@@ -18,7 +19,7 @@ const transporter = nodemailer.createTransport({
 // quick verify on startup (non-fatal)
 transporter
     .verify()
-    .then(() => console.log("✅ SMTP transporter ready"))
-    .catch((err) => console.warn("⚠️ SMTP transporter verify failed:", err.message));
+    .then(() => conditionalConsole.log("✅ SMTP transporter ready"))
+    .catch((err) => conditionalConsole.warn("⚠️ SMTP transporter verify failed:", err.message));
 
 module.exports = transporter;

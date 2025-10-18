@@ -13,7 +13,10 @@
     "type": "commonjs",
     "main": "src/index.js",
     "scripts": {
-        "test": "NODE_ENV=test jest --detectOpenHandles",
+        "test": "NODE_ENV=test SUPPRESS_CONSOLE=true jest --detectOpenHandles",
+        "test:coverage": "NODE_ENV=test SUPPRESS_CONSOLE=true jest --coverage --passWithNoTests",
+        "test:ci": "NODE_ENV=test SUPPRESS_CONSOLE=true jest --ci --coverage --passWithNoTests --reporters=default --reporters=jest-junit --outputFile=test-results/junit.xml",
+        "test:suite": "node scripts/test-runner.js",
         "start": "node src/index.js",
         "dev": "nodemon src/index.js",
         "build": "echo 'No build step required for Express.js' && exit 0",
@@ -24,6 +27,7 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",
         "jest": "^30.2.0",
+        "jest-junit": "^16.0.0",
         "mongodb-memory-server": "^10.2.2",
         "nodemon": "^3.1.10",
         "prettier": "^3.6.2",
@@ -85,7 +89,22 @@
         "testEnvironment": "node",
         "testTimeout": 60000,
         "maxWorkers": 1,
-        "forceExit": true
+        "forceExit": true,
+        "collectCoverageFrom": [
+            "src/**/*.js",
+            "!src/index.js",
+            "!src/config/**",
+            "!src/views/**",
+            "!src/public/**",
+            "!src/readme.md"
+        ],
+        "coverageDirectory": "coverage",
+        "coverageReporters": [
+            "text",
+            "lcov",
+            "html"
+        ],
+        "reporters": ["default"]
     },
     "directories": {
         "test": "test"

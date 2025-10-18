@@ -1,8 +1,6 @@
 <!-- GSSoC banner and project insights -->
 <h1 align="center">
-  <img width="64" height="64" alt="LegalHuB Logo" src="src/public/pic/logo1.png"/>
-  <br>
-  LegalHuB
+  <img src="src/public/pic/LegalHubBanner.png" alt="LegalHubBanner" width = "100%"/>
 </h1>
 
 <p align="center">

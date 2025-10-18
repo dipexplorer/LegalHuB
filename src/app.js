@@ -379,9 +379,14 @@ app.use((err, req, res, next) => {
     }
 
     // Default: send structured JSON API response
+    const response = new apiResponse(statusCode, null, err.message || "Internal Server Error");
+
+    // Ensure response has success property set based on status code
+    response.success = statusCode < 400;
+
     return res
         .status(statusCode)
-        .json(new apiResponse(statusCode, null, err.message || "Internal Server Error"));
+        .json(response);
 });
 
 module.exports = app;

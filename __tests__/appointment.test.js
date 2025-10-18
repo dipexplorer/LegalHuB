@@ -61,7 +61,7 @@ describe("📅 Appointment API Testing", () => {
             client: testClient._id,
             lawyer: testLawyer._id,
             date: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            timeSlot: ["2:00 PM"],
+            timeSlot: "2:00 PM",
             status: "pending",
             notes: "Test appointment for updates",
             appointmentCard: {

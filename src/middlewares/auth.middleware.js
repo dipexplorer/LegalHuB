@@ -7,7 +7,7 @@ const ChatRoom = require("../models/chatRoom.model.js");
 const isLoggedIn = (req, res, next) => {
     // ✅ Bypass authentication if in test environment and author is in request
     if (process.env.NODE_ENV === "test" && req.body.author) {
-        req.user = { _id: req.body.author }; // Simulate logged-in user
+        req.user = { _id: req.body.author, isAdmin: false }; // Simulate logged-in user
         return next();
     }
 
