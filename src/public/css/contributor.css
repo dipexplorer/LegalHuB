@@ -229,3 +229,119 @@
     font-weight: 700;
     color: #9c27b0;
 }
+
+.contributors-banner {
+	width: 100%;
+	background: linear-gradient(135deg, #2e003e, #4a0072);
+	color: #f5f5fa;
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+	animation: fadeInDown 0.5s ease;
+	position: relative;
+	z-index: 10;
+	box-sizing: border-box;
+	text-align: center;
+	padding: 30px 60px;
+}
+
+.contributors-banner h1 {
+	font-size: 3rem;
+	letter-spacing: -0.02em;
+	margin-bottom: 20px;
+	font-weight: 700;
+	text-align: center;
+	color: #fffcfc;
+}
+
+.banner-row {
+	display: grid;
+	grid-template-columns: 1fr 200px;
+	grid-template-rows: auto auto;
+	grid-template-areas:
+		"description image"
+		"cta         image";
+	gap: 40px;
+	align-items: start;
+}
+
+.description {
+	grid-area: description;
+	font-size: 1.15rem;
+	font-weight: 600;
+	color: #e1bee7;
+	line-height: 1.5;
+	text-align: left;
+}
+
+
+.banner-image {
+	grid-area: image;
+	display: flex;
+	align-items: center;
+}
+
+.banner-image img {
+	width: 200px;
+	height: 200px;
+	object-fit: contain;
+}
+
+.cta-button {
+	grid-area: cta;
+	align-self: center;
+	justify-self: start;
+	background: linear-gradient(135deg, #ff6ec7, #b388ff);
+	color: #fff;
+	padding: 1rem 2rem;
+	border-radius: 30px;
+	font-weight: 700;
+	text-decoration: none;
+	box-shadow: 0 5px 25px rgba(255, 140, 245, 0.5);
+	transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+	background: linear-gradient(135deg, #ff8cf5, #e1a8ff);
+	color: #000;
+	transform: translateY(-3px) scale(1.03);
+	box-shadow: 0 8px 30px rgba(255, 140, 245, 0.6);
+}
+
+@media (max-width: 768px) {
+	.contributors-banner h1 {
+		padding: 0 15px;
+		word-wrap: break-word;
+		font-size: 3rem;
+		line-height: 1.2;
+	}
+
+	.banner-row {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto auto;
+		grid-template-areas:
+			"description"
+			"image"
+			"cta";
+		gap: 20px;
+		justify-items: center;
+		text-align: center;
+	}
+
+	.description {
+		text-align: center;
+	}
+
+	.banner-image {
+		justify-content: center;
+	}
+
+	.banner-image img {
+		width: 100%;
+		max-width: 250px;
+		height: auto;
+	}
+
+	.cta-button {
+		justify-self: center;
+		margin-top: 15px;
+	}
+}
