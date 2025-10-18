@@ -181,6 +181,61 @@
    ADMIN_SECRECT_KEY=mysupersecretkey
 ```
 
+
+## 🔑 Google OAuth Setup (Important for Local Development)
+
+LegalHuB uses Google OAuth 2.0 for user authentication via Passport.js.
+
+If not configured, the project will throw this error when you run it locally:
+
+**TypeError: OAuth2Strategy requires a clientID option**
+
+### 1. Go to Google Cloud Console
+https://console.cloud.google.com/
+
+### 2. Set Up OAuth Consent Screen
+- Navigate to **APIs & Services → OAuth consent screen**
+- Choose **External** and add your Gmail as a **Test User**
+
+### 3. Create OAuth Client Credentials
+- Go to **APIs & Services → Credentials → Create Credentials → OAuth client ID**
+- Choose **Web Application**
+- Add the following Authorized redirect URI:  http://localhost:8000/auth/google/callback
+    
+
+### 4. Copy Your Client ID and Secret
+Add them to your `.env` file:
+```
+GOOGLE_CLIENT_ID=your-client-id-here
+GOOGLE_CLIENT_SECRET=your-client-secret-here
+GOOGLE_CALLBACK_URL=http://localhost:8000/auth/google/callback
+LOCAL_GOOGLE_CALLBACK=http://localhost:8000/auth/google/callback
+```
+---
+
+## 🚀 Start the Server
+
+Restart your server:
+
+```
+npm start
+```
+
+Your app will now start successfully and Google login will work at:
+http://localhost:8000/auth/google
+
+---
+
+## 💡 Tip
+
+If you’re just testing the app and don’t need login, you can skip OAuth setup by setting:
+
+```
+USE_FAKE_DATA=true
+```
+
+in your `.env` to use local mock data and disable external dependencies.
+
 ---
 
 ## 🔐 Mistral AI API Integration

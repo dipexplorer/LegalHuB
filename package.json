@@ -48,6 +48,8 @@
         "express-mongo-sanitize": "^2.2.0",
         "express-rate-limit": "^8.1.0",
         "express-session": "^1.18.2",
+        "express-useragent": "^1.0.15",
+        "geoip-lite": "^1.4.10",
         "helmet": "^8.1.0",
         "hpp": "^0.2.3",
         "json2csv": "^6.0.0-alpha.2",
