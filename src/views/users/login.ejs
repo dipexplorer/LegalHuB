@@ -1,335 +1,991 @@
 <% layout("/layouts/boilerplate") -%>
 <style>
-    .btn {
-        width: 100%;
-        padding: 15px 25px;
-        background: linear-gradient(90deg, #4e00ff, #8e00ff);
-        border: none;
-        border-radius: 25px;
-        color: #fff;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(78, 0, 255, 0.5);
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(142, 0, 255, 0.7);
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
     }
-    .google-btn {
-        width: 100%;
-        margin-top: 10px;
-        background: #fff;
-        color: #444;
-        font-weight: bold;
-        border: 1px solid #ddd;
-        border-radius: 25px;
-        padding: 12px 20px;
+
+    /* Animated gradient orbs */
+    .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.5;
+        animation: float 20s infinite ease-in-out;
+        pointer-events: none;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
+        top: -200px;
+        right: -100px;
+        animation-delay: 0s;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.35) 0%, transparent 70%);
+        bottom: -150px;
+        left: -100px;
+        animation-delay: -10s;
+    }
+
+    .orb-3 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        animation-delay: -5s;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translate(0, 0) scale(1);
+        }
+        33% {
+            transform: translate(30px, -30px) scale(1.1);
+        }
+        66% {
+            transform: translate(-20px, 20px) scale(0.9);
+        }
+    }
+
+    .auth-container {
+        min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+
+    /* Left side - Welcome section */
+    .welcome-section {
+        padding: 40px;
+        animation: slideInLeft 0.8s ease-out;
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .welcome-logo {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 48px;
+    }
+
+    .logo-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        box-shadow: 0 20px 60px rgba(168, 85, 247, 0.4);
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .logo-text {
+        font-size: 36px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .welcome-content h1 {
+        font-size: 56px;
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .welcome-content p {
+        font-size: 20px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 40px;
+        animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
         transition: all 0.3s ease;
     }
-    .google-btn img {
-        height: 20px;
-        margin-right: 10px;
+
+    .feature-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateX(10px);
+        border-color: rgba(168, 85, 247, 0.3);
     }
-    .google-btn:hover {
-        background: #f5f5f5;
-        transform: translateY(-2px);
+
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
     }
+
+    .feature-text h3 {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .feature-text p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    /* Right side - Glass form */
+    .form-section {
+        animation: slideInRight 0.8s ease-out;
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(40px) saturate(100%);
+        -webkit-backdrop-filter: blur(40px) saturate(100%);
+        border-radius: 32px;
+        padding: 48px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .form-header h2 {
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+    }
+
+    .form-header p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 15px;
+    }
+
+    .toggle {
+        display: flex;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(10px);
+        padding: 6px;
+        border-radius: 16px;
+        margin-bottom: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .toggle button {
+        flex: 1;
+        padding: 14px;
+        background: transparent;
+        border: none;
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+
+    .toggle button.active {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+    }
+
+    .toggle button.active::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        padding: 1px;
+        background: linear-gradient(135deg, #a855f7, #ec4899);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        letter-spacing: 0.3px;
+    }
+
     .input-group {
         position: relative;
+        display: flex;
+        align-items: center;
     }
-    .password-toggle-btn {
+
+    input{
+        border-radius: 20px;
+    }
+
+
+    .form-control {
+        width: 100%;
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.09);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        color: #ffffff;
+        font-size: 15px;
+        outline: none;
+        transition: all 0.3s ease;
         position: relative;
-        margin-left: 8px;
+        z-index: 1;
+    }
+
+    /* Password fields with toggle buttons need extra right padding */
+    .password-field .form-control {
+        padding-right: 60px;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.13);
+        border-color: rgba(168, 85, 247, 0.6);
+        box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+    }
+
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.55);
+    }
+
+    select.form-control {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='rgba(255,255,255,0.7)' d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        padding-right: 48px;
+    }
+
+    .password-toggle-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
         background: none;
         border: none;
-        bottom: 2px;
-        color: #6c757d;
-        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.75);
         cursor: pointer;
-        padding: 0 0.5rem;
+        padding: 6px;
+        transition: all 0.3s ease;
+        font-size: 17px;
+        z-index: 20;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .password-toggle-btn i {
-        pointer-events: none;
+
+    .password-toggle-btn:hover {
+        color: #a855f7;
+        transform: translateY(-50%) scale(1.1);
     }
+
     .password-feedback {
-        font-size: 0.8rem;
-        color: #dc3545;
-        margin-top: 0.25rem;
+        font-size: 13px;
+        margin-top: 8px;
+        color: #ef4444;
         display: none;
+        font-weight: 500;
     }
+
     .password-feedback.valid {
-        color: green;
+        color: #10b981;
         display: block;
     }
+
     .password-feedback.show {
         display: block;
     }
-    .form-label {
-        font-weight: bold;
-        margin-bottom: 6px;
-        text-align: left;
-        display: block;
-        color: #aaa;
-    }
-    .input-group input {
-        width: 100% !important;
-        padding: 15px 20px;
-        border: none;
-        border-radius: 21px 5px 21px 5px !important;
-        font-size: 16px;
-        outline: none;
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+
+    .forgot-link {
+        display: inline-block;
+        color: #a855f7;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
         transition: all 0.3s ease;
+        margin-top: 8px;
     }
-    .input-group input::-webkit-input-placeholder {
-        color: #858484;
+
+    .forgot-link:hover {
+        color: #ec4899;
+        transform: translateX(4px);
     }
-    .input-group input:focus {
-        background: rgba(78, 0, 255, 0.3);
-        color: #aca4a4;
-        box-shadow: 0 0 10px rgba(78, 0, 255, 0.5);
+
+    .btn {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        border: none;
+        border-radius: 16px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+        margin-top: 24px;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
+    }
+
+    .btn:hover::before {
+        opacity: 1;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 40px rgba(168, 85, 247, 0.5);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    .btn span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 28px 0;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .divider span {
+        padding: 0 20px;
+    }
+
+    .google-btn {
+        width: 100%;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.09);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+    .google-btn:hover {
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .google-btn img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .small-text {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        margin-top: 28px;
+    }
+
+    .small-text span {
+        color: #a855f7;
+        font-weight: 700;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .small-text span:hover {
+        color: #ec4899;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+
+    .lawyer-profile-fields {
+        background: rgba(168, 85, 247, 0.06);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(168, 85, 247, 0.18);
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    .lawyer-profile-fields::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #a855f7, #ec4899, transparent);
+        border-radius: 20px 20px 0 0;
+    }
+
+    .lawyer-fields-title {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .invalid-feedback {
+        color: #ef4444;
+        font-size: 13px;
+        margin-top: 6px;
+        display: none;
+        font-weight: 500;
+    }
+
+    .was-validated .form-control:invalid ~ .invalid-feedback {
+        display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .auth-wrapper {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            display: none;
+        }
+
+        .glass-card {
+            padding: 44px 36px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .glass-card {
+            padding: 40px 32px;
+        }
+
+        .form-header h2 {
+            font-size: 30px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .auth-container {
+            padding: 20px 16px;
+        }
+
+        .glass-card {
+            padding: 32px 24px;
+            border-radius: 24px;
+        }
+
+        .form-header h2 {
+            font-size: 28px;
+        }
+
+        .btn {
+            padding: 16px;
+            font-size: 15px;
+        }
+
+        .form-control {
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        .password-field .form-control {
+            padding-right: 56px;
+        }
+
+
+        .password-toggle-btn {
+            right: 18px;
+            font-size: 16px;
+            width: 26px;
+            height: 26px;
+        }
+
+        .google-btn {
+            padding: 15px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .glass-card {
+            padding: 28px 20px;
+        }
+
+        .form-header h2 {
+            font-size: 26px;
+        }
+
+        .welcome-content h1 {
+            font-size: 48px;
+        }
+    }
+
+    /* Subtle animations for inputs */
+    .form-control {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
 </style>
 
-<div class="frm_container row">
-    <div class="col-md-4 offset-md-4 frm_box">
-        <!-- Toggle Buttons -->
-        <div class="toggle">
-            <button id="login-toggle" class="active" type="button">Login</button>
-            <button id="register-toggle" type="button">Register</button>
+<!-- Animated background orbs -->
+
+
+<div class="auth-container">
+    <div class="auth-wrapper">
+        <!-- Left Side - Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-logo">
+                <div class="logo-icon">⚖️</div>
+                <div class="logo-text">LegalHub</div>
+            </div>
+
+            <div class="welcome-content">
+                <h1>Welcome<br>Back</h1>
+                <p>Access your legal dashboard and connect with verified professionals across India.</p>
+            </div>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Secure & Private</h3>
+                        <p>Your data is encrypted end-to-end</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Verified Lawyers</h3>
+                        <p>3.9K+ certified professionals</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>24/7 Support</h3>
+                        <p>Always here when you need us</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- LOGIN FORM -->
-        <form
-            id="login-form"
-            class="form needs-validation"
-            method="POST"
-            action="/api/users/login"
-            novalidate>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group form-group">
-                        <label for="username" class="form-label">Username</label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            placeholder="Enter your username"
-                            class="form-control"
-                            required />
-                        <div class="invalid-feedback">Please enter a valid username.</div>
-                    </div>
+        <!-- Right Side - Glass Form -->
+        <div class="form-section">
+            <div class="glass-card">
+                <div class="form-header">
+                    <h2>Sign In</h2>
+                    <p>Continue your legal journey</p>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group form-group">
-                        <label for="login-password" class="form-label">Password</label>
-                        <button
-                            type="button"
-                            class="password-toggle-btn"
-                            onclick=`${togglePassword('login-password', this)}`
-                            aria-label="Toggle password visibility">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <input
-                            type="password"
-                            id="login-password"
-                            name="password"
-                            placeholder="Enter your password"
-                            class="form-control"
-                            required />
-                        <div class="invalid-feedback">Please enter a valid password.</div>
-                    </div>
+                <div class="toggle">
+                    <button id="login-toggle" class="active" type="button">Login</button>
+                    <button id="register-toggle" type="button">Register</button>
                 </div>
-            </div>
 
-            <div class="row">
-                <button type="submit" class="btn">Login</button>
-                <a href="/auth/google" class="google-btn">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
-                    Continue with Google
-                </a>
-                <p class="small-text">
-                    <a href="/api/users/forgot-password" class="forgot-link" style="color: #8e00ff">Forgot Password?</a>
-                </p>
-            </div>
-
-            <p class="small-text">
-                Don't have an account?
-                <span id="switch-to-register" style="cursor: pointer; color: #8e00ff"
-                    >Register</span
-                >
-            </p>
-        </form>
-
-        <!-- REGISTRATION FORM -->
-        <form
-            id="register-form"
-            class="form hidden needs-validation"
-            method="POST"
-            action="/api/users/register"
-            novalidate>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group form-group">
-                        <label for="register-name" class="form-label">Username</label>
-                        <input
-                            type="text"
-                            id="register-name"
-                            name="username"
-                            placeholder="Enter your name"
-                            class="form-control"
-                            required />
-                        <div class="invalid-feedback">Please enter a valid username.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group form-group">
-                        <label for="register-email" class="form-label">Email</label>
-                        <input
-                            type="email"
-                            id="register-email"
-                            name="email"
-                            placeholder="Enter your email"
-                            class="form-control"
-                            required />
-                        <div class="invalid-feedback">Please enter a valid email.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Role selection -->
-            <div class="row mb-3">
-                <div class="col">
+                <!-- LOGIN FORM -->
+                <form
+                    id="login-form"
+                    class="form needs-validation"
+                    method="POST"
+                    action="/api/users/login"
+                    novalidate>
                     <div class="form-group">
-                        <label for="register-role" class="form-label">Account Type</label>
-                        <select id="register-role" name="role" class="form-control" required>
-                            <option value="user">User</option>
-                            <option value="lawyer">Lawyer</option>
-                        </select>
-                        <div class="invalid-feedback">Please select a role.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lawyer Profile Fields -->
-            <div class="lawyer-profile-fields d-none">
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="specialization" class="form-label">Specialization</label>
-                            <select
-                                id="specialization"
-                                name="lawyerProfile[specialization]"
-                                class="form-control">
-                                <option value="">Select Specialization</option>
-                                <option value="Criminal Law">Criminal Law</option>
-                                <option value="Civil Law">Civil Law</option>
-                                <option value="Corporate Law">Corporate Law</option>
-                                <option value="Family Law">Family Law</option>
-                                <option value="Intellectual Property">Intellectual Property</option>
-                                <option value="Tax Law">Tax Law</option>
-                                <option value="Labor Law">Labor Law</option>
-                                <option value="Real Estate Law">Real Estate Law</option>
-                                <option value="Immigration Law">Immigration Law</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="register-license-number" class="form-label"
-                                >License Number</label
-                            >
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
                             <input
                                 type="text"
-                                id="register-license-number"
-                                name="lawyerProfile[licenseNumber]"
-                                placeholder="Enter your license number"
-                                class="form-control" />
-                            <div class="invalid-feedback">Please enter a valid license number.</div>
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                                class="form-control"
+                                required />
+                            <div class="invalid-feedback">Please enter a valid username.</div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="input-group form-group">
+                    <div class="form-group">
+                        <label for="login-password" class="form-label">Password</label>
+                        <div class="input-group password-field">
+                            <input
+                                type="password"
+                                id="login-password"
+                                name="password"
+                                placeholder="Enter your password"
+                                class="form-control"
+                                required />
+                            <button
+                                type="button"
+                                class="password-toggle-btn"
+                                onclick=`${togglePassword('login-password', this)}`
+                                aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div class="invalid-feedback">Please enter a valid password.</div>
+                        </div>
+                        <a href="/api/users/forgot-password" class="forgot-link">Forgot Password? →</a>
+                    </div>
+
+                    <button type="submit" class="btn"><span>Sign In</span></button>
+
+                    <div class="divider"><span>or</span></div>
+
+                    <a href="/auth/google" class="google-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+                        Continue with Google
+                    </a>
+
+                    <p class="small-text">
+                        Don't have an account?
+                        <span id="switch-to-register">Create one</span>
+                    </p>
+                </form>
+
+                <!-- REGISTRATION FORM -->
+                <form
+                    id="register-form"
+                    class="form hidden needs-validation"
+                    method="POST"
+                    action="/api/users/register"
+                    novalidate>
+                    <div class="form-group">
+                        <label for="register-name" class="form-label">Username</label>
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                id="register-name"
+                                name="username"
+                                placeholder="Choose a username"
+                                class="form-control"
+                                required />
+                            <div class="invalid-feedback">Please enter a valid username.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <input
+                                type="email"
+                                id="register-email"
+                                name="email"
+                                placeholder="your.email@example.com"
+                                class="form-control"
+                                required />
+                            <div class="invalid-feedback">Please enter a valid email.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-role" class="form-label">Account Type</label>
+                        <div class="input-group">
+                            <select id="register-role" name="role" class="form-control" required>
+                                <option value="user">User</option>
+                                <option value="lawyer">Lawyer</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a role.</div>
+                        </div>
+                    </div>
+
+                    <!-- Lawyer Profile Fields -->
+                    <div class="lawyer-profile-fields d-none">
+                        <div class="lawyer-fields-title">
+                            <i class="fas fa-briefcase"></i> Professional Details
+                        </div>
+                        <div class="form-group">
+                            <label for="specialization" class="form-label">Specialization</label>
+                            <div class="input-group">
+                                <select
+                                    id="specialization"
+                                    name="lawyerProfile[specialization]"
+                                    class="form-control">
+                                    <option value="">Select Specialization</option>
+                                    <option value="Criminal Law">Criminal Law</option>
+                                    <option value="Civil Law">Civil Law</option>
+                                    <option value="Corporate Law">Corporate Law</option>
+                                    <option value="Family Law">Family Law</option>
+                                    <option value="Intellectual Property">Intellectual Property</option>
+                                    <option value="Tax Law">Tax Law</option>
+                                    <option value="Labor Law">Labor Law</option>
+                                    <option value="Real Estate Law">Real Estate Law</option>
+                                    <option value="Immigration Law">Immigration Law</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="register-license-number" class="form-label">License Number</label>
+                            <div class="input-group">
+                                <input
+                                    type="text"
+                                    id="register-license-number"
+                                    name="lawyerProfile[licenseNumber]"
+                                    placeholder="Enter your license number"
+                                    class="form-control" />
+                                <div class="invalid-feedback">Please enter a valid license number.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="register-password" class="form-label">Password</label>
-                        <button
-                            type="button"
-                            class="password-toggle-btn"
-                            onclick=`${togglePassword('register-password', this)}`
-                            aria-label="Toggle password visibility">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <input
-                            type="password"
-                            id="register-password"
-                            name="password"
-                            placeholder="Enter your password"
-                            class="form-control"
-                            required
-                            minlength="8" />
-                        <div id="password-feedback" class="password-feedback"></div>
-                        <div class="invalid-feedback">Please enter a valid password.</div>
+                        <div class="input-group password-field">
+                            <input
+                                type="password"
+                                id="register-password"
+                                name="password"
+                                placeholder="Create a strong password"
+                                class="form-control"
+                                required
+                                minlength="8" />
+                            <button
+                                type="button"
+                                class="password-toggle-btn"
+                                onclick=`${togglePassword('register-confirm-password', this)}`
+                                aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div id="password-feedback" class="password-feedback"></div>
+                            <div class="invalid-feedback">Please enter a valid password.</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="input-group form-group">
-                        <label for="register-confirm-password" class="form-label"
-                            >Confirm Password</label
-                        >
-                        <button
-                            type="button"
-                            class="password-toggle-btn"
-                            onclick=`${togglePassword('register-confirm-password', this)}`
-                            aria-label="Toggle password visibility">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <input
-                            type="password"
-                            id="register-confirm-password"
-                            name="confirmPassword"
-                            placeholder="Confirm your password"
-                            class="form-control"
-                            required />
-                        <div class="invalid-feedback">Passwords do not match.</div>
+                    <div class="form-group">
+                        <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                        <div class="input-group password-field">
+                            <input
+                                type="password"
+                                id="register-confirm-password"
+                                name="confirmPassword"
+                                placeholder="Confirm your password"
+                                class="form-control"
+                                required />
+                            <button
+                                type="button"
+                                class="password-toggle-btn"
+                                onclick="togglePassword('register-confirm-password', this)"
+                                aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div class="invalid-feedback">Passwords do not match.</div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <button type="submit" class="btn">Register</button>
-                <a href="/auth/google" class="google-btn">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
-                    Continue with Google
-                </a>
-            </div>
+                    <button type="submit" class="btn"><span>Create Account</span></button>
 
-            <p class="small-text">
-                Already have an account?
-                <span id="switch-to-login" style="cursor: pointer; color: #8e00ff">Login</span>
-            </p>
-        </form>
+                    <div class="divider"><span>or</span></div>
+
+                    <a href="/auth/google" class="google-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+                        Continue with Google
+                    </a>
+
+                    <p class="small-text">
+                        Already have an account?
+                        <span id="switch-to-login">Sign in</span>
+                    </p>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -351,6 +1007,7 @@
             loginForm.classList.remove("hidden");
             registerForm.classList.add("hidden");
         };
+
         const showRegister = () => {
             registerToggle.classList.add("active");
             loginToggle.classList.remove("active");
@@ -363,6 +1020,7 @@
         if (switchToRegister) switchToRegister.addEventListener("click", showRegister);
         if (switchToLogin) switchToLogin.addEventListener("click", showLogin);
 
+        // Password validation
         const passwordInput = document.getElementById("register-password");
         const confirmPasswordInput = document.getElementById("register-confirm-password");
         const passwordFeedback = document.getElementById("password-feedback");
@@ -404,6 +1062,7 @@
             });
         }
 
+        // Form validation
         const forms = document.querySelectorAll(".needs-validation");
         forms.forEach((form) => {
             form.addEventListener("submit", (event) => {
@@ -436,7 +1095,6 @@
         if (!icon) return;
         const isPassword = input.type === "password";
         input.type = isPassword ? "text" : "password";
-        // Use explicit class management for FontAwesome
         if (isPassword) {
             icon.classList.remove("fa-eye");
             icon.classList.add("fa-eye-slash");
@@ -446,7 +1104,6 @@
         }
     }
 
-    // Attach event listeners after DOMContentLoaded for increased robustness
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".password-toggle-btn").forEach(function (btn) {
             btn.addEventListener("click", function () {
