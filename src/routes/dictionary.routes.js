@@ -4,10 +4,10 @@ const router = express.Router();
 
 // Controller handlers
 const {
-  getTerm,
-  renderDictionaryPage,
-  saveTerm,
-  searchTerm
+    getTerm,
+    renderDictionaryPage,
+    saveTerm,
+    searchTerm,
 } = require("../controllers/dictionary.controller");
 
 // Optional auth middleware (uncomment and use if available)

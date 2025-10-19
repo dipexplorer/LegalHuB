@@ -125,6 +125,9 @@ describe("📄 Documents API", () => {
 
         const res = await request(app).get(`/api/documents/${fakeId}`);
         // console.log("📥 Response status:", res.statusCode);
+
+        // Debug code removed - was writing to debug_response.json
+
         expect(res.statusCode).toBe(404);
         expect(res.body.success).toBe(false);
         expect(res.body.msg).toBe("Document not found");

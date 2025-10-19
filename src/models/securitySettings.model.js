@@ -25,25 +25,27 @@ const securitySettingsSchema = new mongoose.Schema(
         recoveryEmail: {
             type: String,
             validate: {
-                validator: function(v) {
+                validator: function (v) {
                     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
                 },
-                message: "Please enter a valid email address"
-            }
+                message: "Please enter a valid email address",
+            },
         },
         recoveryPhone: {
             type: String,
             validate: {
-                validator: function(v) {
+                validator: function (v) {
                     return /^\+?[\d\s-]{8,}$/.test(v);
                 },
-                message: "Please enter a valid phone number"
-            }
+                message: "Please enter a valid phone number",
+            },
         },
-        securityQuestions: [{
-            question: String,
-            answer: String, // Should be hashed before saving
-        }],
+        securityQuestions: [
+            {
+                question: String,
+                answer: String, // Should be hashed before saving
+            },
+        ],
         lastPasswordChange: {
             type: Date,
             default: Date.now,

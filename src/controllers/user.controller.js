@@ -39,7 +39,7 @@ const registerAccount = asyncHandler(async (req, res) => {
 
     // 1️⃣ Required fields check
     if (!username || !email || !password || !confirmPassword) {
-        const errorMsg = "Please fill in all the required fields to create your account.";
+        const errorMsg = "All fields are required";
         if (req.accepts("html")) {
             req.flash("error", errorMsg);
             return res.redirect("/register");
@@ -59,7 +59,7 @@ const registerAccount = asyncHandler(async (req, res) => {
 
     // 3️⃣ Password match check
     if (password !== confirmPassword) {
-        const errorMsg = "The passwords you entered don't match. Please try again.";
+        const errorMsg = "Passwords do not match";
         if (req.accepts("html")) {
             req.flash("error", errorMsg);
             return res.redirect("/register");
@@ -70,14 +70,7 @@ const registerAccount = asyncHandler(async (req, res) => {
     // Unique username/email
     const existing = await User.findOne({ $or: [{ email }, { username }] });
     if (existing) {
-        let msg = "";
-        if (existing.email === email) {
-            msg =
-                "This email is already registered. Please use a different email or try logging in.";
-        } else {
-            msg = "This username is already taken. Please choose a different one.";
-        }
-
+        const msg = "User with given email or username already exists";
         if (req.accepts("html")) {
             req.flash("error", msg);
             return res.redirect("/register");
@@ -90,8 +83,7 @@ const registerAccount = asyncHandler(async (req, res) => {
         // Additional check for existing email
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            const errorMsg =
-                "This email is already registered. Please use a different email or try logging in.";
+            const errorMsg = "User with given email or username already exists";
             if (req.accepts("html")) {
                 req.flash("error", errorMsg);
                 return res.redirect("/register");
@@ -148,20 +140,7 @@ const registerAccount = asyncHandler(async (req, res) => {
     } catch (err) {
         // Handle duplicate key errors with user-friendly messages
         if (err.code === 11000) {
-            const field = Object.keys(err.keyValue)[0];
-            let errorMsg = "";
-
-            // User-friendly messages based on the field
-            if (field === "email") {
-                errorMsg =
-                    "This email is already registered. Please use a different email or try logging in.";
-            } else if (field === "username") {
-                errorMsg = "This username is already taken. Please choose a different one.";
-            } else {
-                errorMsg =
-                    "An account with this information already exists. Please try logging in.";
-            }
-
+            const errorMsg = "User with given email or username already exists";
             if (req.accepts("html")) {
                 req.flash("error", errorMsg);
                 return res.redirect("/register");

@@ -196,5 +196,5 @@ module.exports = {
     escapeHtml,
     highlightTerm,
     renderAnyToHtml,
-    convertStructuredToHtml
+    convertStructuredToHtml,
 };
