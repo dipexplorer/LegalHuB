@@ -27,7 +27,7 @@ async function callAI(term, opts = {}) {
 
             // For rate limit errors, wait and retry
             attempt++;
-            await new Promise(resolve => setTimeout(resolve, retryDelay * attempt));
+            await new Promise((resolve) => setTimeout(resolve, retryDelay * attempt));
         }
     }
 

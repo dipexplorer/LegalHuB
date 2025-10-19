@@ -10,7 +10,12 @@ const { extractStructuredFromRaw } = require("../utils/heuristics");
 const { normalizeParsedKeys } = require("../utils/normalizer");
 const { callAIService } = require("../services/aiService");
 
-const { escapeHtml, highlightTerm, renderAnyToHtml, convertStructuredToHtml } = require("../utils/htmlRenderer");
+const {
+    escapeHtml,
+    highlightTerm,
+    renderAnyToHtml,
+    convertStructuredToHtml,
+} = require("../utils/htmlRenderer");
 
 /**
  * GET /api/dictionary/:term
@@ -270,5 +275,5 @@ module.exports = {
     getTerm,
     renderDictionaryPage,
     saveTerm,
-    searchTerm
+    searchTerm,
 };

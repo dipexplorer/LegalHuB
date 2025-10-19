@@ -14,15 +14,16 @@
     "main": "src/index.js",
     "scripts": {
         "test": "NODE_ENV=test SUPPRESS_CONSOLE=true jest --detectOpenHandles",
-        "test:coverage": "NODE_ENV=test SUPPRESS_CONSOLE=true jest --coverage --passWithNoTests",
-        "test:ci": "NODE_ENV=test SUPPRESS_CONSOLE=true jest --ci --coverage --passWithNoTests --reporters=default --reporters=jest-junit --outputFile=test-results/junit.xml",
+        "test:coverage": "node scripts/prepare-coverage.js && NODE_ENV=test SUPPRESS_CONSOLE=true jest --coverage --passWithNoTests --coverageReporters=text --coverageReporters=lcov --coverageReporters=html",
+        "test:ci": "node scripts/prepare-coverage.js && NODE_ENV=test SUPPRESS_CONSOLE=true jest --ci --coverage --passWithNoTests --coverageReporters=text --coverageReporters=lcov --coverageReporters=html --reporters=default --reporters=jest-junit --outputFile=test-results/junit.xml",
         "test:suite": "node scripts/test-runner.js",
         "start": "node src/index.js",
         "dev": "nodemon src/index.js",
         "build": "echo 'No build step required for Express.js' && exit 0",
-        "format": "prettier --write . && eslint --fix ."
+        "format": "prettier --write . && npx eslint --fix ."
     },
     "devDependencies": {
+        "@eslint/js": "^9.37.0",
         "eslint": "^9.37.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",
@@ -104,7 +105,9 @@
             "lcov",
             "html"
         ],
-        "reporters": ["default"]
+        "reporters": [
+            "default"
+        ]
     },
     "directories": {
         "test": "test"

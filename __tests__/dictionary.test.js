@@ -232,7 +232,9 @@ describe("📚 Dictionary API Testing", () => {
 
             expect(res.statusCode).toBe(200);
             expect(res.body.success).toBe(true);
-            expect(res.body.data.structured.definition).toContain("successful response after retry");
+            expect(res.body.data.structured.definition).toContain(
+                "successful response after retry"
+            );
 
             // Should have been called twice (first failed, second succeeded)
             expect(mockedAxios.post).toHaveBeenCalledTimes(2);

@@ -225,54 +225,56 @@ app.use(async (req, res, next) => {
     next();
 });
 
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_CALLBACK_URL,
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                let user = await User.findOne({ googleId: profile.id });
+if (process.env.NODE_ENV !== "test") {
+    passport.use(
+        new GoogleStrategy(
+            {
+                clientID: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                callbackURL: process.env.GOOGLE_CALLBACK_URL,
+            },
+            async (accessToken, refreshToken, profile, done) => {
+                try {
+                    let user = await User.findOne({ googleId: profile.id });
 
-                if (!user) {
-                    const existingUser = await User.findOne({ email: profile.emails[0].value });
-                    if (existingUser) {
-                        existingUser.googleId = profile.id;
-                        if (!existingUser.profilePicture) {
-                            existingUser.profilePicture = profile.photos[0]?.value || undefined;
+                    if (!user) {
+                        const existingUser = await User.findOne({ email: profile.emails[0].value });
+                        if (existingUser) {
+                            existingUser.googleId = profile.id;
+                            if (!existingUser.profilePicture) {
+                                existingUser.profilePicture = profile.photos[0]?.value || undefined;
+                            }
+                            if (!existingUser.name) existingUser.name = profile.displayName;
+                            if (!existingUser.username) existingUser.username = undefined;
+                            await existingUser.save();
+                            return done(null, existingUser);
+                        } else {
+                            user = await User.create({
+                                googleId: profile.id,
+                                email: profile.emails?.[0]?.value,
+                                name: profile.displayName || undefined,
+                                username: undefined,
+                                profilePicture: profile.photos[0]?.value || undefined,
+                            });
+                            return done(null, user);
                         }
-                        if (!existingUser.name) existingUser.name = profile.displayName;
-                        if (!existingUser.username) existingUser.username = undefined;
-                        await existingUser.save();
-                        return done(null, existingUser);
-                    } else {
-                        user = await User.create({
-                            googleId: profile.id,
-                            email: profile.emails?.[0]?.value,
-                            name: profile.displayName || undefined,
-                            username: undefined,
-                            profilePicture: profile.photos[0]?.value || undefined,
-                        });
-                        return done(null, user);
                     }
+                    return done(null, user);
+                } catch (err) {
+                    if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+                        return done(
+                            new Error(
+                                "An account with this email already exists. Please use a different email or try logging in with your existing account."
+                            ),
+                            null
+                        );
+                    }
+                    return done(err, null);
                 }
-                return done(null, user);
-            } catch (err) {
-                if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
-                    return done(
-                        new Error(
-                            "An account with this email already exists. Please use a different email or try logging in with your existing account."
-                        ),
-                        null
-                    );
-                }
-                return done(err, null);
             }
-        }
-    )
-);
+        )
+    );
+}
 
 // ------------------------- Google OAuth Routes -------------------------
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));

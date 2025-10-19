@@ -179,7 +179,6 @@
    ADMIN_SECRECT_KEY=mysupersecretkey
 ```
 
-
 ## 🔑 Google OAuth Setup (Important for Local Development)
 
 LegalHuB uses Google OAuth 2.0 for user authentication via Passport.js.
@@ -189,26 +188,31 @@ If not configured, the project will throw this error when you run it locally:
 **TypeError: OAuth2Strategy requires a clientID option**
 
 ### 1. Go to Google Cloud Console
+
 https://console.cloud.google.com/
 
 ### 2. Set Up OAuth Consent Screen
+
 - Navigate to **APIs & Services → OAuth consent screen**
 - Choose **External** and add your Gmail as a **Test User**
 
 ### 3. Create OAuth Client Credentials
+
 - Go to **APIs & Services → Credentials → Create Credentials → OAuth client ID**
 - Choose **Web Application**
-- Add the following Authorized redirect URI:  http://localhost:8000/auth/google/callback
-    
+- Add the following Authorized redirect URI: http://localhost:8000/auth/google/callback
 
 ### 4. Copy Your Client ID and Secret
+
 Add them to your `.env` file:
+
 ```
 GOOGLE_CLIENT_ID=your-client-id-here
 GOOGLE_CLIENT_SECRET=your-client-secret-here
 GOOGLE_CALLBACK_URL=http://localhost:8000/auth/google/callback
 LOCAL_GOOGLE_CALLBACK=http://localhost:8000/auth/google/callback
 ```
+
 ---
 
 ## 🚀 Start the Server
@@ -494,6 +498,7 @@ This project is licensed under the [MIT License](LICENSE).
 Pull requests are welcome! For significant changes, please open an issue first to discuss your proposed modifications.
 
 ---
+
 ## Contributor
 
 A heartfelt thank you to all the contributors who have dedicated their time and effort to make this project a success.  

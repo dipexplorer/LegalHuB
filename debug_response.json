@@ -1,8 +1,0 @@
-{
-  "statusCode": 404,
-  "body": {
-    "success": false,
-    "statusCode": 404,
-    "msg": "Document not found"
-  }
-}

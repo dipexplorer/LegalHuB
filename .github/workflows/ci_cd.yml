@@ -18,7 +18,7 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: 20
-                  cache: 'npm'
+                  cache: "npm"
 
             - name: 📦 Install Dependencies
               run: npm ci
@@ -39,12 +39,17 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: 20
-                  cache: 'npm'
+                  cache: "npm"
 
             - name: 📦 Install Dependencies
               run: npm ci
 
             - name: 🧪 Run Tests
+              env:
+                  NODE_ENV: test
+                  GOOGLE_CLIENT_ID: fake-client-id
+                  GOOGLE_CLIENT_SECRET: fake-client-secret
+                  GOOGLE_CALLBACK_URL: http://localhost:3000/auth/google/callback
               run: npm run test -- --passWithNoTests
 
     deploy:
@@ -54,7 +59,7 @@ jobs:
         runs-on: ubuntu-latest
         environment:
             name: production
-            url: https://your-app-url.com
+            url: https://legalhub-zwk9.onrender.com/
         steps:
             - name: 📥 Checkout Code
               uses: actions/checkout@v4

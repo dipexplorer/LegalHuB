@@ -127,7 +127,7 @@ describe("📄 Articles API Testing", () => {
         console.log("📥 Missing field create response:", res.body);
         expect(res.statusCode).toBe(400);
         // Check if response has the expected structure
-        if (res.body && typeof res.body === 'object') {
+        if (res.body && typeof res.body === "object") {
             if (res.body.success !== undefined) {
                 expect(res.body.success).toBe(false);
             }
@@ -158,7 +158,7 @@ describe("📄 Articles API Testing", () => {
         console.log("📥 Update non-existent article response:", res.body);
         expect(res.statusCode).toBe(404);
         // Check if response has the expected structure
-        if (res.body && typeof res.body === 'object') {
+        if (res.body && typeof res.body === "object") {
             if (res.body.success !== undefined) {
                 expect(res.body.success).toBe(false);
             }
@@ -177,7 +177,7 @@ describe("📄 Articles API Testing", () => {
         console.log("📥 Delete non-existent article response:", res.body);
         expect(res.statusCode).toBe(404);
         // Check if response has the expected structure
-        if (res.body && typeof res.body === 'object') {
+        if (res.body && typeof res.body === "object") {
             if (res.body.success !== undefined) {
                 expect(res.body.success).toBe(false);
             }

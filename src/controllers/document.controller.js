@@ -155,7 +155,7 @@ const getDocumentById = asyncHandler(async (req, res) => {
             return res.status(404).json({
                 success: false,
                 statusCode: 404,
-                msg: "Document not found"
+                msg: "Document not found",
             });
         }
 
@@ -164,7 +164,9 @@ const getDocumentById = asyncHandler(async (req, res) => {
 
     // In test environment, always return JSON response
     if (process.env.NODE_ENV === "test") {
-        return res.status(200).json(new ApiResponse(200, document, "Document fetched successfully"));
+        return res
+            .status(200)
+            .json(new ApiResponse(200, document, "Document fetched successfully"));
     }
 
     if (req.accepts("html")) {
@@ -194,7 +196,7 @@ const updateDocument = asyncHandler(async (req, res) => {
             return res.status(404).json({
                 success: false,
                 statusCode: 404,
-                msg: "Document not found"
+                msg: "Document not found",
             });
         }
         throw new ApiError(404, "Document not found");
@@ -238,7 +240,7 @@ const deleteDocument = asyncHandler(async (req, res) => {
             return res.status(404).json({
                 success: false,
                 statusCode: 404,
-                msg: "Document not found"
+                msg: "Document not found",
             });
         }
         throw new ApiError(404, "Document not found");
