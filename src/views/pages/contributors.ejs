@@ -1,59 +1,67 @@
 <% layout("layouts/boilerplate") %>
 
-<section class="contributors-banner">
-  <h1>We Welcome Contributions!</h1>
-  <div class="banner-row">
-    <p class="description">
-      Your ideas and skills can help make justice accessible to everyone across
-      the globe. Join us in improving this platform and simplify access to legal
-      resources.
-    </p>
-    <div class="banner-image">
-      <img src="/pic/contributions.png" alt="A justice scale and a lawyer hammer" />
+<div class="contributors-page">
+  <section class="contributors-banner">
+    <h2>
+      <img
+        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f30d/512.gif"
+        alt="Handshake"
+        width="50"
+        height="50" /> 
+      We Welcome Contributions!
+    </h2>
+    <div class="banner-row">
+      <p class="description">
+        Your ideas and skills can help make justice accessible to everyone across the globe. 
+        Join us in improving this platform and simplify access to legal resources. 
+          <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2696_fe0f/512.gif" alt="Scales of Justice" width="32" height="32">
+      </p>
+      <div class="banner-image">
+        <img src="/pic/contributors.png" alt="Collaborative Network" />
     </div>
-    <a href="https://github.com/dipexplorer/LegalHuB/" target="_blank" rel="noopener" class="cta-button">
-      Become a Contributor
-    </a>
-  </div>
-</section>
+      <a href="https://github.com/dipexplorer/LegalHuB/" target="_blank" rel="noopener" class="cta-button">
+        Become a Contributor
+      </a>
+    </div>
+  </section>
 
-<section class="contributors-hero">
-  <div class="container">
-    <h1>Our Contributors</h1>
-    <p>Huge thanks to everyone helping build LegalHuB.</p>
-    <% if (repoStats) { %>
-      <div class="repo-stats">
-        <a href="<%= repoStats.repoHtmlUrl %>" target="_blank" rel="noopener" class="btn">GitHub Repo</a>
-        <a href="<%= repoStats.pullsUrl %>" target="_blank" rel="noopener" class="btn">View PRs</a>
-        <a href="<%= repoStats.issuesUrl %>" target="_blank" rel="noopener" class="btn">Open Issues</a>
-        <div class="stats">
-          <span>⭐ <%= repoStats.stars %></span>
-          <span>🍴 <%= repoStats.forks %></span>
-          <span>👀 <%= repoStats.watchers %></span>
-          <span>🐞 <%= repoStats.openIssues %> open</span>
+  <section class="contributors-hero">
+    <div class="container">
+      <h1>Our Contributors</h1>
+      <p>Huge thanks to everyone helping build LegalHuB.</p>
+      <% if (repoStats) { %>
+        <div class="repo-stats">
+          <a href="<%= repoStats.repoHtmlUrl %>" target="_blank" rel="noopener" class="btn">GitHub Repo</a>
+          <a href="<%= repoStats.pullsUrl %>" target="_blank" rel="noopener" class="btn">View PRs</a>
+          <a href="<%= repoStats.issuesUrl %>" target="_blank" rel="noopener" class="btn">Open Issues</a>
+          <div class="stats">
+            <span>⭐ <%= repoStats.stars %></span>
+            <span>🍴 <%= repoStats.forks %></span>
+            <span>👀 <%= repoStats.watchers %></span>
+            <span>🐞 <%= repoStats.openIssues %> open</span>
+          </div>
         </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="container contributors-container">
+    <% if (!contributors || !contributors.length) { %>
+      <p class="contributors-empty">No contributors found right now. Please try again later.</p>
+    <% } else { %>
+      <div class="contributors-grid">
+        <% contributors.forEach(c => { %>
+          <article class="contrib-card">
+            <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
+            <div class="contrib-name"><%= c.login %></div>
+            <a class="contrib-link" href="<%= c.html_url %>" target="_blank" rel="noopener">@<%= c.login %></a>
+            <% if (typeof c.contributions !== 'undefined') { %>
+              <div style="margin-top:6px; font-size: 0.9rem; color:#666;">🧩 <%= c.contributions %> contributions</div>
+            <% } %>
+          </article>
+        <% }) %>
       </div>
     <% } %>
-  </div>
-</section>
-
-<section class="container contributors-container">
-  <% if (!contributors || !contributors.length) { %>
-    <p class="contributors-empty">No contributors found right now. Please try again later.</p>
-  <% } else { %>
-    <div class="contributors-grid">
-      <% contributors.forEach(c => { %>
-        <article class="contrib-card">
-          <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
-          <div class="contrib-name"><%= c.login %></div>
-          <a class="contrib-link" href="<%= c.html_url %>" target="_blank" rel="noopener">@<%= c.login %></a>
-          <% if (typeof c.contributions !== 'undefined') { %>
-            <div style="margin-top:6px; font-size: 0.9rem; color:#666;">🧩 <%= c.contributions %> contributions</div>
-          <% } %>
-        </article>
-      <% }) %>
-    </div>
-  <% } %>
-</section>
-
+  </section>
+</div>
 
