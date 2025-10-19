@@ -1,0 +1,383 @@
+/* =========================================================================
+   security.css — FINAL, FULL-WIDTH NAVBAR/FOOTER, WIDER CONTENT
+   ========================================================================= */
+
+/* -------------------------
+   Theme Variables (Retained for consistency)
+   ------------------------- */
+:root {
+    --bg-1: #212121;
+    --bg-2: #1a1a1a; 
+    --muted: #bdbdbd;
+    --muted-2: #9a9a9a;
+    --accent-start: #4e00ff;
+    --accent-end: #8e00ff;
+    --accent-glow: rgba(142, 0, 255, 0.24);
+    --card-radius: 25px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    --inset-glow: rgba(255, 255, 255, 0.06);
+    --input-bg: rgba(255, 255, 255, 0.03);
+    --input-border: rgba(255, 255, 255, 0.06);
+    --success-color: #28a745;
+    --error-color: #e03e2d;
+    --transition: 200ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* ----------------------------------------------------
+   PAGE LAYOUT FIX: FULL WIDTH STRETCH & CONTENT CENTERING
+   ---------------------------------------------------- */
+body {
+    background: var(--bg-2);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    /* REMOVED FLEXBOX from body: Allows siblings (Navbar, Main, Footer) to behave normally */
+}
+
+.security-page {
+    /* 🚨 WIDER MAX-WIDTH: 1300px */
+    max-width: 1300px; 
+    width: 100%; 
+    
+    /* 🚨 CENTERING FIX: margin: auto on a max-width element */
+    margin: 2rem auto; 
+    padding: 0 1.5rem; 
+}
+
+.security-container {
+    width: 100%;
+}
+
+/* Navbar/Footer (If they have specific classes, you might need to adjust them, 
+   but generally, they will now stretch to 100% viewport width without interference.) 
+*/
+footer {
+    /* Ensures the footer width is not explicitly limited by the security-page max-width */
+    width: 100%;
+    max-width: none; 
+    margin-top: 0;
+}
+
+/* --- Titles --- */
+.page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center; 
+    margin: 0 auto 0.5rem auto; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 12px;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+/* -------------------------
+   Security Card Styling
+   ------------------------- */
+.security-card {
+    width: 100%;
+    margin-bottom: 2rem;
+    background: linear-gradient(145deg, var(--bg-1), var(--bg-2));
+    border-radius: var(--card-radius); 
+    padding: 2.5rem 3rem; /* Spacious Padding */
+    box-shadow: var(--shadow), inset 0 0 20px var(--inset-glow);
+    position: relative;
+    transition: transform var(--transition), box-shadow var(--transition);
+    overflow: hidden;
+}
+
+/* Glowing Border Effect (Retained) */
+.security-card::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: calc(var(--card-radius) + 6px);
+    z-index: -1;
+    background: linear-gradient(
+        90deg,
+        rgba(78, 0, 255, 0.18),
+        rgba(142, 0, 255, 0.12),
+        rgba(78, 0, 255, 0.06)
+    );
+    filter: blur(10px);
+    opacity: 0.9;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.security-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px var(--inset-glow);
+}
+
+.security-card:hover::before {
+    opacity: 1;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-subtitle {
+    color: var(--muted-2);
+    margin-bottom: 1.5rem;
+}
+
+/* -------------------------
+   Form Elements
+   ------------------------- */
+.form-group {
+    margin-bottom: 22px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted-2);
+    font-size: 13px;
+    letter-spacing: 0.2px;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 12px 40px 12px 14px;
+    border-radius: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: #fff;
+    font-size: 15px;
+    transition: all var(--transition);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.input-with-icon input:focus {
+    border-color: rgba(142, 0, 255, 0.9);
+    box-shadow: 0 0 0 3px rgba(78, 0, 255, 0.1);
+}
+
+.input-with-icon .toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: color var(--transition);
+}
+
+.input-with-icon .toggle-password:hover {
+    color: #fff;
+}
+
+.helper-text {
+    font-size: 13px;
+    color: var(--muted-2);
+    margin-top: 8px;
+}
+
+/* -------------------------
+   Buttons
+   ------------------------- */
+.submit-btn {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.submit-btn:focus {
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.gradient-btn {
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    box-shadow: 0 6px 18px var(--accent-glow);
+}
+
+.gradient-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--accent-glow);
+}
+
+.secondary-gradient-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    width: auto;
+    padding: 10px 20px;
+}
+
+.secondary-gradient-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* -------------------------
+   Password Strength Meter
+   ------------------------- */
+.password-strength-meter {
+    height: 8px;
+    background-color: var(--input-bg);
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+.password-strength-meter .strength-text {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    padding: 2px 0;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+.password-strength-meter.weak .strength-text { background-color: #e74c3c; }
+.password-strength-meter.medium .strength-text { background-color: #f39c12; }
+.password-strength-meter.strong .strength-text { background-color: #2ecc71; }
+.password-strength-meter.very-strong .strength-text { background-color: #27ae60; }
+.password-strength-meter .feedback {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+/* -------------------------
+   Session Management
+   ------------------------- */
+.session-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+.session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--input-border);
+}
+
+.session-item:last-child {
+    border-bottom: none;
+}
+
+.session-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.session-info strong {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.session-info .location {
+    font-size: 0.9rem;
+    color: var(--muted-2);
+}
+
+.session-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.activity-time {
+    font-size: 0.9rem;
+    color: var(--muted-2);
+}
+
+.session-item.current-session .activity-time {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.revoke-btn {
+    background: transparent;
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.revoke-btn:hover {
+    background: var(--error-color);
+    color: #fff;
+}
+
+.no-sessions {
+    color: var(--muted);
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* -------------------------
+   Responsiveness
+   ------------------------- */
+@media (max-width: 600px) {
+    /* Ensure the main content block has padding on mobile */
+    .security-page {
+        padding: 0 10px;
+    }
+    
+    /* Ensure footer aligns fully */
+    footer {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .security-card {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+    .page-title {
+        font-size: 1.8rem;
+    }
+    .session-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .session-actions {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+}
