@@ -95,7 +95,25 @@ footer {
     position: relative;
     transition: transform var(--transition), box-shadow var(--transition);
     overflow: hidden;
+    max-width: 900px;
+    margin: 0 auto;
 }
+.security-card:not(:last-child) {
+  margin-bottom: 2.5rem;
+}
+
+/* NEW: Centered, Max-Width Wrapper for Forms */
+.form-wrapper {
+    max-width: 700px;         /* Restricts width for better desktop readability */
+    margin: 0 auto;           /* Centers form horizontally */
+    width: 100%;
+    padding: 0 1rem;          /* Ensures padding on smaller screens */
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;             /* Consistent spacing between form groups */
+}
+ 
+
 
 /* Glowing Border Effect (Retained) */
 .security-card::before {
@@ -147,6 +165,13 @@ footer {
     position: relative;
 }
 
+.form-group input,
+.form-group select,
+.form-group textarea {
+    max-width: 100%;         /* Prevent overflow */
+    width: 100%;             /* Responsive scaling */
+    box-sizing: border-box;  /* Includes padding in width */
+}
 .form-group label {
     display: block;
     margin-bottom: 8px;
@@ -363,8 +388,9 @@ footer {
     }
 
     .security-card {
-        padding: 25px 20px;
         border-radius: 20px;
+         padding: 1.5rem 1rem;
+        margin-bottom: 2rem;
     }
     .page-title {
         font-size: 1.8rem;
