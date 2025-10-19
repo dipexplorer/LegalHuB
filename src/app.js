@@ -345,8 +345,11 @@ app.get("/api/search", smartSearch);
 
 // 404 handler for HTML or API
 app.all("*", (req, res) => {
-    // if request accepts html render page, else return json
-    if (req.accepts("html")) {
+    const wantsHtml = req.accepts && req.accepts("html");
+    const isApi = req.originalUrl && req.originalUrl.startsWith("/api");
+
+    // For API routes always return JSON
+    if (!isApi && wantsHtml) {
         return res.status(404).render("pages/nopage");
     }
     return res.status(404).json(new apiResponse(404, null, "Not Found"));
@@ -367,8 +370,10 @@ app.use((err, req, res, next) => {
     }
 
     const statusCode = err.statusCode || 500;
-    // If request expects HTML, render an error page (friendly)
-    if (req.accepts("html")) {
+    const isApi = req.originalUrl && req.originalUrl.startsWith("/api");
+
+    // If NOT API and request expects HTML, render an error page (friendly)
+    if (!isApi && req.accepts("html")) {
         // In production avoid exposing stack traces
         return res.status(statusCode).render("pages/error", {
             statusCode,
@@ -379,9 +384,12 @@ app.use((err, req, res, next) => {
     }
 
     // Default: send structured JSON API response
-    return res
-        .status(statusCode)
-        .json(new apiResponse(statusCode, null, err.message || "Internal Server Error"));
+    const response = new apiResponse(statusCode, null, err.message || "Internal Server Error");
+
+    // Ensure response has success property set based on status code
+    response.success = statusCode < 400;
+
+    return res.status(statusCode).json(response);
 });
 
 module.exports = app;

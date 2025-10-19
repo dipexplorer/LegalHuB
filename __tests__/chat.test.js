@@ -65,7 +65,7 @@ describe("💬 Chat API Testing", () => {
             client: testClient._id,
             lawyer: testLawyer._id,
             date: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            timeSlot: ["10:00 AM"],
+            timeSlot: "10:00 AM",
             status: "approved",
             notes: "Test appointment for chat",
             appointmentCard: {
@@ -307,7 +307,7 @@ describe("💬 Chat API Testing", () => {
                 client: testClient._id,
                 lawyer: testLawyer._id,
                 date: new Date(Date.now() + 48 * 60 * 60 * 1000),
-                timeSlot: ["2:00 PM"],
+                timeSlot: "2:00 PM",
                 status: "approved",
             });
 

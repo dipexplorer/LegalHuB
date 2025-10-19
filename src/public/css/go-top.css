@@ -2,7 +2,7 @@
 #goTopBtn {
     position: fixed;
     bottom: 100px !important; /* Lift above Chatbase */
-    right: 25px !important;
+    right: 30px !important;
     z-index: 9999 !important;
     display: none;
     background: linear-gradient(135deg, #667eea, #764ba2);
@@ -13,9 +13,19 @@
     height: 50px;
     font-size: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    /* Restrict transitions to avoid layout/jump issues */
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.3s ease,
+        opacity 0.2s ease;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    animation: float 3s ease-in-out infinite;
+    /* Remove floating animation to prevent erratic movement */
+    /* animation: float 3s ease-in-out infinite; */
+    /* Establish stable transform baseline */
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity;
+    animation: bobY 4s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -30,11 +40,25 @@
     }
 }
 
+/* Gentle vertical bobbing only along Y axis */
+@keyframes bobY {
+    0% {
+        transform: translate3d(0, 0px, 0);
+    }
+    50% {
+        transform: translate3d(0, -4px, 0);
+    }
+    100% {
+        transform: translate3d(0, 0px, 0);
+    }
+}
+
 #goTopBtn.show {
     display: block !important;
+    /* Fade-in and then start gentle vertical bobbing */
     animation:
         fadeIn 0.3s ease,
-        float 3s ease-in-out infinite;
+        bobY 4s ease-in-out 0.3s infinite;
 }
 
 @keyframes fadeIn {
