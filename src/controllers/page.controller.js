@@ -10,101 +10,201 @@ const Notification = require("../models/notification.model.js");
 const axios = require("axios");
 
 // ---------- GitHub Helpers ----------
+
+/**
+ * Helper function to fetch all pages from a paginated GitHub API endpoint.
+ * @param {string} url - The initial URL to fetch.
+ * @param {object} headers - The headers (including auth token).
+ * @returns {Array} - A combined array of all items from all pages.
+ */
+async function fetchAllPages(url, headers) {
+    let allData = [];
+    let nextUrl = url;
+
+    while (nextUrl) {
+        try {
+            const response = await axios.get(nextUrl, { headers, params: { per_page: 100 } });
+            
+            if (response.data && Array.isArray(response.data)) {
+                 allData = allData.concat(response.data);
+            } else {
+                nextUrl = null;
+                continue;
+            }
+
+            const linkHeader = response.headers.link;
+            if (linkHeader) {
+                const nextMatch = linkHeader.match(/<([^>]+)>; rel="next"/);
+                nextUrl = nextMatch ? nextMatch[1] : null;
+            } else {
+                nextUrl = null;
+            }
+        } catch (error) {
+            console.error(`Error fetching GitHub page: ${nextUrl}`, error.message);
+            // If one page fails (e.g., rate limit), stop and return what we have so far
+            nextUrl = null;
+        }
+    }
+    return allData;
+}
+
+
+/**
+ * Fetches all contributors and calculates total commits.
+ */
 async function fetchContributors(owner, repo) {
     const url = `https://api.github.com/repos/${owner}/${repo}/contributors`;
     const headers = {};
     if (process.env.GITHUB_TOKEN) {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
-    const { data } = await axios.get(url, { headers, params: { per_page: 100 } });
-    return data;
+
+    const allContributors = await fetchAllPages(url, headers);
+    
+    const totalCommits = allContributors.reduce((sum, contributor) => {
+        return sum + (contributor.contributions || 0);
+    }, 0);
+
+    return {
+        contributorsList: allContributors,
+        contributorsCount: allContributors.length,
+        totalCommits: totalCommits
+    };
 }
 
+/**
+ * Fetches repository stats like stars, forks, merged PRs, and closed issues.
+ */
 async function fetchRepoStats(owner, repo) {
     const base = `https://api.github.com/repos/${owner}/${repo}`;
+    const searchApi = `https://api.github.com/search/issues`;
     const headers = {};
     if (process.env.GITHUB_TOKEN) {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
-    const [repoRes, prsRes, issuesRes] = await Promise.all([
+
+    const date = new Date();
+    date.setDate(date.getDate() - 30);
+    const thirtyDaysAgo = date.toISOString().split('T')[0];
+
+    const [repoRes, prsRes, issuesRes] = await Promise.allSettled([
         axios.get(base, { headers }),
-        axios.get(`${base}/pulls`, { headers, params: { state: "closed", per_page: 1 } }),
-        axios.get(`${base}/issues`, { headers, params: { state: "open", per_page: 1 } }),
+        axios.get(searchApi, { 
+            headers, 
+            // --- THE FIX IS HERE ---
+            // Using spaces instead of '+' signs for the query.
+            params: { q: `repo:${owner}/${repo} is:pr is:merged` } 
+        }),
+        axios.get(searchApi, {
+            headers,
+            // --- AND HERE ---
+            params: { q: `repo:${owner}/${repo} is:issue is:closed closed:>=${thirtyDaysAgo}` }
+        })
     ]);
 
+    const getData = (result, path, defaultValue = 0) => {
+        if (result.status === 'fulfilled' && result.value.data) {
+            return path.split('.').reduce((o, k) => (o || {})[k], result.value) || defaultValue;
+        }
+        if (result.status === 'rejected') {
+            console.error(`API call failed. Reason:`, result.reason.message);
+        }
+        return defaultValue;
+    };
+
     return {
-        stars: repoRes.data.stargazers_count,
-        forks: repoRes.data.forks_count,
-        watchers: repoRes.data.watchers_count,
-        openIssues: repoRes.data.open_issues_count,
-        defaultBranch: repoRes.data.default_branch,
-        // lightweight counts; detailed counts would need pagination
-        // expose links for users to explore
-        repoHtmlUrl: repoRes.data.html_url,
-        pullsUrl: `${repoRes.data.html_url}/pulls`,
-        issuesUrl: `${repoRes.data.html_url}/issues`,
+        stars: getData(repoRes, 'data.stargazers_count', 0),
+        forks: getData(repoRes, 'data.forks_count', 0),
+        pulls: getData(prsRes, 'data.total_count', 0),
+        issuesClosed: getData(issuesRes, 'data.total_count', 0)
     };
 }
 
+
 const renderHome = asyncHandler(async (req, res) => {
-    const lawyersPromise = User.find({ role: "lawyer" })
-        .populate({
-            path: "lawyerProfile",
-            model: LawyerProfile,
-            select: "specialization experience city state fees isVerified",
-        })
-        .limit(3);
+    const lawyersPromise = User.find({ role: "lawyer" }).limit(3);
 
     const owner = process.env.REPO_OWNER || "dipexplorer";
     const repo = process.env.REPO_NAME || "LegalHuB";
 
     let contributorsTop = [];
+    let githubStats = {}; // Default to an empty object
+
     try {
-        const all = await fetchContributors(owner, repo);
-        contributorsTop = (all || []).slice(0, 12);
-    } catch (_) {
+        const [contributorResult, statsResult] = await Promise.allSettled([
+            fetchContributors(owner, repo),
+            fetchRepoStats(owner, repo)
+        ]);
+
+        // Handle stats (from fetchRepoStats)
+        if (statsResult.status === 'fulfilled') {
+            githubStats = statsResult.value;
+        } else {
+            console.error("fetchRepoStats itself failed:", statsResult.reason);
+            githubStats = { stars: 0, forks: 0, pulls: 0, issuesClosed: 0 };
+        }
+
+        // Handle contributors (from fetchContributors)
+        if (contributorResult.status === 'fulfilled') {
+            const contributorData = contributorResult.value;
+            
+            // --- THIS IS THE CRITICAL FIX ---
+            // We must add BOTH 'contributors' and 'commits' to the stats object
+            githubStats.contributors = contributorData.contributorsCount; 
+            githubStats.commits = contributorData.totalCommits;
+            // ---------------------------------
+
+            contributorsTop = (contributorData.contributorsList || []).slice(0, 12);
+        } else {
+            console.error("fetchContributors failed:", contributorResult.reason);
+            githubStats.contributors = 0;
+            githubStats.commits = 0;
+            contributorsTop = [];
+        }
+
+    } catch (err) {
+        console.error("Fatal error in renderHome:", err.message);
         contributorsTop = [];
+        githubStats = null; // Fallback to null
     }
 
     const lawyers = await lawyersPromise;
-
-    res.render("pages/index", { lawyers, contributorsTop });
+    
+    // This console.log is very helpful for debugging
+    console.log("Final GitHub Stats passed to page:", githubStats);
+    
+    res.render("pages/index", { lawyers, contributorsTop, githubStats });
 });
+
+// ... (rest of your controller file) ...
+// ... (all other functions like renderDictionary, renderDocument, etc.) ...
 
 const renderDictionary = (req, res) => {
     res.render("pages/dictionary");
 };
 
 const renderDocument = asyncHandler(async (req, res) => {
-    // Extract filter parameters and pagination from query string
     const {
         search,
         state,
         department,
         sortBy,
         page = 1,
-        limit = 6, // Feel free to adjust
+        limit = 6,
     } = req.query;
-
-    // Build filter object
     let filter = {};
-
     if (search && search.trim()) {
         filter.$or = [
             { title: { $regex: search.trim(), $options: "i" } },
             { description: { $regex: search.trim(), $options: "i" } },
         ];
     }
-
     if (state && state !== "all") {
         filter.state = state;
     }
-
     if (department && department !== "all") {
         filter.department = department;
     }
-
-    // Build sort object
     let sort = {};
     switch (sortBy) {
         case "oldest":
@@ -121,24 +221,16 @@ const renderDocument = asyncHandler(async (req, res) => {
             sort = { createdAt: -1 };
             break;
     }
-
-    // Pagination logic
     const currentPage = Math.max(1, parseInt(page));
     const perPage = Math.max(1, parseInt(limit));
     const skip = (currentPage - 1) * perPage;
-
     const [documents, totalDocuments] = await Promise.all([
         Document.find(filter).sort(sort).skip(skip).limit(perPage),
         Document.countDocuments(filter),
     ]);
-
     const totalPages = Math.ceil(totalDocuments / perPage);
-
-    // Get unique states and departments
     const allStates = await Document.distinct("state");
     const allDepartments = await Document.distinct("department");
-
-    // Filter and sort options for the frontend
     const filterOptions = {
         states: allStates.sort(),
         departments: allDepartments.sort(),
@@ -149,15 +241,12 @@ const renderDocument = asyncHandler(async (req, res) => {
             { value: "alphabetical", label: "A-Z" },
         ],
     };
-
-    // Current filters for form pre-fill
     const currentFilters = {
         search: search || "",
         state: state || "all",
         department: department || "all",
         sortBy: sortBy || "newest",
     };
-
     res.render("pages/documents", {
         documents,
         filterOptions,
@@ -176,19 +265,14 @@ const renderArticles = asyncHandler(async (req, res) => {
 });
 
 const renderFundamental = asyncHandler(async (req, res) => {
-    // Extract search and filter parameters from query string
     const {
         search,
         category,
         articleNumber,
         page = 1,
-        limit = 9, // Increased for better grid display
+        limit = 9,
     } = req.query;
-
-    // Build filter object for smart search
     let filter = {};
-
-    // Smart search across multiple fields
     if (search && search.trim()) {
         const searchRegex = { $regex: search.trim(), $options: "i" };
         filter.$or = [
@@ -197,26 +281,18 @@ const renderFundamental = asyncHandler(async (req, res) => {
             { articleNumber: searchRegex },
         ];
     }
-
-    // Category filtering
     if (category && category !== "all" && category.trim()) {
         filter.category = category.trim();
     }
-
-    // Article number quick search (exact or partial match)
     if (articleNumber && articleNumber.trim()) {
         filter.articleNumber = { $regex: articleNumber.trim(), $options: "i" };
     }
-
-    // Pagination logic
     const currentPage = Math.max(1, parseInt(page));
     const perPage = Math.max(1, parseInt(limit));
     const skip = (currentPage - 1) * perPage;
-
-    // Execute queries in parallel for better performance
     const [rights, totalRights, categoryStats] = await Promise.all([
         Right.find(filter)
-            .sort({ articleNumber: 1 }) // Sort by article number for logical order
+            .sort({ articleNumber: 1 })
             .skip(skip)
             .limit(perPage),
         Right.countDocuments(filter),
@@ -225,13 +301,8 @@ const renderFundamental = asyncHandler(async (req, res) => {
             { $sort: { _id: 1 } },
         ]),
     ]);
-
     const totalPages = Math.ceil(totalRights / perPage);
-
-    // Get all unique categories for filter dropdown
     const allCategories = await Right.distinct("category");
-
-    // Prepare filter options with counts
     const filterOptions = {
         categories: allCategories.sort().map((cat) => {
             const stat = categoryStats.find((s) => s._id === cat);
@@ -242,21 +313,16 @@ const renderFundamental = asyncHandler(async (req, res) => {
             };
         }),
     };
-
-    // Current filters for form pre-fill and active filter display
     const currentFilters = {
         search: search || "",
         category: category || "all",
         articleNumber: articleNumber || "",
     };
-
-    // Calculate statistics for header display
     const stats = {
         totalRights: await Right.countDocuments(),
         totalCategories: allCategories.length,
         filteredResults: totalRights,
     };
-
     res.render("pages/fundamental", {
         rights,
         filterOptions,
@@ -289,10 +355,8 @@ const renderLoginForm = async (req, res) => {
 
 const getLawyers = asyncHandler(async (req, res) => {
     const { search, specialization, location } = req.query;
-
     const specializations = await LawyerProfile.distinct("specialization");
     const locations = await LawyerProfile.distinct("city");
-
     let lawyers = await User.find({ role: "lawyer" })
         .populate({
             path: "lawyerProfile",
@@ -300,21 +364,15 @@ const getLawyers = asyncHandler(async (req, res) => {
             select: "specialization experience city state availableSlots fees isVerified",
         })
         .lean();
-
     const filteredLawyers = lawyers.filter((lawyer) => {
         if (!lawyer.lawyerProfile) return false;
-
         const s = search && search.trim().toLowerCase();
         const specializationFilter = specialization && specialization.toLowerCase();
         const locationFilter = location && location.toLowerCase();
-
-        // Normalize fields for comparisons (lowercase or empty string)
         const username = (lawyer.username || "").toLowerCase();
         const spec = (lawyer.lawyerProfile.specialization || "").toLowerCase();
         const city = (lawyer.lawyerProfile.city || "").toLowerCase();
         const state = (lawyer.lawyerProfile.state || "").toLowerCase();
-
-        // Filter specialization if filter active
         if (
             specializationFilter &&
             specializationFilter !== "all" &&
@@ -322,13 +380,9 @@ const getLawyers = asyncHandler(async (req, res) => {
         ) {
             return false;
         }
-
-        // Filter location if filter active
         if (locationFilter && locationFilter !== "all" && !city.includes(locationFilter)) {
             return false;
         }
-
-        // Search filter on username, specialization, city, state (partial)
         if (s) {
             if (
                 !(username.includes(s) || spec.includes(s) || city.includes(s) || state.includes(s))
@@ -336,10 +390,8 @@ const getLawyers = asyncHandler(async (req, res) => {
                 return false;
             }
         }
-
         return true;
     });
-
     res.render("pages/lawyers", {
         lawyers: filteredLawyers,
         search: search || "",
@@ -350,16 +402,13 @@ const getLawyers = asyncHandler(async (req, res) => {
     });
 });
 
-// Render notifications page
 const renderNotifications = asyncHandler(async (req, res) => {
     const notifications = await Notification.find({ user: req.user._id })
         .sort({ createdAt: -1 })
         .limit(50);
-
     res.render("pages/notifications", { notifications });
 });
 
-// Mark as read (from UI form)
 const markAsRead = asyncHandler(async (req, res) => {
     await Notification.findOneAndUpdate(
         { _id: req.params.id, user: req.user._id },
@@ -381,12 +430,31 @@ const renderContributors = asyncHandler(async (req, res) => {
     let contributors = [];
     let repoStats = null;
     try {
-        [contributors, repoStats] = await Promise.all([
+        const [contributorResult, statsResult] = await Promise.allSettled([
             fetchContributors(owner, repo),
             fetchRepoStats(owner, repo),
         ]);
+        
+        if (statsResult.status === 'fulfilled') {
+            repoStats = statsResult.value;
+        } else {
+            repoStats = { stars: 0, forks: 0, pulls: 0, issuesClosed: 0 };
+        }
+        
+        if (contributorResult.status === 'fulfilled') {
+            const contributorData = contributorResult.value;
+            contributors = contributorData.contributorsList;
+            // Also add the stats to the repoStats object here
+            repoStats.contributors = contributorData.contributorsCount;
+            repoStats.commits = contributorData.totalCommits;
+        } else {
+            contributors = [];
+            repoStats.contributors = 0;
+            repoStats.commits = 0;
+        }
+        
     } catch (err) {
-        // fail-soft; still render page
+        console.error("Error fetching contributors page data:", err.message);
         contributors = [];
         repoStats = null;
     }

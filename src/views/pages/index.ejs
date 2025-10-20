@@ -192,6 +192,195 @@
         </div>
     </section>
 
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Project Statistics - Perfect Grid Layout</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+/* Background animation */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2d);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: #fff;
+}
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Section */
+.stats-section {
+  padding: 70px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.stats-section .title {
+  text-align: center;
+  font-size: 2.6rem;
+  margin-bottom: 40px;
+  font-weight: 700;
+  text-shadow: 0 0 18px rgba(142,0,255,0.45);
+}
+
+/* Grid Layout */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 160px);
+  gap: 20px;
+}
+
+/* Common Card Style */
+.stat-card {
+  background: rgba(30,30,60,0.42);
+  border: 1px solid rgba(142,0,255,0.18);
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(142,0,255,0.55);
+  box-shadow: 0 18px 40px rgba(142,0,255,0.18);
+}
+.stat-card i {
+  color: #ff79c6;
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: #b2bec3;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+/* Equal box sizing */
+.square { grid-row: span 1; }
+.rectangle { grid-row: span 1; }
+
+/* Top row layout */
+.wide-top {
+  grid-column: 1 / span 3;
+}
+.top-square-1 { grid-column: 4 / span 1; }
+.top-square-2 { grid-column: 5 / span 1; }
+.top-square-3 { grid-column: 6 / span 1; }
+.top-square-4 { display: none; } /* keep 3 small squares aligned */
+
+/* Bottom row layout */
+.bot-square-1 { grid-column: 1 / span 1; }
+.bot-square-2 { grid-column: 2 / span 1; }
+.bot-square-3 { grid-column: 3 / span 1; }
+.wide-bottom {
+  grid-column: 4 / span 3;
+}
+
+/* Make all squares same size */
+.top-square-1, .top-square-2, .top-square-3,
+.bot-square-1, .bot-square-2, .bot-square-3 {
+  aspect-ratio: 1 / 1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+  .wide-top, .wide-bottom,
+  .top-square-1, .top-square-2, .top-square-3,
+  .bot-square-1, .bot-square-2, .bot-square-3 {
+    grid-column: 1 / -1;
+  }
+}
+</style>
+</head>
+<body>
+
+<section class="stats-section">
+  <div class="title">Project Statistics</div>
+
+  <div class="stats-grid">
+
+    <!-- Top wide rectangle -->
+    <div class="stat-card rectangle wide-top">
+      <i class="fas fa-users"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.contributors : 'N/A' %></div>
+      <div class="stat-label">Contributors</div>
+    </div>
+
+    <!-- Four squares on top row -->
+    <div class="stat-card square top-square-1">
+      <i class="fas fa-code-commit"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.commits : 'N/A' %></div>
+      <div class="stat-label">Commits</div>
+    </div>
+    <div class="stat-card square top-square-2">
+      <i class="fas fa-star"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.stars : 'N/A' %></div>
+      <div class="stat-label">Stars</div>
+    </div>
+    <div class="stat-card square top-square-3">
+      <i class="fas fa-code-branch"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.forks : 'N/A' %></div>
+      <div class="stat-label">Forks</div>
+    </div>
+
+    <!-- Four squares on bottom row -->
+    <div class="stat-card square bot-square-1">
+      <i class="fas fa-code-pull-request"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.pulls : 'N/A' %></div>
+      <div class="stat-label">Pulls Merged</div>
+    </div>
+    <div class="stat-card square bot-square-2"> 
+      <i class="fas fa-code"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.languages : 'N/A' %>JS / EJS</div>
+      <div class="stat-label">Languages</div>
+    </div>
+    <div class="stat-card square bot-square-3">
+      <i class="fas fa-git-alt"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.commits : 'N/A' %></div>
+      <div class="stat-label">Total Commits</div>
+    </div>
+
+    <!-- Bottom wide rectangle -->
+    <div class="stat-card rectangle wide-bottom">
+      <i class="fas fa-check-double"></i>
+      <div class="stat-number"><%= githubStats ? githubStats.issuesClosed : 'N/A' %></div>
+      <div class="stat-label">Issues Closed (30d)</div>
+    </div>
+
+  </div>
+</section>
+<script>
+    console.log("GitHub Stats received on page:", <%- JSON.stringify(githubStats || null) %>);
+</script>
+</body>
+</html>
+
+
     <!-- Contributors Teaser -->
     <section class="contributors-teaser">
         <h2>🙏 Thanks to Our Contributors</h2>
