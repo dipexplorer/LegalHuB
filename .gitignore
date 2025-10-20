@@ -7,3 +7,6 @@ node_modules/
 
 coverage/
 .early.coverage
+
+# Ignore debug files
+debug_response*.json

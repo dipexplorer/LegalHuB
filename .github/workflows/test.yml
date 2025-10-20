@@ -1,0 +1,50 @@
+name: Test Suite
+
+on:
+    push:
+        branches: [main, dev]
+    pull_request:
+        branches: [main, dev]
+    workflow_dispatch: # Allow manual triggering from GitHub UI
+
+jobs:
+    test:
+        name: Run Tests
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [18, 20] # Test on multiple Node.js versions
+
+        steps:
+            - name: ⬇️ Checkout Code
+              uses: actions/checkout@v4
+
+            - name: ⚙️ Setup Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "npm"
+
+            - name: 📦 Install Dependencies
+              run: npm ci
+
+            - name: 🧪 Run Tests with Coverage
+              run: npm run test:coverage
+
+            - name: 📊 Upload Coverage Reports
+              uses: codecov/codecov-action@v4
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  files: ./coverage/lcov.info
+                  flags: unittests
+                  name: codecov-umbrella
+                  fail_ci_if_error: false
+              if: matrix.node-version == 20 # Only upload coverage for one node version
+
+            - name: 📋 Test Summary
+              uses: test-summary/action@v2
+              if: always() # Always run this step, even if tests fail
+              with:
+                  paths: coverage/lcov-report/index.html
+              continue-on-error: true

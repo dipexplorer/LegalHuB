@@ -36,7 +36,7 @@ const renderSecurityPage = asyncHandler(async (req, res) => {
                             activeSessions.push({
                                 id: session.id,
                                 lastActive: new Date(session.cookie.expires),
-                                current: session.id === req.sessionID
+                                current: session.id === req.sessionID,
                             });
                         }
                     });
@@ -50,20 +50,20 @@ const renderSecurityPage = asyncHandler(async (req, res) => {
         user: req.user,
         securitySettings,
         recentActivity,
-        activeSessions
+        activeSessions,
     });
 });
 
 // Update security settings
 const updateSecuritySettings = asyncHandler(async (req, res) => {
     const { notifications, recoveryEmail, recoveryPhone } = req.body;
-    
+
     const settings = await SecuritySettings.findOneAndUpdate(
         { user: req.user._id },
         {
             notifications,
             recoveryEmail,
-            recoveryPhone
+            recoveryPhone,
         },
         { new: true, upsert: true }
     );
@@ -72,10 +72,10 @@ const updateSecuritySettings = asyncHandler(async (req, res) => {
         req.flash("success", "Security settings updated successfully");
         return res.redirect("/account/security");
     }
-    
-    return res.status(200).json(
-        new apiResponse(200, settings, "Security settings updated successfully")
-    );
+
+    return res
+        .status(200)
+        .json(new apiResponse(200, settings, "Security settings updated successfully"));
 });
 
 // Change password with current password verification
@@ -124,9 +124,7 @@ const changePassword = asyncHandler(async (req, res) => {
         return res.redirect("/account/security");
     }
 
-    return res.status(200).json(
-        new apiResponse(200, null, "Password changed successfully")
-    );
+    return res.status(200).json(new apiResponse(200, null, "Password changed successfully"));
 });
 
 // Log out from other sessions
@@ -155,9 +153,9 @@ const logoutOtherSessions = asyncHandler(async (req, res) => {
         return res.redirect("/account/security");
     }
 
-    return res.status(200).json(
-        new apiResponse(200, null, "Successfully logged out from other sessions")
-    );
+    return res
+        .status(200)
+        .json(new apiResponse(200, null, "Successfully logged out from other sessions"));
 });
 
 // Log out specific session
@@ -175,9 +173,7 @@ const logoutSession = asyncHandler(async (req, res) => {
         return res.redirect("/account/security");
     }
 
-    return res.status(200).json(
-        new apiResponse(200, null, "Session terminated successfully")
-    );
+    return res.status(200).json(new apiResponse(200, null, "Session terminated successfully"));
 });
 
 // Track login activity middleware
@@ -185,7 +181,7 @@ const trackLoginActivity = asyncHandler(async (req, res, next) => {
     const ua = useragent.parse(req.headers["user-agent"]);
     const ip = req.ip || req.connection.remoteAddress;
     const geo = geoip.lookup(ip);
-    
+
     await LoginActivity.create({
         user: req.user._id,
         device: ua.platform,
