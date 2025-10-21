@@ -429,20 +429,63 @@ img {
   }
 }
 
+/* --- Fix for Printing Appointment Card (Issue #172) --- */
+
 @media print {
-  .container,
-  .page {
-    background: #fff !important;
-    color: #000 !important;
+  
+  /* 1. Hide everything on the page by default */
+  body * {
+    visibility: hidden;
   }
+
+  /* 2. Make ONLY the appointment card and its contents visible */
+  .appointment-card, .appointment-card * {
+    visibility: visible;
+  }
+
+  /* 3. Force the card to the top-left of the print page */
   .appointment-card {
-    box-shadow: none !important;
-    border: 1px solid #eee !important;
-    background: #fff !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 15px; /* Adds a nice border to the paper */
+    width: 100%; /* Use full width for printing */
+    box-sizing: border-box; /* Include padding in width */
+    box-shadow: none !important; /* Remove screen shadow for print */
   }
-  .qr-box { background: #fff !important; }
-  .btn { display: none !important; }
+
+  /* 4. Force the browser to print all background colors and text styles */
+  .appointment-card {
+    -webkit-print-color-adjust: exact !important; /* For Chrome/Safari */
+    print-color-adjust: exact !important; /* For Firefox */
+    background: #1e1e3e !important; /* Force dark background */
+    color: #ffffff !important; /* Force light text */
+    border: 1px solid #333 !important;
+    border-radius: 14px !important;
+  }
+
+  /* 5. Make sure all text inside is also forced to print correctly */
+  .appointment-card * {
+    color: #ffffff !important; /* Force light text for all inner elements */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 6. Ensure the QR code prints correctly (white background) */
+  .appointment-card .qr-box, 
+  .appointment-card .qr-box img, 
+  .appointment-card .qr-box svg {
+    background: white !important; /* Ensure QR code background is white */
+  }
+
+  /* 7. Hide buttons when printing */
+  .btn, .side { /* Hide action buttons and sidebar */
+    display: none !important; 
+  }
 }
+
+/* --- End of Print Fix --- */
 
 </style>
 
