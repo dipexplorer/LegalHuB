@@ -408,8 +408,21 @@
             if (!resp.ok || !j || !j.ok) {
                 // Try to show helpful message from server
                 const msg = (j && (j.message || j.error)) || "Search failed";
-                resultRoot.innerHTML = `<div class="ld-card error">Error: ${msg}</div>`;
-                toast(msg);
+                resultRoot.innerHTML = `
+                    <div class="ld-card error">
+                        <div class="card__header">
+                            <h2 class="card__term-title">Search Issue</h2>
+                        </div>
+                        <div class="card__section card__section--definition">
+                            <h3 class="card__section-title">We couldn't complete your search</h3>
+                            <div class="card__section-body">
+                                <p>${msg}</p>
+                                <p>Please try again with a different search term or check your spelling. For best results, be specific (e.g., include jurisdiction like "harassment — India").</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                toast("Search issue - please try again");
                 setLoading(false);
                 return;
             }
@@ -418,8 +431,22 @@
             injectResultHtml(j.html || "", j.meta || {});
             pushRecent(t);
         } catch (err) {
-            resultRoot.innerHTML = `<div class="ld-card error">Network error while searching.</div>`;
-            toast("Network error");
+            resultRoot.innerHTML = `
+                <div class="ld-card error">
+                    <div class="card__header">
+                        <h2 class="card__term-title">Connection Issue</h2>
+                    </div>
+                    <div class="card__section card__section--definition">
+                        <h3 class="card__section-title">Please try again</h3>
+                        <div class="card__section-body">
+                            <p>We're having trouble connecting to our legal dictionary service. This might be due to network issues or high demand.</p>
+                            <p>Please check your internet connection and try searching again in a few moments.</p>
+                            <p>If the problem continues, you might want to refresh the page or try again later.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            toast("Connection issue - please try again");
             setLoading(false);
         } finally {
             // ensure skeleton hidden

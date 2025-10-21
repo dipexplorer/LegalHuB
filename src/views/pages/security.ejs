@@ -15,6 +15,7 @@
         <% } %>
 
         <section class="security-card password-management-card">
+            <div class="form-wrapper">
             <h2 class="card-title"><i class="fas fa-key icon-left"></i> Change Password</h2>
             
             <form id="change-password-form" action="/account/security/change-password" method="POST" class="needs-validation" novalidate>
@@ -52,9 +53,11 @@
 
                 <button type="submit" class="submit-btn gradient-btn">Update Password</button>
             </form>
+            </div>
         </section>
 
         <section class="security-card session-management-card">
+            <div class="form-wrapper">
             <h2 class="card-title"><i class="fas fa-desktop icon-left"></i> Active Sessions</h2>
             <p class="card-subtitle">Review and manage devices currently logged into your LegalHuB account.</p>
 
@@ -89,9 +92,11 @@
             <form action="/account/security/logout-others" method="POST" class="mt-3">
                 <button type="submit" class="submit-btn secondary-gradient-btn">Log Out All Other Sessions</button>
             </form>
+            </div>
         </section>
 
         <section class="security-card notification-card">
+             <div class="form-wrapper">
             <h2 class="card-title"><i class="fas fa-bell icon-left"></i> Security Notifications</h2>
             <form action="/account/security/settings" method="POST">
                 
@@ -122,9 +127,11 @@
                 
                 <button type="submit" class="submit-btn gradient-btn">Update Notification Settings</button>
             </form>
+        </div>
         </section>
         
         <section class="security-card recovery-card">
+             <div class="form-wrapper">
             <h2 class="card-title"><i class="fas fa-life-ring icon-left"></i> Account Recovery</h2>
             <form action="/account/security/settings" method="POST" class="needs-validation" novalidate>
                 <div class="form-group">
@@ -147,6 +154,7 @@
                 </div>
                 <button type="submit" class="submit-btn gradient-btn">Update Recovery Info</button>
             </form>
+            </div>
         </section>
 
     </div>

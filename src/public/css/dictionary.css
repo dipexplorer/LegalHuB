@@ -239,6 +239,7 @@
     width: 100%;
     background: var(--card);
     color: var(--card-foreground);
+    background-color: var(--background);
     border-radius: var(--radius-lg);
     padding: 22px;
     box-shadow: var(--shadow-card);
@@ -262,7 +263,7 @@
     margin: 0;
     font-size: 22px;
     font-weight: 700;
-    color: var(--card-foreground);
+    color: var(--primary-2);
 }
 .card__badge-list {
     display: flex;
@@ -272,14 +273,21 @@
 
 /* badge */
 .card__badge {
-    background: #eef2ff;
-    color: #4338ca;
+    /* background: #eef2ff; */
+    color: var(--muted);
     padding: 6px 10px;
-    border-radius: 999px;
     font-weight: 700;
     font-size: 13px;
-    border: 1px solid #dbe6ff;
 }
+
+.card__badge:hover {
+    border: 1px solid #dbe6ff;
+    color: var(--card-foreground);
+    border-radius: 999px;
+    background: #f7f5ff;
+    box-shadow: 0 6px 18px rgba(11, 11, 24, 0.06);
+}
+
 .card__badge--source {
     background: linear-gradient(90deg, var(--primary), var(--primary-2));
     color: #fff;
@@ -375,7 +383,7 @@
     font-size: 18px;
     font-weight: 700;
     margin: 0 0 12px 0;
-    color: var(--card-foreground);
+    color: var(--primary-2);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -389,6 +397,7 @@
 .definition-content {
     font-size: 17px;
     line-height: 2;
+    color: var(--muted);
 } /* increased readability for definition specifically */
 
 /* highlight mark */
@@ -459,10 +468,8 @@
     justify-content: space-between;
     gap: 12px;
     padding: 12px;
-    border-radius: 10px;
     cursor: pointer;
-    background: #fafbff;
-    border: 1px solid #eef2ff;
+    background: transparent;
 }
 .card__collapsible details summary .chev {
     transition: transform 0.18s ease;

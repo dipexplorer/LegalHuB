@@ -1,8 +1,8 @@
 name: 💬 Auto Comment on Forked PR Opened
 
 on:
-    pull_request:
-        types: [opened]
+    pull_request_target:
+        types: [opened, reopened, synchronize]
 
 permissions:
     pull-requests: write

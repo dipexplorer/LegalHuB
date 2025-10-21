@@ -36,22 +36,32 @@ const getTerm = asyncHandler(async (req, res, next) => {
 
     // Prepare prompts
     const systemPrompt = `
-You are a legal expert AI. If possible, respond ONLY with a valid JSON object with these fields:
+You are a legal expert AI. First determine if the requested term is actually a legal term.
+
+If the term is NOT a legal term (e.g., "india", "computer", "pizza"), respond with this JSON:
 {
   "term": "<term>",
-  "definition": "<short explanation>",
+  "isLegalTerm": false,
+  "message": "This is not a legal term. I specialize in legal terminology only. Please try searching for a legal term like contract, tort, divorce, or constitutional law."
+}
+
+If the term IS a legal term, respond ONLY with a valid JSON object with these fields:
+{
+  "term": "<term>",
+  "isLegalTerm": true,
+  "definition": "<short explanation without markdown formatting>",
   "types": ["..."],
   "keyAspects": ["..."],
   "examples": ["..."],
   "stepByStep": ["..."],
   "notes": "<extra>",
-  "relatedTerms": ["optional", "list"],
-  "raw": "<long fallback text>"
+  "relatedTerms": ["optional", "list"]
 }
-If you cannot, provide a clear explanation with labeled sections (Definition:, Types:, Examples:, Key Aspects:, Steps:, Notes:, Related Terms:).
+
+IMPORTANT: Do not use markdown formatting like **bold**, [links], or {braces} in your responses. Use plain text only.
 `.trim();
 
-    const userPrompt = `Explain the legal term "${normalized}" in structured format as above.`;
+    const userPrompt = `Determine if "${normalized}" is a legal term and provide the appropriate structured response as described above.`;
 
     let rawText = "";
     try {
@@ -64,10 +74,28 @@ If you cannot, provide a clear explanation with labeled sections (Definition:, T
         rawText = String(rawText || "").trim();
     } catch (err) {
         console.error("AI error:", err?.kind || err?.message || err);
-        if (err.kind === "RATE_LIMIT") return next(new apiError(429, "AI rate limit"));
-        if (err.kind === "ENOTFOUND")
-            return next(new apiError(503, "AI unreachable (network/DNS)"));
-        return next(new apiError(500, "AI request failed"));
+        if (err.kind === "RATE_LIMIT") {
+            // Provide a user-friendly rate limit message
+            rawText = `We're experiencing high demand right now. Please try searching for "${normalized}" again in a few moments. As an alternative, you might want to check other legal resources or try a more specific search term.`;
+        } else if (err.kind === "ENOTFOUND") {
+            // Provide a user-friendly network error message
+            rawText = `We're having trouble connecting to our legal dictionary service. Please check your internet connection and try searching for "${normalized}" again. If the problem persists, please try again later.`;
+        } else {
+            // Provide a helpful fallback definition for common legal terms
+            const fallbackDefinitions = {
+                "harassment": "Harassment is any unwanted behavior that creates a hostile or intimidating environment. In legal contexts, it typically refers to repeated actions intended to distress, threaten, or annoy another person. Harassment can take many forms including verbal, physical, or digital, and may be based on protected characteristics like race, gender, religion, or disability. Laws vary by jurisdiction but generally prohibit harassment in workplaces, schools, and public spaces.",
+                "contract": "A contract is a legally binding agreement between two or more parties that creates obligations enforceable by law. For a contract to be valid, it typically requires an offer, acceptance, consideration (something of value exchanged), and mutual intent to be bound. Contracts can be written or oral, though certain types must be in writing to be enforceable.",
+                "tort": "A tort is a civil wrong that causes a claimant to suffer loss or harm, resulting in legal liability for the person who commits the tortious act. Common types of torts include negligence, defamation, assault, and trespass. The injured party may sue for damages (compensation) to recover losses.",
+                "divorce": "Divorce is the legal process of ending a marriage. It involves dividing property, determining child custody arrangements, and potentially providing spousal support (alimony) or child support. Divorce laws vary significantly by jurisdiction, with some places requiring separation periods or fault-based grounds, while others allow no-fault divorces."
+            };
+            
+            const lowerTerm = normalized.toLowerCase();
+            if (fallbackDefinitions[lowerTerm]) {
+                rawText = fallbackDefinitions[lowerTerm];
+            } else {
+                rawText = `We're having trouble finding information about "${normalized}" right now. This could be due to technical issues or high demand. Please try again in a few moments. For reliable legal information, consider consulting with a qualified legal professional or checking official legal resources specific to your jurisdiction.`;
+            }
+        }
     }
 
     // Attempt to parse JSON
@@ -179,7 +207,28 @@ const searchTerm = asyncHandler(async (req, res, next) => {
         rawText = String(rawText || "").trim();
     } catch (err) {
         console.error("AI error (search):", err?.kind || err?.message || err);
-        rawText = `Unable to fetch definition for "${term}" due to an upstream error.`;
+        
+        // Provide a more user-friendly error message with fallback information
+        if (err.kind === "RATE_LIMIT") {
+            rawText = `We're experiencing high demand right now. Please try searching for "${term}" again in a few moments. As an alternative, you might want to check other legal resources or try a more specific search term.`;
+        } else if (err.kind === "ENOTFOUND") {
+            rawText = `We're having trouble connecting to our legal dictionary service. Please check your internet connection and try searching for "${term}" again. If the problem persists, please try again later.`;
+        } else {
+            // Provide a helpful fallback definition for common legal terms
+            const fallbackDefinitions = {
+                "harassment": "Harassment is any unwanted behavior that creates a hostile or intimidating environment. In legal contexts, it typically refers to repeated actions intended to distress, threaten, or annoy another person. Harassment can take many forms including verbal, physical, or digital, and may be based on protected characteristics like race, gender, religion, or disability. Laws vary by jurisdiction but generally prohibit harassment in workplaces, schools, and public spaces.",
+                "contract": "A contract is a legally binding agreement between two or more parties that creates obligations enforceable by law. For a contract to be valid, it typically requires an offer, acceptance, consideration (something of value exchanged), and mutual intent to be bound. Contracts can be written or oral, though certain types must be in writing to be enforceable.",
+                "tort": "A tort is a civil wrong that causes a claimant to suffer loss or harm, resulting in legal liability for the person who commits the tortious act. Common types of torts include negligence, defamation, assault, and trespass. The injured party may sue for damages (compensation) to recover losses.",
+                "divorce": "Divorce is the legal process of ending a marriage. It involves dividing property, determining child custody arrangements, and potentially providing spousal support (alimony) or child support. Divorce laws vary significantly by jurisdiction, with some places requiring separation periods or fault-based grounds, while others allow no-fault divorces."
+            };
+            
+            const lowerTerm = term.toLowerCase();
+            if (fallbackDefinitions[lowerTerm]) {
+                rawText = fallbackDefinitions[lowerTerm];
+            } else {
+                rawText = `We're having trouble finding information about "${term}" right now. This could be due to technical issues or high demand. Please try again in a few moments. For reliable legal information, consider consulting with a qualified legal professional or checking official legal resources specific to your jurisdiction.`;
+            }
+        }
     }
 
     // Attempt structured parse
@@ -190,21 +239,40 @@ const searchTerm = asyncHandler(async (req, res, next) => {
         parsed = normalizeParsedKeys(parsed, term);
     } else {
         const heur = extractStructuredFromRaw(rawText, term);
-        parsed = Object.assign(
-            {
+        
+        // Check if we have an error message from our improved error handling
+        if (rawText.includes("We're experiencing high demand") || 
+            rawText.includes("We're having trouble connecting") ||
+            rawText.includes("We're having trouble finding information")) {
+            // Use the error message as the definition
+            parsed = {
                 term,
-                definition:
-                    heur?.definition || (rawText ? rawText.split(/\n{2,}/)[0].slice(0, 600) : ""),
-                types: heur?.types || [],
-                keyAspects: heur?.keyAspects || [],
-                examples: heur?.examples || [],
-                stepByStep: heur?.stepByStep || [],
-                notes: heur?.notes || "",
-                relatedTerms: heur?.relatedTerms || [],
+                definition: rawText,
+                types: [],
+                keyAspects: [],
+                examples: [],
+                stepByStep: [],
+                notes: "This information is provided as a fallback due to technical difficulties with our primary service.",
+                relatedTerms: [],
                 raw: rawText,
-            },
-            heur || {}
-        );
+            };
+        } else {
+            parsed = Object.assign(
+                {
+                    term,
+                    definition:
+                        heur?.definition || (rawText ? rawText.split(/\n{2,}/)[0].slice(0, 600) : ""),
+                    types: heur?.types || [],
+                    keyAspects: heur?.keyAspects || [],
+                    examples: heur?.examples || [],
+                    stepByStep: heur?.stepByStep || [],
+                    notes: heur?.notes || "",
+                    relatedTerms: heur?.relatedTerms || [],
+                    raw: rawText,
+                },
+                heur || {}
+            );
+        }
     }
 
     // Convert structured -> HTML pieces

@@ -74,6 +74,200 @@
         </div>
     </section>
 
+    <style>
+        /* Dictionary Search Results Styling */
+        
+        /* Enhanced Dictionary Result Styles */
+        .dictionary-result.enhanced {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid #6c63ff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .dictionary-result.enhanced:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .term-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(67, 97, 238, 0.2);
+        }
+        
+        .term-badge {
+            background-color: #4361ee;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .term-section {
+            margin-bottom: 25px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #4361ee;
+        }
+        
+        .section-header i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .section-header h4 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .section-content {
+            line-height: 1.7;
+            color: #e0e0e0;
+        }
+        
+        .section-content p {
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .example-box {
+            background-color: rgba(108, 99, 255, 0.15);
+            border-left: 4px solid #6c63ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .example-box::before {
+            content: "Example: ";
+            font-weight: 600;
+            font-style: normal;
+            color: #4361ee;
+        }
+        
+        /* End Enhanced Styles */
+        
+        .search-loading {
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .dictionary-result {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            border-left: 4px solid #6c63ff;
+        }
+
+        .term-name {
+            color: #a29bfe;
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .term-definition, .term-example {
+            margin-bottom: 15px;
+        }
+
+        .term-definition h4, .term-example h4 {
+            color: #d1c4e9;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .term-definition p, .term-example p {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .error-message {
+            padding: 15px;
+            background: #ffeeee;
+            border-radius: 8px;
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .error-note {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .error-note p {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Result styling */
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+            border-left: 4px solid #6c63ff;
+        }
+        
+        .term-title {
+            color: #a29bfe;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        #term-definition {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        #result.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
     <!-- Top-Rated-Lawyers -->
     <section class="lawyer-section">
         <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
@@ -387,7 +581,7 @@
         const term = input.value.trim();
         if (!term) return;
 
-        definition.innerText = "🔎 Searching...";
+        definition.innerHTML = `<div class="search-loading">🔎 Searching for "${term}"...</div>`;
         resultContainer.classList.remove("hidden");
         resultContainer.classList.add("show");
 
@@ -396,13 +590,258 @@
             const data = await res.json();
 
             if (data.success) {
-                definition.innerHTML = data.data.response; // use innerHTML for formatted content
+                // Extract the structured data from the API response
+                // Handle different possible response structures
+                let structured;
+                if (data.data && data.data.structured) {
+                    structured = data.data.structured;
+                } else if (data.structured) {
+                    structured = data.structured;
+                } else {
+                    // Fallback: use the entire data object if structured is not found
+                    structured = data.data || data;
+                }
+                
+                // Debug logging to help identify the issue
+                console.log("API Response:", data);
+                console.log("Structured data:", structured);
+                
+                // Function to clean JSON formatting characters for better display
+                const cleanJsonText = (text) => {
+                    if (typeof text !== 'string') return text;
+                    
+                    // First check if this looks like a complete JSON object
+                    if (text.trim().startsWith('{') && text.trim().endsWith('}')) {
+                        try {
+                            // Try to parse it as JSON
+                            const jsonData = JSON.parse(text);
+                            // Extract just the definition if it exists
+                            if (jsonData.definition) {
+                                return jsonData.definition
+                                    .replace(/^[\s\"]+/, '') // Remove leading spaces and quotes
+                                    .replace(/[\s\",]+$/, '') // Remove trailing spaces, quotes, commas
+                                    .replace(/\\n/g, ' ') // Replace escaped newlines with spaces
+                                    .replace(/\n/g, ' ') // Replace literal newlines with spaces
+                                    .replace(/&quot;/g, '"'); // Replace HTML entities
+                            }
+                            // If no definition, return the whole object as string
+                            return JSON.stringify(jsonData, null, 2);
+                        } catch (e) {
+                            // If parsing fails, continue with normal cleaning
+                        }
+                    }
+                    
+                    // Normal cleaning for other cases
+                    return text
+                        .replace(/```json\s*/g, '') // Remove ```json with possible whitespace
+                        .replace(/```/g, '') // Remove closing ```
+                        .replace(/\{[^}]*"term"[^}]*\}/g, '') // Remove { "term": "value", ... } patterns
+                        .replace(/"term"[^,]*,?\s*/g, '') // Remove "term": "value", patterns
+                        .replace(/"isLegalTerm"[^,]*,?\s*/g, '') // Remove "isLegalTerm": value, patterns
+                        .replace(/"definition"[^:]*:\s*/g, '') // Remove "definition": part
+                        .replace(/"message"[^:]*:\s*/g, '') // Remove "message": part
+                        .replace(/^[\s\{"]*/g, '') // Remove opening braces and quotes
+                        .replace(/[\}"\s,]*$/g, '') // Remove closing braces, quotes, whitespace and commas
+                        .replace(/,$/, '') // Remove trailing comma (additional check)
+                        .replace(/\\n/g, ' ') // Replace escaped newlines with spaces
+                        .replace(/\"/g, '"') // Fix escaped quotes
+                        .replace(/\n/g, ' ') // Replace literal newlines with spaces
+                        .replace(/&quot;/g, '"') // Replace HTML entities
+                        .replace(/&amp;/g, '&') // Replace HTML entities
+                        .replace(/&lt;/g, '<') // Replace HTML entities
+                        .replace(/&gt;/g, '>') // Replace HTML entities
+                        .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+                        .trim();
+                };
+                
+                // Clean the structured data if it's a string (likely when it's raw JSON)
+                if (typeof structured === 'string') {
+                    // First try to extract just the definition if it's a complete JSON object
+                    if (structured.trim().startsWith('{') && structured.trim().endsWith('}')) {
+                        try {
+                            // Try to parse it as JSON
+                            const jsonData = JSON.parse(structured);
+                            
+                            // Check if this is a "not a legal term" response
+                            if (jsonData.isLegalTerm === false && jsonData.message) {
+                                // Create a clean structured object for non-legal terms
+                                structured = {
+                                    term: jsonData.term || term,
+                                    isLegalTerm: false,
+                                    message: jsonData.message
+                                };
+                            } else if (jsonData.definition) {
+                                // If we found a definition, create a clean structured object
+                                const cleanDefinition = cleanJsonText(jsonData.definition);
+                                structured = {
+                                    term: jsonData.term || term,
+                                    isLegalTerm: jsonData.isLegalTerm !== false,
+                                    definition: cleanDefinition,
+                                    examples: (jsonData.examples || []).map(cleanJsonText)
+                                };
+                            } else {
+                                // No definition found, use the whole object as raw text
+                                structured = { term, raw: cleanJsonText(JSON.stringify(jsonData)), isLegalTerm: false };
+                            }
+                        } catch (e) {
+                            // If parsing fails, treat it as raw text
+                            structured = { term, raw: cleanJsonText(structured), isLegalTerm: false };
+                        }
+                    } else {
+                        // Not a complete JSON object, just clean the text
+                        structured = { term, raw: cleanJsonText(structured), isLegalTerm: false };
+                    }
+                }
+
+                // Create a clean, simple HTML output with definition and example
+                // Ensure we have the term name even if structured.term is not available
+                const termName = structured.term || term;
+                let htmlOutput = `<div class="dictionary-result enhanced">
+                    <div class="term-header">
+                        <h3 class="term-name">${termName}</h3>
+                        <div class="term-badge">Legal Term</div>
+                    </div>`;
+
+                // Check if this is actually a legal term using the new isLegalTerm field from AI
+                const isLegalTerm = structured.isLegalTerm !== false;
+                
+                // If AI explicitly says it's not a legal term, show the AI's message
+                if (structured.isLegalTerm === false && structured.message) {
+                    // Check if the message is a raw JSON string
+                    let messageText = structured.message;
+                    if (typeof messageText === 'string' && messageText.trim().startsWith('{') && messageText.trim().endsWith('}')) {
+                        try {
+                            // Try to parse it as JSON
+                            const jsonData = JSON.parse(messageText);
+                            messageText = jsonData.message || messageText;
+                        } catch (e) {
+                            // If parsing fails, continue with the original message
+                        }
+                    }
+                    
+                    // Clean the message to remove any JSON formatting
+                    const cleanMessage = cleanJsonText(messageText)
+                        .replace(/^[\s\"]+/, '') // Remove leading spaces and quotes
+                        .replace(/[\s\",]+$/, '') // Remove trailing spaces, quotes, commas
+                        .replace(/\\/g, '') // Remove backslashes
+                        .replace(/&quot;/g, '"') // Replace HTML entities
+                        .replace(/&amp;/g, '&') // Replace HTML entities
+                        .replace(/&lt;/g, '<') // Replace HTML entities
+                        .replace(/&gt;/g, '>'); // Replace HTML entities
+                        
+                    htmlOutput += `<div class="term-section definition-section">
+                        <div class="section-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h4>Not a Legal Term</h4>
+                        </div>
+                        <div class="section-content">
+                            <p>${cleanMessage}</p>
+                        </div>
+                    </div>`;
+                } else {
+                    // Add definition in simple language
+                    // Handle different possible definition structures
+                    if (structured.definition) {
+                    htmlOutput += `<div class="term-section definition-section">
+                        <div class="section-header">
+                            <i class="fas fa-book-open"></i>
+                            <h4>What is ${termName}?</h4>
+                        </div>
+                        <div class="section-content">
+                        <p>${typeof structured.definition === 'string' ? 
+                            cleanJsonText(structured.definition) : 
+                            cleanJsonText(structured.definition.short || structured.definition.description || structured.definition.detailed || 'No definition available.')}</p>
+                        </div>
+                    </div>`;
+                } else if (structured.raw) {
+                    // Fallback to raw text if definition is not available
+                    let rawText = structured.raw;
+                    
+                    // Check if the raw text is a JSON string
+                    if (typeof rawText === 'string' && rawText.trim().startsWith('{') && rawText.trim().endsWith('}')) {
+                        try {
+                            // Try to parse it as JSON
+                            const jsonData = JSON.parse(rawText);
+                            // Extract the message if it exists
+                            if (jsonData.message) {
+                                rawText = jsonData.message;
+                            } else if (jsonData.definition) {
+                                rawText = jsonData.definition;
+                            }
+                        } catch (e) {
+                            // If parsing fails, continue with the original text
+                        }
+                    }
+                    
+                    htmlOutput += `<div class="term-definition">
+                        <h4>Definition:</h4>
+                        <p>${cleanJsonText(rawText.substring(0, 300))}${rawText.length > 300 ? "..." : ""}</p>
+                    </div>`;
+                }
+
+                // Add one simple example if available
+                if (structured.examples && structured.examples.length > 0) {
+                    const example = typeof structured.examples[0] === 'string' ? 
+                        structured.examples[0] : 
+                        structured.examples[0].description || structured.examples[0].text || '';
+
+                    htmlOutput += `<div class="term-section example-section">
+                        <div class="section-header">
+                            <i class="fas fa-lightbulb"></i>
+                            <h4>Real-world Example</h4>
+                        </div>
+                        <div class="section-content">
+                            <div class="example-box">${cleanJsonText(example)}</div>
+                        </div>
+                    </div>`;
+                }
+
+                }
+                
+                // If we still don't have any content, add a fallback message
+                if (!htmlOutput.includes('term-definition') && !htmlOutput.includes('term-example') && !htmlOutput.includes('definition-section')) {
+                    htmlOutput += `<div class="term-section definition-section">
+                        <div class="section-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h4>No Information Available</h4>
+                        </div>
+                        <div class="section-content">
+                            <p>No definition available for "${termName}". This might be due to a temporary issue with our AI service. Please try again later.</p>
+                        </div>
+                    </div>`;
+                }
+                
+                htmlOutput += `</div>`;
+
+                definition.innerHTML = htmlOutput;
             } else {
-                definition.innerHTML = `<span style="color:red;">❌ Error: ${data.msg}</span>`;
+                definition.innerHTML = `<div class="error-message">❌ Error: ${data.msg}</div>`;
             }
         } catch (error) {
-            definition.innerText = "❌ Failed to fetch result. Try again!";
             console.error("Error:", error);
+
+            // Check if it's an AI service error
+            if (error.message && error.message.includes("AI request failed")) {
+                // Provide a fallback message with a simple definition
+                definition.innerHTML = `
+                    <div class="dictionary-result">
+                        <h3 class="term-name">${term}</h3>
+                        <div class="term-definition">
+                            <h4>Definition:</h4>
+                            <p>Our AI service is currently unavailable. "${term}" is a legal term that may have specific meaning in legal contexts. For accurate and up-to-date information, please consult a qualified legal professional or try searching again later.</p>
+                        </div>
+                        <div class="term-example">
+                            <h4>Example:</h4>
+                            <p>This term is commonly used in legal documents and proceedings. The specific application depends on the jurisdiction and context.</p>
+                        </div>
+                        <div class="error-note">
+                            <p><em>Note: For a complete definition and examples, please visit our <a href="/dictionary" style="color: #4361ee;">full dictionary page</a> or try again later.</em></p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                definition.innerHTML = `<div class="error-message">❌ Failed to fetch result. Please try again later.</div>`;
+            }
         }
     });
 </script>
