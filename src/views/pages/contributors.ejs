@@ -1,36 +1,106 @@
 <% layout("layouts/boilerplate") %>
 
 <div class="contributors-page">
+  
   <section class="contributors-banner">
-    <h2>
-      <img
-        src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f30d/512.gif"
-        alt="Handshake"
-        width="50"
-        height="50" />
-      We Welcome Contributions!
-    </h2>
-    <div class="banner-row">
-      <p class="description">
-        Your ideas and skills can help make justice accessible to everyone across
-        the globe. Join us in improving this platform and simplify access to
-        legal resources.
-        <img
-          src="https://fonts.gstatic.com/s/e/notoemoji/latest/2696_fe0f/512.gif"
-          alt="Scales of Justice"
-          width="32"
-          height="32" />
-      </p>
-      <div class="banner-image">
-        <img src="/pic/contributors.png" alt="Collaborative Network" />
+    <div class="banner-container">
+      <div class="banner-content">
+        <div class="banner-text">
+          <h2>
+            <span class="emoji-icon globe-icon">
+              <img
+                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f30d/512.gif"
+                alt="Handshake" />
+              <div class="icon-glow"></div>
+            </span>
+            We Welcome Contributions!
+          </h2>
+          <p class="description">
+            Your ideas and skills can help make justice accessible to everyone across the globe.
+            Join us in improving this platform and simplify access to legal resources.
+            <span class="emoji-icon justice-icon">
+              <img
+                src="https://fonts.gstatic.com/s/e/notoemoji/latest/2696_fe0f/512.gif"
+                alt="Scales of Justice" />
+              <div class="icon-glow"></div>
+            </span>
+          </p>
+          <a
+            href="https://github.com/dipexplorer/LegalHuB/"
+            target="_blank"
+            rel="noopener"
+            class="cta-button">
+            Become a Contributor
+          </a>
+        </div>
+        <div class="banner-image">
+          <div class="network-graphic">
+            <div class="network-container">
+              <div class="network-bg"></div>
+              <div class="network-lines"></div>
+              <img src="/pic/contributors.png" alt="Collaborative Network" />
+              <div class="network-glow"></div>
+              <div class="network-nodes">
+                <div class="node node-1"></div>
+                <div class="node node-2"></div>
+                <div class="node node-3"></div>
+                <div class="node node-4"></div>
+                <div class="node node-5"></div>
+                <div class="node node-6"></div>
+                <div class="node node-7"></div>
+                <div class="node node-8"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <a
-        href="https://github.com/dipexplorer/LegalHuB/"
-        target="_blank"
-        rel="noopener"
-        class="cta-button">
-        Become a Contributor
-      </a>
+      <div class="banner-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+      </div>
+    </div>
+
+    <div class="contribution-types">
+      <div class="contribution-box">
+        <div class="contribution-icon code-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3>Code & Improve</h3>
+        <p>Contribute to the codebase and enhance our platform</p>
+      </div>
+
+      <div class="contribution-box">
+        <div class="contribution-icon design-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3>Design & UI</h3>
+        <p>Help create a better user experience</p>
+      </div>
+
+      <div class="contribution-box">
+        <div class="contribution-icon content-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <h3>Legal Content</h3>
+        <p>Provide legal insights and resources</p>
+      </div>
+
+      <div class="contribution-box">
+        <div class="contribution-icon bug-icon">
+          <i class="fas fa-bug"></i>
+        </div>
+        <h3>Identify Bugs</h3>
+        <p>Help us find and report issues to improve quality</p>
+      </div>
+
+      <div class="contribution-box">
+        <div class="contribution-icon docs-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <h3>Documentation</h3>
+        <p>Improve guides and help resources for users</p>
+      </div>
     </div>
   </section>
 
@@ -84,6 +154,8 @@
     </div>
   </section>
   <% } %>
+
+
   <section class="contributors-hero">
     <div class="container">
       <h1>Our Contributors</h1>
