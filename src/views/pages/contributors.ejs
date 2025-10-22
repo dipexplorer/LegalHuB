@@ -99,32 +99,158 @@
     </div>
   </section>
 
-  <section class="container contributors-container">
-    <% if (!contributors || !contributors.length) { %>
-    <p class="contributors-empty">
-      No contributors found right now. Please try again later.
-    </p>
-    <% } else { %>
-    <div class="contributors-grid">
-      <% contributors.forEach(c => { %>
-      <article class="contrib-card">
-        <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
-        <div class="contrib-name"><%= c.login %></div>
-        <a
-          class="contrib-link"
-          href="<%= c.html_url %>"
-          target="_blank"
-          rel="noopener"
-          >@<%= c.login %></a
-        >
-        <% if (typeof c.contributions !== 'undefined') { %>
-        <div style="margin-top: 6px; font-size: 0.9rem; color: #666">
-          🧩 <%= c.contributions %> contributions
-        </div>
-        <% } %>
-      </article>
+<section class="contributors-container">
+  <% if (!contributors || !contributors.length) { %>
+    <p class="contributors-empty">No contributors found right now. Please try again later.</p>
+  <% } else { %>
+    <!-- Spotlight Section -->
+    <div class="spotlight-grid">
+      <% const spotlightMessages = [
+        "🌟 Outstanding dedication to improving legal access!",
+        "🎉 Making legal knowledge more accessible!",
+        "💫 Champion of legal tech innovation!",
+        "🏆 Exceptional contribution to LegalHuB!",
+        "✨ Driving positive change in legal tech!"
+      ] %>
+      
+      <% const topContributors = contributors.slice(0, 2) %>
+      <% topContributors.forEach((c, index) => { %>
+        <article class="contrib-card spotlight" data-contributor="<%= c.login %>">
+          <div class="card-inner">
+            <!-- Front Side -->
+            <div class="card-front">
+              <div class="spotlight-badge">
+                <i class="fas fa-star"></i> Spotlight Contributor
+              </div>
+              <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
+              <div class="contrib-name"><%= c.login %></div>
+              <div class="contributions">
+                <i class="fas fa-code-branch"></i>
+                <%= c.contributions %> contributions
+              </div>
+              <div class="appreciation">
+                <%= spotlightMessages[Math.floor(Math.random() * spotlightMessages.length)] %>
+              </div>
+              <button class="flip-trigger" aria-label="Show more details">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+            <!-- Back Side -->
+            <div class="card-back">
+              <div class="back-content">
+                <h3>About @<%= c.login %></h3>
+                <div class="social-links">
+                  <a href="<%= c.html_url %>" target="_blank" rel="noopener" class="github-link">
+                    <i class="fab fa-github"></i> GitHub Profile
+                  </a>
+                </div>
+                <div class="stats">
+                  <div class="stat-item">
+                    <i class="fas fa-code-branch"></i>
+                    <%= c.contributions %> contributions
+                  </div>
+                  <div class="stat-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Joined: <%= new Date(c.created_at).toLocaleDateString() %>
+                  </div>
+                </div>
+                <button class="flip-trigger" aria-label="Show front">
+                  <i class="fas fa-undo"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
       <% }) %>
     </div>
-    <% } %>
-  </section>
-</div>
+
+    <!-- Main Contributors Grid -->
+    <div class="contributors-grid">
+      <% contributors.slice(2).forEach(c => { %>
+        <article class="contrib-card" data-contributor="<%= c.login %>">
+          <div class="card-inner">
+            <!-- Front Side -->
+            <div class="card-front">
+              <img src="<%= c.avatar_url %>" alt="<%= c.login %>" />
+              <div class="contrib-name"><%= c.login %></div>
+              <div class="contributions">
+                <i class="fas fa-code-branch"></i>
+                <%= c.contributions %> contributions
+              </div>
+              <button class="flip-trigger" aria-label="Show more details">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+            <!-- Back Side -->
+            <div class="card-back">
+              <div class="back-content">
+                <h3>About @<%= c.login %></h3>
+                <div class="social-links">
+                  <a href="<%= c.html_url %>" target="_blank" rel="noopener" class="github-link">
+                    <i class="fab fa-github"></i> GitHub Profile
+                  </a>
+                </div>
+                <div class="stats">
+                  <div class="stat-item">
+                    <i class="fas fa-code-branch"></i>
+                    <%= c.contributions %> contributions
+                  </div>
+                  <div class="stat-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Joined: <%= new Date(c.created_at).toLocaleDateString() %>
+                  </div>
+                </div>
+                <button class="flip-trigger" aria-label="Show front">
+                  <i class="fas fa-undo"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Contributors Interaction Script -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Flip card functionality
+  document.querySelectorAll('.flip-trigger').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      const card = e.target.closest('.contrib-card');
+      card.classList.toggle('flipped');
+    });
+  });
+
+  // Rotate spotlight messages every 30 seconds
+  const spotlightCards = document.querySelectorAll('.spotlight');
+  const spotlightMessages = [
+    "🌟 Outstanding dedication to improving legal access!",
+    "🎉 Making legal knowledge more accessible!",
+    "💫 Champion of legal tech innovation!",
+    "🏆 Exceptional contribution to LegalHuB!",
+    "✨ Driving positive change in legal tech!"
+  ];
+
+  function updateSpotlightMessage() {
+    spotlightCards.forEach(card => {
+      const appreciation = card.querySelector('.appreciation');
+      if (appreciation) {
+        appreciation.style.opacity = '0';
+        setTimeout(() => {
+          appreciation.textContent = spotlightMessages[Math.floor(Math.random() * spotlightMessages.length)];
+          appreciation.style.opacity = '1';
+        }, 500);
+      }
+    });
+  }
+
+  setInterval(updateSpotlightMessage, 30000);
+});
+</script>
+
+
