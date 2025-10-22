@@ -14,24 +14,6 @@
         <li><a href="/about">About</a></li>
         <li><a href="/#faq">FAQs</a></li>
       </ul>
-
-
-      <% if (locals.currentUser && currentUser.role === 'admin') { %>
-      <li class="nav-item dropdown" style="list-style: none;"> <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #fff; text-decoration: none; font-weight: bold;"> Admin Tools
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark">
-          <li><a class="dropdown-item" href="/api/admin/dashboard">Dashboard</a></li> 
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="/admin/articles">Manage Articles</a></li> 
-          <li><a class="dropdown-item" href="/admin/documents">Manage Documents</a></li>
-          <li><a class="dropdown-item" href="/admin/lawyers">Manage Lawyers</a></li>
-          <li><a class="dropdown-item" href="/admin/users">Manage Users</a></li>
-        </ul>
-      </li>
-    <% } %>
-    ```
-
-
     </div>
 
     <div class="navbar-right-section">
