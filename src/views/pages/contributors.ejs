@@ -105,7 +105,96 @@
   </section>
 
   <% if (repoStats) { %>
-  <%- include('../partials/stats-section') %>
+  <section class="stats-section">
+    <div class="title">Project Statistics</div>
+    <div class="stats-scroll-container">
+      <button class="scroll-arrow left" aria-label="Previous stats">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="stats-grid">
+        <div class="stat-card rectangle wide-top">
+          <i class="fas fa-users"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.contributors ? repoStats.contributors : 'N/A' %></div>
+            <div class="stat-label">Contributors</div>
+            <div class="stat-description">People who make this project possible</div>
+          </div>
+        </div>
+        <div class="stat-card square top-square-1">
+          <i class="fas fa-code-commit"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.commits ? repoStats.commits : 'N/A' %></div>
+            <div class="stat-label">Commits</div>
+            <div class="stat-change positive">+12% this month</div>
+          </div>
+        </div>
+        <div class="stat-card square top-square-2">
+          <i class="fas fa-star"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.stars ? repoStats.stars : 'N/A' %></div>
+            <div class="stat-label">Stars</div>
+            <div class="stat-change positive">+8% this month</div>
+          </div>
+        </div>
+        <div class="stat-card square top-square-3">
+          <i class="fas fa-code-branch"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.forks ? repoStats.forks : 'N/A' %></div>
+            <div class="stat-label">Forks</div>
+            <div class="stat-change neutral">+2% this month</div>
+          </div>
+        </div>
+        <div class="stat-card square bot-square-1">
+          <i class="fas fa-code-pull-request"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.pulls ? repoStats.pulls : 'N/A' %></div>
+            <div class="stat-label">PRs Merged</div>
+            <div class="stat-change positive">+15% this month</div>
+          </div>
+        </div>
+        <div class="stat-card square bot-square-2">
+          <i class="fas fa-code"></i>
+          <div class="stat-content">
+            <div class="stat-number">JS / EJS</div>
+            <div class="stat-label">Languages</div>
+            <div class="stat-bar">
+              <div class="stat-progress" style="width: 75%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card square bot-square-3">
+          <i class="fas fa-git-alt"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.commits ? repoStats.commits : 'N/A' %></div>
+            <div class="stat-label">Total Commits</div>
+            <div class="stat-activity">
+              <div class="activity-dot"></div>
+              <div class="activity-dot"></div>
+              <div class="activity-dot"></div>
+              <div class="activity-dot"></div>
+              <div class="activity-dot"></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card rectangle wide-bottom">
+          <i class="fas fa-check-double"></i>
+          <div class="stat-content">
+            <div class="stat-number"><%= repoStats.issuesClosed ? repoStats.issuesClosed : 'N/A' %></div>
+            <div class="stat-label">Issues Closed (30d)</div>
+            <div class="stat-metric">98% resolution rate</div>
+          </div>
+        </div>
+      </div>
+      <button class="scroll-arrow right" aria-label="Next stats">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div class="scroll-indicator">
+        <div class="scroll-dot active"></div>
+        <div class="scroll-dot"></div>
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+  </section>
   <% } %>
 
 
@@ -153,3 +242,152 @@
     <% } %>
   </section>
 </div>
+
+<script>
+// Stats section horizontal scroll functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on a small screen
+    const isSmallScreen = window.innerWidth <= 640;
+
+    // Get all necessary elements
+    const scrollContainer = document.querySelector('.stats-scroll-container');
+    const statsGrid = document.querySelector('.stats-grid');
+    const leftArrow = document.querySelector('.scroll-arrow.left');
+    const rightArrow = document.querySelector('.scroll-arrow.right');
+    const scrollDots = document.querySelectorAll('.scroll-dot');
+
+    // Only show scroll arrows on small screens
+    if (leftArrow && rightArrow) {
+        if (!isSmallScreen) {
+            leftArrow.style.display = 'none';
+            rightArrow.style.display = 'none';
+        } else {
+            leftArrow.style.display = 'flex';
+            rightArrow.style.display = 'flex';
+        }
+    }
+
+    // Only run on small screens where scroll container exists
+    if (!isSmallScreen || !scrollContainer) return;
+
+    // Function to update active scroll dot
+    function updateScrollDots() {
+        if (!scrollDots.length) return;
+
+        // Calculate which card is most visible in center
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const containerCenter = containerRect.left + containerRect.width / 2;
+
+        const cards = document.querySelectorAll('.stat-card');
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const distance = Math.abs(containerCenter - cardCenter);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = index;
+            }
+        });
+
+        // Update active dot
+        scrollDots.forEach((dot, index) => {
+            if (index === closestIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    // Manual scroll with arrows
+    function scrollLeft() {
+        if (statsGrid) {
+            statsGrid.scrollBy({
+                left: -300,
+                behavior: 'smooth'
+            });
+            setTimeout(updateScrollDots, 300); // Update after scroll animation
+        }
+    }
+
+    function scrollRight() {
+        if (statsGrid) {
+            statsGrid.scrollBy({
+                left: 300,
+                behavior: 'smooth'
+            });
+            setTimeout(updateScrollDots, 300); // Update after scroll animation
+        }
+    }
+
+    // Event listeners for arrow buttons
+    if (leftArrow) {
+        leftArrow.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            scrollLeft();
+        });
+    }
+
+    if (rightArrow) {
+        rightArrow.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            scrollRight();
+        });
+    }
+
+    // Touch events for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    if (statsGrid) {
+        statsGrid.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        statsGrid.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+    }
+
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            // Swiped left
+            scrollRight();
+        }
+        if (touchEndX > touchStartX + 50) {
+            // Swiped right
+            scrollLeft();
+        }
+    }
+
+    // Update dots on scroll
+    if (statsGrid) {
+        statsGrid.addEventListener('scroll', updateScrollDots);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        // Show/hide arrows based on new screen size
+        const newIsSmallScreen = window.innerWidth <= 640;
+        if (leftArrow && rightArrow) {
+            if (!newIsSmallScreen) {
+                leftArrow.style.display = 'none';
+                rightArrow.style.display = 'none';
+            } else {
+                leftArrow.style.display = 'flex';
+                rightArrow.style.display = 'flex';
+            }
+        }
+    });
+
+    // Initialize scroll dots
+    setTimeout(updateScrollDots, 100);
+});
+</script>
