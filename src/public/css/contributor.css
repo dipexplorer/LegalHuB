@@ -1292,21 +1292,428 @@
 }
 
 /* === RESPONSIVE DESIGN === */
-@media (max-width: 900px) {
+
+/* Large tablets and small desktops */
+@media (max-width: 1200px) {
+    .stats-section {
+        max-width: 95%;
+    }
+}
+
+/* Medium tablets and small desktops */
+@media (max-width: 1024px) {
+    .stats-section {
+        padding: 35px 15px;
+        margin: 25px auto;
+    }
+
+    .stats-section .title {
+        font-size: 2.2rem;
+        margin-bottom: 35px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto;
+        gap: 16px;
+    }
+
+    .wide-top {
+        grid-column: 1 / span 2;
+        grid-row: 1;
+    }
+
+    .top-square-1, .top-square-2, .top-square-3 {
+        grid-column: auto;
+        grid-row: 1;
+    }
+
+    .bot-square-1, .bot-square-2 {
+        grid-column: auto;
+        grid-row: 2;
+    }
+
+    .wide-bottom {
+        grid-column: 2 / span 2;
+        grid-row: 2;
+    }
+
+    .bot-square-3 {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .stat-card {
+        min-height: 160px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 860px) {
+    .stats-section {
+        padding: 30px 12px;
+        margin: 20px auto;
+    }
+
+    .stats-section .title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto;
+        gap: 14px;
     }
 
-    .wide-top,
-    .wide-bottom,
-    .top-square-1,
-    .top-square-2,
-    .top-square-3,
-    .bot-square-1,
-    .bot-square-2,
-    .bot-square-3 {
-        grid-column: 1 / -1;
+    .wide-top, .wide-bottom {
+        grid-column: 1 / span 2;
+        min-height: 120px;
+    }
+
+    .top-square-1, .top-square-2, .top-square-3,
+    .bot-square-1, .bot-square-2, .bot-square-3 {
+        grid-column: span 1;
+        min-height: 140px;
+        aspect-ratio: unset;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-card i {
+        font-size: 1.9rem;
+        margin-bottom: 12px;
+    }
+
+    .stat-number {
+        font-size: 1.7rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .stat-description, .stat-change, .stat-metric {
+        font-size: 0.8rem;
+    }
+
+    .stat-bar {
+        height: 7px;
+        margin-top: 8px;
+    }
+
+    .stat-activity {
+        margin-top: 8px;
+    }
+
+    .activity-dot {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+/* Horizontal scrollable container for small screens */
+@media (max-width: 640px) {
+    .stats-section {
+        padding: 20px 10px;
+        margin: 15px auto;
+        border-radius: 15px;
+    }
+
+    .stats-section .title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    /* Create horizontal scroll container */
+    .stats-scroll-container {
+        position: relative;
+        overflow: hidden;
+        padding: 0 40px; /* Space for navigation arrows */
+    }
+
+    .stats-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 15px;
+        padding: 5px 0 20px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        /* Hide scrollbar but keep functionality */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+
+    .stats-grid::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* Make cards snap to center when scrolling */
+    .stat-card {
+        flex: 0 0 280px; /* Fixed width for mobile */
+        scroll-snap-align: center;
+        padding: 20px;
+        min-height: 180px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        aspect-ratio: unset;
+    }
+
+    .stat-card i {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .stat-content {
+        width: 100%;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .stat-description, .stat-change, .stat-metric {
+        font-size: 0.8rem;
+        margin-top: 6px;
+        line-height: 1.3;
+    }
+
+    .stat-bar {
+        height: 6px;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .stat-activity {
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+    .activity-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    /* Navigation arrows */
+    .scroll-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        background: rgba(25, 15, 45, 0.9);
+        border: 1px solid rgba(139, 92, 246, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #00f5ff;
+        font-size: 1.2rem;
+        z-index: 10;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s ease;
+    }
+
+    .scroll-arrow i {
+        font-size: inherit;
+        color: inherit;
+    }
+
+    .scroll-arrow:hover {
+        background: rgba(30, 20, 50, 0.95);
+        border-color: rgba(0, 245, 255, 0.7);
+        box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+    }
+
+    .scroll-arrow:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+
+    .scroll-arrow.left {
+        left: 5px;
+    }
+
+    .scroll-arrow.right {
+        right: 5px;
+    }
+
+    /* Auto-scroll indicator */
+    .scroll-indicator {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        gap: 8px;
+    }
+
+    .scroll-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .scroll-dot.active {
+        background: #00f5ff;
+        box-shadow: 0 0 8px rgba(0, 245, 255, 0.5);
+    }
+}
+
+/* Small mobile phones */
+@media (max-width: 480px) {
+    .stats-section {
+        padding: 15px 8px;
+        margin: 12px auto;
+    }
+
+    .stats-section .title {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+
+    .stats-scroll-container {
+        padding: 0 35px;
+    }
+
+    .stat-card {
+        flex: 0 0 250px; /* Smaller width for very small screens */
+        padding: 18px;
+        min-height: 160px;
+    }
+
+    .stat-card i {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+
+    .stat-number {
+        font-size: 1.6rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .stat-description, .stat-change, .stat-metric {
+        font-size: 0.75rem;
+        margin-top: 5px;
+    }
+
+    .stat-bar {
+        height: 5px;
+        margin-top: 8px;
+    }
+
+    .stat-activity {
+        margin-top: 8px;
+    }
+
+    .activity-dot {
+        width: 7px;
+        height: 7px;
+    }
+
+    .scroll-arrow {
+        width: 32px;
+        height: 32px;
+    }
+
+    .scroll-indicator {
+        margin-top: 12px;
+        gap: 6px;
+    }
+
+    .scroll-dot {
+        width: 7px;
+        height: 7px;
+    }
+}
+
+/* Very small mobile phones */
+@media (max-width: 360px) {
+    .stats-section {
+        padding: 12px 6px;
+        margin: 10px auto;
+    }
+
+    .stats-section .title {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .stats-scroll-container {
+        padding: 0 30px;
+    }
+
+    .stat-card {
+        flex: 0 0 220px; /* Even smaller width for very small screens */
+        padding: 15px;
+        min-height: 140px;
+    }
+
+    .stat-card i {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+
+    .stat-description, .stat-change, .stat-metric {
+        font-size: 0.7rem;
+        margin-top: 4px;
+    }
+
+    .stat-bar {
+        height: 4px;
+        margin-top: 6px;
+    }
+
+    .stat-activity {
+        margin-top: 6px;
+    }
+
+    .activity-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .scroll-arrow {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+
+    .scroll-indicator {
+        margin-top: 10px;
+        gap: 5px;
+    }
+
+    .scroll-dot {
+        width: 6px;
+        height: 6px;
     }
 }
 
