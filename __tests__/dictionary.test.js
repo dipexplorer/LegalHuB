@@ -196,8 +196,10 @@ describe("📚 Dictionary API Testing", () => {
                 .get("/api/dictionary/test-term")
                 .set("Accept", "application/json");
 
-            expect(res.statusCode).toBe(500);
-            expect(res.body.success).toBe(false);
+            expect(res.statusCode).toBe(200);
+            expect(res.body.success).toBe(true);
+            expect(res.body.msg).toBe("Success (heuristic structured)");
+            expect(res.body.data.structured.definition).toContain("trouble finding information");
         });
 
         it("should handle rate limiting with retry", async () => {
@@ -254,8 +256,10 @@ describe("📚 Dictionary API Testing", () => {
                 .get("/api/dictionary/test-term")
                 .set("Accept", "application/json");
 
-            expect(res.statusCode).toBe(429);
-            expect(res.body.success).toBe(false);
+            expect(res.statusCode).toBe(200);
+            expect(res.body.success).toBe(true);
+            expect(res.body.msg).toBe("Success (heuristic structured)");
+            expect(res.body.data.structured.definition).toContain("experiencing high demand");
         }, 15000); // Increase timeout for this test due to delays
     });
 
