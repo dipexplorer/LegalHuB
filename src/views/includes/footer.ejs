@@ -1,148 +1,406 @@
-<footer class="footer-container" id="footer">
-  <div class="container">
-    <!-- Left Section -->
-    <div class="footer-left">
-      <div class="brand">
-        <h2>LegalHub</h2>
-        <p>Your trusted source for legal information and resources.</p>
-      </div>
-      <div class="contact-info">
-        <div class="email" style="display: flex; align-items: center;">
-            <i class="fas fa-envelope contact-icon" style="position: relative; bottom: 10px;"></i>
-            <p>Need help?<br>
-              <a href="mailto:support@legalhub.com" class="mail">support@legalhub.com</a>
-            </p>
+<footer class="legalhub-footer">
+    <div class="footer-wave">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1380,80 1440,60 L1440,120 L0,120 Z" fill="rgba(108,99,255,0.1)"/>
+        </svg>
+    </div>
+    <div class="footer-main">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="/" class="brand-logo">
+                    <span class="logo-icon">⚖️</span>
+                    <span class="logo-text">Legal<span class="logo-accent">HuB</span></span>
+                </a>
+                <p class="brand-tagline">Your trusted source for legal knowledge and resources in India.</p>
+                <div class="brand-contact">
+                    <a href="mailto:support@legalhub.com" class="contact-item">
+                        <span class="item-icon">📧</span>
+                        <span>support@legalhub.com</span>
+                    </a>
+                    <a href="tel:+919876543210" class="contact-item">
+                        <span class="item-icon">📞</span>
+                        <span>+91-98765-43210</span>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <span>📸</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <span>📘</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <span>🐦</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <span>💻</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4 class="group-title">Legal Resources</h4>
+                    <ul class="group-list">
+                        <li><a href="/dictionary">Legal Dictionary</a></li>
+                        <li><a href="/documents">Legal Documents</a></li>
+                        <li><a href="/rights">Constitutional Rights</a></li>
+                        <li><a href="/articles">Articles & Guides</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4 class="group-title">Connect</h4>
+                    <ul class="group-list">
+                        <li><a href="/lawyers">Find Lawyers</a></li>
+                        <li><a href="/appointments">Book Appointment</a></li>
+                        <li><a href="/chat">Live Chat</a></li>
+                        <li><a href="/contributors">Contributors</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4 class="group-title">Company</h4>
+                    <ul class="group-list">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/#faq">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <% if (currentUser) { %>
+            <div class="footer-cta">
+                <h4 class="cta-title">Enable Notifications</h4>
+                <p class="cta-desc">Get real-time updates on appointments and messages</p>
+                <button id="notifyBtn" class="cta-btn">
+                    <span>🔔</span> Enable Notifications
+                </button>
+            </div>
+            <% } %>
         </div>
-        <div class="phone" style="display: flex; align-items: center;">
-            <i class="fas fa-phone contact-icon" style="position: relative; bottom: 10px;"></i>
-            <p>Available 24/7<br>
-                <a href="tel:+919876543210" class="phone-link">+91-98765-43210</a>
-            </p>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="footer-container">
+            <div class="bottom-content">
+                <p class="copyright">© 2025 LegalHuB. All rights reserved.</p>
+                <p class="made-with">Made with ❤️ for India</p>
+            </div>
         </div>
-      </div>
     </div>
-
-    <!-- Middle Section -->
-    <div class="footer-middle">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><a href="/about">About Us</a></li>
-        <li><a href="/privacy">Privacy Policy</a></li>
-        <li><a href="/terms">Terms & Conditions</a></li>
-        <li><a href="/articles">Articles</a></li>
-        <li><a href="/articles/publish">Publish Article</a></li>
-        <li><a href="/contributors">Contributors</a></li>
-      </ul>
-    </div>
-
-    <!-- Right Section -->
-    <div class="footer-right">
-      <h3>Connect with us</h3>
-      <div class="social-media">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-      </div>
-      <% if (currentUser) { %>
-        <button id="notifyBtn" class="btn btn-outline-accent" style="margin-top: 20px; color: azure; margin-left: -15px;">Send Notification (all)</button>
-      <% } %>
-    </div>
-  </div>
-
-  <div class="copyright">
-    <p>© 2025 LegalHub. All rights reserved.</p>
-  </div>
 </footer>
 
-<!-- Push Notification -->
-<script>
-  function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
-    return outputArray;
-  }
-
-  let swRegistration = null;
-
-  async function init() {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      console.warn('Push not supported');
-      return;
+<style>
+    .legalhub-footer {
+        position: relative;
+        background: linear-gradient(180deg, #0f1322 0%, #0a0f1a 100%);
+        color: #fff;
+        overflow: hidden;
     }
-    swRegistration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-    console.log('SW registered:', swRegistration);
 
-    // update UI based on subscription state
-    const sub = await swRegistration.pushManager.getSubscription();
-    
-    if (sub) {
-      // Always tell the backend which user this subscription belongs to
-      await fetch('/api/push/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sub),
-      });
+    .footer-wave {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        line-height: 0;
     }
-    
-    console.log('Push notification subscription state:', !!sub);
-  }
 
-  // Note: subscribeBtn functionality has been moved to notifications.js
-  // This avoids conflicts with the notification button
+    .footer-wave svg {
+        width: 100%;
+        height: 60px;
+    }
 
-  // Wait for DOM to be fully loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    const notifyBtn = document.getElementById('notifyBtn');
-    if (notifyBtn) {
-      console.log('Notification button found, adding event listener');
-      notifyBtn.addEventListener('click', async (event) => {
-        event.preventDefault();
-        console.log('Notification button clicked');
+    .footer-main {
+        padding: 60px 30px 40px;
+    }
 
-        try {
-          const r = await fetch('/api/push/send', {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({ 
-              payload: { 
-                title: 'LegalHub Notification', 
-                body: 'This is a test notification from LegalHub', 
-                url: '/' 
-              } 
-            }),
-          });
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.5fr 2fr 1fr;
+        gap: 60px;
+    }
 
-          if (!r.ok) {
-            throw new Error(`Server responded with status: ${r.status}`);
-          }
+    .footer-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
-          const data = await r.json();
-          console.log('Send result', data);
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: #fff;
+    }
 
-          // Show appropriate feedback based on results
-          if (data.results && data.results.length > 0) {
-            const successCount = data.results.filter(r => r.status === 'ok').length;
-            alert(`Notification sent to ${successCount} subscriber(s)`);
-          } else {
-            alert('No subscribers found');
-          }
-        } catch (error) {
-          console.error('Error sending notification:', error);
-          alert('Failed to send notification: ' + error.message);
+    .logo-icon {
+        font-size: 2rem;
+    }
+
+    .logo-text {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .logo-accent {
+        color: #6c63ff;
+        background: linear-gradient(135deg, #6c63ff, #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .brand-tagline {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .brand-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+
+    .contact-item:hover {
+        color: #6c63ff;
+    }
+
+    .item-icon {
+        font-size: 1rem;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 12px;
+    }
+
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        background: rgba(108, 99, 255, 0.15);
+        border: 1px solid rgba(108, 99, 255, 0.3);
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+        background: #6c63ff;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+    }
+
+    .social-link span {
+        font-size: 1.2rem;
+    }
+
+    .footer-links {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+    }
+
+    .link-group {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .group-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 4px;
+    }
+
+    .group-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .group-list li a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .group-list li a:hover {
+        color: #6c63ff;
+        transform: translateX(4px);
+    }
+
+    .footer-cta {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 30px;
+        background: rgba(108, 99, 255, 0.1);
+        border: 1px solid rgba(108, 99, 255, 0.2);
+        border-radius: 20px;
+    }
+
+    .cta-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .cta-desc {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.5;
+    }
+
+    .cta-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #6c63ff, #a855f7);
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+    }
+
+    .footer-bottom {
+        padding: 24px 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bottom-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .copyright {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+    }
+
+    .made-with {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 1024px) {
+        .footer-container {
+            grid-template-columns: 1fr 1fr;
         }
-      });
-    } else {
-      console.log('Notification button not found');
-    }
-  });
 
-  init().catch(console.error);
-  
+        .footer-cta {
+            grid-column: span 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .footer-links {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .footer-cta {
+            grid-column: auto;
+        }
+
+        .bottom-content {
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .footer-main {
+            padding: 40px 20px 30px;
+        }
+
+        .footer-links {
+            grid-template-columns: 1fr;
+        }
+
+        .social-links {
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+        for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+        return outputArray;
+    }
+
+    async function init() {
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+        const sw = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        const sub = await sw.pushManager.getSubscription();
+        if (sub) {
+            await fetch('/api/push/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(sub),
+            });
+        }
+    }
+
+    document.getElementById('notifyBtn')?.addEventListener('click', async () => {
+        try {
+            const r = await fetch('/api/push/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ payload: { title: 'LegalHuB', body: 'Notifications enabled!', url: '/' } }),
+            });
+            const data = await r.json();
+            alert('Notification sent to ' + (data.results?.filter(r => r.status === 'ok').length || 0) + ' subscriber(s)');
+        } catch (err) {
+            console.error(err);
+        }
+    });
+
+    init().catch(console.error);
 </script>
