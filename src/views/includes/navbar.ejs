@@ -1,242 +1,624 @@
-<header>
-  <nav>
-    <div class="navbar-brand logo">
-      <a href="/" class="logo-link">
-        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="40" height="40" rx="8" fill="#1a1a2e"/>
-          <path d="M12 28L20 10L28 28H12Z" fill="#e040fb" opacity="0.9"/>
-          <path d="M15 24H25L20 16L15 24Z" fill="#fff"/>
-          <circle cx="32" cy="12" r="5" fill="#e040fb" opacity="0.3"/>
-          <circle cx="32" cy="12" r="3" fill="#e040fb"/>
-        </svg>
-        <span class="logo-text">Legal<span class="logo-accent">HuB</span></span>
-      </a>
-    </div>
+<header class="navbar">
+    <nav class="nav-container">
+        <a href="/" class="nav-brand">
+            <svg class="nav-logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="40" height="40" rx="10" fill="#1a1a2e"/>
+                <path d="M12 28L20 10L28 28H12Z" fill="#8b5cf6"/>
+                <path d="M15 24H25L20 16L15 24Z" fill="#fff"/>
+                <circle cx="32" cy="12" r="4" fill="#8b5cf6" opacity="0.4"/>
+                <circle cx="32" cy="12" r="2.5" fill="#8b5cf6"/>
+            </svg>
+            <span class="nav-brand-text">Legal<span class="nav-brand-accent">HuB</span></span>
+        </a>
 
-    <!-- Navigation & Login -->
-    <div class="nav-container" id="nav-container">
-      <ul class="nav-links">
-        <li><a href="/dictionary">Dictionary</a></li>
-        <li><a href="/articles">Articles</a></li>
-        <li><a href="/documents">Documents</a></li>
-        <li><a href="/rights">Fundamental Rights</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/#faq">FAQs</a></li>
-      </ul>
-    </div>
-
-    <div class="navbar-right-section">
-      <!-- Hamburger for small screens -->
-      <div class="hamburger" id="hamburger">&#9776;</div>
-
-      <!-- Notifications -->
-      <% if (currentUser) { %>
-        <div class="notifications dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button">
-            <i class="fa fa-bell"></i>
-            <% if (notificationsCount && notificationsCount > 0) { %>
-              <span class="badge badge-danger"><%= notificationsCount %></span>
-            <% } %>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
-            <% if (notifications && notifications.length > 0) { %>
-              <% notifications.forEach(n => { %>
-                <a class="dropdown-item <%= n.status === 'unread' ? 'font-weight-bold' : '' %>" href="/notifications">
-                  <%= n.title %> <br/>
-                  <small><%= n.createdAt.toLocaleString() %></small>
-                </a>
-              <% }) %>
-            <% } else { %>
-              <span class="dropdown-item">No notifications</span>
-            <% } %>
-
-            <!-- <div class="dropdown-divider"></div> -->
-            <a class="dropdown-item text-center" href="/notifications">View all</a>
-          </div>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="/dictionary" class="nav-link"><i class="fa-solid fa-book"></i> Dictionary</a></li>
+                <li><a href="/articles" class="nav-link"><i class="fa-solid fa-newspaper"></i> Articles</a></li>
+                <li><a href="/documents" class="nav-link"><i class="fa-solid fa-file-lines"></i> Documents</a></li>
+                <li><a href="/rights" class="nav-link"><i class="fa-solid fa-shield-halved"></i> Rights</a></li>
+                <li><a href="/about" class="nav-link"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            </ul>
         </div>
-      <% } %>
 
-      <!-- Auth Links (Right side of navbar) -->
-      <div class="auth-links">
-        <% if (currentUser) { %>
-          <div class="dropdown" id="profileDropdown">
-            <img
-              src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>"
-              alt="Profile"
-              class="profile-avatar avatar-btn"
-              tabindex="0"
-              aria-haspopup="true"
-              aria-expanded="false"
-            />
-            <div class="dropdown-content" id="dropdownContent" role="menu" aria-hidden="true">
-              <div class="profile-info">
-                <img
-                  src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>"
-                  alt="Profile"
-                  class="profile-avatar"
-                />
-                <div>
-                  <span><%= currentUser.username %></span><br />
-                  <span><%= currentUser.email %></span>
+        <div class="nav-actions">
+            <% if (currentUser) { %>
+                <div class="nav-notifications">
+                    <button class="nav-icon-btn" id="notificationsBtn" aria-label="Notifications">
+                        <i class="fa-solid fa-bell"></i>
+                        <% if (notificationsCount && notificationsCount > 0) { %>
+                            <span class="nav-badge"><%= notificationsCount %></span>
+                        <% } %>
+                    </button>
+                    <div class="notifications-dropdown" id="notificationsDropdown">
+                        <div class="notifications-header">
+                            <span>Notifications</span>
+                        </div>
+                        <div class="notifications-list">
+                            <% if (notifications && notifications.length > 0) { %>
+                                <% notifications.slice(0, 5).forEach(n => { %>
+                                    <a href="/notifications" class="notification-item <%= n.status === 'unread' ? 'unread' : '' %>">
+                                        <div class="notification-icon"><i class="fa-solid fa-bell"></i></div>
+                                        <div class="notification-content">
+                                            <span class="notification-title"><%= n.title %></span>
+                                            <span class="notification-time"><%= new Date(n.createdAt).toLocaleDateString() %></span>
+                                        </div>
+                                    </a>
+                                <% }) %>
+                            <% } else { %>
+                                <div class="notifications-empty">
+                                    <i class="fa-solid fa-bell-slash"></i>
+                                    <span>No notifications</span>
+                                </div>
+                            <% } %>
+                        </div>
+                        <a href="/notifications" class="notifications-footer">View all</a>
+                    </div>
                 </div>
-                <button class="close-btn" style="background-color: transparent; border: none;" id="closeProfileBtn" aria-label="Close profile">&times;</button>
-              </div>
-              <hr />
-              <div class="dropdown-links">
-                <a href="/api/users/profile"><i class="fa-solid fa-user" style="padding-right: 8px;"></i>Profile</a>
-                <a href="/api/users/logout"><i class="fa-solid fa-right-from-bracket" style="padding-right: 8px;"></i>Logout</a>
-              </div>
-            </div>
-          </div>
-          <% } else { %>
-            <a href="/login">Login</a>
-          <% } %>
-      </div>
-      </div>
 
+                <div class="nav-profile" id="profileDropdown">
+                    <img
+                        src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>"
+                        alt="Profile"
+                        class="profile-avatar"
+                        id="profileAvatar"
+                    />
+                    <div class="profile-dropdown" id="profileDropdownMenu">
+                        <div class="profile-header">
+                            <img
+                                src="<%= currentUser.profilePicture || 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg' %>"
+                                alt="Profile"
+                                class="profile-avatar-lg"
+                            />
+                            <div class="profile-info">
+                                <span class="profile-name"><%= currentUser.username %></span>
+                                <span class="profile-email"><%= currentUser.email %></span>
+                            </div>
+                        </div>
+                        <div class="profile-links">
+                            <a href="/api/users/profile" class="profile-link">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                            <a href="/api/users/logout" class="profile-link logout">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <a href="/login" class="nav-login-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Login</span>
+                </a>
+            <% } %>
 
-    
-  </nav>
+            <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
 </header>
+
 <style>
-  .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 24px;
-    padding: 0;
-    margin: 0;
-  }
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(13, 13, 20, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
 
-  .nav-links li a {
-    position: relative;
-    text-decoration: none;
-    color: #ffffff; /* adjust based on your theme */
-    font-weight: 500;
-    transition: color 0.3s ease;
-    padding-bottom: 4px;
-  }
+    .nav-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        gap: 2rem;
+    }
 
-  /* Hover underline effect */
-  .nav-links li a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0%;
-    height: 2px;
-    background-color: white;
-    transition: width 0.3s ease-in-out;
-  }
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        flex-shrink: 0;
+    }
 
-  .nav-links li a:hover::after {
-    width: 100%;
-  }
+    .nav-logo {
+        width: 40px;
+        height: 40px;
+        transition: transform 0.3s ease;
+    }
+
+    .nav-brand:hover .nav-logo {
+        transform: scale(1.05);
+    }
+
+    .nav-brand-text {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+
+    .nav-brand-accent {
+        color: #8b5cf6;
+    }
+
+    .nav-menu {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1rem;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link i {
+        font-size: 0.875rem;
+        color: #64748b;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+        background: rgba(139, 92, 246, 0.1);
+    }
+
+    .nav-link:hover i {
+        color: #8b5cf6;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .nav-icon-btn {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        color: #94a3b8;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .nav-icon-btn:hover {
+        background: rgba(139, 92, 246, 0.15);
+        border-color: rgba(139, 92, 246, 0.3);
+        color: #8b5cf6;
+    }
+
+    .nav-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        background: #ef4444;
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-notifications {
+        position: relative;
+    }
+
+    .notifications-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 320px;
+        background: #131320;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        display: none;
+        overflow: hidden;
+    }
+
+    .notifications-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .notifications-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: #fff;
+    }
+
+    .notifications-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.25rem;
+        text-decoration: none;
+        color: #fff;
+        transition: background 0.3s ease;
+    }
+
+    .notification-item:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .notification-item.unread {
+        background: rgba(139, 92, 246, 0.08);
+    }
+
+    .notification-icon {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(139, 92, 246, 0.15);
+        border-radius: 8px;
+        color: #8b5cf6;
+        font-size: 0.875rem;
+        flex-shrink: 0;
+    }
+
+    .notification-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notification-title {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .notification-time {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    .notifications-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 2rem;
+        color: #64748b;
+    }
+
+    .notifications-footer {
+        display: block;
+        padding: 0.875rem;
+        text-align: center;
+        color: #8b5cf6;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        transition: background 0.3s ease;
+    }
+
+    .notifications-footer:hover {
+        background: rgba(139, 92, 246, 0.1);
+    }
+
+    .profile-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .profile-avatar:hover {
+        border-color: #8b5cf6;
+    }
+
+    .nav-profile {
+        position: relative;
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 260px;
+        background: #131320;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        display: none;
+        overflow: hidden;
+    }
+
+    .profile-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        padding: 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .profile-avatar-lg {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .profile-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .profile-name {
+        display: block;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .profile-email {
+        display: block;
+        font-size: 0.75rem;
+        color: #64748b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .profile-links {
+        padding: 0.5rem;
+    }
+
+    .profile-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.875rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .profile-link:hover {
+        background: rgba(255, 255, 255, 0.03);
+        color: #fff;
+    }
+
+    .profile-link.logout:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .profile-link i {
+        width: 18px;
+        text-align: center;
+    }
+
+    .nav-login-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+
+    .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .nav-hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: #fff;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-hamburger.open span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-hamburger.open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-hamburger.open span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 992px) {
+        .nav-links .nav-link span {
+            display: none;
+        }
+
+        .nav-link {
+            padding: 0.625rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav-hamburger {
+            display: flex;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(13, 13, 20, 0.98);
+            backdrop-filter: blur(20px);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            z-index: 999;
+        }
+
+        .nav-menu.active {
+            display: flex;
+        }
+
+        .nav-links {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        .nav-link span {
+            display: inline !important;
+        }
+
+        .nav-login-btn span {
+            display: inline !important;
+        }
+    }
 </style>
 
 <script>
-  (function () {
-    const hamburger = document.getElementById('hamburger');
-    const navContainer = document.getElementById('nav-container');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const avatarBtns = document.querySelectorAll('.avatar-btn');
-    const closeProfileBtn = document.getElementById('closeProfileBtn');
-    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileDropdownMenu = document.getElementById('profileDropdownMenu');
+        const notificationsBtn = document.getElementById('notificationsBtn');
+        const notificationsDropdown = document.getElementById('notificationsDropdown');
 
-    function disableBodyScroll(flag) {
-      document.body.style.overflow = flag ? 'hidden' : '';
-    }
+        hamburger?.addEventListener('click', function() {
+            hamburger.classList.toggle('open');
+            navMenu.classList.toggle('active');
+        });
 
-    function openNav() {
-      navContainer?.classList.add('active');
-      hamburger?.classList.add('open');
-      hamburger?.setAttribute('aria-expanded', 'true');
-      disableBodyScroll(true);
-    }
+        navMenu?.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger?.classList.remove('open');
+                navMenu.classList.remove('active');
+            });
+        });
 
-    function closeNav() {
-      navContainer?.classList.remove('active');
-      hamburger?.classList.remove('open');
-      hamburger?.setAttribute('aria-expanded', 'false');
-      disableBodyScroll(false);
-    }
+        profileAvatar?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdownMenu?.classList.toggle('show');
+            notificationsDropdown?.classList.remove('show');
+        });
 
-    function toggleNav() {
-      navContainer?.classList.contains('active') ? closeNav() : openNav();
-    }
+        notificationsBtn?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notificationsDropdown?.classList.toggle('show');
+            profileDropdownMenu?.classList.remove('show');
+        });
 
-    // Toggle mobile menu
-    hamburger?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleNav();
+        document.addEventListener('click', function(e) {
+            if (profileDropdown && !profileDropdown.contains(e.target)) {
+                profileDropdownMenu?.classList.remove('show');
+            }
+            if (notificationsDropdown && !notificationsDropdown.contains(e.target)) {
+                notificationsDropdown?.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                profileDropdownMenu?.classList.remove('show');
+                notificationsDropdown?.classList.remove('show');
+                hamburger?.classList.remove('open');
+                navMenu?.classList.remove('active');
+            }
+        });
     });
-
-    // Close nav when clicking link (mobile only)
-    navContainer?.querySelectorAll('a')?.forEach(a => {
-      a.addEventListener('click', () => { if (isMobile()) closeNav(); });
-    });
-
-    // Profile dropdown toggle
-    avatarBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        profileDropdown?.classList.toggle('show');
-      });
-    });
-
-    // Close profile dropdown
-    closeProfileBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      profileDropdown?.classList.remove('show');
-    });
-
-    // Click outside → close
-    document.addEventListener('click', (e) => {
-      if (navContainer?.classList.contains('active') &&
-          !navContainer.contains(e.target) &&
-          !hamburger.contains(e.target)) {
-        closeNav();
-      }
-      if (profileDropdown?.classList.contains('show') &&
-          !profileDropdown.contains(e.target)) {
-        profileDropdown.classList.remove('show');
-      }
-    });
-
-    // Escape key closes
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeNav();
-        profileDropdown?.classList.remove('show');
-      }
-    });
-
-    // Resize resets nav
-    window.addEventListener('resize', () => { if (!isMobile()) closeNav(); });
-  })();
-</script>
-
-<script>
-  const notificationsDropdown = document.querySelector('.notifications');
-  const notificationsToggle = document.getElementById('notificationsDropdown');
-
-  notificationsToggle?.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    notificationsDropdown.classList.toggle('show');
-  });
-
-  // Click outside
-  document.addEventListener('click', (e) => {
-    if (notificationsDropdown.classList.contains('show') &&
-        !notificationsDropdown.contains(e.target)) {
-      notificationsDropdown.classList.remove('show');
-    }
-  });
-
-  // Escape key
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      notificationsDropdown.classList.remove('show');
-    }
-  });
 </script>
