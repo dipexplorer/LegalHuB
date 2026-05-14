@@ -299,7 +299,7 @@ body::before {
 .section-header {
     text-align: center;
     max-width: 650px;
-    margin: 0 auto 3.5rem;
+    margin: 0 auto 2.5rem;
 }
 
 .section-badge {
@@ -754,14 +754,14 @@ body::before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.75rem 2rem;
+    padding: 1.25rem 1.5rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     text-decoration: none;
     color: var(--text-primary);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    min-width: 200px;
+    min-width: 160px;
     flex-shrink: 0;
 }
 
@@ -772,11 +772,11 @@ body::before {
 }
 
 .contrib-avatar {
-    width: 72px;
-    height: 72px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    margin-bottom: 1rem;
-    border: 3px solid var(--border-color);
+    margin-bottom: 0.75rem;
+    border: 2px solid var(--border-color);
     transition: border-color 0.3s ease;
 }
 
@@ -786,21 +786,22 @@ body::before {
 
 .contrib-name {
     font-weight: 600;
-    font-size: 0.9375rem;
-    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
     color: var(--text-primary);
 }
 
 .contrib-count {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.375rem;
 }
 
 .contrib-count i {
     color: var(--accent-light);
+    font-size: 0.75rem;
 }
 
 /* FAQ Section */
