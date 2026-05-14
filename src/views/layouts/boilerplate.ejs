@@ -37,27 +37,13 @@
 
         <!-- Page-specific CSS (home page, dictionary, faq, lawyers, etc.) -->
         <link rel="stylesheet" href="/css/home.css" />
-
-        <style>
-            .body-wrapper {
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-            }
-            .main-content {
-                flex: 1;
-            }
-            body {
-                overflow-x: hidden;
-            }
-        </style>
     </head>
 
-    <body class="body-wrapper">
+    <body>
         <!-- Navbar -->
         <%- include('../includes/navbar.ejs') %>
 
-        <main class="main-content">
+        <main>
             <!-- Flash Messages -->
             <%- include("../includes/flash.ejs") %>
 
