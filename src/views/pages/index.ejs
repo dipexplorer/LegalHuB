@@ -240,128 +240,48 @@
 </section>
 
 <section class="section contributors-section">
-    <div class="contributors-hero">
-        <div class="contributors-hero-bg"></div>
-        <div class="contributors-hero-content">
-            <div class="section-badge">
-                <i class="fa-brands fa-github"></i>
-                <span>Open Source Community</span>
-            </div>
-            <h2 class="contributors-hero-title">Built by <span class="gradient-text">Contributors</span></h2>
-            <p class="contributors-hero-subtitle">
-                Open source is at the heart of LegalHuB. Join our amazing community of contributors making legal accessible to everyone.
-            </p>
-            <div class="contributors-hero-actions">
-                <a href="https://github.com/dipexplorer/LegalHuB" target="_blank" rel="noopener" class="btn btn-primary">
-                    <i class="fa-solid fa-code"></i>
-                    Start Contributing
-                </a>
-                <a href="/contributors" class="btn btn-secondary">
-                    <i class="fa-solid fa-users"></i>
-                    View All Contributors
-                </a>
-            </div>
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-heart"></i>
+            <span>Community</span>
         </div>
+        <h2 class="section-title">Thanks to Our Contributors</h2>
+        <p class="section-subtitle">Open source community building LegalHuB</p>
     </div>
 
-    <div class="contributors-main">
-        <div class="contributors-highlight">
+    <div class="contributors-wrapper">
+        <div class="contributors-track" id="sliderTrack">
             <% if (contributorsTop && contributorsTop.length > 0) { %>
-            <div class="top-contributors">
-                <h3 class="top-contributors-title">
-                    <i class="fa-solid fa-crown"></i>
-                    Top Contributors
-                </h3>
-                <div class="top-contributors-grid">
-                    <% const topThree = contributorsTop.slice(0, 3); %>
-                    <% const sortedContribs = [...contributorsTop].sort((a, b) => b.contributions - a.contributions); %>
-                    <% const actualTop = sortedContribs.slice(0, 3); %>
-                    <% actualTop.forEach((c, index) => { %>
-                    <div class="top-contributor-card rank-<%= index %>">
-                        <div class="top-contributor-rank">
-                            <% if (index === 0) { %>
-                            <i class="fa-solid fa-trophy"></i>
-                            <% } else if (index === 1) { %>
-                            <i class="fa-solid fa-medal"></i>
-                            <% } else { %>
-                            <i class="fa-solid fa-award"></i>
-                            <% } %>
-                        </div>
-                        <a href="<%= c.html_url %>" target="_blank" rel="noopener" class="top-contributor-link">
-                            <div class="top-contributor-avatar-wrapper">
-                                <img src="<%= c.avatar_url %>" alt="<%= c.login %>" class="top-contributor-avatar" />
-                                <div class="top-contributor-glow"></div>
-                            </div>
-                            <span class="top-contributor-name">@<%= c.login %></span>
-                            <span class="top-contributor-commits">
-                                <i class="fa-solid fa-code-commit"></i>
-                                <%= c.contributions %> commits
-                            </span>
-                        </a>
+                <% contributorsTop.forEach(c => { %>
+                <a href="<%= c.html_url %>" target="_blank" rel="noopener" class="contrib-card">
+                    <img src="<%= c.avatar_url %>" alt="<%= c.login %>" class="contrib-avatar" />
+                    <span class="contrib-name">@<%= c.login %></span>
+                    <span class="contrib-count">
+                        <i class="fa-solid fa-code"></i>
+                        <%= c.contributions %> contributions
+                    </span>
+                </a>
+                <% }) %>
+            <% } else { %>
+                <a href="https://github.com" target="_blank" rel="noopener" class="contrib-card">
+                    <div class="contrib-avatar" style="background: var(--gradient-primary); display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-brands fa-github" style="font-size: 2rem; color: white;"></i>
                     </div>
-                    <% }) %>
-                </div>
-            </div>
+                    <span class="contrib-name">Join Us</span>
+                    <span class="contrib-count">
+                        <i class="fa-solid fa-code"></i>
+                        Contribute on GitHub
+                    </span>
+                </a>
             <% } %>
         </div>
-
-        <div class="contributors-all">
-            <h3 class="contributors-all-title">
-                <i class="fa-solid fa-users"></i>
-                All Contributors
-            </h3>
-            <div class="contributors-grid">
-                <% if (contributorsTop && contributorsTop.length > 0) { %>
-                    <% contributorsTop.forEach((c, index) => { %>
-                    <a href="<%= c.html_url %>" target="_blank" rel="noopener" class="contrib-card" style="animation-delay: <%= index * 0.05 %>s;">
-                        <div class="contrib-avatar-wrapper">
-                            <img src="<%= c.avatar_url %>" alt="<%= c.login %>" class="contrib-avatar" />
-                            <span class="contrib-rank-badge">#<%= index + 1 %></span>
-                        </div>
-                        <div class="contrib-info">
-                            <span class="contrib-name">@<%= c.login %></span>
-                            <span class="contrib-commits">
-                                <i class="fa-solid fa-code-commit"></i>
-                                <%= c.contributions %>
-                            </span>
-                        </div>
-                    </a>
-                    <% }) %>
-                <% } else { %>
-                    <% for (let i = 0; i < 8; i++) { %>
-                    <a href="https://github.com/dipexplorer/LegalHuB" target="_blank" rel="noopener" class="contrib-card">
-                        <div class="contrib-avatar-wrapper">
-                            <div class="contrib-avatar contrib-avatar-placeholder">
-                                <i class="fa-brands fa-github"></i>
-                            </div>
-                            <span class="contrib-rank-badge">#<%= i + 1 %></span>
-                        </div>
-                        <div class="contrib-info">
-                            <span class="contrib-name">Be the first!</span>
-                            <span class="contrib-commits">
-                                <i class="fa-solid fa-plus"></i>
-                                Join Us
-                            </span>
-                        </div>
-                    </a>
-                    <% } %>
-                <% } %>
-            </div>
-        </div>
     </div>
 
-    <div class="contributors-cta">
-        <div class="contributors-cta-content">
-            <i class="fa-brands fa-github contributors-cta-icon"></i>
-            <div class="contributors-cta-text">
-                <h3>Ready to make a difference?</h3>
-                <p>Join our open-source community and help make legal information accessible to everyone in India.</p>
-            </div>
-            <a href="https://github.com/dipexplorer/LegalHuB" target="_blank" rel="noopener" class="btn btn-primary">
-                <i class="fa-solid fa-arrow-right"></i>
-                Contribute Now
-            </a>
-        </div>
+    <div class="view-all-container">
+        <a href="/contributors" class="view-all-btn">
+            View All Contributors
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
     </div>
 </section>
 
