@@ -31,11 +31,32 @@ nav {
     position: relative;
 }
 
-.navbar-brand a {
-    color: #9c27b0; /* Light Purple */
-    font-size: 1.8rem;
-    font-weight: bold;
+.navbar-brand .logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
+}
+
+.navbar-brand .logo-icon {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand .logo-link:hover .logo-icon {
+    transform: scale(1.1);
+}
+
+.navbar-brand .logo-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand .logo-accent {
+    color: #e040fb;
 }
 
 /* ✅ Navigation Container */

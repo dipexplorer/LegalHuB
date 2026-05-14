@@ -1,847 +1,623 @@
 <% layout("layouts/boilerplate") %>
 <link rel="stylesheet" href="/css/index.css">
 
-<body>
-    <div class="spotlight"></div>
+<div class="spotlight"></div>
 
-    <div class="hero-section">
-        <main class="hero">
-            <div class="hero-content">
-                <div class="tagline"><i class="fa-solid fa-scale-balanced"></i> LegalHub</div>
-                <h1 class="hero-top__title reveal hero-animate">Clarity. Counsel. Confidence.</h1>
-                <p class="hero-top__subtitle reveal hero-animate">
-                    LegalHub turns complex legal jargon into clear answers, connects you to verified
-                    lawyers, and provides templates and guides tailored for India.
-                </p>
-                <div class="action-buttons">
-                    <a href="/articles" class="btn btn-primary">📚 Get Started →</a>
-                    <a href="/lawyers" class="btn btn-secondary"
-                        ><i class="fa-solid fa-magnifying-glass"></i> Find a Lawyer</a
-                    >
+<section class="hero-section">
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>Your Legal Companion</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Clarity. Counsel.</span>
+                <span class="gradient-text">Confidence.</span>
+            </h1>
+            <p class="hero-subtitle">
+                LegalHub simplifies complex legal jargon into clear answers, connects you with verified 
+                lawyers, and provides templates tailored for India.
+            </p>
+            <div class="hero-actions">
+                <a href="/articles" class="btn btn-primary">
+                    <i class="fa-solid fa-book-open"></i>
+                    Explore Resources
+                </a>
+                <a href="/lawyers" class="btn btn-secondary">
+                    <i class="fa-solid fa-user-tie"></i>
+                    Find a Lawyer
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-value">250k+</div>
+                    <div class="stat-label">Legal Terms</div>
                 </div>
-                <div class="hero-top__stats">
-                    <div class="stat">
-                        <div class="stat__value">250k+</div>
-                        <div class="stat__label">terms & resources</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat__value">3.9k+</div>
-                        <div class="stat__label">verified lawyers</div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value">3.9k+</div>
+                    <div class="stat-label">Verified Lawyers</div>
                 </div>
             </div>
+        </div>
 
-            <div class="hero-visual">
-                <div class="visual-card">
-                    <div class="card-line-1"></div>
-                    <div class="card-line-2"></div>
-                    <div class="card-line-3"></div>
-                    <div class="card-circle-small"></div>
-                    <div class="card-bottom-bar"></div>
-                    <div class="gavel-button">
+        <div class="hero-visual">
+            <div class="visual-card">
+                <div class="visual-inner">
+                    <div class="visual-icon">
                         <i class="fa-solid fa-gavel"></i>
                     </div>
+                    <div class="visual-title">Know Your Rights</div>
+                    <div class="visual-desc">Access comprehensive constitutional rights and legal resources</div>
                 </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Hero + Dictionary -->
-    <section class="hero-dic">
-        <h1 class="hero-title reveal">⚖️ Empower Yourself with Legal Knowledge</h1>
-        <p class="lead reveal">
-            We simplify complex laws and empower individuals with the right legal tools to protect
-            their rights and make informed decisions in today's complex legal landscape.
-        </p>
-        <h2 class="title">📖 Legal Dictionary</h2>
-        <div class="dic_container reveal">
-            <form id="search-form" class="search-form">
-                <input
-                    type="text"
-                    id="term-input"
-                    class="search-input"
-                    placeholder="Enter a legal term (e.g., 'habeas corpus', 'tort law')..."
-                    required />
-                <button type="submit" id="search-button" class="search-btn">
-                    <span class="search-icon">🔎</span>
-                    <span>Search</span>
-                </button>
-            </form>
-            <div id="result" class="hidden">
-                <h2 class="term-title">Result:</h2>
-                <p id="term-definition">Searching...</p>
+                <div class="visual-bar"></div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <style>
-        /* Dictionary Search Results Styling */
-        
-        /* Enhanced Dictionary Result Styles */
-        .dictionary-result.enhanced {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: 16px;
-            padding: 25px;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            border-left: 5px solid #6c63ff;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
-        
-        .dictionary-result.enhanced:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        .term-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(67, 97, 238, 0.2);
-        }
-        
-        .term-badge {
-            background-color: #4361ee;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .term-section {
-            margin-bottom: 25px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            color: #4361ee;
-        }
-        
-        .section-header i {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-        
-        .section-header h4 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 18px;
-        }
-        
-        .section-content {
-            line-height: 1.7;
-            color: #e0e0e0;
-        }
-        
-        .section-content p {
-            margin: 0;
-            font-size: 16px;
-        }
-        
-        .example-box {
-            background-color: rgba(108, 99, 255, 0.15);
-            border-left: 4px solid #6c63ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-style: italic;
-        }
-        
-        .example-box::before {
-            content: "Example: ";
-            font-weight: 600;
-            font-style: normal;
-            color: #4361ee;
-        }
-        
-        /* End Enhanced Styles */
-        
-        .search-loading {
-            padding: 15px;
-            text-align: center;
-            font-size: 16px;
-            color: #555;
-        }
+<section class="section dictionary-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-book"></i>
+            <span>AI-Powered Dictionary</span>
+        </div>
+        <h2 class="section-title">Understand Legal Terminology</h2>
+        <p class="section-subtitle">
+            Search our comprehensive legal dictionary powered by AI to understand complex terms and concepts.
+        </p>
+    </div>
 
-        .dictionary-result {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            border-left: 4px solid #6c63ff;
-        }
+    <div class="dictionary-search">
+        <form id="search-form" class="dictionary-form">
+            <input
+                type="text"
+                id="term-input"
+                class="dictionary-input"
+                placeholder="Search legal terms (e.g., 'habeas corpus', 'tort')..."
+                required
+            />
+            <button type="submit" class="dictionary-btn">
+                <i class="fa-solid fa-search"></i>
+                Search
+            </button>
+        </form>
+    </div>
 
-        .term-name {
-            color: #a29bfe;
-            font-size: 22px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
+    <div id="result" class="dictionary-result hidden">
+        <div id="term-definition"></div>
+    </div>
+</section>
 
-        .term-definition, .term-example {
-            margin-bottom: 15px;
-        }
+<section class="section lawyers-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-user-tie"></i>
+            <span>Expert Lawyers</span>
+        </div>
+        <h2 class="section-title">Top-Rated Legal Professionals</h2>
+        <p class="section-subtitle">
+            Connect with verified legal experts ready to help you with your legal matters.
+        </p>
+    </div>
 
-        .term-definition h4, .term-example h4 {
-            color: #d1c4e9;
-            font-size: 16px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .term-definition p, .term-example p {
-            color: #e0e0e0;
-            line-height: 1.6;
-            font-size: 15px;
-        }
-
-        .error-message {
-            padding: 15px;
-            background: #ffeeee;
-            border-radius: 8px;
-            color: #d32f2f;
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .error-note {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed #ddd;
-        }
-
-        .error-note p {
-            font-size: 14px;
-            color: #666;
-            font-style: italic;
-        }
-
-        /* Result styling */
-        #result {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-            border-left: 4px solid #6c63ff;
-        }
-        
-        .term-title {
-            color: #a29bfe;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        
-        #term-definition {
-            color: #e0e0e0;
-            line-height: 1.6;
-            font-size: 15px;
-        }
-        
-        #result.show {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-
-    <!-- Top-Rated-Lawyers -->
-    <section class="lawyer-section">
-        <h2>👩‍⚖️ Top-Rated Legal Professionals</h2>
-        <p class="subheading">Connect with verified experts in your area</p>
-        <div class="lawyer-grid">
-            <% lawyers.forEach(lawyer => { %>
-            <article class="lawyer-card">
-                <!-- Verified Badge -->
-                <% if (lawyer.lawyerProfile?.isVerified) { %>
-                <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                <% } else { %>
-                <span class="small-badge"
-                    ><i class="fas fa-exclamation-triangle"></i>Unverified</span
-                >
-                <% } %>
-                <div class="lawyer-header">
+    <div class="lawyers-grid">
+        <% lawyers.forEach((lawyer, index) => { %>
+        <article class="lawyer-card" style="animation-delay: <%= index * 0.1 %>s;">
+            <% if (lawyer.lawyerProfile?.isVerified) { %>
+            <span class="lawyer-badge">
+                <i class="fas fa-check-circle"></i>
+                Verified
+            </span>
+            <% } %>
+            
+            <div class="lawyer-card-header">
+                <div class="lawyer-avatar-wrapper">
                     <img
                         src="<%= lawyer.photo || '/pic/profile.jpg' %>"
-                        alt="Photo of <%= lawyer.name %>"
-                        class="lawyer-photo" />
-                    <div class="lawyer-info">
-                        <h3><%= lawyer.name %></h3>
-                        <p class="specialization">
-                            <%= lawyer.lawyerProfile?.specialization || 'No specialization' %>
-                        </p>
-                        <div class="rating">
-                            <% const actualRating = lawyer.lawyerProfile?.rating; const rating =
-                            (typeof actualRating === 'number' && actualRating > 0) ?
-                            Math.floor(actualRating) : 5; %>
-                            <div class="rating-stars">
-                                <% for (let i = 1; i <= 5; i++) { %>
-                                <span class="star <%= i <= rating ? 'filled' : 'empty' %>">★</span>
-                                <% } %>
-                                <div class="rating-value"><%= rating %> / 5</div>
-                            </div>
-                        </div>
+                        alt="<%= lawyer.name %>"
+                        class="lawyer-avatar"
+                    />
+                    <div class="lawyer-online-indicator"></div>
+                </div>
+                <div class="lawyer-info">
+                    <h3><%= lawyer.name %></h3>
+                    <span class="lawyer-specialization">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <%= lawyer.lawyerProfile?.specialization || 'General Practice' %>
+                    </span>
+                </div>
+            </div>
+
+            <div class="lawyer-rating">
+                <div class="stars">
+                    <% const actualRating = lawyer.lawyerProfile?.rating;
+                       const rating = (typeof actualRating === 'number' && actualRating > 0) ? Math.floor(actualRating) : 5;
+                       for (let i = 1; i <= 5; i++) { %>
+                    <span class="star <%= i <= rating ? '' : 'empty' %>">★</span>
+                    <% } %>
+                </div>
+                <span class="rating-value"><%= rating %> / 5</span>
+            </div>
+
+            <div class="lawyer-details">
+                <div class="lawyer-detail-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <span><%= lawyer.lawyerProfile?.experience || 'N/A' %> years</span>
+                </div>
+                <div class="lawyer-detail-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span><%= lawyer.lawyerProfile?.city || lawyer.lawyerProfile?.state || 'India' %></span>
+                </div>
+            </div>
+
+            <div class="lawyer-tags">
+                <% const specs = (lawyer.lawyerProfile?.specialization || 'General').split(',');
+                   specs.slice(0, 2).forEach(spec => { %>
+                <span class="lawyer-tag"><%= spec.trim() %></span>
+                <% }) %>
+            </div>
+
+            <a href="/lawyers/<%= lawyer._id %>" class="lawyer-card-footer">
+                <span class="lawyer-action-text">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Book Consultation
+                </span>
+                <i class="fa-solid fa-arrow-right lawyer-arrow"></i>
+            </a>
+        </article>
+        <% }) %>
+    </div>
+
+    <div class="view-all-container">
+        <a href="/lawyers" class="view-all-btn">
+            View All Lawyers
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+
+<section class="section resources-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-folder"></i>
+            <span>Legal Resources</span>
+        </div>
+        <h2 class="section-title">Complete Legal Resource Hub</h2>
+        <p class="section-subtitle">
+            Everything you need for legal research, documentation, and professional connections.
+        </p>
+    </div>
+
+    <div class="resources-grid">
+        <a href="/dictionary" class="resource-card blue">
+            <div class="resource-icon">
+                <i class="fa-solid fa-book"></i>
+            </div>
+            <span class="resource-label">Dictionary</span>
+            <span class="resource-count">10K+ Terms</span>
+        </a>
+
+        <a href="/documents" class="resource-card green">
+            <div class="resource-icon">
+                <i class="fa-solid fa-file-lines"></i>
+            </div>
+            <span class="resource-label">Documents</span>
+            <span class="resource-count">2.5K+ Forms</span>
+        </a>
+
+        <a href="/articles" class="resource-card purple">
+            <div class="resource-icon">
+                <i class="fa-solid fa-newspaper"></i>
+            </div>
+            <span class="resource-label">Articles</span>
+            <span class="resource-count">Expert Guides</span>
+        </a>
+
+        <a href="/rights" class="resource-card red">
+            <div class="resource-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span class="resource-label">Rights</span>
+            <span class="resource-count">Constitutional</span>
+        </a>
+
+        <a href="#faq" class="resource-card orange">
+            <div class="resource-icon">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <span class="resource-label">FAQ</span>
+            <span class="resource-count">Common Answers</span>
+        </a>
+
+        <a href="/lawyers" class="resource-card indigo">
+            <div class="resource-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <span class="resource-label">Lawyers</span>
+            <span class="resource-count">500+ Verified</span>
+        </a>
+    </div>
+</section>
+
+<section class="section contributors-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-heart"></i>
+            <span>Community</span>
+        </div>
+        <h2 class="section-title">Built by Contributors</h2>
+        <p class="section-subtitle">
+            Thank you to the amazing open-source community building LegalHuB together.
+        </p>
+    </div>
+
+    <div class="contributors-wrapper">
+        <div class="contributors-track" id="sliderTrack">
+            <% if (contributorsTop && contributorsTop.length > 0) { %>
+                <% contributorsTop.forEach(c => { %>
+                <a href="<%= c.html_url %>" target="_blank" rel="noopener" class="contrib-card">
+                    <img src="<%= c.avatar_url %>" alt="<%= c.login %>" class="contrib-avatar" />
+                    <span class="contrib-name">@<%= c.login %></span>
+                    <span class="contrib-count">
+                        <i class="fa-solid fa-code"></i>
+                        <%= c.contributions %> contributions
+                    </span>
+                </a>
+                <% }) %>
+            <% } else { %>
+                <a href="https://github.com" target="_blank" rel="noopener" class="contrib-card">
+                    <div class="contrib-avatar" style="background: var(--gradient-primary); display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-brands fa-github" style="font-size: 2rem; color: white;"></i>
                     </div>
-                </div>
-                <div class="lawyer-details">
-                    <p>
-                        <strong>Experience:</strong> <%= lawyer.lawyerProfile?.experience || 'N/A'
-                        %> years
-                    </p>
-                    <p><strong>State:</strong> <%= lawyer.lawyerProfile?.state || 'N/A' %></p>
-                </div>
-                <div class="lawyer-actions">
-                    <a href="/lawyers/<%= lawyer._id %>" class="contact-btn">📩 Connect</a>
-                </div>
-            </article>
-            <% }) %>
+                    <span class="contrib-name">Join Us</span>
+                    <span class="contrib-count">
+                        <i class="fa-solid fa-code"></i>
+                        Contribute on GitHub
+                    </span>
+                </a>
+            <% } %>
         </div>
+    </div>
 
-        <div class="lawyer-action">
-            <a href="/lawyers" class="view-all-btn">View All Lawyers →</a>
-        </div>
-    </section>
+    <div class="view-all-container">
+        <a href="/contributors" class="view-all-btn">
+            View All Contributors
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
 
-    <!-- Quick Links -->
-    <section class="legal-hub-section">
-        <div class="gradient-overlay"></div>
-        <div class="legal-hub-container">
-            <h2 class="legal-hub-title">Complete Legal Resource Hub</h2>
-            <p class="legal-hub-subtitle">
-                Everything you need for legal research, documentation, and professional connections
-            </p>
-
-            <div class="legal-hub-grid">
-                <a href="/dictionary" class="legal-hub-item blue">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">📖</div>
-                    <span class="item-label">Dictionary</span>
-                    <span class="item-desc">10K+ Terms</span>
-                </a>
-
-                <a href="/documents" class="legal-hub-item green">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">📄</div>
-                    <span class="item-label">Documents</span>
-                    <span class="item-desc">2.5K+ Forms</span>
-                </a>
-
-                <a href="/articles" class="legal-hub-item purple">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">📘</div>
-                    <span class="item-label">Articles</span>
-                    <span class="item-desc">Expert Guides</span>
-                </a>
-
-                <a href="/rights" class="legal-hub-item red">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">🛡️</div>
-                    <span class="item-label">Rights</span>
-                    <span class="item-desc">Know Your Rights</span>
-                </a>
-
-                <a href="/#FAQs" class="legal-hub-item yellow">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">❓</div>
-                    <span class="item-label">Q&amp;A</span>
-                    <span class="item-desc">Get Answers</span>
-                </a>
-
-                <a href="/lawyers" class="legal-hub-item indigo">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">👥</div>
-                    <span class="item-label">Lawyers</span>
-                    <span class="item-desc">500+ Verified</span>
-                </a>
-
-                <a href="/account" class="legal-hub-item gray">
-                    <div class="item-bg"></div>
-                    <div class="item-icon">👤</div>
-                    <span class="item-label">Profile</span>
-                    <span class="item-desc">Your Account</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contributors Teaser -->
-    <section class="contributors-teaser">
-        <h2>🙏 Thanks to Our Contributors</h2>
-        <p class="subheading">Community members building LegalHuB together</p>
-
-        <div class="contributors-slider">
-            <div class="slider-fog left-fog"></div>
-            <button class="slider-arrow left">&#8592;</button>
-
-            <div class="slider-track" id="sliderTrack"></div>
-
-            <button class="slider-arrow right">&#8594;</button>
-            <div class="slider-fog right-fog"></div>
-        </div>
-
-        <div class="lawyer-action">
-            <a href="/contributors" class="view-all-btn">View All Contributors →</a>
-        </div>
-        <script type="application/json" id="contributorsData">
-            <%= JSON.stringify(contributorsTop || []) %>
-        </script>
-        <script>
-            const contributors = <%- JSON.stringify(contributorsTop || []) %>;
-            const track = document.getElementById('sliderTrack');
-            const leftBtn = document.querySelector('.slider-arrow.left');
-            const rightBtn = document.querySelector('.slider-arrow.right');
-
-            let currentIndex = 0;
-            const visibleCards = 7;
-
-            function renderSlider() {
-              track.innerHTML = '';
-              const total = contributors.length;
-
-              for (let i = 0; i < visibleCards; i++) {
-                const realIndex = (currentIndex + i) % total;
-                const c = contributors[realIndex];
-
-                const card = document.createElement('a');
-                card.className = 'contrib-pill' + (i === Math.floor(visibleCards / 2) ? ' middle' : '');
-                card.href = c.html_url;
-                card.target = '_blank';
-                card.rel = 'noopener';
-                card.innerHTML = `
-                  <img src="${c.avatar_url}" alt="${c.login}" />
-                  <span>@${c.login}</span>
-                  <div style="margin-top:6px; font-size: 0.9rem; color:#666;">🧩 ${c.contributions} contributions</div>
-                `;
-                track.appendChild(card);
-              }
-            }
-
-            function scrollRight() {
-              currentIndex = (currentIndex + 1) % contributors.length;
-              renderSlider();
-            }
-
-            function scrollLeft() {
-              currentIndex = (currentIndex - 1 + contributors.length) % contributors.length;
-              renderSlider();
-            }
-
-            leftBtn.addEventListener('click', scrollLeft);
-            rightBtn.addEventListener('click', scrollRight);
-            setInterval(scrollRight, 3000);
-            window.addEventListener('load', renderSlider);
-        </script>
-    </section>
-
-    <!-- FAQ Section -->
-    <div class="container faq-container" id="faq">
-        <div class="faq-left">
+<section class="section faq-section" id="faq">
+    <div class="faq-container">
+        <div class="faq-info">
             <h2>Frequently Asked Questions</h2>
-            <p>
-                Get answers to all your legal queries!
-                <img
-                    src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif"
-                    alt="🤔"
-                    width="28"
-                    height="28" />
-                <img
-                    src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.gif"
-                    alt="✨"
-                    width="28"
-                    height="28" />
-            </p>
-            <div class="contact-info">
-                <span><i class="fas fa-envelope"></i> Have more questions?</span>
-                <a href="mailto:support@legalhub.com">support@legalhub.com</a>
+            <p>Find quick answers to common legal queries. Still have questions? We're here to help.</p>
+            <div class="faq-contact">
+                <i class="fa-solid fa-envelope"></i>
+                <div class="faq-contact-text">
+                    <div class="faq-contact-label">Email Support</div>
+                    <a href="mailto:support@legalhub.com">support@legalhub.com</a>
+                </div>
             </div>
         </div>
 
-        <div class="faq-right">
+        <div class="faq-list">
             <div class="faq-item">
-                <h3>What is LegalHub and how does it work? <i class="fas fa-chevron-down"></i></h3>
+                <button class="faq-question">
+                    <span class="faq-question-content">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        What is LegalHub?
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
                 <div class="faq-answer">
-                    <p>
-                        LegalHub is an online platform providing free access to legal resources,
-                        forms, and guides. You can explore state-specific legal forms and understand
-                        legal terms easily. 🏛️
+                    <p class="faq-answer-content">
+                        LegalHub is a comprehensive legal resource platform for Indian citizens. We provide free access to legal information, state-specific forms, AI-powered dictionary, and verified lawyer connections to help you navigate the legal system.
                     </p>
                 </div>
             </div>
 
             <div class="faq-item">
-                <h3>
-                    Can I download legal forms from LegalHub? <i class="fas fa-chevron-down"></i>
-                </h3>
+                <button class="faq-question">
+                    <span class="faq-question-content">
+                        <i class="fa-solid fa-file-lines"></i>
+                        Can I download legal forms?
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
                 <div class="faq-answer">
-                    <p>
-                        Yes! LegalHub allows you to download state-specific legal forms directly
-                        from our database. You can also find instructions on how to fill them
-                        correctly. 📄
+                    <p class="faq-answer-content">
+                        Yes! We provide access to state-specific legal forms with detailed guidelines on how to fill them correctly. All resources are free to download and cover various departments including Revenue, Police, Court, and more.
                     </p>
                 </div>
             </div>
 
             <div class="faq-item">
-                <h3>
-                    How can I search for specific legal terms? <i class="fas fa-chevron-down"></i>
-                </h3>
+                <button class="faq-question">
+                    <span class="faq-question-content">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        How does the dictionary work?
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
                 <div class="faq-answer">
-                    <p>
-                        You can use the smart search feature to look up legal terms. The integrated
-                        AI will provide detailed explanations and related resources. 🔍
+                    <p class="faq-answer-content">
+                        Our AI-powered dictionary provides detailed explanations for legal terms. Simply search for any term to get comprehensive definitions, real-world examples, and related legal concepts explained in plain language.
                     </p>
                 </div>
             </div>
 
             <div class="faq-item">
-                <h3>
-                    Is the information on LegalHub accurate and up-to-date?
-                    <i class="fas fa-chevron-down"></i>
-                </h3>
+                <button class="faq-question">
+                    <span class="faq-question-content">
+                        <i class="fa-solid fa-check-circle"></i>
+                        Is the information accurate?
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
                 <div class="faq-answer">
-                    <p>
-                        Yes. We source information from verified legal authorities and update it
-                        regularly to reflect the latest legal changes. ✅
+                    <p class="faq-answer-content">
+                        Yes. We source information from verified legal authorities and update it regularly to reflect the latest legal changes in India. Our AI helps simplify complex legal concepts while maintaining accuracy.
                     </p>
                 </div>
             </div>
 
             <div class="faq-item">
-                <h3>Is LegalHub free to use? <i class="fas fa-chevron-down"></i></h3>
+                <button class="faq-question">
+                    <span class="faq-question-content">
+                        <i class="fa-solid fa-tag"></i>
+                        Is LegalHub free?
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
                 <div class="faq-answer">
-                    <p>
-                        Absolutely! LegalHub is completely free to use, and you can access all
-                        resources without signing up. 🎯
+                    <p class="faq-answer-content">
+                        Absolutely! LegalHub is completely free to use. You can access all resources including legal terms, forms, articles, constitutional rights, and lawyer connections without any charges.
                     </p>
                 </div>
             </div>
         </div>
     </div>
-</body>
+</section>
 
-<!-- FAQ Script -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2 class="cta-title">Ready to Explore Legal Knowledge?</h2>
+        <p class="cta-subtitle">
+            Start your journey to understanding legal rights and resources today.
+        </p>
+        <div class="hero-actions" style="justify-content: center;">
+            <a href="/dictionary" class="btn btn-primary">
+                <i class="fa-solid fa-search"></i>
+                Search Dictionary
+            </a>
+            <a href="/lawyers" class="btn btn-secondary">
+                <i class="fa-solid fa-user-tie"></i>
+                Find Lawyer
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .dictionary-result.enhanced {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .term-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .term-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .term-badge {
+        background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.375rem 0.875rem;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .term-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .term-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section-header-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .section-header-content i {
+        color: #a78bfa;
+        font-size: 1.125rem;
+    }
+
+    .section-header-content h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+    }
+
+    .section-content p {
+        color: #94a3b8;
+        line-height: 1.7;
+        font-size: 0.9375rem;
+    }
+
+    .example-box {
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 3px solid #8b5cf6;
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 0.75rem;
+        font-style: italic;
+        color: #94a3b8;
+    }
+
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        padding: 1.25rem;
+        border-radius: 12px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .search-loading {
+        text-align: center;
+        padding: 2.5rem;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    #result.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dictionary-result {
+        animation: fadeIn 0.3s ease;
+    }
+</style>
+
 <script>
-    document.querySelectorAll(".faq-item").forEach((item) => {
-        item.addEventListener("click", () => {
-            const faqAnswer = item.querySelector(".faq-answer");
+    const form = document.getElementById('search-form');
+    const input = document.getElementById('term-input');
+    const resultContainer = document.getElementById('result');
+    const definition = document.getElementById('term-definition');
 
-            item.classList.toggle("open");
-
-            if (item.classList.contains("open")) {
-                faqAnswer.style.maxHeight = faqAnswer.scrollHeight + "px";
-                faqAnswer.style.opacity = 1;
-            } else {
-                faqAnswer.style.maxHeight = 0;
-                faqAnswer.style.opacity = 0;
-            }
-
-            document.querySelectorAll(".faq-item").forEach((otherItem) => {
-                if (otherItem !== item && otherItem.classList.contains("open")) {
-                    otherItem.classList.remove("open");
-                    otherItem.querySelector(".faq-answer").style.maxHeight = 0;
-                    otherItem.querySelector(".faq-answer").style.opacity = 0;
-                }
-            });
-        });
-    });
-</script>
-
-<!-- Dictionary Script -->
-<script>
-    const form = document.getElementById("search-form");
-    const input = document.getElementById("term-input");
-    const resultContainer = document.getElementById("result");
-    const definition = document.getElementById("term-definition");
-
-    form.addEventListener("submit", async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const term = input.value.trim();
         if (!term) return;
 
-        definition.innerHTML = `<div class="search-loading">🔎 Searching for "${term}"...</div>`;
-        resultContainer.classList.remove("hidden");
-        resultContainer.classList.add("show");
+        definition.innerHTML = `<div class="search-loading"><i class="fa-solid fa-spinner fa-spin"></i> Searching for "${term}"...</div>`;
+        resultContainer.classList.remove('hidden');
+        resultContainer.classList.add('show');
 
         try {
             const res = await fetch(`/api/dictionary/${term}`);
             const data = await res.json();
 
             if (data.success) {
-                // Extract the structured data from the API response
-                // Handle different possible response structures
                 let structured;
                 if (data.data && data.data.structured) {
                     structured = data.data.structured;
                 } else if (data.structured) {
                     structured = data.structured;
                 } else {
-                    // Fallback: use the entire data object if structured is not found
                     structured = data.data || data;
                 }
-                
-                // Debug logging to help identify the issue
-                console.log("API Response:", data);
-                console.log("Structured data:", structured);
-                
-                // Function to clean JSON formatting characters for better display
+
                 const cleanJsonText = (text) => {
                     if (typeof text !== 'string') return text;
-                    
-                    // First check if this looks like a complete JSON object
-                    if (text.trim().startsWith('{') && text.trim().endsWith('}')) {
-                        try {
-                            // Try to parse it as JSON
-                            const jsonData = JSON.parse(text);
-                            // Extract just the definition if it exists
-                            if (jsonData.definition) {
-                                return jsonData.definition
-                                    .replace(/^[\s\"]+/, '') // Remove leading spaces and quotes
-                                    .replace(/[\s\",]+$/, '') // Remove trailing spaces, quotes, commas
-                                    .replace(/\\n/g, ' ') // Replace escaped newlines with spaces
-                                    .replace(/\n/g, ' ') // Replace literal newlines with spaces
-                                    .replace(/&quot;/g, '"'); // Replace HTML entities
-                            }
-                            // If no definition, return the whole object as string
-                            return JSON.stringify(jsonData, null, 2);
-                        } catch (e) {
-                            // If parsing fails, continue with normal cleaning
-                        }
-                    }
-                    
-                    // Normal cleaning for other cases
                     return text
-                        .replace(/```json\s*/g, '') // Remove ```json with possible whitespace
-                        .replace(/```/g, '') // Remove closing ```
-                        .replace(/\{[^}]*"term"[^}]*\}/g, '') // Remove { "term": "value", ... } patterns
-                        .replace(/"term"[^,]*,?\s*/g, '') // Remove "term": "value", patterns
-                        .replace(/"isLegalTerm"[^,]*,?\s*/g, '') // Remove "isLegalTerm": value, patterns
-                        .replace(/"definition"[^:]*:\s*/g, '') // Remove "definition": part
-                        .replace(/"message"[^:]*:\s*/g, '') // Remove "message": part
-                        .replace(/^[\s\{"]*/g, '') // Remove opening braces and quotes
-                        .replace(/[\}"\s,]*$/g, '') // Remove closing braces, quotes, whitespace and commas
-                        .replace(/,$/, '') // Remove trailing comma (additional check)
-                        .replace(/\\n/g, ' ') // Replace escaped newlines with spaces
-                        .replace(/\"/g, '"') // Fix escaped quotes
-                        .replace(/\n/g, ' ') // Replace literal newlines with spaces
-                        .replace(/&quot;/g, '"') // Replace HTML entities
-                        .replace(/&amp;/g, '&') // Replace HTML entities
-                        .replace(/&lt;/g, '<') // Replace HTML entities
-                        .replace(/&gt;/g, '>') // Replace HTML entities
-                        .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+                        .replace(/```json\s*/g, '')
+                        .replace(/```/g, '')
+                        .replace(/\\n/g, ' ')
+                        .replace(/\n/g, ' ')
+                        .replace(/&quot;/g, '"')
+                        .replace(/&amp;/g, '&')
+                        .replace(/\s+/g, ' ')
                         .trim();
                 };
-                
-                // Clean the structured data if it's a string (likely when it's raw JSON)
-                if (typeof structured === 'string') {
-                    // First try to extract just the definition if it's a complete JSON object
-                    if (structured.trim().startsWith('{') && structured.trim().endsWith('}')) {
-                        try {
-                            // Try to parse it as JSON
-                            const jsonData = JSON.parse(structured);
-                            
-                            // Check if this is a "not a legal term" response
-                            if (jsonData.isLegalTerm === false && jsonData.message) {
-                                // Create a clean structured object for non-legal terms
-                                structured = {
-                                    term: jsonData.term || term,
-                                    isLegalTerm: false,
-                                    message: jsonData.message
-                                };
-                            } else if (jsonData.definition) {
-                                // If we found a definition, create a clean structured object
-                                const cleanDefinition = cleanJsonText(jsonData.definition);
-                                structured = {
-                                    term: jsonData.term || term,
-                                    isLegalTerm: jsonData.isLegalTerm !== false,
-                                    definition: cleanDefinition,
-                                    examples: (jsonData.examples || []).map(cleanJsonText)
-                                };
-                            } else {
-                                // No definition found, use the whole object as raw text
-                                structured = { term, raw: cleanJsonText(JSON.stringify(jsonData)), isLegalTerm: false };
-                            }
-                        } catch (e) {
-                            // If parsing fails, treat it as raw text
-                            structured = { term, raw: cleanJsonText(structured), isLegalTerm: false };
+
+                if (typeof structured === 'string' && structured.trim().startsWith('{') && structured.trim().endsWith('}')) {
+                    try {
+                        const jsonData = JSON.parse(structured);
+                        if (jsonData.isLegalTerm === false && jsonData.message) {
+                            structured = { term, isLegalTerm: false, message: jsonData.message };
+                        } else if (jsonData.definition) {
+                            structured = { term: jsonData.term || term, definition: cleanJsonText(jsonData.definition), examples: jsonData.examples || [] };
+                        } else {
+                            structured = { term, definition: cleanJsonText(JSON.stringify(jsonData)) };
                         }
-                    } else {
-                        // Not a complete JSON object, just clean the text
-                        structured = { term, raw: cleanJsonText(structured), isLegalTerm: false };
+                    } catch (e) {
+                        structured = { term, definition: cleanJsonText(structured) };
                     }
                 }
 
-                // Create a clean, simple HTML output with definition and example
-                // Ensure we have the term name even if structured.term is not available
                 const termName = structured.term || term;
                 let htmlOutput = `<div class="dictionary-result enhanced">
                     <div class="term-header">
                         <h3 class="term-name">${termName}</h3>
-                        <div class="term-badge">Legal Term</div>
+                        <span class="term-badge">${structured.isLegalTerm === false ? 'Info' : 'Legal Term'}</span>
                     </div>`;
 
-                // Check if this is actually a legal term using the new isLegalTerm field from AI
-                const isLegalTerm = structured.isLegalTerm !== false;
-                
-                // If AI explicitly says it's not a legal term, show the AI's message
                 if (structured.isLegalTerm === false && structured.message) {
-                    // Check if the message is a raw JSON string
-                    let messageText = structured.message;
-                    if (typeof messageText === 'string' && messageText.trim().startsWith('{') && messageText.trim().endsWith('}')) {
-                        try {
-                            // Try to parse it as JSON
-                            const jsonData = JSON.parse(messageText);
-                            messageText = jsonData.message || messageText;
-                        } catch (e) {
-                            // If parsing fails, continue with the original message
-                        }
-                    }
-                    
-                    // Clean the message to remove any JSON formatting
-                    const cleanMessage = cleanJsonText(messageText)
-                        .replace(/^[\s\"]+/, '') // Remove leading spaces and quotes
-                        .replace(/[\s\",]+$/, '') // Remove trailing spaces, quotes, commas
-                        .replace(/\\/g, '') // Remove backslashes
-                        .replace(/&quot;/g, '"') // Replace HTML entities
-                        .replace(/&amp;/g, '&') // Replace HTML entities
-                        .replace(/&lt;/g, '<') // Replace HTML entities
-                        .replace(/&gt;/g, '>'); // Replace HTML entities
-                        
-                    htmlOutput += `<div class="term-section definition-section">
-                        <div class="section-header">
-                            <i class="fas fa-info-circle"></i>
-                            <h4>Not a Legal Term</h4>
-                        </div>
-                        <div class="section-content">
-                            <p>${cleanMessage}</p>
-                        </div>
+                    htmlOutput += `<div class="term-section">
+                        <div class="section-header-content"><i class="fa-solid fa-circle-info"></i><h4>Information</h4></div>
+                        <div class="section-content"><p>${cleanJsonText(structured.message)}</p></div>
                     </div>`;
-                } else {
-                    // Add definition in simple language
-                    // Handle different possible definition structures
-                    if (structured.definition) {
-                    htmlOutput += `<div class="term-section definition-section">
-                        <div class="section-header">
-                            <i class="fas fa-book-open"></i>
-                            <h4>What is ${termName}?</h4>
-                        </div>
-                        <div class="section-content">
-                        <p>${typeof structured.definition === 'string' ? 
-                            cleanJsonText(structured.definition) : 
-                            cleanJsonText(structured.definition.short || structured.definition.description || structured.definition.detailed || 'No definition available.')}</p>
-                        </div>
+                } else if (structured.definition) {
+                    htmlOutput += `<div class="term-section">
+                        <div class="section-header-content"><i class="fa-solid fa-book-open"></i><h4>Definition</h4></div>
+                        <div class="section-content"><p>${typeof structured.definition === 'string' ? cleanJsonText(structured.definition) : cleanJsonText(structured.definition.short || structured.definition.description || 'No definition available.')}</p></div>
                     </div>`;
-                } else if (structured.raw) {
-                    // Fallback to raw text if definition is not available
-                    let rawText = structured.raw;
-                    
-                    // Check if the raw text is a JSON string
-                    if (typeof rawText === 'string' && rawText.trim().startsWith('{') && rawText.trim().endsWith('}')) {
-                        try {
-                            // Try to parse it as JSON
-                            const jsonData = JSON.parse(rawText);
-                            // Extract the message if it exists
-                            if (jsonData.message) {
-                                rawText = jsonData.message;
-                            } else if (jsonData.definition) {
-                                rawText = jsonData.definition;
-                            }
-                        } catch (e) {
-                            // If parsing fails, continue with the original text
-                        }
-                    }
-                    
-                    htmlOutput += `<div class="term-definition">
-                        <h4>Definition:</h4>
-                        <p>${cleanJsonText(rawText.substring(0, 300))}${rawText.length > 300 ? "..." : ""}</p>
-                    </div>`;
-                }
 
-                // Add one simple example if available
-                if (structured.examples && structured.examples.length > 0) {
-                    const example = typeof structured.examples[0] === 'string' ? 
-                        structured.examples[0] : 
-                        structured.examples[0].description || structured.examples[0].text || '';
-
-                    htmlOutput += `<div class="term-section example-section">
-                        <div class="section-header">
-                            <i class="fas fa-lightbulb"></i>
-                            <h4>Real-world Example</h4>
-                        </div>
-                        <div class="section-content">
+                    if (structured.examples && structured.examples.length > 0) {
+                        const example = typeof structured.examples[0] === 'string' ? structured.examples[0] : structured.examples[0].description || '';
+                        htmlOutput += `<div class="term-section">
+                            <div class="section-header-content"><i class="fa-solid fa-lightbulb"></i><h4>Example</h4></div>
                             <div class="example-box">${cleanJsonText(example)}</div>
-                        </div>
-                    </div>`;
+                        </div>`;
+                    }
                 }
 
-                }
-                
-                // If we still don't have any content, add a fallback message
-                if (!htmlOutput.includes('term-definition') && !htmlOutput.includes('term-example') && !htmlOutput.includes('definition-section')) {
-                    htmlOutput += `<div class="term-section definition-section">
-                        <div class="section-header">
-                            <i class="fas fa-info-circle"></i>
-                            <h4>No Information Available</h4>
-                        </div>
-                        <div class="section-content">
-                            <p>No definition available for "${termName}". This might be due to a temporary issue with our AI service. Please try again later.</p>
-                        </div>
-                    </div>`;
-                }
-                
                 htmlOutput += `</div>`;
-
                 definition.innerHTML = htmlOutput;
             } else {
-                definition.innerHTML = `<div class="error-message">❌ Error: ${data.msg}</div>`;
+                definition.innerHTML = `<div class="error-message"><i class="fa-solid fa-circle-exclamation"></i> ${data.msg || 'An error occurred'}</div>`;
             }
         } catch (error) {
-            console.error("Error:", error);
-
-            // Check if it's an AI service error
-            if (error.message && error.message.includes("AI request failed")) {
-                // Provide a fallback message with a simple definition
-                definition.innerHTML = `
-                    <div class="dictionary-result">
-                        <h3 class="term-name">${term}</h3>
-                        <div class="term-definition">
-                            <h4>Definition:</h4>
-                            <p>Our AI service is currently unavailable. "${term}" is a legal term that may have specific meaning in legal contexts. For accurate and up-to-date information, please consult a qualified legal professional or try searching again later.</p>
-                        </div>
-                        <div class="term-example">
-                            <h4>Example:</h4>
-                            <p>This term is commonly used in legal documents and proceedings. The specific application depends on the jurisdiction and context.</p>
-                        </div>
-                        <div class="error-note">
-                            <p><em>Note: For a complete definition and examples, please visit our <a href="/dictionary" style="color: #4361ee;">full dictionary page</a> or try again later.</em></p>
-                        </div>
-                    </div>
-                `;
-            } else {
-                definition.innerHTML = `<div class="error-message">❌ Failed to fetch result. Please try again later.</div>`;
-            }
+            definition.innerHTML = `<div class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Failed to fetch result. Please try again.</div>`;
         }
+    });
+
+    document.querySelectorAll('.faq-item').forEach((item) => {
+        item.querySelector('.faq-question').addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+            if (!isActive) item.classList.add('active');
+        });
     });
 </script>

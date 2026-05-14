@@ -1,169 +1,19 @@
-/* Base styles for hero */
-.hero-section {
-    padding: 2rem;
-    /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); */
-    color: white;
+.spotlight {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
 }
 
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 2rem;
-}
-
-/* Hero content styling */
-.hero-content {
-    flex: 1 1 50%;
-    max-width: 600px;
-}
-
-.tagline {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.hero-top__title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
-.hero-top__subtitle {
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
-}
-
-/* Stats */
-.hero-top__stats {
-    display: flex;
-    gap: 3rem;
-    margin-top: 2rem;
-}
-
-.stat__value {
-    font-weight: 700;
-    font-size: 1.5rem;
-}
-
-.stat__label {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* Hero visual */
-.hero-visual {
-    flex: 1 1 45%;
-    max-width: 400px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-
-.visual-card {
-    width: 350px;
-    height: 350px;
-    position: relative;
-    /* Add your existing visual-card styles here */
-}
-
-/* Example styles for visual-card children (optional, customize as needed) */
-.card-line-1,
-.card-line-2,
-.card-line-3,
-.card-circle-small,
-.card-bottom-bar,
-.gavel-button {
-    position: absolute;
-    /* Add positioning and styling as per your design */
-}
-
-/* Responsive Breakpoints */
-@media (max-width: 1024px) {
-    .hero {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .hero-content,
-    .hero-visual {
-        max-width: 100%;
-        flex: none;
-    }
-
-    .hero-top__title {
-        font-size: 2.5rem;
-    }
-
-    .action-buttons .btn {
-        margin-bottom: 1rem;
-        width: 100%;
-    }
-
-    .hero-top__stats {
-        justify-content: center;
-        gap: 2rem;
-    }
-
-    .visual-card {
-        width: 280px;
-        height: 280px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .action-buttons {
-        display: flex;
-    }
-}
-
-@media (max-width: 600px) {
-    .hero-top__title {
-        font-size: 2rem;
-    }
-
-    .hero-top__subtitle {
-        font-size: 1rem;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .stat__value {
-        font-size: 1.25rem;
-    }
-
-    .stat__label {
-        font-size: 0.875rem;
-    }
-
-    .hero-visual {
-        max-width: 300px;
-        margin-top: 1.5rem;
-    }
-
-    .visual-card {
-        width: 220px;
-        height: 220px;
-    }
-}
-
-@media (max-width: 480px) {
-    .visual-card {
-        width: 160px;
-        height: 160px;
-    }
-    .hero-top__title {
-        font-size: 1.8rem;
-    }
-    .hero-top__subtitle {
-        font-size: 0.9rem;
+@media (max-width: 768px) {
+    .spotlight {
+        width: 400px;
+        height: 400px;
     }
 }
